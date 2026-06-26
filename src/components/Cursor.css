@@ -1,0 +1,47 @@
+.cur-dot,
+.cur-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  will-change: transform;
+  transition: opacity 0.2s;
+}
+
+.cur-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--orange);
+  transition: transform 0.05s, width 0.2s, height 0.2s;
+}
+
+.cur-dot.clicked {
+  width: 12px;
+  height: 12px;
+}
+
+.cur-ring {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--ink);
+  opacity: 0.3;
+  transition: width 0.3s cubic-bezier(0.25,0.1,0.25,1),
+              height 0.3s cubic-bezier(0.25,0.1,0.25,1),
+              opacity 0.3s,
+              border-color 0.3s;
+}
+
+.cur-ring.hovered {
+  width: 64px;
+  height: 64px;
+  opacity: 0.6;
+  border-color: var(--orange);
+}
+
+.cur-ring.clicked {
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
+}

@@ -1,0 +1,215 @@
+.intro-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 60px 80px;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* diagonal line decorations */
+.intro-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.iline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--cream-darker);
+  top: calc(var(--i) * 18%);
+  transform: rotate(-8deg) scaleX(1.4);
+  transform-origin: left center;
+  opacity: 0.6;
+}
+
+.intro-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.intro-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* GIANT name */
+.intro-name-wrap {
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.intro-name {
+  font-family: var(--serif);
+  font-size: clamp(56px, 10.5vw, 148px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--ink);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* mid row */
+.intro-mid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
+
+.intro-role {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  padding-top: 6px;
+}
+
+.intro-tagline {
+  font-size: clamp(18px, 2.2vw, 26px);
+  color: var(--ink-soft);
+  line-height: 1.5;
+  text-align: right;
+  max-width: 420px;
+}
+.intro-tagline em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+/* stats */
+.intro-stats {
+  display: flex;
+  gap: 0;
+  margin-bottom: 56px;
+  border-top: 1px solid var(--cream-darker);
+  border-bottom: 1px solid var(--cream-darker);
+  padding: 32px 0;
+}
+
+.istat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 40px 0 0;
+  border-right: 1px solid var(--cream-darker);
+}
+.istat:last-child { border-right: none; padding-left: 40px; }
+.istat:first-child { padding-left: 0; }
+
+.istat-num {
+  font-family: var(--serif);
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.istat-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+
+/* cta */
+.intro-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary, .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  padding: 16px 40px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  will-change: transform;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--cream);
+}
+.btn-primary:hover {
+  background: var(--orange);
+  box-shadow: 0 8px 32px rgba(255,77,0,0.35);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--cream-darker);
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+
+/* scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 60px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scroll-line {
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--ink-dim);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { transform: scaleX(1); opacity: 0.4; }
+  50%       { transform: scaleX(0.4); opacity: 1; }
+}
+
+.scroll-text {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+@media (max-width: 768px) {
+  .intro-section { padding: 100px 24px 80px; }
+  .intro-name { white-space: normal; }
+  .intro-mid  { flex-direction: column; }
+  .intro-tagline { text-align: left; }
+  .istat { padding: 0 20px 0 0; }
+  .istat:last-child { padding-left: 20px; }
+  .scroll-hint { left: 24px; }
+}
