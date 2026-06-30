@@ -1,6 +1,4 @@
-import { useState, useCallback } from 'react'
 import Cursor     from './components/Cursor'
-import Terminal   from './components/Terminal'
 import Navbar     from './components/Navbar'
 import SidePanel  from './components/SidePanel'
 import Intro      from './components/Intro'
@@ -11,16 +9,14 @@ import Dockyard   from './components/Dockyard'
 import Skills     from './components/Skills'
 import Contact    from './components/Contact'
 import Footer     from './components/Footer'
+import RobotWidget from './components/RobotWidget'
 import './App.css'
 
 export default function App() {
-  const [done, setDone] = useState(false)
-  const onDone = useCallback(() => setDone(true), [])
-
   return (
     <>
       <Cursor />
-      {!done && <Terminal onDone={onDone} />}
+      <RobotWidget />
       <Navbar />
       <SidePanel />
       <main>

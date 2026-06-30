@@ -16,7 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.http import HttpResponse
+
+from pathlib import Path
+READAR_HTML = (Path(__file__).resolve().parent.parent.parent / 'readar' / 'index.html').read_text(encoding='utf-8')
+
+def readar(request):
+    return HttpResponse(READAR_HTML, content_type='text/html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('readar/', readar),
 ]

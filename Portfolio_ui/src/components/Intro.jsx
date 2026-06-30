@@ -2,6 +2,68 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import './Intro.css'
 
+// Spline robot — delayed mount so page animations finish first
+function RobotEmbed() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 1800)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="robot-embed-wrap">
+      {!mounted && <div className="robot-skeleton" />}
+      {mounted && (
+        <iframe
+          src="https://my.spline.design/nexbotrobotcharacterconceptforpersonaluse-h4TOz8zew9BzurOxHRYxE2nF/"
+          className="robot-iframe"
+          frameBorder="0"
+          title="Readar AI"
+        />
+      )}
+    </div>
+  )
+}
+
+// Aurora blob — pure CSS animated gradients, no canvas needed
+function Aurora() {
+  return (
+    <div className="aurora" aria-hidden>
+      <div className="aurora-blob aurora-blob-1" />
+      <div className="aurora-blob aurora-blob-2" />
+      <div className="aurora-blob aurora-blob-3" />
+    </div>
+  )
+}
+
+// Glitch name — occasionally RGB-splits and scanlines, snaps back clean
+function GlitchName({ text }) {
+  const [glitching, setGlitching] = useState(false)
+
+  useEffect(() => {
+    // trigger a glitch every 4–8 seconds, lasts ~400ms
+    const schedule = () => {
+      const wait = 4000 + Math.random() * 4000
+      return setTimeout(() => {
+        setGlitching(true)
+        setTimeout(() => {
+          setGlitching(false)
+          schedule()
+        }, 1100)
+      }, wait)
+    }
+    const t = schedule()
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className={`intro-name glitch-name${glitching ? ' is-glitching' : ''}`} data-text={text}>
+      {text}
+    </div>
+  )
+}
+
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%'
 
 function useScramble(text, startDelay = 0) {
@@ -107,6 +169,9 @@ export default function Intro() {
 
   return (
     <section className="intro-section">
+      {/* aurora blobs */}
+      <Aurora />
+
       {/* horizontal rule lines */}
       <div className="intro-lines" aria-hidden>
         {[...Array(6)].map((_, i) => <span key={i} className="iline" style={{ '--i': i }} />)}
@@ -116,25 +181,30 @@ export default function Intro() {
         {/* top row */}
         <motion.div
           className="intro-top"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="intro-index">01 / PORTFOLIO</span>
           <span className="intro-location">Bangalore, India · Open to relocation</span>
         </motion.div>
 
         {/* giant name */}
-        <div className="intro-name-wrap">
-          <div className="intro-name">{name}</div>
-        </div>
+        <motion.div
+          className="intro-name-wrap"
+          initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ delay: 0.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <GlitchName text={name} />
+        </motion.div>
 
-        {/* title + tagline row */}
+        {/* title + tagline */}
         <motion.div
           className="intro-mid"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.7 }}
+          initial={{ opacity: 0, y: 30, filter: 'blur(4px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="intro-role">{title}</p>
           <p className="intro-tagline">
@@ -146,9 +216,9 @@ export default function Intro() {
         {/* stats */}
         <motion.div
           className="intro-stats"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="istat">
             <span className="istat-num"><CountUp target={95} suffix="%" /></span>
@@ -167,9 +237,9 @@ export default function Intro() {
         {/* cta */}
         <motion.div
           className="intro-cta"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
           <MagButton href="#experience" className="btn-primary">View Work</MagButton>
           <MagButton href="mailto:manojshendre.1202@gmail.com" className="btn-ghost">Get in Touch</MagButton>
@@ -181,7 +251,7 @@ export default function Intro() {
         className="scroll-hint"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.6 }}
+        transition={{ delay: 1.1, duration: 0.6 }}
       >
         <span className="scroll-line" />
         <span className="scroll-text">scroll</span>

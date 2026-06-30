@@ -16,10 +16,10 @@ export default function Skills() {
       <div className="skills-inner">
         <motion.div
           className="skills-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="section-label">Technical Skills</p>
           <h2 className="section-title">What I work with</h2>
@@ -30,10 +30,10 @@ export default function Skills() {
             <motion.div
               key={i}
               className="skill-group"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 36, filter: 'blur(4px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+              transition={{ duration: 0.7, delay: (i % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
               <p className="sg-cat">{g.cat}</p>
               <div className="sg-items">

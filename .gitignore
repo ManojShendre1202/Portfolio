@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+portfolio_session.md
 *.local
+start.bat
 
 # Editor directories and files
 .vscode/*

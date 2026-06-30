@@ -34,9 +34,9 @@ export default function Cursor() {
         dotRef.current.style.transform =
           `translate(${pos.current.x - 4}px, ${pos.current.y - 4}px)`
 
-        // ring — lerp (lazy follow)
-        ring.current.x += (pos.current.x - ring.current.x) * 0.12
-        ring.current.y += (pos.current.y - ring.current.y) * 0.12
+        // ring — snappier lerp
+        ring.current.x += (pos.current.x - ring.current.x) * 0.22
+        ring.current.y += (pos.current.y - ring.current.y) * 0.22
         ringRef.current.style.transform =
           `translate(${ring.current.x - 20}px, ${ring.current.y - 20}px)`
       }

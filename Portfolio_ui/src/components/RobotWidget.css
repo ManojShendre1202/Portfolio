@@ -1,0 +1,108 @@
+.robot-widget {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9000;
+  width: 180px;
+  pointer-events: none;
+}
+
+.robot-widget-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: all;
+  text-decoration: none;
+}
+
+/* lottie wrapper — hover scales up slightly */
+.robot-lottie-wrap {
+  width: 180px;
+  height: 180px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.4s ease;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.10));
+}
+
+.robot-lottie-wrap.hovered {
+  transform: translateY(-6px) scale(1.06);
+  filter: drop-shadow(0 16px 32px rgba(255, 100, 30, 0.2));
+}
+
+.robot-lottie {
+  width: 100%;
+  height: 100%;
+}
+
+/* skeleton while loading */
+.robot-widget-skeleton {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(
+    110deg,
+    var(--cream-dark) 30%,
+    var(--cream-darker) 50%,
+    var(--cream-dark) 70%
+  );
+  background-size: 200% 100%;
+  animation: rw-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes rw-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* pill label */
+.robot-widget-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 7px 14px;
+  border-radius: 100px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  transition: background 0.2s, transform 0.2s;
+  margin-top: -8px;
+}
+
+.robot-widget-link:hover .robot-widget-label {
+  background: var(--orange);
+  transform: translateY(-2px);
+}
+
+.robot-widget-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4ade80;
+  animation: rw-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes rw-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+@media (max-width: 768px) {
+  .robot-widget {
+    width: 130px;
+    bottom: 20px;
+    right: 16px;
+  }
+  .robot-lottie-wrap {
+    width: 130px;
+    height: 130px;
+  }
+  .robot-widget-skeleton {
+    width: 130px;
+    height: 130px;
+  }
+}
