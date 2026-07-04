@@ -1,5 +1,5 @@
 import waitress
-from Portfolio.wsgi import application
+from backend.wsgi import application
 
 if __name__ == "__main__":
     waitress.serve(
