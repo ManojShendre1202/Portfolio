@@ -1,0 +1,47 @@
+services:
+
+  # ── Django (Waitress) ─────────────────────────────────────────────────────
+  django:
+    build: .
+    command: python server.py
+    env_file: backend/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+      - SIGNAL_HOST=dockyard
+      - SIGNAL_PORT=9000
+    volumes:
+      - media_data:/app/media        # persist uploaded files + processed graphs
+    depends_on:
+      - dockyard
+    restart: unless-stopped
+
+  # ── Dockyard engine (pipeline WS + chat WS + TCP signal listener) ────────
+  dockyard:
+    build: .
+    command: python -m workflow.main
+    env_file: backend/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+      - SIGNAL_HOST=0.0.0.0
+      - SIGNAL_PORT=9000
+      - WS_PORT=8040
+      - CHAT_WS_PORT=8041
+    volumes:
+      - media_data:/app/media        # same volume — reads files django wrote
+    restart: unless-stopped
+
+  # ── Nginx ────────────────────────────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8020:8020"                  # only nginx is exposed to host
+    volumes:
+      - ./nginx.docker.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/dist:/app/frontend/dist:ro
+    depends_on:
+      - django
+      - dockyard
+    restart: unless-stopped
+
+volumes:
+  media_data:                        # named volume — survives container restarts
