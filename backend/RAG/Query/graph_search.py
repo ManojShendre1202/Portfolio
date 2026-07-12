@@ -31,6 +31,84 @@ def load_graph(job_id: int) -> dict:
         return json.load(f)
 
 
+# Phrases that signal the question wants EVERY match, not just the closest
+# few — top-k similarity search can never answer these correctly by
+# construction, since it only ever returns the closest handful.
+_ENUMERATION_PHRASES = (
+    'list all', 'list every', 'list each',
+    'how many', 'count of', 'total number',
+    'enumerate', 'all of the', 'every single',
+    'complete list',
+)
+
+
+def is_enumeration_question(question: str) -> bool:
+    """Detects list-all / count-all style questions that need full-section
+    coverage instead of top-k similarity search."""
+    q = question.lower()
+    return any(phrase in q for phrase in _ENUMERATION_PHRASES)
+
+
+def search_full_sections(graph: dict, question_embedding: list[float], top_k_sections: int | None = None) -> dict:
+    """
+    For enumeration/listing questions: returns EVERY paragraph in the
+    document (not just the top-k closest), so the model has full coverage
+    to list or count from. Capping by section similarity would defeat the
+    point of a "list all X in this document" question, so by default this
+    includes every section — pass top_k_sections to narrow scope only when
+    the question is clearly about one part of a large document.
+    """
+    sections   = graph.get('sections',   [])
+    paragraphs = graph.get('paragraphs', [])
+    document   = graph.get('document',   {})
+
+    scored = []
+    for sec in sections:
+        emb = sec.get('embedding')
+        if not emb:
+            continue
+        scored.append((_cosine(question_embedding, emb), sec))
+    scored.sort(key=lambda x: x[0], reverse=True)
+    top_secs = scored if top_k_sections is None else scored[:top_k_sections]
+
+    full_paragraphs = []
+    for _, sec in top_secs:
+        children = set(sec.get('children', []))
+        for p in paragraphs:
+            if p['id'] in children:
+                full_paragraphs.append({'summary': p['summary'], 'page': p['page']})
+
+    return {
+        'document_title':   document.get('title', ''),
+        'document_summary': document.get('summary', ''),
+        'sections':         [{'title': s['title'], 'summary': s['summary']} for _, s in top_secs],
+        'full_paragraphs':  full_paragraphs,
+    }
+
+
+def build_full_section_prompt(result: dict) -> str:
+    """Formats a search_full_sections() result into a context string."""
+    lines = []
+
+    lines.append(f"Document: {result['document_title']}")
+    lines.append(f"Summary: {result['document_summary']}")
+    lines.append("")
+
+    if result['sections']:
+        lines.append("Matched section(s) — FULL content included below so you can list/count exhaustively:")
+        for s in result['sections']:
+            lines.append(f"  [{s['title']}] {s['summary']}")
+        lines.append("")
+
+    if result['full_paragraphs']:
+        lines.append("Every paragraph in the matched section(s):")
+        for p in result['full_paragraphs']:
+            lines.append(f"  [Page {p['page']}] {p['summary']}")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
 def search(graph: dict, question_embedding: list[float], top_k: int = 5) -> dict:
     """
     Search all node levels for the most relevant context.
@@ -95,7 +173,7 @@ def search(graph: dict, question_embedding: list[float], top_k: int = 5) -> dict
     }
 
 
-def build_context_prompt(search_result: dict, question: str) -> str:
+def build_context_prompt(search_result: dict) -> str:
     """
     Formats the search result into a clean context string to send to Gemini.
     """
@@ -122,7 +200,5 @@ def build_context_prompt(search_result: dict, question: str) -> str:
         for s in search_result['matched_sentences']:
             lines.append(f"  [Page {s['page']}] {s['text']}")
         lines.append("")
-
-    lines.append(f"Question: {question}")
 
     return "\n".join(lines)

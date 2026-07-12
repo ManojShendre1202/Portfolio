@@ -21,8 +21,9 @@ def run(task: Task, update_queue):
         except Exception:
             pass
 
-    extracted_path = ''
-    graph_path     = ''
+    extracted_path    = ''
+    graph_path        = ''
+    entity_graph_path = ''
 
     try:
         section_data = task.payload.get('section_data', {})
@@ -40,12 +41,16 @@ def run(task: Task, update_queue):
 
         ReadarJobService.set_extracted_text(job_id, extracted_path)
 
-        # Step 2 — build hierarchical graph + embeddings
+        # Step 2 — build hierarchical graph + entity graph + embeddings
         log("Starting graph build")
-        graph_path = build_graph(extracted_path, job_id, log)
+        graph_path, entity_graph_path, suggested_actions = build_graph(extracted_path, job_id, log)
 
-        # Store graph path in section_data structured_data field
-        ReadarJobService.set_structured_data(job_id, {'graph_path': graph_path})
+        # Store graph paths in section_data structured_data field
+        ReadarJobService.set_structured_data(job_id, {
+            'graph_path': graph_path,
+            'entity_graph_path': entity_graph_path,
+        })
+        ReadarJobService.set_action_suggestions(job_id, suggested_actions)
 
         log("Processing complete")
 
@@ -62,7 +67,7 @@ def run(task: Task, update_queue):
     return TaskResult(
         status='completed',
         comments=comments,
-        file_paths=[p for p in [extracted_path, graph_path] if p],
+        file_paths=[p for p in [extracted_path, graph_path, entity_graph_path] if p],
         time_taken=round(time.time() - start, 2),
         error=None,
     )
