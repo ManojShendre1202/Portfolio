@@ -8,8 +8,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/"         element={<Portfolio />} />
-        <Route path="/readar"   element={<Readar />} />
-        <Route path="/readar/*" element={<Readar />} />
+        <Route path="/readar"          element={<Readar />} />
+        <Route path="/readar/:docId"   element={<Readar />} />
       </Routes>
     </BrowserRouter>
   )
