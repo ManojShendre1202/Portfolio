@@ -14,8 +14,8 @@
   --ink-soft:    #3a3530;
   --ink-muted:   #7a7068;
   --ink-dim:     #b0a898;
-  --orange:      #ff4d00;
-  --orange-soft: #ff6a2a;
+  --orange:      #a3760f;
+  --orange-soft: #8a6209;
   --sans:        'DM Sans', sans-serif;
   --serif:       'DM Serif Display', serif;
 }
@@ -27,11 +27,7 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   overflow-x: hidden;
-  cursor: none;
 }
-
-/* hide default cursor everywhere — custom cursor handles it */
-*, *::before, *::after { cursor: none !important; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--cream); }
@@ -39,6 +35,91 @@ body {
 
 a { color: inherit; text-decoration: none; }
 ::selection { background: var(--orange); color: white; }
+
+/* ══════════════════════════════
+   DRAWING-SHEET DESIGN SYSTEM
+   shared across every section — the site reads like an
+   annotated technical drawing sheet, in the archival palette
+══════════════════════════════ */
+
+/* corner registration mark — like alignment crosshairs on a drawing sheet */
+.reg-mark {
+  position: absolute;
+  width: 18px; height: 18px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.reg-mark::before, .reg-mark::after {
+  content: '';
+  position: absolute;
+  background: var(--ink-dim);
+}
+.reg-mark::before { top: 50%; left: 0; width: 100%; height: 1px; transform: translateY(-50%); }
+.reg-mark::after  { left: 50%; top: 0; height: 100%; width: 1px; transform: translateX(-50%); }
+.reg-mark.tl { top: 18px; left: 18px; }
+.reg-mark.tr { top: 18px; right: 18px; }
+.reg-mark.bl { bottom: 18px; left: 18px; }
+.reg-mark.br { bottom: 18px; right: 18px; }
+
+/* title block — bottom-corner sheet stamp, like a real drawing title block */
+.sheet-title-block {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--ink-dim);
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  z-index: 2;
+}
+.sheet-title-block > div {
+  padding: 6px 12px;
+  border-right: 1px solid var(--ink-dim);
+  white-space: nowrap;
+}
+.sheet-title-block > div:last-child { border-right: none; }
+.sheet-title-block .stb-num  { font-weight: 700; color: var(--ink); }
+.sheet-title-block .stb-rev  { color: var(--orange); font-weight: 700; }
+
+/* dark-section variant — for panels on var(--ink) background */
+.sheet-title-block.on-dark {
+  border-color: rgba(250,248,245,0.15);
+  color: rgba(250,248,245,0.4);
+}
+.sheet-title-block.on-dark > div { border-right-color: rgba(250,248,245,0.15); }
+.sheet-title-block.on-dark .stb-num { color: var(--cream); }
+.reg-mark.on-dark::before, .reg-mark.on-dark::after { background: rgba(250,248,245,0.2); }
+
+/* callout label — replaces plain "section-label" with a drawing-callout tag */
+.callout-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.callout-label::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--orange);
+}
+
+/* dotted measurement-line divider between sections */
+.measure-line {
+  width: 100%;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--ink-dim) 40%, transparent 0%);
+  background-position: top;
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
 
 /* grain overlay */
 body::before {

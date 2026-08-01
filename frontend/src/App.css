@@ -1,12 +1,20 @@
 /* shared utilities */
 .section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--sans);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--orange);
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   margin-bottom: 16px;
+}
+.section-label::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--orange);
 }
 
 .section-title {
