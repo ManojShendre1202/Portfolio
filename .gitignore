@@ -16,6 +16,18 @@ portfolio_session.md
 start.bat
 media/
 
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.env
+.venv/
+venv/
+*.pyc
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

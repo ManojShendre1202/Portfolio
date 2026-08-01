@@ -15,16 +15,13 @@ services:
       - dockyard
     restart: unless-stopped
 
-  # ── Dockyard engine (pipeline WS + chat WS + TCP signal listener) ────────
+  # ── Dockyard engine (chat WS) ─────────────────────────────────────────────
   dockyard:
     build: .
     command: python -m workflow.main
     env_file: backend/.env
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
-      - SIGNAL_HOST=0.0.0.0
-      - SIGNAL_PORT=9000
-      - WS_PORT=8040
       - CHAT_WS_PORT=8041
     volumes:
       - media_data:/app/media        # same volume — reads files django wrote

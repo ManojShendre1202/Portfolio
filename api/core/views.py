@@ -1,66 +1,129 @@
-import os
-import socket
+import json
 
-from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
-from api.core.service.ReadarJobService import ReadarJobService
+from api.core.service.ChatSessionService import ChatSessionService
 
 
 @csrf_exempt
-def uploadDocument(request):
-    files      = request.FILES['file']
-    client_id  = request.POST.get('client_id', '')
-    path       = default_storage.save(f'uploads/{files.name}', files)
-    job        = ReadarJobService.create_job(files.name, files.size, path, files.content_type, client_id)
-
-    signal_host = os.environ.get('SIGNAL_HOST', '127.0.0.1')
-    signal_port = int(os.environ.get('SIGNAL_PORT', 9000))
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((signal_host, signal_port))
-    sock.sendall(f"{job.id}:File_processing".encode())
-    sock.recv(16)
-    sock.close()
-
-    return JsonResponse({'status': 'success', 'job_id': job.id})
-
-
-@require_GET
-def getJob(request, job_id):
+@require_POST
+def getOrCreateSession(request):
     try:
-        job = ReadarJobService.get_job(job_id)
-    except Exception:
-        return JsonResponse({'error': 'not found'}, status=404)
+        body = json.loads(request.body or b'{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'invalid JSON body'}, status=400)
 
+    client_id = (body.get('client_id') or '').strip()
+    doc_id    = (body.get('doc_id') or '').strip()
+    if not client_id or not doc_id:
+        return JsonResponse({'error': 'client_id and doc_id required'}, status=400)
+
+    session = ChatSessionService.get_or_create(client_id, doc_id)
     return JsonResponse({
-        'id':           job.id,
-        'file_name':    job.file_name,
-        'file_size':    job.file_size,
-        'status':       job.status,
-        'section_data': job.section_data,
+        'chat_id': str(session.chat_id),
+        'doc_id':  session.doc_id,
+        'active':  session.active,
+    })
+
+
+@csrf_exempt
+@require_POST
+def startNewSession(request):
+    try:
+        body = json.loads(request.body or b'{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'invalid JSON body'}, status=400)
+
+    client_id = (body.get('client_id') or '').strip()
+    doc_id    = (body.get('doc_id') or '').strip()
+    if not client_id or not doc_id:
+        return JsonResponse({'error': 'client_id and doc_id required'}, status=400)
+
+    session = ChatSessionService.start_new(client_id, doc_id)
+    return JsonResponse({
+        'chat_id': str(session.chat_id),
+        'doc_id':  session.doc_id,
+        'active':  session.active,
     })
 
 
 @require_GET
-def getJobsByClient(request):
-    client_id = request.GET.get('client_id', '').strip()
-    if not client_id:
-        return JsonResponse({'error': 'client_id required'}, status=400)
+def getSessionTurns(request, chat_id):
+    try:
+        turns = ChatSessionService.get_turns(chat_id)
+    except Exception:
+        return JsonResponse({'error': 'not found'}, status=404)
 
-    jobs = ReadarJobService.get_by_client(client_id)
+    result = [{
+        'role':       t.role,
+        'text':       t.text,
+        'bullets':    t.bullets,
+        'citations':  t.citations,
+        'trace':      t.trace,
+        'created_at': t.created_at.isoformat(),
+    } for t in turns]
 
-    # section_data contains DateTimeField in created_at — convert to str
+    return JsonResponse({'turns': result})
+
+
+@require_GET
+def listSessions(request):
+    client_id = (request.GET.get('client_id') or '').strip()
+    doc_id    = (request.GET.get('doc_id') or '').strip()
+    if not client_id or not doc_id:
+        return JsonResponse({'error': 'client_id and doc_id required'}, status=400)
+
+    sessions = ChatSessionService.list_sessions(client_id, doc_id)
+
     result = []
-    for j in jobs:
+    for s in sessions:
+        turns = list(s.turns.all())
+        first_question = next((t.text for t in turns if t.role == 'user'), None)
         result.append({
-            'id':           j['id'],
-            'file_name':    j['file_name'],
-            'file_size':    j['file_size'],
-            'status':       j['status'],
-            'section_data': j['section_data'],
-            'created_at':   j['created_at'].isoformat(),
+            'chat_id':        str(s.chat_id),
+            'active':         s.active,
+            'turn_count':     len(turns),
+            'first_question': first_question,
+            'updated_at':     s.updated_at.isoformat(),
         })
 
-    return JsonResponse({'jobs': result})
+    return JsonResponse({'sessions': result})
+
+
+@csrf_exempt
+@require_http_methods(['DELETE'])
+def deleteSession(request, chat_id):
+    client_id = (request.GET.get('client_id') or '').strip()
+    doc_id    = (request.GET.get('doc_id') or '').strip()
+    if not client_id or not doc_id:
+        return JsonResponse({'error': 'client_id and doc_id required'}, status=400)
+
+    ChatSessionService.delete_session(client_id, doc_id, chat_id)
+    return JsonResponse({'deleted': True})
+
+
+@csrf_exempt
+@require_POST
+def switchSession(request, chat_id):
+    try:
+        body = json.loads(request.body or b'{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'invalid JSON body'}, status=400)
+
+    client_id = (body.get('client_id') or '').strip()
+    doc_id    = (body.get('doc_id') or '').strip()
+    if not client_id or not doc_id:
+        return JsonResponse({'error': 'client_id and doc_id required'}, status=400)
+
+    try:
+        session = ChatSessionService.switch_to(client_id, doc_id, chat_id)
+    except Exception:
+        return JsonResponse({'error': 'not found'}, status=404)
+
+    return JsonResponse({
+        'chat_id': str(session.chat_id),
+        'doc_id':  session.doc_id,
+        'active':  session.active,
+    })
