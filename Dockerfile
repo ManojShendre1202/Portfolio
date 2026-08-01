@@ -13,6 +13,11 @@ WORKDIR /app
 
 # Copy requirements first — layer cache means pip only reruns if requirements change
 COPY requirements.txt .
+# CPU-only torch wheel — installed first so the plain requirements.txt install
+# below finds a matching version already satisfied and skips pulling the
+# default PyPI (CUDA-bundled) build, which drags in several GB of unused
+# nvidia-* packages on a GPU-less VM.
+RUN pip install --no-cache-dir torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the code
