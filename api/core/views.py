@@ -31,6 +31,7 @@ def _with_client_cookie(response, client_id: str, is_new: bool):
             max_age=CLIENT_ID_MAX_AGE,
             httponly=True,
             samesite='Lax',
+            secure=True,
         )
     return response
 

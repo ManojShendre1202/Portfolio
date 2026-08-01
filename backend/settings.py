@@ -30,6 +30,11 @@ DEBUG = False
 
 ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()]
 
+# nginx terminates TLS and forwards this header — without it Django can't
+# tell requests are actually HTTPS, breaking request.is_secure() and any
+# secure-cookie logic.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Application definition
 
 INSTALLED_APPS = [
