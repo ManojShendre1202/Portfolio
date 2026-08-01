@@ -1,14 +1,46 @@
+import random
+
 from django.db import transaction
+from django.utils import timezone
 
 from api.core.models import ChatSession, ChatTurn
+
+# No login means client_id is just a cookie, not a real identity — so we
+# don't keep sessions around indefinitely. A week matches the cookie's
+# own expiry (views.CLIENT_ID_MAX_AGE); after that a visitor is simply
+# treated as new, which is fine for an interview-demo flow. ChatTurn rows
+# cascade-delete with their session (see models.py's on_delete=CASCADE).
+SESSION_RETENTION_SECONDS = 60 * 60 * 24 * 7
+
+# Purging on every call would mean a DELETE scan on every single request
+# for very little benefit at this traffic scale; run it opportunistically
+# instead (same trick Django's own clearsessions-adjacent code uses).
+_PURGE_PROBABILITY = 0.01
 
 
 class ChatSessionService:
 
     @staticmethod
+    def purge_expired() -> int:
+        from backend.RAG.Query import session_memory  # local import — avoids loading embed models at module import time
+
+        cutoff = timezone.now() - timezone.timedelta(seconds=SESSION_RETENTION_SECONDS)
+        expired_ids = list(ChatSession.objects.filter(updated_at__lt=cutoff).values_list('chat_id', flat=True))
+        if not expired_ids:
+            return 0
+
+        deleted, _ = ChatSession.objects.filter(chat_id__in=expired_ids).delete()
+        for chat_id in expired_ids:
+            session_memory.delete(chat_id)
+        return deleted
+
+    @staticmethod
     def get_or_create(client_id: str, doc_id: str) -> ChatSession:
         """Resume the current active session for this (client, doc), or
         create the first one if none exists yet."""
+        if random.random() < _PURGE_PROBABILITY:
+            ChatSessionService.purge_expired()
+
         session = (
             ChatSession.objects
             .filter(client_id=client_id, doc_id=doc_id, active=True)
@@ -71,7 +103,10 @@ class ChatSessionService:
         """Permanently removes a session and its turns. If it was the active
         session, the next getOrCreateSession call for this (client, doc)
         will simply start a fresh one — no session is left dangling."""
+        from backend.RAG.Query import session_memory  # local import — avoids loading embed models at module import time
+
         ChatSession.objects.filter(client_id=client_id, doc_id=doc_id, chat_id=chat_id).delete()
+        session_memory.delete(chat_id)
 
     @staticmethod
     @transaction.atomic

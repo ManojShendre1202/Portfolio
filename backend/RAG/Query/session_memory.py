@@ -10,6 +10,7 @@ stays roughly flat regardless of session length, unlike resending full
 history every turn.
 """
 
+import os
 import pickle
 from pathlib import Path
 
@@ -37,10 +38,21 @@ def load(chat_id) -> tuple[list[dict], np.ndarray]:
     return data["nodes"], data["embeddings"]
 
 
+def delete(chat_id) -> None:
+    """Best-effort — called when a ChatSession row is deleted/purged so its
+    memory file doesn't outlive the session it belongs to."""
+    _path(chat_id).unlink(missing_ok=True)
+
+
 def save(chat_id, nodes: list[dict], embeddings: np.ndarray) -> str:
+    """Writes via a temp file + atomic rename so a crash mid-write can't
+    leave a truncated/corrupt .pkl behind — the old file (or none) stays
+    readable until the new one is fully written."""
     path = _path(chat_id)
-    with open(path, "wb") as f:
+    tmp_path = path.with_suffix(path.suffix + f'.tmp{os.getpid()}')
+    with open(tmp_path, "wb") as f:
         pickle.dump({"nodes": nodes, "embeddings": embeddings}, f)
+    os.replace(tmp_path, path)
     return str(path)
 
 

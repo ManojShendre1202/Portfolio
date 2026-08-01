@@ -71,7 +71,7 @@ class RateLimiter:
             self._clean_minute_window()
 
             if len(self.minute_calls) + 1 > RPM_LIMIT * SAFETY_MARGIN:
-                return False, 'rpm'
+                return False, 'rpm out of limit'
             projected_tpm = sum(t for _, t in self.minute_tokens) + estimated_tokens
             if projected_tpm > TPM_LIMIT * SAFETY_MARGIN:
                 return False, 'tpm'
@@ -110,10 +110,10 @@ chat_rate_limiter = RateLimiter()
 
 
 GUARD_MESSAGES = {
-    'rpm': "Readar is handling a lot of questions right now — please wait about 10 seconds and try again.",
-    'tpm': "Readar is handling a lot of questions right now — please wait about 10 seconds and try again.",
-    'rpd': "Readar has hit its daily question limit — please try again tomorrow, or reach out directly in the meantime.",
-    'tpd': "Readar has hit its daily usage limit — please try again tomorrow, or reach out directly in the meantime.",
+    'rpm': "Readar is getting more love than the free tier expected. Give it about 10 seconds and try again.",
+    'tpm': "The free tier is doing its best. Give it about 10 seconds and try again.",
+    'rpd': "The budget has entered its 'that's enough for today' era. Please try again tomorrow, or feel free to reach out directly.",
+    'tpd': "The free-tier accountant has closed the books for today. Please try again tomorrow, or feel free to reach out directly.",
 }
 
 GENERIC_ERROR_MESSAGE = "Something went wrong answering that — please try rephrasing your question or try again in a moment."

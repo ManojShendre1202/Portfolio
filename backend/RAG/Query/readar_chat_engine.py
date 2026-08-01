@@ -33,6 +33,7 @@ import logging
 import os
 import queue as pyqueue
 import time
+from collections import defaultdict
 
 from asgiref.sync import sync_to_async
 from google import genai
@@ -74,6 +75,17 @@ conversational."""
 
 def _estimate_tokens(text: str) -> int:
     return max(1, len(text) // 4)
+
+
+# Serializes retrieval+answer+memory-append per chat_id — without this, two
+# questions fired back-to-back on the same session (double-click, duplicate
+# send, two tabs sharing a chat_id) would both read session_memory before
+# either writes, and the second append_turn silently clobbers the first
+# turn's summary (lost-update race on the per-session pickle file). Plain
+# dict (not locked itself) is safe because get-or-create below never awaits
+# between the check and the set, so it can't interleave with another task
+# on this single event loop.
+_chat_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
 
 
 def _run_retrieval(doc_id: str, chat_id: str, question: str):
@@ -163,18 +175,21 @@ async def handle_question(chat_id: str, question: str, send_to_browser) -> None:
     client = genai.Client(api_key=GEMINI_KEY)
 
     try:
-        session = await sync_to_async(ChatSessionService.get_by_chat_id)(chat_id)
-        doc_id  = session.doc_id
+        # Serializes this whole retrieval -> answer -> memory-append sequence
+        # per chat_id — see _chat_locks comment for why this matters.
+        async with _chat_locks[chat_id]:
+            session = await sync_to_async(ChatSessionService.get_by_chat_id)(chat_id)
+            doc_id  = session.doc_id
 
-        await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
+            await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
 
-        t0 = time.perf_counter()
-        doc_context, citations, memory_context, n_retrieved, n_reranked = await asyncio.to_thread(
-            _run_retrieval, doc_id, chat_id, question
-        )
-        t_retrieval = time.perf_counter() - t0
+            t0 = time.perf_counter()
+            doc_context, citations, memory_context, n_retrieved, n_reranked = await asyncio.to_thread(
+                _run_retrieval, doc_id, chat_id, question
+            )
+            t_retrieval = time.perf_counter() - t0
 
-        prompt = f"""{SYSTEM_PROMPT}
+            prompt = f"""{SYSTEM_PROMPT}
 
 {memory_context}Document context:
 {doc_context}
@@ -183,61 +198,61 @@ Question: {question}
 
 Answer:"""
 
-        estimated_tokens = _estimate_tokens(prompt)
-        ok, reason = chat_rate_limiter.can_proceed(estimated_tokens)
-        if not ok:
-            logger.warning('Chat request for session %s blocked by rate guard: %s', chat_id, reason)
-            await send_to_browser({'type': 'error', 'text': GUARD_MESSAGES[reason]})
-            return
-
-        last_error = None
-        for model in CHAT_MODELS:
-            try:
-                t1 = time.perf_counter()
-                answer_text, summary_text, usage_tokens = await _stream_model(
-                    client, model, prompt, send_to_browser
-                )
-                t_gemini = time.perf_counter() - t1
-
-                token_count = usage_tokens or estimated_tokens
-                chat_rate_limiter.record(token_count)
-
-                trace = {
-                    'total':     round(t_retrieval + t_gemini, 2),
-                    'retrieve':  round(t_retrieval, 2),
-                    'gemini':    round(t_gemini, 2),
-                    'tokens':    token_count,
-                    'retrieved': n_retrieved,
-                    'reranked':  n_reranked,
-                    'used':      len(citations),
-                }
-
-                await sync_to_async(ChatSessionService.add_turn)(
-                    chat_id, role='ai', text=answer_text, citations=citations, trace=trace,
-                )
-
-                if summary_text:
-                    # Awaited (not fire-and-forget) — this is cheap (local embed + tiny
-                    # pickle write, no network call), and a background task here created
-                    # a real race: a quick follow-up question could read the memory file
-                    # before this write landed, silently seeing no prior-turn context.
-                    # asyncio.to_thread still keeps it off the event loop, so other
-                    # connected users aren't blocked by it.
-                    await asyncio.to_thread(session_memory.append_turn, chat_id, question, summary_text)
-                else:
-                    logger.warning('No memory summary parsed for session %s — marker missing from response', chat_id)
-
-                await send_to_browser({'type': 'done', 'citations': citations, 'trace': trace})
+            estimated_tokens = _estimate_tokens(prompt)
+            ok, reason = chat_rate_limiter.can_proceed(estimated_tokens)
+            if not ok:
+                logger.warning('Chat request for session %s blocked by rate guard: %s', chat_id, reason)
+                await send_to_browser({'type': 'error', 'text': GUARD_MESSAGES[reason]})
                 return
-            except Exception as e:
-                if '429' in str(e) or 'quota' in str(e).lower():
-                    logger.warning('Model %s quota hit — trying next', model)
-                    last_error = e
-                    continue
-                raise
 
-        logger.error('All chat models exhausted for session %s: %s', chat_id, last_error)
-        await send_to_browser({'type': 'error', 'text': GUARD_MESSAGES['rpm']})
+            last_error = None
+            for model in CHAT_MODELS:
+                try:
+                    t1 = time.perf_counter()
+                    answer_text, summary_text, usage_tokens = await _stream_model(
+                        client, model, prompt, send_to_browser
+                    )
+                    t_gemini = time.perf_counter() - t1
+
+                    token_count = usage_tokens or estimated_tokens
+                    chat_rate_limiter.record(token_count)
+
+                    trace = {
+                        'total':     round(t_retrieval + t_gemini, 2),
+                        'retrieve':  round(t_retrieval, 2),
+                        'gemini':    round(t_gemini, 2),
+                        'tokens':    token_count,
+                        'retrieved': n_retrieved,
+                        'reranked':  n_reranked,
+                        'used':      len(citations),
+                    }
+
+                    await sync_to_async(ChatSessionService.add_turn)(
+                        chat_id, role='ai', text=answer_text, citations=citations, trace=trace,
+                    )
+
+                    if summary_text:
+                        # Awaited (not fire-and-forget) — this is cheap (local embed + tiny
+                        # pickle write, no network call), and a background task here created
+                        # a real race: a quick follow-up question could read the memory file
+                        # before this write landed, silently seeing no prior-turn context.
+                        # asyncio.to_thread still keeps it off the event loop, so other
+                        # connected users aren't blocked by it.
+                        await asyncio.to_thread(session_memory.append_turn, chat_id, question, summary_text)
+                    else:
+                        logger.warning('No memory summary parsed for session %s — marker missing from response', chat_id)
+
+                    await send_to_browser({'type': 'done', 'citations': citations, 'trace': trace})
+                    return
+                except Exception as e:
+                    if '429' in str(e) or 'quota' in str(e).lower():
+                        logger.warning('Model %s quota hit — trying next', model)
+                        last_error = e
+                        continue
+                    raise
+
+            logger.error('All chat models exhausted for session %s: %s', chat_id, last_error)
+            await send_to_browser({'type': 'error', 'text': GUARD_MESSAGES['rpm']})
 
     except Exception:
         logger.exception('Chat error for session %s', chat_id)

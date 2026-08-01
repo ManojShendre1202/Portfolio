@@ -188,10 +188,12 @@ export default function SplitView({ doc, onBack }) {
   useEffect(() => {
     if (!chatId) return
 
-    // chat_ws_server.py runs as its own thread on CHAT_WS_PORT (default 8041),
-    // separate from Django (window.location.port) — see workflow/main.py Thread E.
-    const CHAT_WS_PORT = 8041
-    const ws = new WebSocket(`ws://${window.location.hostname}:${CHAT_WS_PORT}/ws/readar-chat/${chatId}`)
+    // Routed through nginx (location /ws/readar-chat/ in nginx.docker.conf),
+    // same origin as the page — no separate port needed, and wss:// when the
+    // page itself is https:// so the browser doesn't block a mixed-content WS.
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws/readar-chat/${chatId}`)
+
     wsRef.current = ws
 
     ws.onopen = () => {

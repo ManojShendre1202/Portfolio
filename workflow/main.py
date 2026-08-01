@@ -1,17 +1,3 @@
-"""
-Dockyard chat process entry point.
-
-Single purpose: host the chat WebSocket server (chat_ws_server.py, port 8041)
-that the frontend's split-view chat connects to. The old file-upload pipeline
-(TCP signal listener, Dispatcher, WorkerPool, pipeline WS on port 8040) is
-gone — Readar no longer accepts uploads (see note.md's FINAL DECISION), so
-there was nothing left for that machinery to run.
-
-Usage:
-    cd Portfolio
-    python -m workflow.main
-"""
-
 import logging
 import os
 import sys
