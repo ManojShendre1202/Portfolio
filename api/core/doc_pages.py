@@ -23,7 +23,7 @@ from django.http import HttpResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_GET
 
-DATA_ROOT = Path(settings.BASE_DIR).parent / 'data' / 'html' / 'raw'
+DATA_ROOT = Path(settings.BASE_DIR) / 'documents' / 'raw'
 
 DOC_PAGE_SOURCES = {
     'python-tutorial': {
