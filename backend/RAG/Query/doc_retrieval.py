@@ -20,10 +20,10 @@ import numpy as np
 from django.conf import settings
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-DATA_ROOT = Path(settings.BASE_DIR).parent / 'data'
+DATA_ROOT = Path(settings.BASE_DIR) / 'documents'
 
 GRAPH_PATHS = {
-    'python-tutorial': DATA_ROOT / 'html' / 'graph_output' / 'python_tutorial_all_parsed.pkl',
+    'python-tutorial': DATA_ROOT / 'graph_output' / 'python_tutorial_all_parsed.pkl',
 }
 
 TOP_K             = 6

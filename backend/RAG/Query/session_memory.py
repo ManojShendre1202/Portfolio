@@ -19,7 +19,7 @@ from django.conf import settings
 
 from backend.RAG.Query.doc_retrieval import embed_document
 
-MEMORY_DIR = Path(settings.BASE_DIR).parent / 'data' / 'sessions'
+MEMORY_DIR = Path(settings.BASE_DIR) / 'media' / 'sessions'
 MEMORY_DIR.mkdir(parents=True, exist_ok=True)
 
 TOP_K = 3
