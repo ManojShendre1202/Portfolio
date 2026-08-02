@@ -6,5 +6,5 @@ if __name__ == "__main__":
         application,
         host="0.0.0.0",
         port=8030,
-        threads=4
+        threads=16
     )

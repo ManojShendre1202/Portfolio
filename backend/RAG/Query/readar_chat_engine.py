@@ -34,6 +34,7 @@ import os
 import queue as pyqueue
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 
 from asgiref.sync import sync_to_async
 from google import genai
@@ -45,6 +46,26 @@ from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter, GUARD_MESSAGE
 logger = logging.getLogger(__name__)
 
 GEMINI_KEY = os.getenv('GEMINI_API_KEY')
+
+# Two dedicated pools instead of asyncio's shared default executor
+# (min(32, cpu_count+4)) — under concurrent load that single pool was
+# starved: every chat needs both a retrieval slot AND a Gemini-stream slot
+# held for the whole streaming duration, so 25 concurrent chats could need
+# 50 slots against a pool of ~6-8 on this small VM, causing ~7x latency
+# (load-tested: 3.2s baseline -> ~20s at 25 concurrent).
+#
+# retrieval_executor: genuinely CPU-bound (local nomic embedder +
+# cross-encoder rerank, no GPU) — capped below actual core count so the
+# host OS and other containers (nginx, django) always keep a free core
+# rather than this pool saturating every CPU on the box.
+_CPU_COUNT = os.cpu_count() or 2
+RETRIEVAL_WORKERS = max(1, _CPU_COUNT - 1)
+retrieval_executor = ThreadPoolExecutor(max_workers=RETRIEVAL_WORKERS, thread_name_prefix="rd-retrieval")
+
+# stream_executor: I/O-bound (blocked on the Gemini network stream, not
+# CPU), so it can run far more concurrent threads than there are cores
+# without contending with retrieval or starving the OS.
+stream_executor = ThreadPoolExecutor(max_workers=64, thread_name_prefix="rd-gemini-stream")
 
 CHAT_MODELS = [
     'gemini-3.1-flash-lite',
@@ -131,14 +152,14 @@ async def _stream_model(client, model: str, prompt: str, send_to_browser) -> tup
     """
     loop        = asyncio.get_event_loop()
     chunk_queue = pyqueue.Queue()
-    loop.run_in_executor(None, _stream_model_sync, client, model, prompt, chunk_queue)
+    loop.run_in_executor(stream_executor, _stream_model_sync, client, model, prompt, chunk_queue)
 
     buffer     = ""
     sent_len   = 0
     marker_idx = -1
 
     while True:
-        kind, payload = await loop.run_in_executor(None, chunk_queue.get)
+        kind, payload = await loop.run_in_executor(stream_executor, chunk_queue.get)
 
         if kind == 'token':
             buffer += payload
@@ -184,8 +205,9 @@ async def handle_question(chat_id: str, question: str, send_to_browser) -> None:
             await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
 
             t0 = time.perf_counter()
-            doc_context, citations, memory_context, n_retrieved, n_reranked = await asyncio.to_thread(
-                _run_retrieval, doc_id, chat_id, question
+            loop = asyncio.get_event_loop()
+            doc_context, citations, memory_context, n_retrieved, n_reranked = await loop.run_in_executor(
+                retrieval_executor, _run_retrieval, doc_id, chat_id, question
             )
             t_retrieval = time.perf_counter() - t0
 
@@ -232,13 +254,12 @@ Answer:"""
                     )
 
                     if summary_text:
-                        # Awaited (not fire-and-forget) — this is cheap (local embed + tiny
-                        # pickle write, no network call), and a background task here created
-                        # a real race: a quick follow-up question could read the memory file
-                        # before this write landed, silently seeing no prior-turn context.
-                        # asyncio.to_thread still keeps it off the event loop, so other
-                        # connected users aren't blocked by it.
-                        await asyncio.to_thread(session_memory.append_turn, chat_id, question, summary_text)
+                        # Awaited (not fire-and-forget) — a background task here created a real
+                        # race: a quick follow-up question could read the memory file before
+                        # this write landed, silently seeing no prior-turn context. Runs on
+                        # retrieval_executor (not the default pool) since embed_document is the
+                        # same CPU-bound local model call as retrieval, not actually "cheap".
+                        await loop.run_in_executor(retrieval_executor, session_memory.append_turn, chat_id, question, summary_text)
                     else:
                         logger.warning('No memory summary parsed for session %s — marker missing from response', chat_id)
 
