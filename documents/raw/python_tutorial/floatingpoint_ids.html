@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="15. Floating-Point Arithmetic:  Issues and Limitations" property="og:title"/>
+<meta content="website" property="og:type"/>
+<meta content="https://docs.python.org/3/tutorial/floatingpoint.html" property="og:url"/>
+<meta content="Python documentation" property="og:site_name"/>
+<meta content="Floating-point numbers are represented in computer hardware as base 2 (binary) fractions. For example, the decimal fraction 0.625 has value 6/10 + 2/100 + 5/1000, and in the same way the binary fra..." property="og:description"/>
+<meta content="1146" property="og:image:width"/>
+<meta content="600" property="og:image:height"/>
+<meta content="https://docs.python.org/3.14/_images/social_previews/summary_tutorial_floatingpoint_c638e124.png" property="og:image"/>
+<meta content="Floating-point numbers are represented in computer hardware as base 2 (binary) fractions. For example, the decimal fraction 0.625 has value 6/10 + 2/100 + 5/1000, and in the same way the binary fra..." property="og:image:alt"/>
+<meta content="Floating-point numbers are represented in computer hardware as base 2 (binary) fractions. For example, the decimal fraction 0.625 has value 6/10 + 2/100 + 5/1000, and in the same way the binary fra..." name="description"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="#3776ab" name="theme-color"/>
+<title>15. Floating-Point Arithmetic: Issues and Limitations — Python 3.14.6 documentation</title><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../_static/classic.css?v=234b1a7c" rel="stylesheet" type="text/css"/>
+<link href="../_static/pydoctheme.css?v=4365c8fe" rel="stylesheet" type="text/css"/>
+<link href="../_static/pygments_dark.css?v=5349f25f" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+
+
+
+
+<link href="../_static/opensearch.xml" rel="search" title="Search within Python 3.14.6 documentation" type="application/opensearchdescription+xml"/>
+<link href="../about.html" rel="author" title="About these documents"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../copyright.html" rel="copyright" title="Copyright"/>
+<link href="appendix.html" rel="next" title="16. Appendix"/>
+<link href="interactive.html" rel="prev" title="14. Interactive Input Editing and History Substitution"/>
+
+<link href="https://docs.python.org/3/tutorial/floatingpoint.html" rel="canonical"/>
+
+<link href="../_static/pydoctheme_dark.css" id="pydoctheme_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet"/>
+<link href="../_static/py.svg" rel="shortcut icon" type="image/png"/>
+
+
+
+
+
+<meta content="1" name="readthedocs-addons-api-version"/>
+</head>
+<body>
+<div class="mobile-nav">
+<input aria-controls="navigation" aria-expanded="false" aria-label="Menu" aria-pressed="false" class="toggler__input" id="menuToggler" role="button" type="checkbox"/>
+
+<div class="menu-wrapper">
+
+</div>
+</div>
+
+<div class="document">
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main">
+<section id="floating-point-arithmetic-issues-and-limitations">
+<span id="tut-fp-issues"></span><h1 id="readar-node-0001"><span class="section-number">15. </span>Floating-Point Arithmetic:  Issues and Limitations<a class="headerlink" href="#floating-point-arithmetic-issues-and-limitations" title="Link to this heading">¶</a></h1>
+<p id="readar-node-0002">Floating-point numbers are represented in computer hardware as base 2 (binary)
+fractions.  For example, the <strong>decimal</strong> fraction <code class="docutils literal notranslate"><span class="pre">0.625</span></code>
+has value 6/10 + 2/100 + 5/1000, and in the same way the <strong>binary</strong> fraction <code class="docutils literal notranslate"><span class="pre">0.101</span></code>
+has value 1/2 + 0/4 + 1/8. These two fractions have identical values, the only
+real difference being that the first is written in base 10 fractional notation,
+and the second in base 2.</p>
+<p id="readar-node-0003">Unfortunately, most decimal fractions cannot be represented exactly as binary
+fractions.  A consequence is that, in general, the decimal floating-point
+numbers you enter are only approximated by the binary floating-point numbers
+actually stored in the machine.</p>
+<p id="readar-node-0004">The problem is easier to understand at first in base 10.  Consider the fraction
+1/3.  You can approximate that as a base 10 fraction:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0005"><span></span><span class="mf">0.3</span>
+</pre></div>
+</div>
+<p id="readar-node-0006">or, better,</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0007"><span></span><span class="mf">0.33</span>
+</pre></div>
+</div>
+<p id="readar-node-0008">or, better,</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0009"><span></span><span class="mf">0.333</span>
+</pre></div>
+</div>
+<p id="readar-node-0010">and so on.  No matter how many digits you’re willing to write down, the result
+will never be exactly 1/3, but will be an increasingly better approximation of
+1/3.</p>
+<p id="readar-node-0011">In the same way, no matter how many base 2 digits you’re willing to use, the
+decimal value 0.1 cannot be represented exactly as a base 2 fraction.  In base
+2, 1/10 is the infinitely repeating fraction</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0012"><span></span><span class="mf">0.0001100110011001100110011001100110011001100110011</span><span class="o">...</span>
+</pre></div>
+</div>
+<p id="readar-node-0013">Stop at any finite number of bits, and you get an approximation.  On most
+machines today, floats are approximated using a binary fraction with
+the numerator using the first 53 bits starting with the most significant bit and
+with the denominator as a power of two.  In the case of 1/10, the binary fraction
+is <code class="docutils literal notranslate"><span class="pre">3602879701896397</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">**</span> <span class="pre">55</span></code> which is close to but not exactly
+equal to the true value of 1/10.</p>
+<p id="readar-node-0014">Many users are not aware of the approximation because of the way values are
+displayed.  Python only prints a decimal approximation to the true decimal
+value of the binary approximation stored by the machine.  On most machines, if
+Python were to print the true decimal value of the binary approximation stored
+for 0.1, it would have to display:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0015"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.1</span>
+<span class="go">0.1000000000000000055511151231257827021181583404541015625</span>
+</pre></div>
+</div>
+<p id="readar-node-0016">That is more digits than most people find useful, so Python keeps the number
+of digits manageable by displaying a rounded value instead:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0017"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span>
+<span class="go">0.1</span>
+</pre></div>
+</div>
+<p id="readar-node-0018">Just remember, even though the printed result looks like the exact value
+of 1/10, the actual stored value is the nearest representable binary fraction.</p>
+<p id="readar-node-0019">Interestingly, there are many different decimal numbers that share the same
+nearest approximate binary fraction.  For example, the numbers <code class="docutils literal notranslate"><span class="pre">0.1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">0.10000000000000001</span></code> and
+<code class="docutils literal notranslate"><span class="pre">0.1000000000000000055511151231257827021181583404541015625</span></code> are all
+approximated by <code class="docutils literal notranslate"><span class="pre">3602879701896397</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">**</span> <span class="pre">55</span></code>.  Since all of these decimal
+values share the same approximation, any one of them could be displayed
+while still preserving the invariant <code class="docutils literal notranslate"><span class="pre">eval(repr(x))</span> <span class="pre">==</span> <span class="pre">x</span></code>.</p>
+<p id="readar-node-0020">Historically, the Python prompt and built-in <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code></a> function would choose
+the one with 17 significant digits, <code class="docutils literal notranslate"><span class="pre">0.10000000000000001</span></code>.   Starting with
+Python 3.1, Python (on most systems) is now able to choose the shortest of
+these and simply display <code class="docutils literal notranslate"><span class="pre">0.1</span></code>.</p>
+<p id="readar-node-0021">Note that this is in the very nature of binary floating point: this is not a bug
+in Python, and it is not a bug in your code either.  You’ll see the same kind of
+thing in all languages that support your hardware’s floating-point arithmetic
+(although some languages may not <em>display</em> the difference by default, or in all
+output modes).</p>
+<p id="readar-node-0022">For more pleasant output, you may wish to use string formatting to produce a
+limited number of significant digits:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0023"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">'.12g'</span><span class="p">)</span>  <span class="c1"># give 12 significant digits</span>
+<span class="go">'3.14159265359'</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="s1">'.2f'</span><span class="p">)</span>   <span class="c1"># give 2 digits after the point</span>
+<span class="go">'3.14'</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="go">'3.141592653589793'</span>
+</pre></div>
+</div>
+<p id="readar-node-0024">It’s important to realize that this is, in a real sense, an illusion: you’re
+simply rounding the <em>display</em> of the true machine value.</p>
+<p id="readar-node-0025">One illusion may beget another.  For example, since 0.1 is not exactly 1/10,
+summing three values of 0.1 may not yield exactly 0.3, either:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0026"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">==</span> <span class="mf">0.3</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p id="readar-node-0027">Also, since the 0.1 cannot get any closer to the exact value of 1/10 and
+0.3 cannot get any closer to the exact value of 3/10, then pre-rounding with
+<a class="reference internal" href="../library/functions.html#round" title="round"><code class="xref py py-func docutils literal notranslate"><span class="pre">round()</span></code></a> function cannot help:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0028"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p id="readar-node-0029">Though the numbers cannot be made closer to their intended exact values,
+the <a class="reference internal" href="../library/math.html#math.isclose" title="math.isclose"><code class="xref py py-func docutils literal notranslate"><span class="pre">math.isclose()</span></code></a> function can be useful for comparing inexact values:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0030"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0031">Alternatively, the <a class="reference internal" href="../library/functions.html#round" title="round"><code class="xref py py-func docutils literal notranslate"><span class="pre">round()</span></code></a> function can be used to compare rough
+approximations:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0032"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span><span class="mi">22</span> <span class="o">/</span> <span class="mi">7</span><span class="p">,</span> <span class="n">ndigits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0033">Binary floating-point arithmetic holds many surprises like this.  The problem
+with “0.1” is explained in precise detail below, in the “Representation Error”
+section.  See <a class="reference external" href="https://jvns.ca/blog/2023/01/13/examples-of-floating-point-problems/">Examples of Floating Point Problems</a> for
+a pleasant summary of how binary floating point works and the kinds of
+problems commonly encountered in practice.  Also see
+<a class="reference external" href="http://www.indowsway.com/floatingpoint.htm">The Perils of Floating Point</a>
+for a more complete account of other common surprises.</p>
+<p id="readar-node-0034">As that says near the end, “there are no easy answers.”  Still, don’t be unduly
+wary of floating point!  The errors in Python float operations are inherited
+from the floating-point hardware, and on most machines are on the order of no
+more than 1 part in 2**53 per operation.  That’s more than adequate for most
+tasks, but you do need to keep in mind that it’s not decimal arithmetic and
+that every float operation can suffer a new rounding error.</p>
+<p id="readar-node-0035">While pathological cases do exist, for most casual use of floating-point
+arithmetic you’ll see the result you expect in the end if you simply round the
+display of your final results to the number of decimal digits you expect.
+<a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> usually suffices, and for finer control see the <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.format()</span></code></a>
+method’s format specifiers in <a class="reference internal" href="../library/string.html#formatstrings"><span class="std std-ref">Format string syntax</span></a>.</p>
+<p id="readar-node-0036">For use cases which require exact decimal representation, try using the
+<a class="reference internal" href="../library/decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic Specification."><code class="xref py py-mod docutils literal notranslate"><span class="pre">decimal</span></code></a> module which implements decimal arithmetic suitable for
+accounting applications and high-precision applications.</p>
+<p id="readar-node-0037">Another form of exact arithmetic is supported by the <a class="reference internal" href="../library/fractions.html#module-fractions" title="fractions: Rational numbers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">fractions</span></code></a> module
+which implements arithmetic based on rational numbers (so the numbers like
+1/3 can be represented exactly).</p>
+<p id="readar-node-0038">If you are a heavy user of floating-point operations you should take a look
+at the NumPy package and many other packages for mathematical and
+statistical operations supplied by the SciPy project. See &lt;<a class="reference external" href="https://scipy.org">https://scipy.org</a>&gt;.</p>
+<p id="readar-node-0039">Python provides tools that may help on those rare occasions when you really
+<em>do</em> want to know the exact value of a float.  The
+<a class="reference internal" href="../library/stdtypes.html#float.as_integer_ratio" title="float.as_integer_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">float.as_integer_ratio()</span></code></a> method expresses the value of a float as a
+fraction:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0040"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="mf">3.14159</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()</span>
+<span class="go">(3537115888337719, 1125899906842624)</span>
+</pre></div>
+</div>
+<p id="readar-node-0041">Since the ratio is exact, it can be used to losslessly recreate the
+original value:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0042"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">==</span> <span class="mi">3537115888337719</span> <span class="o">/</span> <span class="mi">1125899906842624</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0043">The <a class="reference internal" href="../library/stdtypes.html#float.hex" title="float.hex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">float.hex()</span></code></a> method expresses a float in hexadecimal (base
+16), again giving the exact value stored by your computer:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0044"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+<span class="go">'0x1.921f9f01b866ep+1'</span>
+</pre></div>
+</div>
+<p id="readar-node-0045">This precise hexadecimal representation can be used to reconstruct
+the float value exactly:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0046"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">==</span> <span class="nb">float</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">'0x1.921f9f01b866ep+1'</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0047">Since the representation is exact, it is useful for reliably porting values
+across different versions of Python (platform independence) and exchanging
+data with other languages that support the same format (such as Java and C99).</p>
+<p id="readar-node-0048">Another helpful tool is the <a class="reference internal" href="../library/functions.html#sum" title="sum"><code class="xref py py-func docutils literal notranslate"><span class="pre">sum()</span></code></a> function which helps mitigate
+loss-of-precision during summation.  It uses extended precision for
+intermediate rounding steps as values are added onto a running total.
+That can make a difference in overall accuracy so that the errors do not
+accumulate to the point where they affect the final total:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0049"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">==</span> <span class="mf">1.0</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="mf">0.1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0050">The <a class="reference internal" href="../library/math.html#math.fsum" title="math.fsum"><code class="xref py py-func docutils literal notranslate"><span class="pre">math.fsum()</span></code></a> goes further and tracks all of the “lost digits”
+as values are added onto a running total so that the result has only a
+single rounding.  This is slower than <a class="reference internal" href="../library/functions.html#sum" title="sum"><code class="xref py py-func docutils literal notranslate"><span class="pre">sum()</span></code></a> but will be more
+accurate in uncommon cases where large magnitude inputs mostly cancel
+each other out leaving a final sum near zero:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0051"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.10430216751806065</span><span class="p">,</span> <span class="o">-</span><span class="mf">266310978.67179024</span><span class="p">,</span> <span class="mf">143401161448607.16</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="o">-</span><span class="mf">143401161400469.7</span><span class="p">,</span> <span class="mf">266262841.31058735</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.003244936839808227</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Fraction</span><span class="p">,</span> <span class="n">arr</span><span class="p">)))</span>   <span class="c1"># Exact summation with single rounding</span>
+<span class="go">8.042173697819788e-13</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">fsum</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>                   <span class="c1"># Single rounding</span>
+<span class="go">8.042173697819788e-13</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>                         <span class="c1"># Multiple roundings in extended precision</span>
+<span class="go">8.042178034628478e-13</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span>                   <span class="c1"># Multiple roundings in standard precision</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">total</span>                            <span class="c1"># Straight addition has no correct digits!</span>
+<span class="go">-0.0051575902860057365</span>
+</pre></div>
+</div>
+<section id="representation-error">
+<span id="tut-fp-error"></span><h2 id="readar-node-0052"><span class="section-number">15.1. </span>Representation Error<a class="headerlink" href="#representation-error" title="Link to this heading">¶</a></h2>
+<p id="readar-node-0053">This section explains the “0.1” example in detail, and shows how you can perform
+an exact analysis of cases like this yourself.  Basic familiarity with binary
+floating-point representation is assumed.</p>
+<p id="readar-node-0054"><em class="dfn">Representation error</em> refers to the fact that some (most, actually)
+decimal fractions cannot be represented exactly as binary (base 2) fractions.
+This is the chief reason why Python (or Perl, C, C++, Java, Fortran, and many
+others) often won’t display the exact decimal number you expect.</p>
+<p id="readar-node-0055">Why is that?  1/10 is not exactly representable as a binary fraction.  Since at
+least 2000, almost all machines use IEEE 754 binary floating-point arithmetic,
+and almost all platforms map Python floats to IEEE 754 binary64 “double
+precision” values.  IEEE 754 binary64 values contain 53 bits of precision, so
+on input the computer strives to convert 0.1 to the closest fraction it can of
+the form <em>J</em>/2**<em>N</em> where <em>J</em> is an integer containing exactly 53 bits.
+Rewriting</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0056"><span></span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">~=</span> <span class="n">J</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="readar-node-0057">as</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0058"><span></span><span class="n">J</span> <span class="o">~=</span> <span class="mi">2</span><span class="o">**</span><span class="n">N</span> <span class="o">/</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p id="readar-node-0059">and recalling that <em>J</em> has exactly 53 bits (is <code class="docutils literal notranslate"><span class="pre">&gt;=</span> <span class="pre">2**52</span></code> but <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">2**53</span></code>),
+the best value for <em>N</em> is 56:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0060"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">2</span><span class="o">**</span><span class="mi">52</span> <span class="o">&lt;=</span>  <span class="mi">2</span><span class="o">**</span><span class="mi">56</span> <span class="o">//</span> <span class="mi">10</span>  <span class="o">&lt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">53</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0061">That is, 56 is the only value for <em>N</em> that leaves <em>J</em> with exactly 53 bits.  The
+best possible value for <em>J</em> is then that quotient rounded:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0062"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">56</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<p id="readar-node-0063">Since the remainder is more than half of 10, the best approximation is obtained
+by rounding up:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0064"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span><span class="o">+</span><span class="mi">1</span>
+<span class="go">7205759403792794</span>
+</pre></div>
+</div>
+<p id="readar-node-0065">Therefore the best possible approximation to 1/10 in IEEE 754 double precision
+is:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0066"><span></span><span class="mi">7205759403792794</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">56</span>
+</pre></div>
+</div>
+<p id="readar-node-0067">Dividing both the numerator and denominator by two reduces the fraction to:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0068"><span></span><span class="mi">3602879701896397</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">55</span>
+</pre></div>
+</div>
+<p id="readar-node-0069">Note that since we rounded up, this is actually a little bit larger than 1/10;
+if we had not rounded up, the quotient would have been a little bit smaller than
+1/10.  But in no case can it be <em>exactly</em> 1/10!</p>
+<p id="readar-node-0070">So the computer never “sees” 1/10:  what it sees is the exact fraction given
+above, the best IEEE 754 double approximation it can get:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0071"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">55</span>
+<span class="go">3602879701896397.0</span>
+</pre></div>
+</div>
+<p id="readar-node-0072">If we multiply that fraction by 10**55, we can see the value out to
+55 decimal digits:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0073"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mi">3602879701896397</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">55</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">55</span>
+<span class="go">1000000000000000055511151231257827021181583404541015625</span>
+</pre></div>
+</div>
+<p id="readar-node-0074">meaning that the exact number stored in the computer is equal to
+the decimal value 0.1000000000000000055511151231257827021181583404541015625.
+Instead of displaying the full decimal value, many languages (including
+older versions of Python), round the result to 17 significant digits:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0075"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="s1">'.17f'</span><span class="p">)</span>
+<span class="go">'0.10000000000000001'</span>
+</pre></div>
+</div>
+<p id="readar-node-0076">The <a class="reference internal" href="../library/fractions.html#module-fractions" title="fractions: Rational numbers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">fractions</span></code></a> and <a class="reference internal" href="../library/decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic Specification."><code class="xref py py-mod docutils literal notranslate"><span class="pre">decimal</span></code></a> modules make these calculations
+easy:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre id="readar-node-0077"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">fractions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fraction</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">Fraction(3602879701896397, 36028797018963968)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">as_integer_ratio</span><span class="p">()</span>
+<span class="go">(3602879701896397, 36028797018963968)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Decimal</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="go">Decimal('0.1000000000000000055511151231257827021181583404541015625')</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="n">Decimal</span><span class="o">.</span><span class="n">from_float</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="s1">'.17'</span><span class="p">)</span>
+<span class="go">'0.10000000000000001'</span>
+</pre></div>
+</div>
+</section>
+</section>
+<div class="clearer"></div>
+</div>
+</div>
+</div>
+
+<div class="clearer"></div>
+</div>
+
+<div class="footer">
+    © <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br/>
+    This page is licensed under the Python Software Foundation License Version 2.
+    <br/>
+    Examples, recipes, and other code in the documentation are additionally licensed under the Zero Clause BSD License.
+    <br/>
+    
+      See <a href="/license.html">History and License</a> for more information.<br/>
+<br/>
+
+    The Python Software Foundation is a non-profit corporation.
+<a href="https://www.python.org/psf/donations/">Please donate.</a>
+<br/>
+<br/>
+      Last updated on Jul 29, 2026 (11:21 UTC).
+    
+      <a href="/bugs.html">Found a bug</a>?
+    
+    <br/>
+
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+
+</body>
+</html>

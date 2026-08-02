@@ -146,6 +146,7 @@ export default function SplitView({ doc, onBack }) {
   const [chapter, setChapter] = useState(doc.startChapter)
   const [typing, setTyping]   = useState(false)
   const [docCollapsed, setDocCollapsed] = useState(false)
+  const [historyCollapsed, setHistoryCollapsed] = useState(false)
   const [sessions, setSessions]         = useState([])
   const iframeRef               = useRef()
   const chatEndRef              = useRef()
@@ -439,43 +440,65 @@ export default function SplitView({ doc, onBack }) {
 
       {/* ── RIGHT: chat sidebar + conversation ── */}
       <div className="rd-split-right rd-theme-dark-glass">
-        <aside className="rd-chat-sidebar">
-          <button className="rd-new-chat-btn" onClick={handleNewChat}>
-            <Icon name="plus" size={13} /> New chat
-          </button>
-          <div className="rd-sidebar-label">
-            <Icon name="book" size={12} /> History
-          </div>
-          <div className="rd-sidebar-list">
-            {visibleSessions.length === 0 ? (
-              <div className="rd-history-empty">No past sessions yet</div>
-            ) : (
-              visibleSessions.map(s => (
-                <div
-                  key={s.chat_id}
-                  className={`rd-history-item ${s.chat_id === chatId ? 'active' : ''}`}
-                  onClick={() => handleSwitchSession(s.chat_id)}
-                >
-                  <div className="rd-history-item-text">
-                    <span className="rd-history-item-title">
-                      {s.first_question || 'New conversation'}
-                    </span>
-                    <span className="rd-history-item-meta">
-                      {s.turn_count} turns · {new Date(s.updated_at).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <button
-                    className="rd-history-item-delete"
-                    title="Delete this conversation"
-                    onClick={(e) => handleDeleteSession(e, s.chat_id)}
+        {!historyCollapsed && (
+          <aside className="rd-chat-sidebar">
+            <div className="rd-sidebar-top">
+              <button className="rd-new-chat-btn" onClick={handleNewChat}>
+                <Icon name="plus" size={13} /> New chat
+              </button>
+              <button
+                className="rd-history-collapse-btn"
+                onClick={() => setHistoryCollapsed(true)}
+                title="Hide history"
+              >
+                <Icon name="chevronLeft" size={14} />
+              </button>
+            </div>
+            <div className="rd-sidebar-label">
+              <Icon name="book" size={12} /> History
+            </div>
+            <div className="rd-sidebar-list">
+              {visibleSessions.length === 0 ? (
+                <div className="rd-history-empty">No past sessions yet</div>
+              ) : (
+                visibleSessions.map(s => (
+                  <div
+                    key={s.chat_id}
+                    className={`rd-history-item ${s.chat_id === chatId ? 'active' : ''}`}
+                    onClick={() => handleSwitchSession(s.chat_id)}
                   >
-                    <Icon name="trash" size={13} />
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-        </aside>
+                    <div className="rd-history-item-text">
+                      <span className="rd-history-item-title">
+                        {s.first_question || 'New conversation'}
+                      </span>
+                      <span className="rd-history-item-meta">
+                        {s.turn_count} turns · {new Date(s.updated_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <button
+                      className="rd-history-item-delete"
+                      title="Delete this conversation"
+                      onClick={(e) => handleDeleteSession(e, s.chat_id)}
+                    >
+                      <Icon name="trash" size={13} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </aside>
+        )}
+
+        {historyCollapsed && (
+          <button
+            className="rd-history-expand-rail"
+            onClick={() => setHistoryCollapsed(false)}
+            title="Show history"
+          >
+            <Icon name="panelLeft" size={14} />
+            <span>History</span>
+          </button>
+        )}
 
         <div className="rd-chat-main">
           <div className="rd-chat-area">

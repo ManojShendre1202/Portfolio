@@ -258,9 +258,13 @@
   border-right: 1px solid var(--rd-line);
   overflow: hidden;
 }
+.rd-sidebar-top {
+  display: flex; align-items: center; gap: 8px;
+  flex-shrink: 0;
+}
 .rd-new-chat-btn {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%;
+  flex: 1;
   background: transparent;
   border: 1px solid var(--rd-line-strong);
   border-radius: 10px;
@@ -271,6 +275,45 @@
   flex-shrink: 0;
 }
 .rd-new-chat-btn:hover { background: var(--rd-accent-wash); border-color: var(--rd-accent-line); color: var(--rd-ink); }
+
+.rd-history-collapse-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--rd-line-strong);
+  color: var(--rd-muted);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.rd-history-collapse-btn:hover { background: var(--rd-bg3); color: var(--rd-ink); border-color: var(--rd-line-strong); }
+
+.rd-history-expand-rail {
+  flex-shrink: 0;
+  width: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 20px 0;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rd-line);
+  color: var(--rd-muted);
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.rd-history-expand-rail:hover { color: var(--rd-ink); background: var(--rd-bg3); }
+.rd-history-expand-rail span {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
 
 .rd-sidebar-label {
   display: flex; align-items: center; gap: 6px;
@@ -373,6 +416,7 @@
   display: flex; flex-direction: column; gap: 28px;
   max-width: 900px;
   width: 100%;
+  margin: 0 auto;
 }
 .rd-chat-empty {
   flex: 1;
@@ -525,6 +569,7 @@
   padding: 14px 32px 22px;
   max-width: 900px;
   width: 100%;
+  margin: 0 auto;
 }
 .rd-input-row {
   display: flex; gap: 10px; align-items: flex-end;

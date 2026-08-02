@@ -27,6 +27,7 @@ services:
       - PYTHONUNBUFFERED=1
     volumes:
       - media_data:/app/media        # same volume — reads files django wrote
+      - hf_cache:/root/.cache/huggingface   # embedder/reranker weights — survives rebuilds
     restart: unless-stopped
 
   # ── Nginx ────────────────────────────────────────────────────────────────
@@ -56,3 +57,4 @@ volumes:
   media_data:                        # named volume — survives container restarts
   certbot_conf:                      # Let's Encrypt certs + account keys
   certbot_www:                       # ACME HTTP-01 challenge webroot, shared with certbot
+  hf_cache:                          # HuggingFace model cache — avoids re-downloading on every rebuild
