@@ -1,8 +1,42 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import lottie from 'lottie-web'
 import robotData from '../../assets/robot.json'
 import './Portfolio.css'
+
+/* ══════════════════════════════
+   TILT CARD — cursor-reactive 3D tilt wrapper
+══════════════════════════════ */
+function TiltCard({ children, className, style, max = 6, ...motionProps }) {
+  const ref = useRef(null)
+  const mx  = useMotionValue(0)
+  const my  = useMotionValue(0)
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [max, -max]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-max, max]), { stiffness: 300, damping: 30 })
+  const glowX   = useSpring(useTransform(mx, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
+  const glowY   = useSpring(useTransform(my, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
+
+  const onMove = (e) => {
+    const r = ref.current.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => { mx.set(0); my.set(0) }
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`tilt-card ${className || ''}`}
+      style={{ ...style, rotateX, rotateY, '--gx': glowX, '--gy': glowY }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      {...motionProps}
+    >
+      <div className="tilt-glow" aria-hidden />
+      {children}
+    </motion.div>
+  )
+}
 
 /* ══════════════════════════════
    NAVBAR
@@ -10,7 +44,7 @@ import './Portfolio.css'
 const NAV_LINKS = [
   { label: 'About',      href: '#about'      },
   { label: 'Experience', href: '#experience' },
-  { label: 'Dockyard',   href: '#dockyard'   },
+  { label: 'Readar',     href: '#readar'     },
   { label: 'Skills',     href: '#skills'     },
   { label: 'Contact',    href: '#contact'    },
 ]
@@ -171,23 +205,8 @@ function CountUp({ target, suffix = '', duration = 1800 }) {
 }
 
 function MagButton({ children, href, className }) {
-  const ref = useRef(null)
-
-  const onMove = (e) => {
-    const r  = ref.current.getBoundingClientRect()
-    const dx = e.clientX - (r.left + r.width / 2)
-    const dy = e.clientY - (r.top  + r.height / 2)
-    ref.current.style.transform = `translate(${dx * 0.35}px, ${dy * 0.35}px)`
-  }
-
-  const onLeave = () => {
-    ref.current.style.transition = 'transform 0.5s cubic-bezier(0.25,0.1,0.25,1)'
-    ref.current.style.transform = 'translate(0,0)'
-    setTimeout(() => { if (ref.current) ref.current.style.transition = '' }, 500)
-  }
-
   return (
-    <a ref={ref} href={href} className={className} onMouseMove={onMove} onMouseLeave={onLeave}>
+    <a href={href} className={className}>
       {children}
     </a>
   )
@@ -212,7 +231,7 @@ function Intro() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <span className="callout-label">Sheet 01 · Cover</span>
+          <span className="callout-label">· Cover</span>
           <span className="intro-location">Bangalore, India · Open to relocation</span>
         </motion.div>
 
@@ -320,6 +339,30 @@ function Marquee({ dark = false }) {
   )
 }
 
+/* mask-wipe reveal — curtain-style clip-path reveal for headlines.
+   onMount=true animates immediately instead of on scroll — whileInView's
+   IntersectionObserver is unreliable inside a position:sticky ancestor
+   (e.g. .exp-header-wrap), so sticky-parented headlines would stay stuck
+   at their fully-clipped initial state and never reveal. */
+function MaskReveal({ children, as: Tag = 'h2', className, delay = 0, onMount = false }) {
+  const hiddenClip  = 'inset(-20% 100% -20% 0%)'
+  const visibleClip = 'inset(-20% 0% -20% 0%)'
+  const revealProps = onMount
+    ? { initial: { clipPath: hiddenClip }, animate: { clipPath: visibleClip } }
+    : { initial: { clipPath: hiddenClip }, whileInView: { clipPath: visibleClip }, viewport: { once: true, margin: '-80px' } }
+
+  return (
+    <div className="mask-reveal-wrap">
+      <motion.div
+        {...revealProps}
+        transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <Tag className={className}>{children}</Tag>
+      </motion.div>
+    </div>
+  )
+}
+
 /* ══════════════════════════════
    ABOUT
 ══════════════════════════════ */
@@ -349,17 +392,21 @@ const CREDENTIALS = [
 ]
 
 function About() {
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
+
   return (
-    <section className="about-section" id="about">
+    <section className="about-section" id="about" ref={sectionRef}>
       <span className="reg-mark tl" aria-hidden /><span className="reg-mark br" aria-hidden />
-      <div className="about-inner">
+      <motion.div className="about-inner" style={{ y }}>
 
         <motion.p className="section-label" {...aboutReveal(0)}>About</motion.p>
 
-        <motion.h2 className="about-headline" {...aboutReveal(0.1)}>
+        <MaskReveal className="about-headline" delay={0.1}>
           Aeronautical engineer<br />
           <em>who builds CV systems</em>
-        </motion.h2>
+        </MaskReveal>
 
         <motion.div className="about-body" {...aboutReveal(0.2)}>
           <p>
@@ -391,7 +438,7 @@ function About() {
           ))}
         </motion.div>
 
-      </div>
+      </motion.div>
 
       <div className="sheet-title-block">
         <div className="stb-num">MS-02</div>
@@ -624,17 +671,36 @@ const PROJECTS = [
 ]
 
 function ProjectRow({ p, onOpen }) {
-  const sc = STATUS_COLOR[p.status] || '#78716c'
+  const sc  = STATUS_COLOR[p.status] || '#78716c'
+  const ref = useRef(null)
+  const mx  = useMotionValue(0)
+  const my  = useMotionValue(0)
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [3, -3]), { stiffness: 300, damping: 30 })
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-3, 3]), { stiffness: 300, damping: 30 })
+  const glowX   = useSpring(useTransform(mx, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
+  const glowY   = useSpring(useTransform(my, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
+
+  const onMove  = (e) => {
+    const r = ref.current.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => { mx.set(0); my.set(0) }
 
   return (
     <motion.div
+      ref={ref}
       className="log-row"
       initial={{ opacity: 0, x: -16 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.5, delay: 0.03, ease: [0.25, 0.1, 0.25, 1] }}
+      style={{ rotateX, rotateY, '--gx': glowX, '--gy': glowY }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
       onClick={() => onOpen({ ...p, statusColor: sc })}
     >
+      <div className="log-glow" aria-hidden />
       <span className="log-num">{p.num}</span>
 
       <div className="log-main">
@@ -671,10 +737,10 @@ function Experience() {
         <div className="exp-header-wrap">
           <motion.div className="exp-header" style={{ y }}>
             <p className="section-label">Professional Experience</p>
-            <h2 className="section-title">
+            <MaskReveal className="section-title" onMount>
               Kynea Solutions LLP<br />
               <em>May 2024 — Present</em>
-            </h2>
+            </MaskReveal>
             <p className="exp-sub">
               ML Engineer · Bangalore<br />
               7 of 10 projects — core development or lead
@@ -701,51 +767,47 @@ function Experience() {
 }
 
 /* ══════════════════════════════
-   DOCKYARD
+   READAR
 ══════════════════════════════ */
 const DOCK_STEPS = [
-  { num: '01', title: 'pipeline_config.py',  desc: 'Define queues, pipeline stages, and entry point. New domain in one file.' },
-  { num: '02', title: 'workflow_stages.json', desc: 'Stage names and metadata. Must match pipeline keys exactly.' },
-  { num: '03', title: 'Worker files',         desc: 'Each worker: run(task, update_queue) → TaskResult. That\'s the entire contract.' },
-  { num: '04', title: 'Upload view',          desc: 'Django view sends TCP signal with stage name. Engine receives, dispatches.' },
-  { num: '05', title: 'Review APIs',          desc: 'submit_validation and data endpoints for human-review gate stages.' },
-  { num: '06', title: '__init__.py',          desc: 'Present in every new Python package. Easy to forget, always the last bug.' },
+  { num: '01', title: 'Parse',   desc: 'DOM-aware HTML parsing — heading-path stitching, no font-size heuristics. Cross-page paragraph stitching for PDFs.' },
+  { num: '02', title: 'Embed',   desc: 'nomic-embed-text-v1.5 locally, 8192-token context. Overflow nodes chunked + mean-pooled, never truncated.' },
+  { num: '03', title: 'Graph',   desc: 'Cosine-similarity edges above threshold connect nodes — coreferences resolve naturally, no entity extraction pass.' },
+  { num: '04', title: 'Retrieve', desc: 'BFS hop traversal over the graph pulls a candidate subgraph — a cheap, wide recall net.' },
+  { num: '05', title: 'Rerank',  desc: 'Cross-encoder re-scores candidates against the real query text — cuts tokens sent to Gemini by ~75-85%.' },
+  { num: '06', title: 'Stream',  desc: 'WebSocket token streaming with live citation highlighting — click a citation, it scrolls to and flashes the real source paragraph.' },
 ]
 
 const DOCK_PRINCIPLES = [
   {
-    principle: 'Open / Closed Principle',
-    source:    'Robert C. Martin — Clean Architecture',
-    quote:     'Open for extension, closed for modification.',
-    how:       'Engine files are never touched per domain. New behaviour is added only by writing new workers and configs.',
+    name:   'Memory that doesn\'t grow with the conversation',
+    metric: 'Flat cost — turn 2 or turn 30',
+    detail: 'Each turn\'s hidden summary gets embedded into its own small per-session graph. A new question retrieves only the few relevant past turns, never the full transcript.',
   },
   {
-    principle: 'Single Responsibility',
-    source:    'Robert C. Martin — Clean Code',
-    quote:     'A module should have one, and only one, reason to change.',
-    how:       'Each worker does exactly one stage. The dispatcher orchestrates. The pool executes. Zero overlap.',
+    name:   'Rerank before it reaches Gemini',
+    metric: '~75-85% fewer tokens per answer',
+    detail: 'Graph-hop retrieval casts a wide net; a cross-encoder re-scores every candidate against the actual question before anything gets sent to the model.',
   },
   {
-    principle: 'Dependency Inversion',
-    source:    'Robert C. Martin — Clean Architecture',
-    quote:     'High-level modules should not depend on low-level modules. Both should depend on abstractions.',
-    how:       'Engine depends only on BaseTask and TaskResult abstractions — never on concrete domain workers.',
+    name:   'A similarity graph, not an entity graph',
+    metric: 'Zero entity-extraction passes',
+    detail: 'Nodes are paragraphs, edges are cosine similarity. Coreferences like "it" or "the system" resolve for free by clustering with what they mean.',
   },
   {
-    principle: 'Plugin Architecture',
-    source:    'Martin Fowler — Patterns of Enterprise Application Architecture',
-    quote:     'Define a fixed core and a flexible shell.',
-    how:       'The engine is the fixed core. Every client domain is a plugin — dropped in without touching the core.',
+    name:   'Built to survive real concurrent load',
+    metric: 'Load-tested with real simultaneous chats',
+    detail: 'Blocking embed/rerank/Gemini calls run off the shared event loop in dedicated executors; a rate guard returns a friendly message instead of a raw exception.',
   },
 ]
 
-function Dockyard() {
+function Readar() {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
   const lineH = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%'])
 
   return (
-    <section className="dock-section" id="dockyard" ref={ref}>
+    <section className="dock-section" id="readar" ref={ref}>
       <span className="reg-mark on-dark tl" aria-hidden /><span className="reg-mark on-dark tr" aria-hidden />
       <div className="dock-inner">
 
@@ -757,10 +819,10 @@ function Dockyard() {
           transition={{ duration: 0.7 }}
         >
           <p className="section-label">Personal Project</p>
-          <h2 className="section-title">Dockyard<br /><em>Workflow Engine</em></h2>
+          <MaskReveal className="section-title">Readar<br /><em>Graph RAG Chat Engine</em></MaskReveal>
           <p className="dock-tagline">
-            A domain-agnostic drawing processing engine —<br />
-            built from first principles, designed to never be touched.
+            A retrieval-augmented chatbot built from scratch —<br />
+            semantic similarity graph, live citations, real conversation memory.
           </p>
         </motion.div>
 
@@ -773,26 +835,34 @@ function Dockyard() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <p>
-              Built over 6–9 months after multiple failed attempts.
-              A <strong>domain-agnostic drawing processing engine</strong> — plugin architecture,
-              custom Python worker pool with configurable concurrency, multi-stage pipelines
-              with human-review gates, real-time WebSocket log streaming, crash recovery,
-              and TCP signal-based job dispatch.
+              A <strong>graph-based RAG pipeline</strong> written from first principles — no
+              vector DB, no LangChain. Paragraphs become nodes, cosine-similarity edges connect
+              related ideas, and a BFS hop-traversal retrieves a subgraph per question. A
+              cross-encoder reranks the candidates before anything reaches Gemini.
             </p>
             <p>
-              The engine files are <strong>never touched</strong> when adding a new client domain.
-              Drop in a config file, write workers, done.
+              The live demo ingests real documentation end-to-end — parsed straight from the
+              DOM, stitched into 1,049 nodes and 549,676 similarity edges — and answers with
+              streamed responses, clickable citations that scroll to and highlight the exact
+              source paragraph, and a live trace panel exposing retrieval scores, token counts,
+              and latency per stage.
             </p>
             <p>
-              Designed to support drawing-processing logic across domains — railways,
-              shipbuilding, automotive — with the same core engine and entirely different
-              domain logic per plugin.
+              Multi-turn memory is <strong>retrieval-augmented, not history replay</strong> —
+              each turn's hidden summary is embedded into its own small per-session graph, so
+              cost stays flat over a long conversation instead of growing with every turn.
+            </p>
+            <p>
+              Self-hosted end-to-end on an <strong>Oracle Cloud (OCI) ARM VM</strong> — Dockerized
+              Django + WebSocket services behind Nginx, load-tested with real concurrent chat
+              sessions (embedding, reranking, and Gemini streaming all running under actual
+              simultaneous load, not just single-request benchmarks).
             </p>
 
             <div className="dock-stats">
               {[
-                { num: '0',   label: 'Engine files touched\nper new domain' },
-                { num: '6',   label: 'Step onboarding\nchecklist' },
+                { num: '1,049',  label: 'Nodes ingested\n(live demo graph)' },
+                { num: '~80%',   label: 'Token cut from\ntwo-stage rerank' },
               ].map((s, i) => (
                 <div key={i} className="dock-stat">
                   <span className="dock-stat-num">{s.num}</span>
@@ -803,7 +873,7 @@ function Dockyard() {
           </motion.div>
 
           <div className="dock-steps-wrap">
-            <p className="dock-steps-title">6-Step Onboarding Checklist</p>
+            <p className="dock-steps-title">Pipeline — question to answer</p>
 
             <div className="dock-line-track">
               <motion.div className="dock-line-fill" style={{ height: lineH }} />
@@ -837,10 +907,10 @@ function Dockyard() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <p className="dock-principles-title">Built on</p>
+          <p className="dock-principles-title">Engineering decisions</p>
           <div className="dock-principles-grid">
             {DOCK_PRINCIPLES.map((p, i) => (
-              <motion.div
+              <TiltCard
                 key={i}
                 className="dock-principle"
                 initial={{ opacity: 0, y: 16 }}
@@ -848,13 +918,10 @@ function Dockyard() {
                 viewport={{ once: true, margin: '-20px' }}
                 transition={{ duration: 0.5, delay: i * 0.07 }}
               >
-                <div className="dp-header">
-                  <span className="dp-name">{p.principle}</span>
-                  <span className="dp-source">{p.source}</span>
-                </div>
-                <p className="dp-quote">"{p.quote}"</p>
-                <p className="dp-how">{p.how}</p>
-              </motion.div>
+                <p className="dp-name">{p.name}</p>
+                <p className="dp-metric">{p.metric}</p>
+                <p className="dp-how">{p.detail}</p>
+              </TiltCard>
             ))}
           </div>
         </motion.div>
@@ -866,8 +933,13 @@ function Dockyard() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="dock-oss-label">Open Source</span>
-          <p>GitHub release coming soon — clean extraction in progress.</p>
+          <span className="dock-oss-label">Live Demo</span>
+          <p>
+            Try it yourself — pick a curated doc and ask it anything at{' '}
+            <a href="https://manojshendre.com/readar/" target="_blank" rel="noopener noreferrer" className="dock-oss-link">
+              manojshendre.com/readar
+            </a>
+          </p>
         </motion.div>
 
       </div>
@@ -884,19 +956,24 @@ function Dockyard() {
    SKILLS
 ══════════════════════════════ */
 const SKILLS = [
+  { cat: 'AI, ML & LLM Engineering', items: ['Machine Learning', 'Deep Learning', 'Generative AI', 'Large Language Models (LLMs)', 'Retrieval-Augmented Generation (RAG)', 'Google Gemini API', 'Prompt Engineering', 'Vector Embeddings', 'Semantic Search', 'Natural Language Processing (NLP)'] },
   { cat: 'Computer Vision & ML',    items: ['OpenCV (advanced)', 'FasterRCNN', 'OCR', 'Azure Computer Vision', 'ChangeFormer', 'PyTorch'] },
   { cat: 'Drawing & Geometry',      items: ['ezdxf', 'Shapely', 'DXF processing', 'SVG processing', 'PDF processing'] },
   { cat: 'Algorithms',              items: ['Dijkstra', 'Flood Fill', 'Graph Algorithms', 'Geometric Computation', 'BFS / DFS'] },
-  { cat: 'Cloud & Infrastructure',  items: ['Azure ADF', 'Azure ADLS', 'AWS', 'GCP Vertex AI', 'Cloud Run', 'Docker'] },
+  { cat: 'Cloud & Infrastructure',  items: ['Azure ADF', 'Azure ADLS', 'AWS', 'Oracle Cloud Infrastructure (OCI)', 'Docker', 'Nginx'] },
   { cat: 'Backend & Systems',       items: ['Python', 'Django', 'FastAPI', 'WebSockets', 'Custom Worker Pools', 'SQL'] },
-  { cat: 'Databases',               items: ['MSSQL', 'MySQL', 'ArangoDB', 'Azure Data Lake', 'Firebase'] },
+  { cat: 'Databases',               items: ['MSSQL', 'MySQL', 'ArangoDB', 'Azure Data Lake', 'Firebase', 'PostgreSQL'] },
 ]
 
 function Skills() {
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
+
   return (
-    <section className="skills-section" id="skills">
+    <section className="skills-section" id="skills" ref={sectionRef}>
       <span className="reg-mark tl" aria-hidden /><span className="reg-mark br" aria-hidden />
-      <div className="skills-inner">
+      <motion.div className="skills-inner" style={{ y }}>
         <motion.div
           className="skills-header"
           initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
@@ -905,7 +982,7 @@ function Skills() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="section-label">Technical Skills</p>
-          <h2 className="section-title">What I work with</h2>
+          <MaskReveal className="section-title">What I work with</MaskReveal>
         </motion.div>
 
         <div className="bom-table">
@@ -933,7 +1010,7 @@ function Skills() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <div className="sheet-title-block">
         <div className="stb-num">MS-05</div>
@@ -947,10 +1024,14 @@ function Skills() {
    CONTACT
 ══════════════════════════════ */
 function Contact() {
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
+
   return (
-    <section className="contact-section" id="contact">
+    <section className="contact-section" id="contact" ref={sectionRef}>
       <span className="reg-mark on-dark tl" aria-hidden /><span className="reg-mark on-dark br" aria-hidden />
-      <div className="contact-inner">
+      <motion.div className="contact-inner" style={{ y }}>
 
         <motion.div
           className="contact-left"
@@ -960,10 +1041,10 @@ function Contact() {
           transition={{ duration: 0.7 }}
         >
           <p className="section-label">Contact</p>
-          <h2 className="contact-headline">
+          <MaskReveal className="contact-headline">
             Let's build<br />
             <em>something real.</em>
-          </h2>
+          </MaskReveal>
           <p className="contact-sub">
             Open to senior CV / ML / Backend engineering roles.<br />
             Bangalore or remote.
@@ -1000,7 +1081,7 @@ function Contact() {
           </div>
         </motion.div>
 
-      </div>
+      </motion.div>
 
       <div className="sheet-title-block on-dark">
         <div className="stb-num">MS-06</div>
@@ -1111,7 +1192,7 @@ export default function Portfolio() {
         <Marquee />
         <Experience />
         <Marquee />
-        <Dockyard />
+        <Readar />
         <Marquee dark />
         <Skills />
         <Contact />
