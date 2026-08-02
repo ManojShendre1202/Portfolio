@@ -163,3 +163,9 @@ GEMINI_API_KEY=...
 
 Readar is a temporary, non-commercial interview/portfolio demo — curated documents only, no
 live upload path. It will be taken down once its purpose (the active job search) concludes.
+
+## License
+
+No license is granted. This repository is public for viewing purposes only (portfolio review,
+interviews) — all rights reserved. Copying, reusing, or redistributing this code or its
+contents is not permitted without explicit permission.

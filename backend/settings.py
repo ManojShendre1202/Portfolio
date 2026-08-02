@@ -24,11 +24,15 @@ load_dotenv(Path(__file__).resolve().parent / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+PROD = os.getenv('PROD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()]
+if PROD == "PROD":
+    ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = ['127.0.0.1']
 
 # nginx terminates TLS and forwards this header — without it Django can't
 # tell requests are actually HTTPS, breaking request.is_secure() and any
@@ -84,11 +88,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.iffooxlsgmrguifprwfd',
+        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres.iffooxlsgmrguifprwfd'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'aws-1-ap-southeast-1.pooler.supabase.com',
-        'PORT': '6543',
+        'HOST': os.getenv('POSTGRES_HOST', 'aws-1-ap-southeast-1.pooler.supabase.com'),
+        'PORT': os.getenv('POSTGRES_PORT', '6543'),
     }
 }
 
@@ -135,5 +139,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # _csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8020,http://localhost:8020')
-_csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS')
-CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',')]
+
+if PROD == "PROD":
+    _csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS')
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',')]
+else:
+    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8020"]
