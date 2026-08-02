@@ -109,7 +109,14 @@ python -m venv .venv
 source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
-python server.py
+python server.py               # Django app (Waitress)
+```
+
+In a second terminal, start the chat WebSocket server + worker pool — required for Readar's
+chat to function, since `server.py` only serves the Django app:
+
+```bash
+python -m workflow.main
 ```
 
 ### Frontend
