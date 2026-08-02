@@ -9,6 +9,7 @@ services:
       - DJANGO_SETTINGS_MODULE=backend.settings
       - SIGNAL_HOST=dockyard
       - SIGNAL_PORT=9000
+      - PYTHONUNBUFFERED=1
     volumes:
       - media_data:/app/media        # persist uploaded files + processed graphs
     depends_on:
@@ -23,6 +24,7 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
       - CHAT_WS_PORT=8041
+      - PYTHONUNBUFFERED=1
     volumes:
       - media_data:/app/media        # same volume — reads files django wrote
     restart: unless-stopped
