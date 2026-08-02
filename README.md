@@ -124,8 +124,26 @@ python -m workflow.main
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run build      # or `npm run dev`, but see the Nginx note below
 ```
+
+### Nginx
+
+The frontend calls `/api/...` and `/ws/...` as **relative, same-origin paths** — there's no
+Vite dev-server proxy configured, so nothing routes those requests to Django or the chat
+WebSocket server unless something sits in front of all three. Nginx does this in production
+(`nginx.docker.conf`) and is needed locally too for a fully working end-to-end setup:
+
+```bash
+nginx -c /path/to/nginx.docker.conf
+```
+
+Adjust `nginx.docker.conf`'s upstreams (`django:8030`, `dockyard:8040`/`8041`) to `127.0.0.1`
+for a non-Docker local run, and point its `root` at `frontend/dist` (or your dev server) —
+it's written for the Docker Compose network by default.
+
+Simpler alternative: run everything via `docker-compose.yml`, which already wires Django,
+the workflow/chat service, and Nginx together with the correct upstreams out of the box.
 
 ### Environment
 
