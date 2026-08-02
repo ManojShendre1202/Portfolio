@@ -23,5 +23,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the code
 COPY . .
 
+# Bakes admin's CSS/JS into staticfiles/ for WhiteNoise to serve — safe to
+# run in both django and dockyard images even though only django serves it.
+RUN python manage.py collectstatic --noinput
+
 # Default command — overridden per service in docker-compose.yml
 CMD ["python", "server.py"]

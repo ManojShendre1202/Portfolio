@@ -15,6 +15,7 @@ portfolio_session.md
 *.local
 start.bat
 media/
+staticfiles/
 
 # Python
 __pycache__/
