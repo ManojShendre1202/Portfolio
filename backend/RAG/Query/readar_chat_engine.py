@@ -41,7 +41,8 @@ from google import genai
 
 from api.core.service.ChatSessionService import ChatSessionService
 from backend.RAG.Query import doc_retrieval, session_memory
-from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter, GUARD_MESSAGES, GENERIC_ERROR_MESSAGE
+from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter, persist_usage, GUARD_MESSAGES, GENERIC_ERROR_MESSAGE
+from workflow.engine.ws import live_stats
 
 logger = logging.getLogger(__name__)
 
@@ -239,6 +240,7 @@ Answer:"""
 
                     token_count = usage_tokens or estimated_tokens
                     chat_rate_limiter.record(token_count)
+                    await sync_to_async(persist_usage)(1, token_count)
 
                     trace = {
                         'total':     round(t_retrieval + t_gemini, 2),
@@ -253,6 +255,7 @@ Answer:"""
                     await sync_to_async(ChatSessionService.add_turn)(
                         chat_id, role='ai', text=answer_text, citations=citations, trace=trace,
                     )
+                    live_stats.record_call(t_retrieval, t_gemini, t_retrieval + t_gemini)
 
                     if summary_text:
                         # Awaited (not fire-and-forget) — a background task here created a real

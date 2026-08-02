@@ -9,18 +9,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 import websockets
 
-from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter
 from backend.RAG.Query.readar_chat_engine import handle_question
-from workflow.engine.ws.live_stats import write_stats
+from workflow.engine.ws import live_stats
 
 logger  = logging.getLogger(__name__)
 WS_PORT = int(os.environ.get('CHAT_WS_PORT', 8041))
-
-_active_connections = 0
-
-
-def _connections_changed() -> None:
-    write_stats(_active_connections, chat_rate_limiter)
 
 _UUID_RE = re.compile(
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
@@ -71,9 +64,7 @@ async def _handle(websocket) -> None:
     ip = websocket.remote_address[0] if websocket.remote_address else 'unknown'
     logger.info('Chat WS connected: session=%s ip=%s', chat_id, ip)
 
-    global _active_connections
-    _active_connections += 1
-    _connections_changed()
+    live_stats.connection_opened()
 
     async def send_to_browser(msg: dict) -> None:
         try:
@@ -108,8 +99,7 @@ async def _handle(websocket) -> None:
     except websockets.ConnectionClosed:
         pass
 
-    _active_connections -= 1
-    _connections_changed()
+    live_stats.connection_closed()
     logger.info('Chat WS disconnected: session=%s', chat_id)
 
 

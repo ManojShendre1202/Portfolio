@@ -22,10 +22,13 @@ actual per-day token cap in the Gemini API console before relying on it;
 until then this is a conservative placeholder, not a confirmed quota.
 """
 
+import logging
 import threading
 import time
 from collections import deque
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 RPM_LIMIT = 100
 TPM_LIMIT = 30_000
@@ -107,6 +110,41 @@ class RateLimiter:
 # concurrent chat connections, since the Gemini API key's limits are
 # account-wide, not per-connection.
 chat_rate_limiter = RateLimiter()
+
+
+def hydrate_from_db() -> None:
+    """Load today's persisted calls/tokens into the in-memory limiter.
+    Call once at dockyard startup (after django.setup()) — without this,
+    a restart mid-day would reset the guard's (and the admin dashboard's)
+    idea of 'calls today' back to zero, even though GeminiUsage still has
+    the real count from before the restart."""
+    from datetime import date
+    from api.core.models import GeminiUsage
+
+    row = GeminiUsage.objects.filter(date=date.today()).first()
+    if row:
+        with chat_rate_limiter._lock:
+            chat_rate_limiter.calls_today  = row.calls
+            chat_rate_limiter.tokens_today = row.tokens
+        logger.info('Hydrated Gemini usage from DB: %d calls, %d tokens today', row.calls, row.tokens)
+    else:
+        logger.info('No persisted Gemini usage for today yet — starting at 0')
+
+
+def persist_usage(calls_delta: int, tokens_delta: int) -> None:
+    """Adds this call's usage to today's DB row (creating it if this is the
+    first call today). Call after every successful chat_rate_limiter.record()
+    — see hydrate_from_db for why this needs to survive process restarts."""
+    from datetime import date
+    from django.db.models import F
+    from api.core.models import GeminiUsage
+
+    today = date.today()
+    obj, _ = GeminiUsage.objects.get_or_create(date=today)
+    GeminiUsage.objects.filter(pk=obj.pk).update(
+        calls=F('calls') + calls_delta,
+        tokens=F('tokens') + tokens_delta,
+    )
 
 
 GUARD_MESSAGES = {

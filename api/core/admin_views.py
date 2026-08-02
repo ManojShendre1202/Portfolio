@@ -67,9 +67,12 @@ def admin_stats(request):
             'disk_total_gb': round(disk.total / 1e9, 1),
         },
         'live': {
-            'ws_connections': live.get('ws_connections', 0),
-            'gemini':         live.get('gemini'),
-            'stats_age_sec':  round(time.time() - live['updated_at'], 1) if 'updated_at' in live else None,
+            'ws_connections':   live.get('ws_connections', 0),
+            'gemini':           live.get('gemini'),
+            'stats_age_sec':    round(time.time() - live['updated_at'], 1) if 'updated_at' in live else None,
+            'avg_latency_sec':  live.get('avg_latency_sec'),
+            'last_latency_sec': live.get('last_latency_sec'),
+            'recent_calls':     live.get('recent_calls', []),
         },
         'db': {
             'total_sessions':  ChatSession.objects.count(),

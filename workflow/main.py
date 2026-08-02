@@ -22,9 +22,11 @@ def main() -> None:
     import django
     django.setup()
 
+    from backend.RAG.Query.gemini_rate_guard import hydrate_from_db
     from workflow.engine.ws.chat_ws_server import start_chat_ws_server
 
     logger.info("Dockyard starting up")
+    hydrate_from_db()
 
     chat_ws_thread = threading.Thread(
         target=start_chat_ws_server,

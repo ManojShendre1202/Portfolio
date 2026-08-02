@@ -27,6 +27,19 @@ class ChatSession(models.Model):
         ]
 
 
+class GeminiUsage(models.Model):
+    """One row per calendar date — daily Gemini call/token counts, persisted
+    so a dockyard restart mid-day doesn't silently forget usage that already
+    happened (the in-memory RateLimiter alone resets to 0 on every restart).
+    Old rows are never deleted, so historical daily usage stays queryable."""
+    date   = models.DateField(unique=True)
+    calls  = models.IntegerField(default=0)
+    tokens = models.BigIntegerField(default=0)
+
+    class Meta:
+        db_table = 'readar_gemini_usage'
+
+
 class ChatTurn(models.Model):
     """The UI transcript — distinct from the session's memory-graph .pkl.
     See schema_design.md §1."""
