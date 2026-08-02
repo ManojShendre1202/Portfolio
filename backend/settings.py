@@ -16,8 +16,72 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT  = os.path.join(BASE_DIR, 'media')
+LOG_DIR = Path(MEDIA_ROOT) / 'logs'
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 load_dotenv(Path(__file__).resolve().parent / '.env')
+
+# Split logs by subsystem so the admin dashboard can show each block
+# (django, dockyard/workflow, RAG, api) separately instead of one firehose.
+# Files live on the media_data volume both containers already mount, so
+# django's admin view can read dockyard's/RAG's log files even though
+# they run in a different container/process.
+# `propagate: True` on each named logger keeps `docker compose logs`
+# working exactly as before (everything still reaches the root console
+# handler) while ALSO splitting into per-subsystem files.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(name)s: %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+        'django_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_DIR / 'django.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'standard',
+        },
+        'dockyard_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_DIR / 'dockyard.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'standard',
+        },
+        'rag_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_DIR / 'rag.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'standard',
+        },
+        'core_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_DIR / 'core.log',
+            'maxBytes': 5 * 1024 * 1024,
+            'backupCount': 3,
+            'formatter': 'standard',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django':      {'handlers': ['django_file'],   'level': 'INFO', 'propagate': True},
+        'workflow':     {'handlers': ['dockyard_file'], 'level': 'INFO', 'propagate': True},
+        'backend.RAG':  {'handlers': ['rag_file'],      'level': 'INFO', 'propagate': True},
+        'api':          {'handlers': ['core_file'],     'level': 'INFO', 'propagate': True},
+    },
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/

@@ -1,9 +1,12 @@
+import logging
 import random
 
 from django.db import transaction
 from django.utils import timezone
 
 from api.core.models import ChatSession, ChatTurn
+
+logger = logging.getLogger(__name__)
 
 # No login means client_id is just a cookie, not a real identity — so we
 # don't keep sessions around indefinitely. A week matches the cookie's
@@ -32,6 +35,7 @@ class ChatSessionService:
         deleted, _ = ChatSession.objects.filter(chat_id__in=expired_ids).delete()
         for chat_id in expired_ids:
             session_memory.delete(chat_id)
+        logger.info('Purged %d expired session(s)', deleted)
         return deleted
 
     @staticmethod
@@ -49,7 +53,9 @@ class ChatSessionService:
         )
         if session:
             return session
-        return ChatSession.objects.create(client_id=client_id, doc_id=doc_id, active=True)
+        session = ChatSession.objects.create(client_id=client_id, doc_id=doc_id, active=True)
+        logger.info('New session created: chat_id=%s doc_id=%s', session.chat_id, doc_id)
+        return session
 
     @staticmethod
     @transaction.atomic
@@ -57,7 +63,9 @@ class ChatSessionService:
         """Archive any active session(s) for this (client, doc) and start a
         fresh one — old conversations stay in the DB, just no longer active."""
         ChatSession.objects.filter(client_id=client_id, doc_id=doc_id, active=True).update(active=False)
-        return ChatSession.objects.create(client_id=client_id, doc_id=doc_id, active=True)
+        session = ChatSession.objects.create(client_id=client_id, doc_id=doc_id, active=True)
+        logger.info('Session archived, new one started: chat_id=%s doc_id=%s', session.chat_id, doc_id)
+        return session
 
     @staticmethod
     def get_by_chat_id(chat_id) -> ChatSession:
@@ -107,6 +115,7 @@ class ChatSessionService:
 
         ChatSession.objects.filter(client_id=client_id, doc_id=doc_id, chat_id=chat_id).delete()
         session_memory.delete(chat_id)
+        logger.info('Session deleted: chat_id=%s doc_id=%s', chat_id, doc_id)
 
     @staticmethod
     @transaction.atomic

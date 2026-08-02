@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 
 from django.http import JsonResponse
@@ -6,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from api.core.service.ChatSessionService import ChatSessionService
+
+logger = logging.getLogger(__name__)
 
 # The server is the sole issuer of client_id, via this cookie — nothing
 # read from a request body/query string is ever trusted as identity.
@@ -42,10 +45,12 @@ def getOrCreateSession(request):
     try:
         body = json.loads(request.body or b'{}')
     except json.JSONDecodeError:
+        logger.warning('getOrCreateSession: invalid JSON body')
         return JsonResponse({'error': 'invalid JSON body'}, status=400)
 
     doc_id = (body.get('doc_id') or '').strip()
     if not doc_id:
+        logger.warning('getOrCreateSession: missing doc_id')
         return JsonResponse({'error': 'doc_id required'}, status=400)
 
     client_id, is_new = _client_id(request)
@@ -64,10 +69,12 @@ def startNewSession(request):
     try:
         body = json.loads(request.body or b'{}')
     except json.JSONDecodeError:
+        logger.warning('startNewSession: invalid JSON body')
         return JsonResponse({'error': 'invalid JSON body'}, status=400)
 
     doc_id = (body.get('doc_id') or '').strip()
     if not doc_id:
+        logger.warning('startNewSession: missing doc_id')
         return JsonResponse({'error': 'doc_id required'}, status=400)
 
     client_id, is_new = _client_id(request)
@@ -85,6 +92,7 @@ def getSessionTurns(request, chat_id):
     try:
         turns = ChatSessionService.get_turns(chat_id)
     except Exception:
+        logger.warning('getSessionTurns: chat_id=%s not found', chat_id)
         return JsonResponse({'error': 'not found'}, status=404)
 
     result = [{
@@ -103,6 +111,7 @@ def getSessionTurns(request, chat_id):
 def listSessions(request):
     doc_id = (request.GET.get('doc_id') or '').strip()
     if not doc_id:
+        logger.warning('listSessions: missing doc_id')
         return JsonResponse({'error': 'doc_id required'}, status=400)
 
     client_id, is_new = _client_id(request)
@@ -129,10 +138,12 @@ def listSessions(request):
 def deleteSession(request, chat_id):
     doc_id = (request.GET.get('doc_id') or '').strip()
     if not doc_id:
+        logger.warning('deleteSession: missing doc_id')
         return JsonResponse({'error': 'doc_id required'}, status=400)
 
     client_id, is_new = _client_id(request)
     ChatSessionService.delete_session(client_id, doc_id, chat_id)
+    logger.info('deleteSession request: client=%s doc=%s chat=%s', client_id, doc_id, chat_id)
     response = JsonResponse({'deleted': True})
     return _with_client_cookie(response, client_id, is_new)
 
@@ -143,16 +154,19 @@ def switchSession(request, chat_id):
     try:
         body = json.loads(request.body or b'{}')
     except json.JSONDecodeError:
+        logger.warning('switchSession: invalid JSON body')
         return JsonResponse({'error': 'invalid JSON body'}, status=400)
 
     doc_id = (body.get('doc_id') or '').strip()
     if not doc_id:
+        logger.warning('switchSession: missing doc_id')
         return JsonResponse({'error': 'doc_id required'}, status=400)
 
     client_id, is_new = _client_id(request)
     try:
         session = ChatSessionService.switch_to(client_id, doc_id, chat_id)
     except Exception:
+        logger.warning('switchSession: chat_id=%s doc=%s not found', chat_id, doc_id)
         return JsonResponse({'error': 'not found'}, status=404)
 
     response = JsonResponse({

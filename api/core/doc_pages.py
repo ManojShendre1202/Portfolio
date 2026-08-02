@@ -15,6 +15,7 @@ rather than reinventing a theme:
       links so navigation stays inside our app instead of leaving it
 """
 
+import logging
 import re
 from pathlib import Path
 
@@ -22,6 +23,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_GET
+
+logger = logging.getLogger(__name__)
 
 DATA_ROOT = Path(settings.BASE_DIR) / 'documents' / 'raw'
 
@@ -87,12 +90,15 @@ def _prepare_doc_page_html(raw_html: str, base_href: str) -> str:
 def getDocPage(request, doc_id, chapter):
     source = DOC_PAGE_SOURCES.get(doc_id)
     if not source or chapter not in source['chapters']:
+        logger.warning('getDocPage: unknown doc_id=%s chapter=%s', doc_id, chapter)
         return HttpResponse('Not found', status=404)
 
     file_path = DATA_ROOT / source['dir'] / f'{chapter}_ids.html'
     if not file_path.exists():
+        logger.error('getDocPage: expected file missing on disk: %s', file_path)
         return HttpResponse('Not found', status=404)
 
     raw_html = file_path.read_text(encoding='utf-8')
     html     = _prepare_doc_page_html(raw_html, source['base_href'])
+    logger.info('getDocPage served: doc_id=%s chapter=%s', doc_id, chapter)
     return HttpResponse(html, content_type='text/html; charset=utf-8')

@@ -13,13 +13,17 @@ the same local model, not the Gemini embed API used elsewhere in this
 backend for uploaded documents.
 """
 
+import logging
 import pickle
+import time
 from pathlib import Path
 
 import numpy as np
 import torch
 from django.conf import settings
 from sentence_transformers import CrossEncoder, SentenceTransformer
+
+logger = logging.getLogger(__name__)
 
 # Without this, each inference call spawns its own intra-op BLAS/OMP threads
 # (defaults to cpu_count), so concurrent requests already parallelized across
@@ -41,8 +45,15 @@ RERANK_TOP_N      = 15
 MAX_CONTEXT_CHARS = 6000
 
 # Loaded once at process start — heavy models, never per-request.
+logger.info('Loading nomic-embed-text-v1.5 (embedder)...')
+_t0 = time.perf_counter()
 _embedder = SentenceTransformer("nomic-ai/nomic-embed-text-v1.5", trust_remote_code=True)
+logger.info('Embedder loaded in %.1fs', time.perf_counter() - _t0)
+
+logger.info('Loading ms-marco-MiniLM-L-6-v2 (reranker)...')
+_t0 = time.perf_counter()
 _reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+logger.info('Reranker loaded in %.1fs', time.perf_counter() - _t0)
 
 _graph_cache: dict[str, tuple[dict, np.ndarray]] = {}
 
@@ -50,11 +61,25 @@ _graph_cache: dict[str, tuple[dict, np.ndarray]] = {}
 def load_graph(doc_id: str) -> tuple[dict, np.ndarray]:
     if doc_id in _graph_cache:
         return _graph_cache[doc_id]
-    path = GRAPH_PATHS[doc_id]
-    with open(path, "rb") as f:
-        data = pickle.load(f)
+
+    path = GRAPH_PATHS.get(doc_id)
+    if path is None:
+        logger.error('load_graph: unknown doc_id=%s (no graph path configured)', doc_id)
+        raise KeyError(doc_id)
+
+    t0 = time.perf_counter()
+    try:
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+    except FileNotFoundError:
+        logger.error('load_graph: graph .pkl missing on disk for doc_id=%s path=%s', doc_id, path)
+        raise
     result = (data["graph"], data["embeddings"])
     _graph_cache[doc_id] = result
+    logger.info(
+        'Graph loaded for doc_id=%s: %d nodes in %.2fs (now cached)',
+        doc_id, len(data["graph"].get("nodes", [])), time.perf_counter() - t0,
+    )
     return result
 
 

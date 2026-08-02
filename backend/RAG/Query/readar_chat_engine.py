@@ -201,6 +201,7 @@ async def handle_question(chat_id: str, question: str, send_to_browser) -> None:
         async with _chat_locks[chat_id]:
             session = await sync_to_async(ChatSessionService.get_by_chat_id)(chat_id)
             doc_id  = session.doc_id
+            logger.info('handle_question start: chat_id=%s doc_id=%s question=%r', chat_id, doc_id, question[:120])
 
             await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
 
@@ -264,10 +265,15 @@ Answer:"""
                         logger.warning('No memory summary parsed for session %s — marker missing from response', chat_id)
 
                     await send_to_browser({'type': 'done', 'citations': citations, 'trace': trace})
+                    logger.info(
+                        'handle_question done: chat_id=%s model=%s total=%.2fs retrieve=%.2fs gemini=%.2fs tokens=%d retrieved=%d reranked=%d cited=%d',
+                        chat_id, model, trace['total'], trace['retrieve'], trace['gemini'],
+                        trace['tokens'], trace['retrieved'], trace['reranked'], trace['used'],
+                    )
                     return
                 except Exception as e:
                     if '429' in str(e) or 'quota' in str(e).lower():
-                        logger.warning('Model %s quota hit — trying next', model)
+                        logger.warning('Model %s quota hit for chat_id=%s — trying next', model, chat_id)
                         last_error = e
                         continue
                     raise

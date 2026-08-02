@@ -10,6 +10,7 @@ stays roughly flat regardless of session length, unlike resending full
 history every turn.
 """
 
+import logging
 import os
 import pickle
 from pathlib import Path
@@ -18,6 +19,8 @@ import numpy as np
 from django.conf import settings
 
 from backend.RAG.Query.doc_retrieval import embed_document
+
+logger = logging.getLogger(__name__)
 
 MEMORY_DIR = Path(settings.BASE_DIR) / 'media' / 'sessions'
 MEMORY_DIR.mkdir(parents=True, exist_ok=True)
@@ -33,15 +36,23 @@ def load(chat_id) -> tuple[list[dict], np.ndarray]:
     path = _path(chat_id)
     if not path.exists():
         return [], np.empty((0, 0))
-    with open(path, "rb") as f:
-        data = pickle.load(f)
+    try:
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+    except (pickle.PickleError, EOFError, OSError) as e:
+        logger.error('session_memory.load: corrupt/unreadable memory file for chat_id=%s: %s', chat_id, e)
+        return [], np.empty((0, 0))
     return data["nodes"], data["embeddings"]
 
 
 def delete(chat_id) -> None:
     """Best-effort — called when a ChatSession row is deleted/purged so its
     memory file doesn't outlive the session it belongs to."""
-    _path(chat_id).unlink(missing_ok=True)
+    path = _path(chat_id)
+    existed = path.exists()
+    path.unlink(missing_ok=True)
+    if existed:
+        logger.info('session_memory.delete: removed memory file for chat_id=%s', chat_id)
 
 
 def save(chat_id, nodes: list[dict], embeddings: np.ndarray) -> str:
@@ -86,7 +97,9 @@ def append_turn(chat_id, question: str, summary: str) -> str:
         embeddings = np.vstack([embeddings, new_vec])
     nodes.append(new_node)
 
-    return save(chat_id, nodes, embeddings)
+    path = save(chat_id, nodes, embeddings)
+    logger.info('session_memory.append_turn: chat_id=%s now has %d turn(s) in memory', chat_id, len(nodes))
+    return path
 
 
 def build_memory_prompt(memory_turns: list[dict]) -> str:
