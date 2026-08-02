@@ -17,8 +17,17 @@ import pickle
 from pathlib import Path
 
 import numpy as np
+import torch
 from django.conf import settings
 from sentence_transformers import CrossEncoder, SentenceTransformer
+
+# Without this, each inference call spawns its own intra-op BLAS/OMP threads
+# (defaults to cpu_count), so concurrent requests already parallelized across
+# readar_chat_engine's retrieval_executor end up oversubscribing the same
+# handful of real cores several times over. Capping to 1 here means our own
+# executor's worker count is the only source of parallelism, which is what
+# it was sized for.
+torch.set_num_threads(1)
 
 DATA_ROOT = Path(settings.BASE_DIR) / 'documents'
 
