@@ -232,7 +232,7 @@ function Intro() {
           transition={{ delay: 0.1, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <span className="callout-label">· Cover</span>
-          <span className="intro-location">Bangalore, India · Open to relocation</span>
+          <span className="intro-location">Bangalore, India</span>
         </motion.div>
 
         <div className="intro-grid">
@@ -386,8 +386,22 @@ const CREDENTIALS = [
   },
   {
     label: 'Research',
-    title: '2 Publications',
-    sub:   'Divergence in airplane wings (Int. Journal) · Human color perception (Nature, under review)',
+    title: '3 Publications',
+    sub: (
+      <>
+        <a href="https://doi.org/10.15282/ijame.21.2.2024.3.0866" target="_blank" rel="noopener noreferrer" className="cred-link">
+          Static Aeroelastic Analysis &amp; Flutter Characterization
+        </a>
+        {' · '}
+        <a href="https://doi.org/10.4273/ijvss.16.1.04" target="_blank" rel="noopener noreferrer" className="cred-link">
+          Static Aeroelastic Characterization
+        </a>
+        {' · '}
+        <a href="https://doi.org/10.21203/rs.3.rs-7726344/v1" target="_blank" rel="noopener noreferrer" className="cred-link">
+          Color Vision Prediction from Cone Ratios (preprint)
+        </a>
+      </>
+    ),
   },
 ]
 
@@ -420,8 +434,10 @@ function About() {
             and industrial manufacturing domains.
           </p>
           <p>
-            I also built <strong>Dockyard</strong> — a domain-agnostic drawing processing
-            engine from scratch.
+            As a personal project, I also built and deployed <strong>Readar</strong> — a
+            graph-based RAG chat engine with custom retrieval, graph traversal, cross-encoder
+            reranking, and session memory, cutting LLM token usage by ~75–85% with no accuracy
+            loss.
           </p>
         </motion.div>
 
@@ -599,7 +615,7 @@ const PROJECTS = [
   },
   {
     num: '03', client: 'Shipbuilding — Hull Engineering', title: 'Hull Weld Seam BOM',
-    status: 'In Dev', impact: 'Thousands of weld spots per drawing', solo: true, lead: true,
+    status: 'UAT', impact: 'Thousands of weld spots per drawing', solo: true, lead: true,
     tags: ['Python', 'ezdxf', 'Shapely', 'OpenCV'],
     desc: 'On-spot geometric computation of weld seam lengths — no graph, no ML. Pure shape analysis.',
     fullDesc: 'Second project within the shipbuilding domain — a different department, demonstrating repeat client engagement. Detects thousands of welding spots and blocks across hull drawings, then computes weld seam lengths via on-spot geometric calculation. Deliberately contrasts with the cable routing approach — no graph-based algorithm, no ML models. Pure shape analysis because the problem structure demands it.',
@@ -613,11 +629,11 @@ const PROJECTS = [
     beforeAfter: { before: 'Manual measurement by engineers — error-prone on complex hull geometries', after: 'Automated geometric computation — thousands of spots in minutes' },
   },
   {
-    num: '04', client: 'Automotive', title: 'Automotive Wiring Harness BOM',
+    num: '04', client: 'Automotive (multiple clients)', title: 'Automotive Wiring Harness BOM',
     status: 'Near-Prod', impact: '~95% reduction — 2–3 days → 1 hour',
     tags: ['FasterRCNN', 'AWS', 'Azure', 'OpenCV', 'OCR'],
     desc: 'FasterRCNN detection + graph association generates full BOM from automotive wiring drawings.',
-    fullDesc: 'Processes complex automotive wiring harness drawings — among the most intricate engineering drawings in any domain. Element detection using a locally-trained FasterRCNN model identifies connectors, terminals, splices, and wiring components. Custom graph association logic (core contribution) links detected elements to tables and BOM entries, calculates wiring lengths and bundle configurations, and generates complete manufacturing BOMs.',
+    fullDesc: 'Processes complex automotive wiring harness drawings across multiple clients — among the most intricate engineering drawings in any domain. Element detection using a locally-trained FasterRCNN model identifies connectors, terminals, splices, and wiring components. Custom graph association logic (core contribution) links detected elements to tables and BOM entries, calculates wiring lengths and bundle configurations, and generates complete manufacturing BOMs.',
     techDetails: [
       'FasterRCNN trained locally on automotive wiring harness components',
       'Custom graph/association logic linking detected elements to BOM tables',
@@ -643,30 +659,30 @@ const PROJECTS = [
   {
     num: '06', client: 'Aerospace', title: 'Aircraft BOM Generation',
     status: 'In Dev', impact: 'Airbus + Boeing aircraft database', solo: true,
-    tags: ['Python', 'OpenCV', 'OCR'],
-    desc: 'Table detection without ML — deliberate engineering constraint. Pure OpenCV on scanned aerospace drawings.',
-    fullDesc: 'Processes complex scanned engineering drawings for Airbus and Boeing aircraft databases. The defining technical choice: table detection without ML models. This is a deliberate engineering constraint — fax-format unstructured tables in scanned aerospace drawings have enough consistent geometric structure that a pure OpenCV approach is more robust and maintainable than a neural network. Advanced OpenCV for noisy scan handling and optimized cross-document reference resolution across large drawing datasets.',
+    tags: ['Python', 'YOLO', 'OpenCV', 'AWS OCR'],
+    desc: 'YOLO content classification + deterministic OpenCV table detection, tuned for maximum extraction accuracy.',
+    fullDesc: 'Processes complex scanned engineering drawings for Airbus and Boeing aircraft databases. Trained a YOLO classification model to identify content types across each drawing and route regions to the right extraction path. Table detection itself stays deterministic — fax-format unstructured tables have enough consistent geometric structure that a pure OpenCV approach, backed by custom CV detection and processing, is more accurate and maintainable than a neural network for that specific step.',
     techDetails: [
-      'Fax-format unstructured table detection — pure OpenCV, no ML by design',
-      'Advanced scan noise handling for aged aerospace technical documents',
+      'YOLO classification model trained to identify content types across scanned drawings',
+      'Fax-format unstructured table detection — deterministic OpenCV, no ML by design',
+      "AWS's document-extraction OCR for text extraction, tuned for maximum accuracy",
       'Cross-document reference resolution across large Airbus/Boeing drawing sets',
-      'OCR pipeline optimised for aerospace part numbers and notation',
     ],
   },
   {
     num: '07', client: 'Electrical Components Manufacturing', title: 'SAP Deduction Validation',
-    status: 'Production', impact: '1+ year live · Primary owner', solo: true,
+    status: 'Production', impact: '1+ year owned · 6 months in production', solo: true,
     tags: ['Python', 'Azure ADF', 'ADLS', 'SQL'],
-    desc: 'ML model validates SAP deductions. Primary ownership: retraining, dashboard, all change requests.',
-    fullDesc: 'ML model that validates the genuineness of deductions across SAP enterprise documents. The only non-drawing project in the portfolio — demonstrates stack versatility beyond computer vision, enterprise data pipeline experience, and SAP domain knowledge. Primary ownership for 1+ year: model retraining when distribution shifts, dashboard management, handling all client change requests, and production monitoring.',
+    desc: 'Sole maintainer of an existing ML model validating SAP deductions — took it to production, own the full support lifecycle.',
+    fullDesc: 'An existing ML classification model that validates the genuineness of deductions across SAP enterprise documents, inherited rather than built from scratch. The only non-drawing project in the portfolio — demonstrates stack versatility beyond computer vision, enterprise data pipeline experience, and SAP domain knowledge. Sole maintainer for 1+ year: took the system to production, stabilized its accuracy-drift-triggered retraining pipeline, and own the full support lifecycle — monitoring, dashboarding, and all client change requests.',
     techDetails: [
-      'ML classification model for SAP deduction validation',
+      'Existing ML classification model for SAP deduction validation, maintained not built',
+      'Stabilized and productionized an accuracy-drift-triggered retraining pipeline',
       'Azure Data Factory (ADF) pipelines for automated data ingestion',
       'Azure Data Lake Storage (ADLS) for document and result storage',
       'SQL-based reporting and dashboard for business users',
-      'Model retraining pipeline triggered on accuracy drift detection',
     ],
-    beforeAfter: { before: 'Manual review of deductions by finance team — slow, inconsistent', after: 'Automated ML validation — 1+ year in production, primary owner' },
+    beforeAfter: { before: 'Manual review of deductions by finance team — slow, inconsistent', after: 'Automated ML validation — sole maintainer for 1+ year, in production for the last 6 months' },
   },
 ]
 
@@ -959,7 +975,6 @@ const SKILLS = [
   { cat: 'AI, ML & LLM Engineering', items: ['Machine Learning', 'Deep Learning', 'Generative AI', 'Large Language Models (LLMs)', 'Retrieval-Augmented Generation (RAG)', 'Google Gemini API', 'Prompt Engineering', 'Vector Embeddings', 'Semantic Search', 'Natural Language Processing (NLP)'] },
   { cat: 'Computer Vision & ML',    items: ['OpenCV (advanced)', 'FasterRCNN', 'OCR', 'Azure Computer Vision', 'ChangeFormer', 'PyTorch'] },
   { cat: 'Drawing & Geometry',      items: ['ezdxf', 'Shapely', 'DXF processing', 'SVG processing', 'PDF processing'] },
-  { cat: 'Algorithms',              items: ['Dijkstra', 'Flood Fill', 'Graph Algorithms', 'Geometric Computation', 'BFS / DFS'] },
   { cat: 'Cloud & Infrastructure',  items: ['Azure ADF', 'Azure ADLS', 'AWS', 'Oracle Cloud Infrastructure (OCI)', 'Docker', 'Nginx'] },
   { cat: 'Backend & Systems',       items: ['Python', 'Django', 'FastAPI', 'WebSockets', 'Custom Worker Pools', 'SQL'] },
   { cat: 'Databases',               items: ['MSSQL', 'MySQL', 'ArangoDB', 'Azure Data Lake', 'Firebase', 'PostgreSQL'] },
