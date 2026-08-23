@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Understanding the image layers | Docker Docs</title><meta content="This concept page will teach you about the layers of container image." name="description"/><meta content="concepts,build,images,container,docker,desktop" name="keywords"/><link href="https://docs.docker.com/get-started/docker-concepts/building-images/understanding-image-layers/" rel="canonical"/><link href="/assets/images/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/assets/images/favicon-192x192.png" rel="icon" sizes="192x192"/><link href="/apple-touch-icon.png" rel="apple-touch-icon"/><link href="/favicon.ico" rel="shortcut icon"/><meta content="#2496ed" name="theme-color"/><meta content="Understanding the image layers" itemprop="title name" name="twitter:title"/><meta content="This concept page will teach you about the layers of container image." itemprop="description" name="twitter:description" property="og:description"/><meta content="summary_large_image" name="twitter:card"/><meta content="https://docs.docker.com/" name="twitter:domain"/><meta content="@docker_docs" name="twitter:site"/><meta content="https://twitter.com/docker_docs" name="twitter:url"/><meta content="https://docs.docker.com/images/thumbnail.webp" name="twitter:image:src"/><meta content="Docker Documentation" name="twitter:image:alt"/><meta content="Understanding the image layers" property="og:title"/><meta content="This concept page will teach you about the layers of container image." property="og:description"/><meta content="website" property="og:type"/><meta content="2026-01-21 04:29:50 +0530 +0530" itemprop="dateUpdated" property="og:updated_time"/><meta content="https://docs.docker.com/images/thumbnail.webp" itemprop="image primaryImageOfPage" property="og:image"/><meta content="en_US" property="og:locale"/><meta content="https://docs.docker.com/get-started/docker-concepts/building-images/understanding-image-layers/" property="og:url"/><meta content="Docker Documentation" property="og:site_name"/><meta content="2026-01-21 04:29:50 +0530 +0530" itemprop="datePublished" property="article:published_time"/><link href="https://docs.docker.com/get-started/docker-concepts/building-images/understanding-image-layers.md" rel="alternate" type="text/markdown"/>
+<link crossorigin="anonymous" href="/css/style.513ac5245bf373beb42302e1dc4bc5e9fe221cf733b839e56c769114ff8ef16d.css" integrity="sha256-UTrFJFvzc760IwLh3EvF6f4iHPczuDnlbHaRFP+O8W0=" rel="stylesheet"/>
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet"/><link as="font" crossorigin="" href="/assets/fonts/RobotoFlex.woff2" rel="preload" type="font/woff2"/></head><body class="dark:bg-navbar-bg-dark bg-navbar-bg flex flex-col items-center text-base text-black dark:text-white"><div x-cloak="" x-data="{
+    isLoading: false,
+    error: null,
+    messages: $persist([]).using(sessionStorage).as('gordon-messages'),
+    currentQuestion: '',
+    threadId: $persist(null).using(sessionStorage).as('gordon-threadId'),
+    includePageContext: $persist(true).using(sessionStorage).as('gordon-includePageContext'),
+    maxTurnsPerThread: 10,
+
+    init() {
+      // Clean up any streaming messages that might be persisted
+      this.messages = this.messages.filter(m =&gt; !m.isStreaming)
+
+      // Watch for store changes to focus input
+      this.$watch('$store.gordon.isOpen', (isOpen) =&gt; {
+        if (isOpen) {
+          this.$nextTick(() =&gt; {
+            this.$refs.input?.focus()
+          })
+        }
+      })
+
+      // Watch for query from store and populate input
+      this.$watch('$store.gordon.query', (query) =&gt; {
+        if (query) {
+          this.currentQuestion = query
+          const shouldAutoSubmit = this.$store.gordon.autoSubmit
+          this.$nextTick(() =&gt; {
+            if (shouldAutoSubmit) {
+              this.askQuestion()
+            } else {
+              this.$refs.input?.focus()
+              this.$refs.input?.select()
+            }
+          })
+          // Clear the store query and autoSubmit flag after using them
+          this.$store.gordon.query = ''
+          this.$store.gordon.autoSubmit = false
+        }
+      })
+    },
+
+    getTurnCount() {
+      return this.messages.filter(m =&gt; m.role === 'user').length
+    },
+
+    getRemainingTurns() {
+      return this.maxTurnsPerThread - this.getTurnCount()
+    },
+
+    isThreadLimitReached() {
+      return this.getTurnCount() &gt;= this.maxTurnsPerThread
+    },
+
+    shouldShowCountdown() {
+      const remaining = this.getRemainingTurns()
+      return remaining &gt; 0 &amp;&amp; remaining &lt;= 3
+    },
+
+    async askQuestion() {
+      const question = this.currentQuestion.trim()
+      if (!question || this.isLoading || this.isThreadLimitReached()) {
+        return
+      }
+
+      // Add user message to UI
+      this.messages.push({
+        role: 'user',
+        content: question
+      })
+
+      this.currentQuestion = ''
+      // Reset textarea height
+      this.$nextTick(() =&gt; {
+        if (this.$refs.input) {
+          this.$refs.input.style.height = 'auto'
+        }
+      })
+      this.isLoading = true
+      this.error = null
+
+      // Add placeholder for assistant response
+      const responseIndex = this.messages.length
+      this.messages.push({
+        role: 'assistant',
+        content: '',
+        isStreaming: true,
+        questionAnswerId: null,
+        feedback: null,
+        copied: false
+      })
+
+      this.$nextTick(() =&gt; {
+        this.$refs.messagesContainer?.scrollTo({
+          top: this.$refs.messagesContainer.scrollHeight,
+          behavior: 'smooth'
+        })
+      })
+
+      try {
+        await this.streamGordonResponse(responseIndex)
+      } catch (err) {
+        // Only set error if messages weren't cleared
+        if (this.messages.length &gt; 0) {
+          if (err.message === 'RATE_LIMIT_EXCEEDED') {
+            this.error = 'You\'ve exceeded your question quota for the day. Please come back tomorrow.'
+          } else {
+            this.error = 'Failed to get response. Please try again.'
+          }
+        }
+        console.error('Gordon API error:', err)
+        // Only try to remove message if it still exists
+        if (this.messages[responseIndex]) {
+          this.messages.splice(responseIndex, 1)
+        }
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    getSessionId() {
+      let sessionId = sessionStorage.getItem('gordon-session-id')
+      if (!sessionId) {
+        sessionId = `docs-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        sessionStorage.setItem('gordon-session-id', sessionId)
+      }
+      return sessionId
+    },
+
+    async streamGordonResponse(responseIndex) {
+
+      // Build API request from messages, excluding the streaming placeholder
+      // The placeholder is at responseIndex, so we take everything before it
+      const conversationMessages = this.messages.slice(0, responseIndex).map((msg, i) =&gt; {
+        const message = {
+          role: msg.role,
+          content: msg.content
+        }
+
+        // Add copilot_references to the last message (most recent user question)
+        if (i === responseIndex - 1) {
+          message.copilot_references = [
+            {
+              data: {
+                origin: 'docs-website',
+                email: 'docs@docker.com',
+                uuid: this.getSessionId(),
+                action: 'AskGordon',
+                ...(this.includePageContext &amp;&amp; {
+                  page_url: window.location.href,
+                  page_title: &quot;Understanding the image layers&quot;
+                })
+              }
+            }
+          ]
+        }
+
+        return message
+      })
+
+      const isNewConversation = !this.threadId
+      const payload = {
+        messages: conversationMessages,
+        ...(this.threadId &amp;&amp; { thread_uuid: this.threadId })
+      }
+
+      const response = await fetch(window.GORDON_BASE_URL + '/public/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('RATE_LIMIT_EXCEEDED')
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value, { stream: true })
+        const lines = chunk.split('\n')
+
+        for (const line of lines) {
+          if (!line.trim() || !line.startsWith('data: ')) continue
+
+          const data = line.slice(6)
+          if (data === '[DONE]') continue
+
+          try {
+            const parsed = JSON.parse(data)
+
+            // Capture thread_id for new conversations
+            if (parsed.thread_id) {
+              if (isNewConversation) {
+                this.threadId = parsed.thread_id  // $persist auto-saves to sessionStorage
+              } else if (parsed.thread_id !== this.threadId) {
+                console.warn('Backend returned unexpected thread_id:', parsed.thread_id)
+              }
+              continue
+            }
+
+            // Capture question_answer_id for feedback
+            if (parsed.question_answer_id) {
+              this.messages[responseIndex].questionAnswerId = parsed.question_answer_id
+              continue
+            }
+
+            if (parsed.choices &amp;&amp; parsed.choices[0]?.delta?.content) {
+              const content = parsed.choices[0].delta.content
+              this.messages[responseIndex].content += content
+
+              this.$nextTick(() =&gt; {
+                const container = this.$refs.messagesContainer
+                if (container) {
+                  const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight &lt; 100
+                  if (isNearBottom) {
+                    container.scrollTop = container.scrollHeight
+                  }
+                }
+              })
+            }
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e)
+          }
+        }
+      }
+
+      this.messages[responseIndex].isStreaming = false
+    },
+
+    clearChat() {
+      if (confirm('Clear all messages?')) {
+        this.messages = []      // $persist auto-saves empty array
+        this.threadId = null    // $persist auto-removes from sessionStorage
+        this.error = null
+      }
+    },
+
+    formatMessageContent(content) {
+      return this.$markdown(content)
+    },
+
+    async submitFeedback(messageIndex, feedbackType) {
+      const message = this.messages[messageIndex]
+
+      if (message.feedback === feedbackType) {
+        return
+      }
+
+      // Clear any previous error
+      message.feedbackError = null
+
+      if (!message.questionAnswerId) {
+        message.feedbackError = 'Unable to submit feedback'
+        console.error('No question_answer_id available for feedback')
+        return
+      }
+
+      try {
+        const response = await fetch(window.GORDON_BASE_URL + '/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: message.questionAnswerId,
+            feedback: feedbackType
+          })
+        })
+
+        if (response.ok) {
+          message.feedback = feedbackType  // $persist auto-saves
+        } else {
+          message.feedbackError = 'Unable to submit feedback'
+          console.error('Failed to submit feedback:', response.status, response.statusText)
+        }
+      } catch (err) {
+        message.feedbackError = 'Unable to submit feedback'
+        console.error('Error submitting feedback:', err)
+      }
+    },
+
+    async copyAnswer(messageIndex) {
+      const message = this.messages[messageIndex]
+      if (!message.content) return
+
+      try {
+        await navigator.clipboard.writeText(message.content)
+        message.copied = true
+        this.$nextTick(() =&gt; {
+          setTimeout(() =&gt; {
+            message.copied = false
+          }, 2000)
+        })
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
+  }"><div class="fixed inset-0 z-40 bg-black/50" x-show="$store.gordon.isOpen" x-transition.opacity.duration.300ms=""></div><div class="fixed top-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden overscroll-contain rounded-none bg-white shadow-2xl transition-all duration-200 md:w-[min(80ch,90vw)] dark:bg-gray-950" id="gordon-chat" x-show="$store.gordon.isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-end="translate-x-0" x-transition:enter-start="translate-x-full" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="translate-x-full" x-transition:leave-start="translate-x-0"><div class="z-10 flex items-center justify-between bg-blue-500 px-6 py-3 shadow-lg/30 dark:shadow-lg/60"><div class="flex items-center gap-3"><svg height="20" viewbox="0 0 92 20" width="92"><path d="M20.474 6.892 20.813 7.12S20.608 7.547 20.587 7.576C19.699 9.293 17.884 9.181 17.196 9.17c-2.089 5.243-5.524 7.412-9.532 7.408C5.036 16.576 3.279 15.721 2.116 14.556 1.928 14.367 1.755 14.171 1.597 13.969.166 12.136-.022 9.885.002 8.715H7.997c5.179.0 6.348.167 7.617-.57C15.276 7.735 15.101 7.169 15.049 6.665 14.983 5.848 15.17 4.948 15.614 4.274L15.84 3.932 16.179 4.16c.916.714 1.417 1.533 1.469 2.505C18.623 6.402 19.964 6.549 20.474 6.892zM5.22 5.684v2.25H2.972V5.684H5.22zm2.905.0v2.25H5.876V5.684H8.125zm2.905.0v2.25H8.781V5.684H11.03zm2.904.0v2.25H11.686V5.684h2.248zm-11.619.0v2.25H.067V5.684H2.315zM5.22 2.842v2.25H2.972V2.842H5.22zm2.905.0v2.25H5.876V2.842H8.125zm2.905.0v2.25H8.781V2.842H11.03zM11.03.0V2.25H8.781V0H11.03zM34.107 13.496C33.741 14.148 33.264 14.674 32.676 15.074 32.002 15.52 31.226 15.742 30.348 15.742 29.394 15.742 28.548 15.52 27.811 15.074 27.086 14.616 26.513 13.992 26.094 13.203 25.674 12.401 25.464 11.485 25.464 10.454 25.464 9.41 25.687 8.493 26.132 7.704 26.59 6.902 27.213 6.279 28.002 5.833c.788-.458 1.697-.687 2.728-.687 1.017.0 1.92.229 2.709.687C34.227 6.279 34.844 6.902 35.289 7.704 35.747 8.493 35.976 9.41 35.976 10.454v4.124C35.976 15.583 35.754 16.493 35.308 17.308 34.863 18.135 34.24 18.791 33.439 19.274 32.65 19.758 31.734 20 30.692 20 29.789 20 28.943 19.822 28.154 19.465 27.366 19.109 26.698 18.587 26.151 17.9 25.986 17.683 25.922 17.461 25.96 17.232 26.011 17.002 26.138 16.818 26.342 16.678 26.571 16.525 26.806 16.474 27.048 16.525 27.302 16.576 27.505 16.703 27.658 16.907c.343999999999998.433.776.77 1.297 1.012C29.477 18.161 30.068 18.282 30.73 18.282 31.34 18.282 31.9 18.135 32.409 17.842 32.93 17.55 33.343 17.117 33.649 16.544 33.954 15.971 34.107 15.271 34.107 14.444v-.948zM30.73 14.024C31.391 14.024 31.976 13.871 32.485 13.566 32.994 13.26 33.388 12.84 33.668 12.306 33.96 11.771 34.107 11.154 34.107 10.454 34.107 9.753 33.96 9.136 33.668 8.602 33.388 8.054 32.994 7.628 32.485 7.322c-.509-.305-1.094-.458-1.755-.458C30.068 6.864 29.483 7.017 28.974 7.322 28.466 7.628 28.065 8.054 27.773 8.602 27.48 9.136 27.334 9.753 27.334 10.454 27.334 11.154 27.48 11.771 27.773 12.306 28.065 12.84 28.466 13.26 28.974 13.566 29.483 13.871 30.068 14.024 30.73 14.024zM51.92 9.136v5.575C51.92 15.017 51.837 15.252 51.672 15.418 51.519 15.583 51.284 15.666 50.966 15.666 50.661 15.666 50.425 15.59 50.26 15.437 50.095 15.271 50.012 15.029 50.012 14.711V6.177C50.012 5.871 50.095 5.636 50.26 5.47 50.425 5.305 50.661 5.222 50.966 5.222 51.284 5.222 51.519 5.305 51.672 5.47 51.837 5.623 51.92 5.858 51.92 6.177v.352C52.232 6.177 52.6 5.881 53.026 5.642 53.662 5.286 54.362 5.108 55.125 5.108S56.454 5.235 56.823 5.489c.381.242.527999999999999.535.439.879C57.223 6.546 57.147 6.686 57.033 6.788 56.931 6.877 56.81 6.934 56.67 6.96 56.53 6.985 56.378 6.979 56.212 6.94 55.398 6.775 54.667 6.762 54.018 6.902 53.37 7.042 52.855 7.303 52.473 7.685 52.104 8.067 51.92 8.551 51.92 9.136zM84.159 9.327v5.384C84.159 14.991 84.07 15.227 83.892 15.418 83.714 15.596 83.479 15.685 83.186 15.685 82.906 15.685 82.671 15.596 82.48 15.418 82.302 15.227 82.213 14.991 82.213 14.711V6.196C82.213 5.903 82.302 5.668 82.48 5.489 82.671 5.311 82.906 5.222 83.186 5.222 83.479 5.222 83.714 5.311 83.892 5.489 84.07 5.668 84.159 5.903 84.159 6.196v.203C84.442 6.12 84.767 5.88 85.132 5.68 85.806 5.311 86.563 5.127 87.402 5.127c.878.0 1.66.191 2.34699999999999.572C90.449 6.069 90.996 6.616 91.389 7.341 91.797 8.067 92 8.958 92 10.014v4.697C92 14.991 91.905 15.227 91.714 15.418 91.536 15.596 91.307 15.685 91.027 15.685 90.748 15.685 90.512 15.596 90.321 15.418 90.143 15.227 90.054 14.991 90.054 14.711V10.014C90.054 9.289 89.92 8.697 89.653 8.239 89.386 7.781 89.024 7.443 88.566 7.227 88.121 6.998 87.606 6.883 87.021 6.883 86.487 6.883 86.003 6.991 85.571 7.208 85.138 7.424 84.795 7.717 84.541 8.086 84.286 8.442 84.159 8.856 84.159 9.327zM42.737 15.742C41.706 15.742 40.797 15.52 40.008 15.074 39.22 14.616 38.597 13.992 38.139 13.203 37.694 12.401 37.471 11.485 37.471 10.454 37.471 9.41 37.694 8.493 38.139 7.704 38.597 6.902 39.22 6.279 40.008 5.833 40.797 5.375 41.706 5.146 42.737 5.146 43.754 5.146 44.657 5.375 45.446 5.833 46.234 6.279 46.851 6.902 47.296 7.704 47.754 8.493 47.983 9.41 47.983 10.454 47.983 11.485 47.76 12.401 47.315 13.203 46.87 13.992 46.253 14.616 45.465 15.074 44.676 15.52 43.767 15.742 42.737 15.742zm0-1.718C43.398 14.024 43.983 13.871 44.492 13.566 45 13.26 45.395 12.84 45.675 12.306 45.967 11.771 46.113 11.154 46.113 10.454 46.113 9.753 45.967 9.136 45.675 8.602 45.395 8.054 45 7.628 44.492 7.322 43.983 7.017 43.398 6.864 42.737 6.864 42.075 6.864 41.49 7.017 40.981 7.322 40.473 7.628 40.072 8.054 39.779 8.602 39.487 9.136 39.341 9.753 39.341 10.454 39.341 11.154 39.487 11.771 39.779 12.306 40.072 12.84 40.473 13.26 40.981 13.566 41.49 13.871 42.075 14.024 42.737 14.024zm19.654 1.718C61.398 15.742 60.502 15.513 59.701 15.055 58.912 14.584 58.282 13.948 57.812 13.146 57.354 12.344 57.125 11.44 57.125 10.434 57.125 9.429 57.335 8.532 57.755 7.742 58.187 6.94 58.772 6.31 59.51 5.852 60.247 5.381 61.08 5.146 62.009 5.146c.75.0 1.444.159 2.08.477C64.724 5.929 65.259 6.349 65.691 6.883V1.728C65.691 1.435 65.78 1.2 65.958 1.022 66.149.843 66.384.754 66.664.754 66.957.754 67.192.843 67.37 1.022 67.548 1.2 67.637 1.435 67.637 1.728v8.706C67.637 11.44 67.402 12.344 66.931 13.146 66.473 13.948 65.85 14.584 65.061 15.055 64.273 15.513 63.383 15.742 62.391 15.742zm0-1.718C63.039 14.024 63.618 13.871 64.127 13.566 64.635 13.248 65.036 12.815 65.329 12.267 65.621 11.72 65.767 11.109 65.767 10.434 65.767 9.747 65.621 9.136 65.329 8.602 65.036 8.067 64.635 7.647 64.127 7.341 63.618 7.023 63.039 6.864 62.391 6.864 61.755 6.864 61.176 7.023 60.654 7.341 60.146 7.647 59.739 8.067 59.433 8.602 59.141 9.136 58.995 9.747 58.995 10.434 58.995 11.109 59.141 11.72 59.433 12.267 59.739 12.815 60.146 13.248 60.654 13.566 61.176 13.871 61.755 14.024 62.391 14.024zm12.547 1.718C73.907 15.742 72.998 15.52 72.209 15.074 71.421 14.616 70.798 13.992 70.34 13.203 69.895 12.401 69.672 11.485 69.672 10.454 69.672 9.41 69.895 8.493 70.34 7.704 70.798 6.902 71.421 6.279 72.209 5.833 72.998 5.375 73.907 5.146 74.938 5.146c1.017.0 1.92.229 2.709.687C78.435 6.279 79.052 6.902 79.497 7.704 79.955 8.493 80.184 9.41 80.184 10.454 80.184 11.485 79.962 12.401 79.516 13.203 79.071 13.992 78.454 14.616 77.666 15.074 76.877 15.52 75.968 15.742 74.938 15.742zm0-1.718C75.599 14.024 76.184 13.871 76.693 13.566 77.202 13.26 77.596 12.84 77.876 12.306 78.168 11.771 78.314 11.154 78.314 10.454 78.314 9.753 78.168 9.136 77.876 8.602 77.596 8.054 77.202 7.628 76.693 7.322 76.184 7.017 75.599 6.864 74.938 6.864 74.276 6.864 73.691 7.017 73.182 7.322 72.674 7.628 72.273 8.054 71.981 8.602 71.688 9.136 71.542 9.753 71.542 10.454 71.542 11.154 71.688 11.771 71.981 12.306 72.273 12.84 72.674 13.26 73.182 13.566 73.691 13.871 74.276 14.024 74.938 14.024z" fill="#fff"></path></svg></div><div class="flex items-center gap-2"><div class="relative" data-tooltip-wrapper=""><div class="absolute top-0 left-0 hidden rounded-sm bg-gray-900 p-2 text-sm whitespace-nowrap text-white" data-tooltip-body="" id="gordon-tooltip" role="tooltip" x-show="messages.length &gt; 0">Start a new chat<div class="absolute h-2 w-2 rotate-45 bg-gray-900" data-tooltip-arrow=""></div></div></div></div></div><div class="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto overscroll-contain p-6" style="scrollbar-width:none;&amp;::-webkit-scrollbar:{ display:none; }" x-ref="messagesContainer"><div class="relative flex flex-col gap-4" x-show="messages.length &gt; 0"></div></div><div class="bg-blue-50 px-4 py-3 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">Answers are generated based on the documentation.</div></div></div><main class="relative flex w-full max-w-[1920px]"><div class="dark:bg-background-dark w-full min-w-0 bg-white p-8" data-pagefind-body=""><meta data-pagefind-meta="description:This concept page will teach you about the layers of container image."/><meta data-pagefind-meta="keywords:concepts, build, images, container, docker, desktop"/><meta data-pagefind-meta="breadcrumbs:Get started / Docker concepts / Building images"/><div class="flex w-full gap-8"><div class="min-w-0 flex-[2_2_0%]"><article class="prose dark:prose-invert max-w-4xl"><h1 data-pagefind-weight="10" id="readar-node-0001">Understanding the image layers</h1><div class="hidden lg:block"><div class="not-prose mt-4"><div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+
+</div><hr class="mt-4 mb-6 border-t border-gray-200 dark:border-gray-700"/></div></div><div class="block lg:hidden"><div class="not-prose" data-pagefind-ignore=""><div class="pb-0 text-lg lg:pb-2">Table of contents</div></div><hr/></div><div class="youtube-video aspect-video h-fit w-full py-2" data-video-id="wJwqtAkmtQA" id="youtube-player-wJwqtAkmtQA"></div><h2 class="scroll-mt-20 flex items-center gap-2" id="explanation"><a class="text-black dark:text-white no-underline hover:underline" href="#explanation">Explanation</a></h2><p id="readar-node-0003">As you learned in <a class="link" href="https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/">What is an image?</a>, container images are composed of layers. And each of these layers, once created, are immutable. But, what does that actually mean? And how are those layers used to create the filesystem a container can use?</p><h3 class="scroll-mt-20 flex items-center gap-2" id="image-layers"><a class="text-black dark:text-white no-underline hover:underline" href="#image-layers">Image layers</a></h3><p id="readar-node-0005">Each layer in an image contains a set of filesystem changes - additions, deletions, or modifications. Let’s look at a theoretical image:</p><ol id="readar-node-0006"><li>The first layer adds basic commands and a package manager, such as apt.</li><li>The second layer installs a Python runtime and pip for dependency management.</li><li>The third layer copies in an application’s specific requirements.txt file.</li><li>The fourth layer installs that application’s specific dependencies.</li><li>The fifth layer copies in the actual source code of the application.</li></ol><p id="readar-node-0007">This example might look like:</p><figure class="cursor-pointer hover:opacity-90" x-data="{ zoom: false }" zoom=""><img alt="screenshot of the flowchart showing the concept of the image layers" class="mx-auto border border-divider-light dark:border-divider-dark rounded-sm" loading="lazy" src="https://docs.docker.com/get-started/docker-concepts/building-images/images/container_image_layers.webp"/>
+</figure><p id="readar-node-0008">This is beneficial because it allows layers to be reused between images. For example, imagine you wanted to create another Python application. Due to layering, you can leverage the same Python base. This will make builds faster and reduce the amount of storage and bandwidth required to distribute the images. The image layering might look similar to the following:</p><figure class="cursor-pointer hover:opacity-90" x-data="{ zoom: false }" zoom=""><img alt="screenshot of the flowchart showing the benefits of the image layering" class="mx-auto border border-divider-light dark:border-divider-dark rounded-sm" loading="lazy" src="https://docs.docker.com/get-started/docker-concepts/building-images/images/container_image_layer_reuse.webp"/>
+</figure><p id="readar-node-0009">Layers let you extend images of others by reusing their base layers, allowing you to add only the data that your application needs.</p><h3 class="scroll-mt-20 flex items-center gap-2" id="stacking-the-layers"><a class="text-black dark:text-white no-underline hover:underline" href="#stacking-the-layers">Stacking the layers</a></h3><p id="readar-node-0011">Layering is made possible by content-addressable storage and union filesystems. While this will get technical, here’s how it works:</p><ol id="readar-node-0012"><li>After each layer is downloaded, it is extracted into its own directory on the host filesystem.</li><li>When you run a container from an image, a union filesystem is created where layers are stacked on top of each other, creating a new and unified view.</li><li>When the container starts, its root directory is set to the location of this unified directory, using <code>chroot</code>.</li></ol><p id="readar-node-0013">When the union filesystem is created, in addition to the image layers, a directory is created specifically for the running container. This allows the container to make filesystem changes while allowing the original image layers to remain untouched. This enables you to run multiple containers from the same underlying image.</p><h2 class="scroll-mt-20 flex items-center gap-2" id="try-it-out"><a class="text-black dark:text-white no-underline hover:underline" href="#try-it-out">Try it out</a></h2><p id="readar-node-0015">In this hands-on guide, you will create new image layers manually using the <a class="link" href="https://docs.docker.com/reference/cli/docker/container/commit/" rel="noopener"><code>docker container commit</code></a> command. Note that you’ll rarely create images this way, as you’ll normally <a class="link" href="https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/">use a Dockerfile</a>. But, it makes it easier to understand how it’s all working.</p><h3 class="scroll-mt-20 flex items-center gap-2" id="create-a-base-image"><a class="text-black dark:text-white no-underline hover:underline" href="#create-a-base-image">Create a base image</a></h3><p id="readar-node-0017">In this first step, you will create your own base image that you will then use for the following steps.</p><ol id="readar-node-0018"><li><p><a class="link" href="https://www.docker.com/products/docker-desktop/" rel="noopener">Download and install</a> Docker Desktop.</p></li><li><p>In a terminal, run the following command to start a new container:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>Once the image has been downloaded and the container has started, you should see a new shell prompt. This is running inside your container. It will look similar to the following (the container ID will vary):</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>Inside the container, run the following command to install Node.js:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>When this command runs, it downloads and installs Node inside the container. In the context of the union filesystem, these filesystem changes occur within the directory unique to this container.</p></li><li><p>Validate if Node is installed by running the following command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>You should then see a “Hello world!” appear in the console.</p></li><li><p>Now that you have Node installed, you’re ready to save the changes you’ve made as a new image layer, from which you can start new containers or build new images. To do so, you will use the <a class="link" href="https://docs.docker.com/reference/cli/docker/container/commit/" rel="noopener"><code>docker container commit</code></a> command. Run the following command in a new terminal:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>View the layers of your image using the <code>docker image history</code> command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>You will see output similar to the following:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>Note the “Add node” comment on the top line. This layer contains the Node.js install you just made.</p></li><li><p>To prove your image has Node installed, you can start a new container using this new image:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>With that, you should get a “Hello again” output in the terminal, showing Node was installed and working.</p></li><li><p>Now that you’re done creating your base image, you can remove that container:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li></ol><blockquote class="admonition not-prose"><p id="readar-node-0028"><strong>Base image definition</strong></p><p id="readar-node-0029">A base image is a foundation for building other images. It's possible to use any images as a base image. However, some images are intentionally created as building blocks, providing a foundation or starting point for an application.</p><p id="readar-node-0030">In this example, you probably won’t deploy this <code>node-base</code> image, as it doesn’t actually do anything yet. But it’s a base you can use for other builds.</p></blockquote><h3 class="scroll-mt-20 flex items-center gap-2" id="build-an-app-image"><a class="text-black dark:text-white no-underline hover:underline" href="#build-an-app-image">Build an app image</a></h3><p id="readar-node-0032">Now that you have a base image, you can extend that image to build additional images.</p><ol id="readar-node-0033"><li><p>Start a new container using the newly created node-base image:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>Inside of this container, run the following command to create a Node program:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>To run this Node program, you can use the following command and see the message printed on the screen:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>In another terminal, run the following command to save this container’s changes as a new image:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>This command not only creates a new image named <code>sample-app</code>, but also adds additional configuration to the image to set the default command when starting a container. In this case, you are setting it to automatically run <code>node app.js</code>.</p></li><li><p>In a terminal outside of the container, run the following command to view the updated layers:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>You’ll then see output that looks like the following. Note the top layer comment has “Add app” and the next layer has “Add node”:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>Finally, start a new container using the brand new image. Since you specified the default command, you can use the following command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>You should see your greeting appear in the terminal, coming from your Node program.</p></li><li><p>Now that you’re done with your containers, you can remove them using the following command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li></ol><h2 class="scroll-mt-20 flex items-center gap-2" id="additional-resources"><a class="text-black dark:text-white no-underline hover:underline" href="#additional-resources">Additional resources</a></h2><p id="readar-node-0043">If you’d like to dive deeper into the things you learned, check out the following resources:</p><ul id="readar-node-0044"><li><a class="link" href="/reference/cli/docker/image/history/"><code>docker image history</code></a></li><li><a class="link" href="/reference/cli/docker/container/commit/"><code>docker container commit</code></a></li></ul><h2 class="scroll-mt-20 flex items-center gap-2" id="next-steps"><a class="text-black dark:text-white no-underline hover:underline" href="#next-steps">Next steps</a></h2><p id="readar-node-0046">As hinted earlier, most image builds don’t use <code>docker container commit</code>. Instead, you’ll use a Dockerfile which automates these steps for you.</p><a class="button not-prose" href="https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/">Writing a Dockerfile</a></article></div><div class="-mt-8 hidden min-w-48 flex-1 lg:block"></div></div></div></main></body></html>

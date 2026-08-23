@@ -1,0 +1,326 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: A window function performs a calculation across a set of table rows that are somehow related to the current row. This is comparable to the type of calculation that can be done with an aggregate function. However, window functions do not cause rows to become grouped into a single output row like non-window aggregate calls would. Instead, the rows retain their separate identities. Behind the scenes, the window function is able to access more than just the current row of the query result.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: Here is an example that shows how to compare each employee's salary with the average salary in his or her department:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname) FROM empsalary;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions:   depname  | empno | salary |          avg\n-----------+-------+--------+-----------------------\n develop   |    11 |   5200 | 5020.0000000000000000\n develop   |     7 |   4200 | 5020.0000000000000000\n develop   |     9 |   4500 | 5020.0000000000000000\n develop   |     8 |   6000 | 5020.0000000000000000\n develop   |    10 |   5200 | 5020.0000000000000000\n personnel |     5 |   3500 | 3700.0000000000000000\n personnel |     2 |   3900 | 3700.0000000000000000\n sales     |     3 |   4800 | 4866.6666666666666667\n sales     |     1 |   5000 | 4866.6666666666666667\n sales     |     4 |   4800 | 4866.6666666666666667\n(10 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: The first three output columns come directly from the table empsalary , and there is one output row for each row in the table. The fourth column represents an average taken across all the table rows that have the same depname value as the current row. (This actually is the same function as the non-window avg aggregate, but the OVER clause causes it to be treated as a window function and computed across the window frame.)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: A window function call always contains an OVER clause directly following the window function's name and argument(s). This is what syntactically distinguishes it from a normal function or non-window aggregate. The OVER clause determines exactly how the rows of the query are split up for processing by the window function. The PARTITION BY clause within OVER divides the rows into groups, or partitions, that share the same values of the PARTITION BY expression(s). For each row, the window function is computed across the rows that fall into the same partition as the current row.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: You can also control the order in which rows are processed by window functions using ORDER BY within OVER . (The window ORDER BY does not even have to match the order in which the rows are output.) Here is an example:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT depname, empno, salary,\n       row_number() OVER (PARTITION BY depname ORDER BY salary DESC)\nFROM empsalary;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions:   depname  | empno | salary | row_number\n-----------+-------+--------+------------\n develop   |     8 |   6000 |          1\n develop   |    10 |   5200 |          2\n develop   |    11 |   5200 |          3\n develop   |     9 |   4500 |          4\n develop   |     7 |   4200 |          5\n personnel |     2 |   3900 |          1\n personnel |     5 |   3500 |          2\n sales     |     1 |   5000 |          1\n sales     |     4 |   4800 |          2\n sales     |     3 |   4800 |          3\n(10 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: As shown here, the row_number window function assigns sequential numbers to the rows within each partition, in the order defined by the ORDER BY clause (with tied rows numbered in an unspecified order). row_number needs no explicit parameter, because its behavior is entirely determined by the OVER clause.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: The rows considered by a window function are those of the “ virtual table ” produced by the query's FROM clause as filtered by its WHERE , GROUP BY , and HAVING clauses if any. For example, a row removed because it does not meet the WHERE condition is not seen by any window function. A query can contain multiple window functions that slice up the data in different ways using different OVER clauses, but they all act on the same collection of rows defined by this virtual table.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: We already saw that ORDER BY can be omitted if the ordering of rows is not important. It is also possible to omit PARTITION BY , in which case there is a single partition containing all rows.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: There is another important concept associated with window functions: for each row, there is a set of rows within its partition called its window frame . Some window functions act only on the rows of the window frame, rather than of the whole partition. By default, if ORDER BY is supplied then the frame consists of all rows from the start of the partition up through the current row, plus any following rows that are equal to the current row according to the ORDER BY clause. When ORDER BY is omitted the default frame consists of all rows in the partition. [5] Here is an example using sum :",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT salary, sum(salary) OVER () FROM empsalary;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions:  salary |  sum\n--------+-------\n   5200 | 47100\n   5000 | 47100\n   3500 | 47100\n   4800 | 47100\n   3900 | 47100\n   4200 | 47100\n   4500 | 47100\n   4800 | 47100\n   6000 | 47100\n   5200 | 47100\n(10 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: Above, since there is no ORDER BY in the OVER clause, the window frame is the same as the partition, which for lack of PARTITION BY is the whole table; in other words each sum is taken over the whole table and so we get the same result for each output row. But if we add an ORDER BY clause, we get very different results:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT salary, sum(salary) OVER (ORDER BY salary) FROM empsalary;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions:  salary |  sum\n--------+-------\n   3500 |  3500\n   3900 |  7400\n   4200 | 11600\n   4500 | 16100\n   4800 | 25700\n   4800 | 25700\n   5000 | 30700\n   5200 | 41100\n   5200 | 41100\n   6000 | 47100\n(10 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: Here the sum is taken from the first (lowest) salary up through the current one, including any duplicates of the current one (notice the results for the duplicated salaries).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: Window functions are permitted only in the SELECT list and the ORDER BY clause of the query. They are forbidden elsewhere, such as in GROUP BY , HAVING and WHERE clauses. This is because they logically execute after the processing of those clauses. Also, window functions execute after non-window aggregate functions. This means it is valid to include an aggregate function call in the arguments of a window function, but not vice versa.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: If there is a need to filter or group rows after the window calculations are performed, you can use a sub-select. For example:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT depname, empno, salary, enroll_date\nFROM\n  (SELECT depname, empno, salary, enroll_date,\n     row_number() OVER (PARTITION BY depname ORDER BY salary DESC, empno) AS pos\n     FROM empsalary\n  ) AS ss\nWHERE pos < 3;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: The above query only shows the rows from the inner query having row_number less than 3 (that is, the first two rows for each department).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: When a query involves multiple window functions, it is possible to write out each one with a separate OVER clause, but this is duplicative and error-prone if the same windowing behavior is wanted for several functions. Instead, each windowing behavior can be named in a WINDOW clause and then referenced in OVER . For example:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.5. Window Functions: SELECT sum(salary) OVER w, avg(salary) OVER w\n  FROM empsalary\n  WINDOW w AS (PARTITION BY depname ORDER BY salary DESC);",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: More details about window functions can be found in Section 4.2.8 , Section 9.22 , Section 7.2.5 , and the SELECT reference page.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.5. Window Functions: [5] There are options to define the window frame in other ways, but this tutorial does not cover them. See Section 4.2.8 for details.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-window",
+    "id": "tutorial-window__node_0027"
+  }
+]

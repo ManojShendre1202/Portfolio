@@ -1,0 +1,92 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "To install the LangChain package:",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "install",
+    "id": "install__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "pip install -U langchain\n# Requires Python 3.10+",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "install",
+    "id": "install__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "uv add langchain\n# Requires Python 3.10+",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "install",
+    "id": "install__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LangChain provides integrations to hundreds of LLMs and thousands of other integrations. These live in independent provider packages.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "install",
+    "id": "install__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "# Installing the OpenAI integration\npip install -U langchain-openai\n\n# Installing the Anthropic integration\npip install -U langchain-anthropic",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "install",
+    "id": "install__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "# Installing the OpenAI integration\nuv add langchain-openai\n\n# Installing the Anthropic integration\nuv add langchain-anthropic",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "install",
+    "id": "install__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "See the Integrations tab for a full list of available integrations.",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "install",
+    "id": "install__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Now that you have LangChain installed, you can get started by following the Quickstart guide .",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "install",
+    "id": "install__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up LangSmith tracing to debug your first LangChain app. Follow the tracing quickstart to get started. We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "install",
+    "id": "install__node_0009"
+  }
+]

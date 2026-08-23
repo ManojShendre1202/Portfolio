@@ -1,0 +1,882 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Structured output allows agents to return data in a specific, predictable format. Instead of parsing natural language responses, you get structured data in the form of JSON objects, Pydantic models , or dataclasses that your application can use directly.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "structured-output",
+    "id": "structured-output__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This page covers structured output with agents using create_agent . To use structured output directly on a model (outside of agents), see Models - Structured output .",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "structured-output",
+    "id": "structured-output__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LangChain’s create_agent handles structured output automatically. The user sets their desired structured output schema, and when the model generates the structured data, it’s captured, validated, and returned in the 'structured_response' key of the agent’s state.",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "structured-output",
+    "id": "structured-output__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "def create_agent(\n    ...\n    response_format: Union[\n        ToolStrategy[StructuredResponseT],\n        ProviderStrategy[StructuredResponseT],\n        type[StructuredResponseT],\n        None,\n    ]\n)",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "structured-output",
+    "id": "structured-output__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: Use response_format to control how the agent returns structured data:",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0005"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Response format: - ToolStrategy[StructuredResponseT] : Uses tool calling for structured output - ProviderStrategy[StructuredResponseT] : Uses provider-native structured output - type[StructuredResponseT] : Schema type - automatically selects best strategy based on model capabilities - None : Structured output not explicitly requested",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: When a schema type is provided directly, LangChain automatically chooses:",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Response format: - ProviderStrategy if the model and provider chosen supports native structured output (e.g. OpenAI , Anthropic (Claude) , or xAI (Grok) ). - ToolStrategy for all other models.",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: JSON Schema dictionaries must be wrapped in an explicit strategy ( ProviderStrategy or ToolStrategy ). They are not automatically detected when passed directly to response_format .",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: Support for native structured output features is read dynamically from the model’s profile data if using langchain>=1.1 . If data are not available, use another condition or specify manually:",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Response format: custom_profile = {\n    \"structured_output\": True,\n    # ...\n}\nmodel = init_chat_model(\"...\", profile=custom_profile)",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: If tools are specified, the model must support simultaneous use of tools and structured output.",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Response format: The structured response is returned in the structured_response key of the agent’s final state.",
+    "dom_ids": [
+      "response-format",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: Some model providers support structured output natively through their APIs (e.g. OpenAI, xAI (Grok), Gemini, Anthropic (Claude)). This is the most reliable method when available.",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: To use this strategy, configure a ProviderStrategy :",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Provider strategy: class ProviderStrategy(Generic[SchemaT]):\n    schema: type[SchemaT]\n    strict: bool | None = None",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: The strict param requires langchain>=1.2 .",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: The schema defining the structured output format. Supports:",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0018"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Provider strategy: - Pydantic models : BaseModel subclasses with field validation. Returns validated Pydantic instance. - Dataclasses : Python dataclasses with type annotations. Returns dict. - TypedDict : Typed dictionary classes. Returns dict. - JSON Schema : Dictionary with JSON schema specification. Must include top-level title and description keys. Returns dict.",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: Optional boolean parameter to enable strict schema adherence. Supported by some providers (e.g., OpenAI and xAI ). Defaults to None (disabled).",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: LangChain automatically uses ProviderStrategy when you pass a schema type directly to create_agent.response_format and the model supports native structured output:",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Provider strategy: from pydantic import BaseModel, Field\nfrom langchain.agents import create_agent\n\n\nclass ContactInfo(BaseModel):\n    \"\"\"Contact information for a person.\"\"\"\n    name: str = Field(description=\"The name of the person\")\n    email: str = Field(description=\"The email address of the person\")\n    phone: str = Field(description=\"The phone number of the person\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    response_format=ContactInfo  # Auto-selects ProviderStrategy\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract contact info from: John Doe, john@example.com, (555) 123-4567\"}]\n})\n\nprint(result[\"structured_response\"])\n# ContactInfo(name='John Doe', email='john@example.com', phone='(555) 123-4567')",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Provider strategy: from dataclasses import dataclass\nfrom langchain.agents import create_agent\n\n\n@dataclass\nclass ContactInfo:\n    \"\"\"Contact information for a person.\"\"\"\n    name: str # The name of the person\n    email: str # The email address of the person\n    phone: str # The phone number of the person\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ContactInfo  # Auto-selects ProviderStrategy\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract contact info from: John Doe, john@example.com, (555) 123-4567\"}]\n})\n\nresult[\"structured_response\"]\n# {'name': 'John Doe', 'email': 'john@example.com', 'phone': '(555) 123-4567'}",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Provider strategy: from typing_extensions import TypedDict\nfrom langchain.agents import create_agent\n\n\nclass ContactInfo(TypedDict):\n    \"\"\"Contact information for a person.\"\"\"\n    name: str # The name of the person\n    email: str # The email address of the person\n    phone: str # The phone number of the person\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ContactInfo  # Auto-selects ProviderStrategy\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract contact info from: John Doe, john@example.com, (555) 123-4567\"}]\n})\n\nresult[\"structured_response\"]\n# {'name': 'John Doe', 'email': 'john@example.com', 'phone': '(555) 123-4567'}",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Provider strategy: from langchain.agents import create_agent\nfrom langchain.agents.structured_output import ProviderStrategy\n\n\ncontact_info_schema = {\n    \"title\": \"ContactInfo\",\n    \"type\": \"object\",\n    \"description\": \"Contact information for a person.\",\n    \"properties\": {\n        \"name\": {\"type\": \"string\", \"description\": \"The name of the person\"},\n        \"email\": {\"type\": \"string\", \"description\": \"The email address of the person\"},\n        \"phone\": {\"type\": \"string\", \"description\": \"The phone number of the person\"}\n    },\n    \"required\": [\"name\", \"email\", \"phone\"]\n}\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ProviderStrategy(contact_info_schema)\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract contact info from: John Doe, john@example.com, (555) 123-4567\"}]\n})\n\nresult[\"structured_response\"]\n# {'name': 'John Doe', 'email': 'john@example.com', 'phone': '(555) 123-4567'}",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: Provider-native structured output provides high reliability and strict validation because the model provider enforces the schema. Use it when available.",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: If the provider natively supports structured output for your model choice, it is functionally equivalent to write response_format=ProductReview instead of response_format=ProviderStrategy(ProductReview) .",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Provider strategy: In either case, if structured output is not supported, the agent will fall back to a tool calling strategy.",
+    "dom_ids": [
+      "provider-strategy",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calling strategy: For models that don’t support native structured output, LangChain uses tool calling to achieve the same result. This works with all models that support tool calling (most modern models).",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calling strategy: To use this strategy, configure a ToolStrategy :",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: class ToolStrategy(Generic[SchemaT]):\n    schema: type[SchemaT]\n    tool_message_content: str | None\n    handle_errors: Union[\n        bool,\n        str,\n        type[Exception],\n        tuple[type[Exception], ...],\n        Callable[[Exception], str],\n    ]",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calling strategy: The schema defining the structured output format. Supports:",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0032"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Tool calling strategy: - Pydantic models : BaseModel subclasses with field validation. Returns validated Pydantic instance. - Dataclasses : Python dataclasses with type annotations. Returns dict. - TypedDict : Typed dictionary classes. Returns dict. - JSON Schema : Dictionary with JSON schema specification. Must include top-level title and description keys. Returns dict. - Union types : Multiple schema options. The model will choose the most appropriate schema based on the context.",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calling strategy: Custom content for the tool message returned when structured output is generated. If not provided, defaults to a message showing the structured response data.",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calling strategy: Error handling strategy for structured output validation failures. Defaults to True .",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0035"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Tool calling strategy: - True : Catch all errors with default error template - str : Catch all errors with this custom message - type[Exception] : Only catch this exception type with default message - tuple[type[Exception], ...] : Only catch these exception types with default message - Callable[[Exception], str] : Custom function that returns error message - False : No retry, let exceptions propagate",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: from pydantic import BaseModel, Field\nfrom typing import Literal\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass ProductReview(BaseModel):\n    \"\"\"Analysis of a product review.\"\"\"\n    rating: int | None = Field(description=\"The rating of the product\", ge=1, le=5)\n    sentiment: Literal[\"positive\", \"negative\"] = Field(description=\"The sentiment of the review\")\n    key_points: list[str] = Field(description=\"The key points of the review. Lowercase, 1-3 words each.\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ToolStrategy(ProductReview)\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Analyze this review: 'Great product: 5 out of 5 stars. Fast shipping, but expensive'\"}]\n})\nresult[\"structured_response\"]\n# ProductReview(rating=5, sentiment='positive', key_points=['fast shipping', 'expensive'])",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: from dataclasses import dataclass\nfrom typing import Literal\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\n@dataclass\nclass ProductReview:\n    \"\"\"Analysis of a product review.\"\"\"\n    rating: int | None  # The rating of the product (1-5)\n    sentiment: Literal[\"positive\", \"negative\"]  # The sentiment of the review\n    key_points: list[str]  # The key points of the review\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ToolStrategy(ProductReview)\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Analyze this review: 'Great product: 5 out of 5 stars. Fast shipping, but expensive'\"}]\n})\nresult[\"structured_response\"]\n# {'rating': 5, 'sentiment': 'positive', 'key_points': ['fast shipping', 'expensive']}",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: from typing import Literal\nfrom typing_extensions import TypedDict\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass ProductReview(TypedDict):\n    \"\"\"Analysis of a product review.\"\"\"\n    rating: int | None  # The rating of the product (1-5)\n    sentiment: Literal[\"positive\", \"negative\"]  # The sentiment of the review\n    key_points: list[str]  # The key points of the review\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ToolStrategy(ProductReview)\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Analyze this review: 'Great product: 5 out of 5 stars. Fast shipping, but expensive'\"}]\n})\nresult[\"structured_response\"]\n# {'rating': 5, 'sentiment': 'positive', 'key_points': ['fast shipping', 'expensive']}",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: from langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nproduct_review_schema = {\n    \"title\": \"ProductReview\",\n    \"type\": \"object\",\n    \"description\": \"Analysis of a product review.\",\n    \"properties\": {\n        \"rating\": {\n            \"type\": [\"integer\", \"null\"],\n            \"description\": \"The rating of the product (1-5)\",\n            \"minimum\": 1,\n            \"maximum\": 5\n        },\n        \"sentiment\": {\n            \"type\": \"string\",\n            \"enum\": [\"positive\", \"negative\"],\n            \"description\": \"The sentiment of the review\"\n        },\n        \"key_points\": {\n            \"type\": \"array\",\n            \"items\": {\"type\": \"string\"},\n            \"description\": \"The key points of the review\"\n        }\n    },\n    \"required\": [\"sentiment\", \"key_points\"]\n}\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ToolStrategy(product_review_schema)\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Analyze this review: 'Great product: 5 out of 5 stars. Fast shipping, but expensive'\"}]\n})\nresult[\"structured_response\"]\n# {'rating': 5, 'sentiment': 'positive', 'key_points': ['fast shipping', 'expensive']}",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calling strategy: from pydantic import BaseModel, Field\nfrom typing import Literal, Union\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass ProductReview(BaseModel):\n    \"\"\"Analysis of a product review.\"\"\"\n    rating: int | None = Field(description=\"The rating of the product\", ge=1, le=5)\n    sentiment: Literal[\"positive\", \"negative\"] = Field(description=\"The sentiment of the review\")\n    key_points: list[str] = Field(description=\"The key points of the review. Lowercase, 1-3 words each.\")\n\nclass CustomerComplaint(BaseModel):\n    \"\"\"A customer complaint about a product or service.\"\"\"\n    issue_type: Literal[\"product\", \"service\", \"shipping\", \"billing\"] = Field(description=\"The type of issue\")\n    severity: Literal[\"low\", \"medium\", \"high\"] = Field(description=\"The severity of the complaint\")\n    description: str = Field(description=\"Brief description of the complaint\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=tools,\n    response_format=ToolStrategy(Union[ProductReview, CustomerComplaint])\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Analyze this review: 'Great product: 5 out of 5 stars. Fast shipping, but expensive'\"}]\n})\nresult[\"structured_response\"]\n# ProductReview(rating=5, sentiment='positive', key_points=['fast shipping', 'expensive'])",
+    "dom_ids": [
+      "tool-calling-strategy",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom tool message content: The tool_message_content parameter allows you to customize the message that appears in the conversation history when structured output is generated:",
+    "dom_ids": [
+      "custom-tool-message-content",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom tool message content: from pydantic import BaseModel, Field\nfrom typing import Literal\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass MeetingAction(BaseModel):\n    \"\"\"Action items extracted from a meeting transcript.\"\"\"\n    task: str = Field(description=\"The specific task to be completed\")\n    assignee: str = Field(description=\"Person responsible for the task\")\n    priority: Literal[\"low\", \"medium\", \"high\"] = Field(description=\"Priority level\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[],\n    response_format=ToolStrategy(\n        schema=MeetingAction,\n        tool_message_content=\"Action item captured and added to meeting notes!\"\n    )\n)\n\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"From our meeting: Sarah needs to update the project timeline as soon as possible\"}]\n})",
+    "dom_ids": [
+      "custom-tool-message-content",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom tool message content: ================================ Human Message =================================\n\nFrom our meeting: Sarah needs to update the project timeline as soon as possible\n================================== Ai Message ==================================\nTool Calls:\n  MeetingAction (call_1)\n Call ID: call_1\n  Args:\n    task: Update the project timeline\n    assignee: Sarah\n    priority: high\n================================= Tool Message =================================\nName: MeetingAction\n\nAction item captured and added to meeting notes!",
+    "dom_ids": [
+      "custom-tool-message-content",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom tool message content: Without tool_message_content , our final ToolMessage would be:",
+    "dom_ids": [
+      "custom-tool-message-content",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom tool message content: ================================= Tool Message =================================\nName: MeetingAction\n\nReturning structured response: {'task': 'update the project timeline', 'assignee': 'Sarah', 'priority': 'high'}",
+    "dom_ids": [
+      "custom-tool-message-content",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling: Models can make mistakes when generating structured output via tool calling. LangChain provides intelligent retry mechanisms to handle these errors automatically.",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multiple structured outputs error: When a model incorrectly calls multiple structured output tools, the agent provides error feedback in a ToolMessage and prompts the model to retry:",
+    "dom_ids": [
+      "multiple-structured-outputs-error",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multiple structured outputs error: from pydantic import BaseModel, Field\nfrom typing import Union\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass ContactInfo(BaseModel):\n    name: str = Field(description=\"Person's name\")\n    email: str = Field(description=\"Email address\")\n\nclass EventDetails(BaseModel):\n    event_name: str = Field(description=\"Name of the event\")\n    date: str = Field(description=\"Event date\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[],\n    response_format=ToolStrategy(Union[ContactInfo, EventDetails])  # Default: handle_errors=True\n)\n\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract info: John Doe (john@email.com) is organizing Tech Conference on March 15th\"}]\n})",
+    "dom_ids": [
+      "multiple-structured-outputs-error",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multiple structured outputs error: ================================ Human Message =================================\n\nExtract info: John Doe (john@email.com) is organizing Tech Conference on March 15th\nNone\n================================== Ai Message ==================================\nTool Calls:\n  ContactInfo (call_1)\n Call ID: call_1\n  Args:\n    name: John Doe\n    email: john@email.com\n  EventDetails (call_2)\n Call ID: call_2\n  Args:\n    event_name: Tech Conference\n    date: March 15th\n================================= Tool Message =================================\nName: ContactInfo\n\nError: Model incorrectly returned multiple structured responses (ContactInfo, EventDetails) when only one is expected.\n Please fix your mistakes.\n================================= Tool Message =================================\nName: EventDetails\n\nError: Model incorrectly returned multiple structured responses (ContactInfo, EventDetails) when only one is expected.\n Please fix your mistakes.\n================================== Ai Message ==================================\nTool Calls:\n  ContactInfo (call_3)\n Call ID: call_3\n  Args:\n    name: John Doe\n    email: john@email.com\n================================= Tool Message =================================\nName: ContactInfo\n\nReturning structured response: {'name': 'John Doe', 'email': 'john@email.com'}",
+    "dom_ids": [
+      "multiple-structured-outputs-error",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Schema validation error: When structured output doesn’t match the expected schema, the agent provides specific error feedback:",
+    "dom_ids": [
+      "schema-validation-error",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Schema validation error: from pydantic import BaseModel, Field\nfrom langchain.agents import create_agent\nfrom langchain.agents.structured_output import ToolStrategy\n\n\nclass ProductRating(BaseModel):\n    rating: int | None = Field(description=\"Rating from 1-5\", ge=1, le=5)\n    comment: str = Field(description=\"Review comment\")\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[],\n    response_format=ToolStrategy(ProductRating),  # Default: handle_errors=True\n    system_prompt=\"You are a helpful assistant that parses product reviews. Do not make any field or value up.\"\n)\n\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Parse this: Amazing product, 10/10!\"}]\n})",
+    "dom_ids": [
+      "schema-validation-error",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Schema validation error: ================================ Human Message =================================\n\nParse this: Amazing product, 10/10!\n================================== Ai Message ==================================\nTool Calls:\n  ProductRating (call_1)\n Call ID: call_1\n  Args:\n    rating: 10\n    comment: Amazing product\n================================= Tool Message =================================\nName: ProductRating\n\nError: Failed to parse structured output for tool 'ProductRating': 1 validation error for ProductRating.rating\n  Input should be less than or equal to 5 [type=less_than_equal, input_value=10, input_type=int].\n Please fix your mistakes.\n================================== Ai Message ==================================\nTool Calls:\n  ProductRating (call_2)\n Call ID: call_2\n  Args:\n    rating: 5\n    comment: Amazing product\n================================= Tool Message =================================\nName: ProductRating\n\nReturning structured response: {'rating': 5, 'comment': 'Amazing product'}",
+    "dom_ids": [
+      "schema-validation-error",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: You can customize how errors are handled using the handle_errors parameter:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: Custom error message:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ToolStrategy(\n    schema=ProductRating,\n    handle_errors=\"Please provide a valid rating between 1-5 and include a comment.\"\n)",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: If handle_errors is a string, the agent will always prompt the model to re-try with a fixed tool message:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ================================= Tool Message =================================\nName: ProductRating\n\nPlease provide a valid rating between 1-5 and include a comment.",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: Handle specific exceptions only:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ToolStrategy(\n    schema=ProductRating,\n    handle_errors=ValueError  # Only retry on ValueError, raise others\n)",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: If handle_errors is an exception type, the agent will only retry (using the default error message) if the exception raised is the specified type. In all other cases, the exception will be raised.",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: Handle multiple exception types:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ToolStrategy(\n    schema=ProductRating,\n    handle_errors=(ValueError, TypeError)  # Retry on ValueError and TypeError\n)",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: If handle_errors is a tuple of exceptions, the agent will only retry (using the default error message) if the exception raised is one of the specified types. In all other cases, the exception will be raised.",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: Custom error handler function:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: from langchain.agents.structured_output import StructuredOutputValidationError\nfrom langchain.agents.structured_output import MultipleStructuredOutputsError\n\ndef custom_error_handler(error: Exception) -> str:\n    if isinstance(error, StructuredOutputValidationError):\n        return \"There was an issue with the format. Try again.\"\n    elif isinstance(error, MultipleStructuredOutputsError):\n        return \"Multiple structured outputs were returned. Pick the most relevant one.\"\n    else:\n        return f\"Error: {str(error)}\"\n\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[],\n    response_format=ToolStrategy(\n                        schema=Union[ContactInfo, EventDetails],\n                        handle_errors=custom_error_handler\n                    )  # Default: handle_errors=True\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Extract info: John Doe (john@email.com) is organizing Tech Conference on March 15th\"}]\n})\n\nfor msg in result['messages']:\n    # If message is actually a ToolMessage object (not a dict), check its class name\n    if type(msg).__name__ == \"ToolMessage\":\n        print(msg.content)\n    # If message is a dictionary or you want a fallback\n    elif isinstance(msg, dict) and msg.get('tool_call_id'):\n        print(msg['content'])",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: On StructuredOutputValidationError :",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0067"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ================================= Tool Message =================================\nName: ToolStrategy\n\nThere was an issue with the format. Try again.",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: On MultipleStructuredOutputsError :",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ================================= Tool Message =================================\nName: ToolStrategy\n\nMultiple structured outputs were returned. Pick the most relevant one.",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: On other errors:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: ================================= Tool Message =================================\nName: ToolStrategy\n\nError: <error message>",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling strategies: No error handling:",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling strategies: response_format = ToolStrategy(\n    schema=ProductRating,\n    handle_errors=False  # All errors raised\n)",
+    "dom_ids": [
+      "error-handling-strategies",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "structured-output",
+    "id": "structured-output__node_0074"
+  }
+]

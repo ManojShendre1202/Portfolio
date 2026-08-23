@@ -1,0 +1,430 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: In a traditional build, all build instructions are executed in sequence, and in a single build container: downloading dependencies, compiling code, and packaging the application. All those layers end up in your final image. This approach works, but it leads to bulky images carrying unnecessary weight and increasing your security risks. This is where multi-stage builds come in.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: Multi-stage builds introduce multiple stages in your Dockerfile, each with a specific purpose. Think of it like the ability to run different parts of a build in multiple different environments, concurrently. By separating the build environment from the final runtime environment, you can significantly reduce the image size and attack surface. This is especially beneficial for applications with large build dependencies.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: Multi-stage builds are recommended for all types of applications.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: - For interpreted languages, like JavaScript or Ruby or Python, you can build and minify your code in one stage, and copy the production-ready files to a smaller runtime image. This optimizes your image for deployment. - For compiled languages, like C or Go or Rust, multi-stage builds let you compile in one stage and copy the compiled binaries into a final runtime image. No need to bundle the entire compiler in your final image.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: Here's a simplified example of a multi-stage build structure using pseudo-code. Notice there are multiple FROM statements and a new AS <stage-name> . In addition, the COPY statement in the second stage is copying --from the previous stage.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: # Stage 1: Build Environment\nFROM builder-image AS build-stage\n# Install build tools (e.g., Maven, Gradle)\n# Copy source code\n# Build commands (e.g., compile, package)\n\n# Stage 2: Runtime environment\nFROM runtime-image AS final-stage\n#  Copy application artifacts from the build stage (e.g., JAR file)\nCOPY --from=build-stage /path/in/build/stage /path/to/place/in/final/stage\n# Define runtime configuration (e.g., CMD, ENTRYPOINT)",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: This Dockerfile uses two stages:",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Multi-stage builds — Explanation: - The build stage uses a base image containing build tools needed to compile your application. It includes commands to install build tools, copy source code, and execute build commands. - The final stage uses a smaller base image suitable for running your application. It copies the compiled artifacts (a JAR file, for example) from the build stage. Finally, it defines the runtime configuration (using CMD or ENTRYPOINT ) for starting your application.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this hands-on guide, you'll unlock the power of multi-stage builds to create lean and efficient Docker images for a sample Java application. You'll use a simple “Hello World” Spring Boot-based application built with Maven as your example.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Try it out: - Download and install Docker Desktop. - Open this pre-initialized project to generate a ZIP file. Here’s how that looks: Spring Initializr is a quickstart generator for Spring projects. It provides an extensible API to generate JVM-based projects with implementations for several common concepts — like basic language generation for Java, Kotlin, Groovy, and Maven. Select Generate to create and download the zip file for this project. For this demonstration, you’ve paired Maven build automation with Java, a Spring Web dependency, and Java 21 for your metadata. - Navigate the project directory. Once you unzip the file, you'll see the following project directory structure: The src/main/java directory contains your project's source code, the src/test/java directory contains the test source, and the pom.xml file is your project’s Project Object Model (POM). The pom.xml file is the core of a Maven project's configuration. It's a single configuration file that contains most of the information needed to build a customized project. The POM is huge and can seem daunting. Thankfully, you don't yet need to understand every intricacy to use it effectively. - Create a RESTful web service that displays \"Hello World!\". Under the src/main/java/com/example/spring_boot_docker/ directory, you can modify your SpringBootDockerApplication.java file with the following content: The SpringbootDockerApplication.java file starts by declaring your com.example.spring_boot_docker package and importing necessary Spring frameworks. This Java file creates a simple Spring Boot web application that responds with \"Hello World\" when a user visits its homepage.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out: spring-boot-docker\n├── HELP.md\n├── mvnw\n├── mvnw.cmd\n├── pom.xml\n└── src\n    ├── main\n    │   ├── java\n    │   │   └── com\n    │   │       └── example\n    │   │           └── spring_boot_docker\n    │   │               └── SpringBootDockerApplication.java\n    │   └── resources\n    │       ├── application.properties\n    │       ├── static\n    │       └── templates\n    └── test\n        └── java\n            └── com\n                └── example\n                    └── spring_boot_docker\n                        └── SpringBootDockerApplicationTests.java\n\n15 directories, 7 files",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out: package com.example.spring_boot_docker;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n\n@RestController\n@SpringBootApplication\npublic class SpringBootDockerApplication {\n\n    @RequestMapping(\"/\")\n        public String home() {\n        return \"Hello World\";\n    }\n\n\tpublic static void main(String[] args) {\n\t\tSpringApplication.run(SpringBootDockerApplication.class, args);\n\t}\n\n}",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create the Dockerfile: Now that you have the project, you’re ready to create the Dockerfile .",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0013"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create the Dockerfile: - Create a file named Dockerfile in the same folder that contains all the other folders and files (like src, pom.xml, etc.). - In the Dockerfile , define your base image by adding the following line: - Now, define the working directory by using the WORKDIR instruction. This will specify where future commands will run and the directory files will be copied inside the container image. - Copy both the Maven wrapper script and your project's pom.xml file into the current working directory /app within the Docker container. - Execute a command within the container. It runs the ./mvnw dependency:go-offline command, which uses the Maven wrapper ( ./mvnw ) to download all dependencies for your project without building the final JAR file (useful for faster builds). - Copy the src directory from your project on the host machine to the /app directory within the container. - Set the default command to be executed when the container starts. This command instructs the container to run the Maven wrapper ( ./mvnw ) with the spring-boot:run goal, which will build and execute your Spring Boot application. And with that, you should have the following Dockerfile:",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: FROM eclipse-temurin:21.0.8_9-jdk-jammy",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: WORKDIR /app",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: COPY .mvn/ .mvn\nCOPY mvnw pom.xml ./",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: RUN ./mvnw dependency:go-offline",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: COPY src ./src",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: CMD [\"./mvnw\", \"spring-boot:run\"]",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create the Dockerfile: FROM eclipse-temurin:21.0.8_9-jdk-jammy\nWORKDIR /app\nCOPY .mvn/ .mvn\nCOPY mvnw pom.xml ./\nRUN ./mvnw dependency:go-offline\nCOPY src ./src\nCMD [\"./mvnw\", \"spring-boot:run\"]",
+    "dom_ids": [
+      "create-the-dockerfile",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0021"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build the container image: - Execute the following command to build the Docker image: - Check the size of the Docker image by using the docker images command: Doing so will produce output like the following: This output shows that your image is 880MB in size. It contains the full JDK, Maven toolchain, and more. In production, you don’t need that in your final image.",
+    "dom_ids": [
+      "build-the-container-image",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build the container image: $ docker build -t spring-helloworld .",
+    "dom_ids": [
+      "build-the-container-image",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build the container image: $ docker images",
+    "dom_ids": [
+      "build-the-container-image",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build the container image: REPOSITORY          TAG       IMAGE ID       CREATED          SIZE\nspring-helloworld   latest    ff708d5ee194   3 minutes ago    880MB",
+    "dom_ids": [
+      "build-the-container-image",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0025"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Run the Spring Boot application: - Now that you have an image built, it's time to run the container. You'll then see output similar to the following in the container log: - Access your “Hello World” page through your web browser at http://localhost:8080 , or via this curl command:",
+    "dom_ids": [
+      "run-the-spring-boot-application",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run the Spring Boot application: $ docker run -p 8080:8080 spring-helloworld",
+    "dom_ids": [
+      "run-the-spring-boot-application",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run the Spring Boot application: [INFO] --- spring-boot:3.3.4:run (default-cli) @ spring-boot-docker ---\n[INFO] Attaching agents: []\n\n     .   ____          _            __ _ _\n    /\\\\ / ___'_ __ _ _(_)_ __  __ _ \\ \\ \\ \\\n   ( ( )\\___ | '_ | '_| | '_ \\/ _` | \\ \\ \\ \\\n    \\\\/  ___)| |_)| | | | | || (_| |  ) ) ) )\n     '  |____| .__|_| |_|_| |_\\__, | / / / /\n    =========|_|==============|___/=/_/_/_/\n\n    :: Spring Boot ::                (v3.3.4)\n\n2024-09-29T23:54:07.157Z  INFO 159 --- [spring-boot-docker] [           main]\nc.e.s.SpringBootDockerApplication        : Starting SpringBootDockerApplication using Java\n21.0.2 with PID 159 (/app/target/classes started by root in /app)\n ….",
+    "dom_ids": [
+      "run-the-spring-boot-application",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run the Spring Boot application: $ curl localhost:8080\nHello World",
+    "dom_ids": [
+      "run-the-spring-boot-application",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0029"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use multi-stage builds: - Consider the following Dockerfile: Notice that this Dockerfile has been split into two stages. The first stage remains the same as the previous Dockerfile, providing a Java Development Kit (JDK) environment for building the application. This stage is given the name of builder. The second stage is a new stage named final . It uses a slimmer eclipse-temurin:21.0.8_9-jre-jammy image, containing just the Java Runtime Environment (JRE) needed to run the application. This image provides a Java Runtime Environment (JRE) which is enough for running the compiled application (JAR file). For production use, it's highly recommended that you produce a custom JRE-like runtime using jlink. JRE images are available for all versions of Eclipse Temurin, but jlink allows you to create a minimal runtime containing only the necessary Java modules for your application. This can significantly reduce the size and improve the security of your final image. Refer to this page for more information. With multi-stage builds, a Docker build uses one base image for compilation, packaging, and unit tests and then a separate image for the application runtime. As a result, the final image is smaller in size since it doesn’t contain any development or debugging tools. By separating the build environment from the final runtime environment, you can significantly reduce the image size and increase the security of your final images. - Now, rebuild your image and run your ready-to-use production build. This command builds a Docker image named spring-helloworld-builder using the final stage from your Dockerfile file located in the current directory. Note In your multi-stage Dockerfile, the final stage (final) is the default target for building. This means that if you don't explicitly specify a target stage using the --target flag in the docker build command, Docker will automatically build the last stage by default. You could use docker build -t spring-helloworld-builder --target builder . to build only the builder stage with the JDK environment. - Look at the image size difference by using the docker images command: You'll get output similar to the following: Your final image is just 428 MB, compared to the original build size of 880 MB. By optimizing each stage and only including what's necessary, you were able to significantly reduce the overall image size while still achieving the same functionality. This not only improves performance but also makes your Docker images more lightweight, more secure, and easier to manage.",
+    "dom_ids": [
+      "use-multi-stage-builds",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use multi-stage builds: FROM eclipse-temurin:21.0.8_9-jdk-jammy AS builder\nWORKDIR /opt/app\nCOPY .mvn/ .mvn\nCOPY mvnw pom.xml ./\nRUN ./mvnw dependency:go-offline\nCOPY ./src ./src\nRUN ./mvnw clean install\n\nFROM eclipse-temurin:21.0.8_9-jre-jammy AS final\nWORKDIR /opt/app\nEXPOSE 8080\nCOPY --from=builder /opt/app/target/*.jar /opt/app/*.jar\nENTRYPOINT [\"java\", \"-jar\", \"/opt/app/*.jar\"]",
+    "dom_ids": [
+      "use-multi-stage-builds",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use multi-stage builds: $ docker build -t spring-helloworld-builder .",
+    "dom_ids": [
+      "use-multi-stage-builds",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use multi-stage builds: $ docker images",
+    "dom_ids": [
+      "use-multi-stage-builds",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use multi-stage builds: spring-helloworld-builder latest    c5c76cb815c0   24 minutes ago      428MB\nspring-helloworld         latest    ff708d5ee194   About an hour ago   880MB",
+    "dom_ids": [
+      "use-multi-stage-builds",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0034"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - Multi-stage builds - Dockerfile best practices - Base images - Spring Boot Docker",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "multi_stage_builds",
+    "id": "multi_stage_builds__node_0035"
+  }
+]

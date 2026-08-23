@@ -82,18 +82,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding: 40px;
+  /* clamp(...vh...) instead of fixed px — this whole layout is built to
+     exactly fill the viewport (header + flexible card grid + footer, see
+     .rd-doc-cards below) rather than guess at a pixel height that either
+     overflows a short window or leaves a dead gap on a tall one. */
+  padding: clamp(14px, 2.5vh, 32px) clamp(24px, 4vw, 48px);
+  overflow: hidden;
+}
+
+.rd-logomark {
+  font-size: clamp(12px, 1.6vh, 15px);
+  margin: 0 0 clamp(4px, 1vh, 10px);
+  flex-shrink: 0;
 }
 
 .rd-picker-title {
+  flex-shrink: 0;
   font-family: var(--serif);
-  font-size: clamp(34px, 5vw, 52px);
+  font-size: clamp(22px, 3.4vh, 40px);
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  margin-bottom: 16px;
+  margin: 0 0 clamp(4px, 1vh, 12px);
 }
 .rd-picker-title em {
   font-style: italic;
@@ -102,32 +113,43 @@
 }
 
 .rd-picker-sub {
-  font-size: 14px;
+  font-size: clamp(11px, 1.5vh, 14px);
   color: var(--rd-muted);
-  line-height: 1.7;
-  margin-bottom: 48px;
-  max-width: 480px;
+  line-height: 1.5;
+  margin: 0 0 clamp(12px, 2.5vh, 28px);
+  max-width: 560px;
+  flex-shrink: 0;
 }
 
 .rd-doc-cards {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 900px;
-  margin-bottom: 40px;
+  /* the one flexible element — grows/shrinks to consume exactly whatever
+     vertical space the header+footer don't use, so cards genuinely expand
+     to fill the screen instead of being sized off fixed padding/font
+     numbers that only happen to fit one particular window height. */
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.6vh, 18px);
+  max-width: 1200px;
+  width: 100%;
+  margin-bottom: clamp(10px, 2vh, 20px);
 }
 
 .rd-doc-card {
   position: relative;
-  width: 240px;
   text-align: left;
   background: var(--rd-bg2);
   border: 1px solid var(--rd-line-strong);
   border-radius: 14px;
-  padding: 20px;
+  padding: clamp(10px, 2vh, 22px) clamp(12px, 1.6vw, 22px);
   font-family: var(--sans);
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
   transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 .rd-doc-card:hover:not(.disabled) {
@@ -138,24 +160,66 @@
 .rd-doc-card.disabled { opacity: 0.5; cursor: not-allowed; }
 
 .rd-doc-card-icon {
-  width: 34px; height: 34px;
-  border-radius: 8px;
+  width: clamp(22px, 3.4vh, 36px); height: clamp(22px, 3.4vh, 36px);
+  border-radius: 9px;
   background: var(--rd-accent-wash);
   color: var(--rd-accent);
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: clamp(6px, 1.2vh, 14px);
+  flex-shrink: 0;
 }
-.rd-doc-card-title  { font-size: 15px; font-weight: 600; color: var(--rd-ink); margin-bottom: 2px; }
-.rd-doc-card-source { font-size: 11px; color: var(--rd-accent); margin-bottom: 10px; }
-.rd-doc-card-hook   { font-size: 12.5px; color: var(--rd-muted); line-height: 1.55; }
+.rd-doc-card-icon-logo {
+  background: rgba(255,255,255,0.94);
+  padding: 5px;
+}
+.rd-doc-card-icon-logo img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+.rd-doc-card-icon-fallback {
+  display: none;
+  width: 100%; height: 100%;
+  align-items: center; justify-content: center;
+  color: var(--rd-bg);
+}
+.rd-doc-card-title  {
+  font-size: clamp(12px, 1.7vh, 15px); font-weight: 600; color: var(--rd-ink);
+  margin-bottom: 2px; line-height: 1.3; flex-shrink: 0;
+}
+.rd-doc-card-source {
+  font-size: clamp(9.5px, 1.2vh, 11px); color: var(--rd-accent);
+  margin-bottom: clamp(4px, 1vh, 10px); flex-shrink: 0;
+}
+.rd-doc-card-hook   {
+  font-size: clamp(10px, 1.35vh, 12.5px); color: var(--rd-muted); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
 .rd-doc-card-badge {
-  position: absolute; top: 14px; right: 14px;
-  font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  position: absolute; top: 12px; right: 12px;
+  font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--rd-muted); background: var(--rd-bg3);
-  padding: 3px 8px; border-radius: 100px;
+  padding: 2px 7px; border-radius: 100px;
 }
 
-.rd-picker-back { margin-top: 8px; }
+.rd-picker-back { margin-top: 0; flex-shrink: 0; }
+
+.rd-picker-credits {
+  margin: clamp(6px, 1.2vh, 16px) 0 0;
+  max-width: 560px;
+  font-size: 9.5px;
+  line-height: 1.45;
+  color: var(--rd-faint);
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .rd-picker { overflow-y: auto; }
+  .rd-doc-cards { flex: none; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: none; }
+  .rd-doc-card { min-height: 140px; }
+}
+@media (max-width: 640px) {
+  .rd-doc-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 
 /* ══════════════════════════════
    SPLIT VIEW
@@ -394,6 +458,17 @@
   background: #fff;
 }
 
+.rd-doc-frame-loading {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #999;
+  font-size: 0.85rem;
+}
+
 .rd-split-right {
   flex: 1;
   display: flex;
@@ -461,18 +536,27 @@
 .rd-msg.ai .rd-msg-content {
   font-size: 14.5px; line-height: 1.7;
   color: var(--rd-ink);
-  white-space: pre-wrap;
 }
 .rd-ai-card {
   background: var(--rd-bg2);
   border: 1px solid var(--rd-line-strong);
-  border-radius: 14px 14px 14px 4px;
-  padding: 14px 16px;
+  border-radius: 16px 16px 16px 4px;
+  padding: 15px 17px;
   max-width: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
 }
 
 /* markdown output (react-markdown) inside AI responses — bare tags, scoped to
-   the containers that hold rendered answer text */
+   the containers that hold rendered answer text. Real block paragraphs (no
+   manual <br/> spacing hack) — margin only on top so the first paragraph in
+   a card doesn't add a leading gap, and the last one doesn't add a trailing
+   one below it. */
+.rd-ai-card p, .rd-cited-text p, .rd-bullets p {
+  margin: 10px 0 0;
+}
+.rd-ai-card p:first-child, .rd-cited-text p:first-child, .rd-bullets p:first-child {
+  margin-top: 0;
+}
 .rd-ai-card code,
 .rd-cited-text code,
 .rd-bullets code {
@@ -483,13 +567,17 @@
   font-family: 'SFMono-Regular', Consolas, monospace;
   font-size: 0.9em;
 }
-.rd-ai-card pre,
-.rd-cited-text pre,
-.rd-bullets pre {
+.rd-code-block {
   margin: 10px 0;
   background: rgba(0,0,0,0.35);
   border: 1px solid var(--rd-line-strong);
-  border-radius: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.rd-ai-card pre,
+.rd-cited-text pre,
+.rd-bullets pre {
+  margin: 0;
   padding: 12px 14px;
   overflow-x: auto;
   white-space: pre;
@@ -505,15 +593,68 @@
   line-height: 1.6;
   color: var(--rd-ink);
 }
+.rd-code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 10px 7px 14px;
+  border-bottom: 1px solid var(--rd-line);
+  background: rgba(255,255,255,0.02);
+}
 .rd-code-lang {
-  display: block;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--rd-faint);
-  margin-bottom: 8px;
 }
+.rd-code-copy {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rd-muted);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 3px 7px;
+  transition: background 0.15s, color 0.15s;
+}
+.rd-code-copy:hover { background: rgba(255,255,255,0.08); color: var(--rd-ink); }
+
+/* syntax highlighting — hljs-* classes come from rehype-highlight
+   (highlight.js under the hood), tuned to sit on the same warm/amber dark
+   palette as the rest of the app instead of a generic imported theme */
+.rd-code-block .hljs-keyword,
+.rd-code-block .hljs-selector-tag,
+.rd-code-block .hljs-operator { color: #e0a040; }
+.rd-code-block .hljs-string,
+.rd-code-block .hljs-regexp,
+.rd-code-block .hljs-addition { color: #9ecb7a; }
+.rd-code-block .hljs-number,
+.rd-code-block .hljs-literal { color: #e0906b; }
+.rd-code-block .hljs-comment,
+.rd-code-block .hljs-quote { color: var(--rd-faint); font-style: italic; }
+.rd-code-block .hljs-title,
+.rd-code-block .hljs-title.function_,
+.rd-code-block .hljs-section { color: #7ab8e0; }
+.rd-code-block .hljs-built_in,
+.rd-code-block .hljs-type,
+.rd-code-block .hljs-class .hljs-title { color: #c792ea; }
+.rd-code-block .hljs-attr,
+.rd-code-block .hljs-attribute,
+.rd-code-block .hljs-variable.language_,
+.rd-code-block .hljs-params { color: #d8b892; }
+.rd-code-block .hljs-variable,
+.rd-code-block .hljs-property { color: var(--rd-ink); }
+.rd-code-block .hljs-deletion { color: #f87171; }
+.rd-code-block .hljs-meta,
+.rd-code-block .hljs-doctag { color: var(--rd-muted); }
+.rd-code-block .hljs-symbol,
+.rd-code-block .hljs-bullet,
+.rd-code-block .hljs-link { color: #e0a040; }
+.rd-code-block .hljs-emphasis { font-style: italic; }
+.rd-code-block .hljs-strong { font-weight: 700; }
+
 .rd-ai-card ul, .rd-ai-card ol,
 .rd-cited-text ul, .rd-cited-text ol {
   margin: 8px 0; padding-left: 20px;
@@ -533,12 +674,13 @@
 .rd-msg.user .rd-msg-content {
   background: var(--rd-accent-wash);
   border: 1px solid var(--rd-accent-line);
-  border-radius: 14px 14px 4px 14px;
-  padding: 10px 15px;
+  border-radius: 16px 16px 4px 16px;
+  padding: 11px 16px;
   font-size: 14px; line-height: 1.55;
   color: var(--rd-ink);
   white-space: pre-wrap;
   max-width: 480px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.14);
 }
 
 .rd-cursor {
@@ -741,10 +883,11 @@
 
 .rd-theme-dark-glass .rd-msg.ai .rd-msg-content { color: var(--rdw-ink); }
 .rd-theme-dark-glass .rd-ai-card {
-  background: var(--rdw-glass-bg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.03));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--rdw-glass-border);
+  border-left: 3px solid rgba(224,160,64,0.5);
   box-shadow: 0 4px 18px rgba(0,0,0,0.35);
 }
 .rd-theme-dark-glass .rd-ai-card code,
@@ -754,26 +897,29 @@
   border: 1px solid var(--rdw-glass-border);
   color: var(--rdw-ink);
 }
-.rd-theme-dark-glass .rd-ai-card pre,
-.rd-theme-dark-glass .rd-cited-text pre,
-.rd-theme-dark-glass .rd-bullets pre {
+.rd-theme-dark-glass .rd-code-block {
   background: rgba(0,0,0,0.4);
   border: 1px solid var(--rdw-glass-border);
+}
+.rd-theme-dark-glass .rd-code-block-header {
+  border-bottom-color: var(--rdw-glass-border);
 }
 .rd-theme-dark-glass .rd-ai-card pre code,
 .rd-theme-dark-glass .rd-cited-text pre code,
 .rd-theme-dark-glass .rd-bullets pre code { color: var(--rdw-ink); }
 .rd-theme-dark-glass .rd-code-lang { color: var(--rdw-faint); }
+.rd-theme-dark-glass .rd-code-copy { color: var(--rdw-muted); }
+.rd-theme-dark-glass .rd-code-copy:hover { background: rgba(255,255,255,0.1); color: var(--rdw-ink); }
 .rd-theme-dark-glass .rd-ai-card th, .rd-theme-dark-glass .rd-ai-card td,
 .rd-theme-dark-glass .rd-cited-text th, .rd-theme-dark-glass .rd-cited-text td {
   border-color: var(--rdw-glass-border);
 }
 
 .rd-theme-dark-glass .rd-msg.user .rd-msg-content {
-  background: var(--rdw-glass-bg);
+  background: linear-gradient(135deg, rgba(224,160,64,0.28), rgba(200,144,58,0.16));
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--rdw-glass-border);
+  border: 1px solid rgba(224,160,64,0.42);
   color: var(--rdw-ink);
   box-shadow: 0 4px 18px rgba(0,0,0,0.35);
 }
@@ -869,6 +1015,10 @@
   background: rgba(255,255,255,0.1);
   color: var(--rdw-ink);
 }
+.rd-theme-dark-glass .rd-doc-card-icon-logo {
+  background: rgba(255,255,255,0.94);
+}
+.rd-theme-dark-glass .rd-doc-card-icon-fallback { color: var(--rdw-bg); }
 .rd-theme-dark-glass .rd-doc-card-title { color: var(--rdw-ink); }
 .rd-theme-dark-glass .rd-doc-card-source { color: var(--rdw-muted); }
 .rd-theme-dark-glass .rd-doc-card-hook { color: var(--rdw-muted); }
@@ -876,6 +1026,7 @@
   background: rgba(255,255,255,0.1);
   color: var(--rdw-muted);
 }
+.rd-theme-dark-glass .rd-picker-credits { color: var(--rdw-muted); opacity: 0.7; }
 
 .rd-theme-dark-glass .rd-back-link { color: var(--rdw-muted); }
 .rd-theme-dark-glass .rd-back-link:hover { color: var(--rdw-ink); }

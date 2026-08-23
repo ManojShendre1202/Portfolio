@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
 import { visit } from 'unist-util-visit'
 import { SUGGESTED_QUESTIONS, DOC_CHAPTERS } from './curatedDocs'
-import { getOrCreateSession, startNewSession, getSessionTurns, listSessions, switchSession, deleteSession, docPageUrl } from './api'
+import { getOrCreateSession, startNewSession, getSessionTurns, listSessions, switchSession, deleteSession, fetchDocPage } from './api'
+import { prepareDocPageHtml } from './docPageRender'
 import { Icon } from './icons'
 import './readar.css'
 
@@ -46,24 +48,55 @@ const REMARK_REHYPE_OPTIONS = {
   },
 }
 
-// `p` renders inline (with a line-break in place of paragraph margin) so genuine multi-
-// paragraph answers still read with spacing, without every citation forcing a new block.
-// `pre` adds a language badge above fenced code blocks, read off the inner <code>'s className.
-// `sup` intercepts our citation markers (data-cite-n) and wires them to the click handler;
-// any other <sup> (real markdown superscript) just renders as-is.
+// pulls the raw text out of a code element's children (string, array of
+// strings/elements, or nested) so the copy button has something to copy —
+// react-markdown hands code content as children, not a plain string prop
+function textContent(node) {
+  if (node == null) return ''
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(textContent).join('')
+  if (node.props?.children != null) return textContent(node.props.children)
+  return ''
+}
+
+// fenced code blocks: language badge + copy-to-clipboard button above the code
+function CodeBlock({ children }) {
+  const [copied, setCopied] = useState(false)
+  const codeEl = Array.isArray(children) ? children[0] : children
+  const match = /language-(\w+)/.exec(codeEl?.props?.className || '')
+  const code = textContent(codeEl?.props?.children).replace(/\n$/, '')
+
+  function handleCopy() {
+    navigator.clipboard?.writeText(code).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1400)
+    })
+  }
+
+  return (
+    <div className="rd-code-block">
+      <div className="rd-code-block-header">
+        <span className="rd-code-lang">{match ? match[1] : 'code'}</span>
+        <button type="button" className="rd-code-copy" onClick={handleCopy}>
+          <Icon name={copied ? 'check' : 'copy'} size={12} />
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      </div>
+      <pre>{children}</pre>
+    </div>
+  )
+}
+
+// `pre` renders through CodeBlock (language badge + copy button above the code, see
+// above). `sup` intercepts our citation markers (data-cite-n) and wires them to the
+// click handler; any other <sup> (real markdown superscript) just renders as-is.
+// `p` is left as react-markdown's default — real block paragraphs, spaced by CSS
+// margin (see .rd-ai-card p) — rather than manually injected <br/><br/>, which used
+// to stack on top of adjacent elements' own margins (e.g. a code block right after a
+// paragraph) and produce oversized gaps.
 function mdComponents(citations, onCite) {
   return {
-    p: ({ children }) => <>{children}<br /><br /></>,
-    pre: ({ children }) => {
-      const codeEl = Array.isArray(children) ? children[0] : children
-      const match = /language-(\w+)/.exec(codeEl?.props?.className || '')
-      return (
-        <pre>
-          {match && <span className="rd-code-lang">{match[1]}</span>}
-          {children}
-        </pre>
-      )
-    },
+    pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
     sup: ({ children, ...rest }) => {
       const raw = rest['data-cite-n']
       if (raw == null) return <sup {...rest}>{children}</sup>
@@ -80,25 +113,25 @@ function mdComponents(citations, onCite) {
 
 function TraceStrip({ trace }) {
   const [open, setOpen] = useState(false)
+  // older persisted turns (before trace['total'] was included in the write) won't
+  // have a total — fall back to summing what we do have rather than showing "s"
+  const total = trace.total ?? (trace.retrieve ?? 0) + (trace.gemini ?? 0)
   return (
     <div className="rd-trace">
       <button className="rd-trace-summary" onClick={() => setOpen(o => !o)}>
         <Icon name="sparkle" size={12} />
-        <span>{trace.total}s</span>
+        <span>{total}s</span>
         <span className="rd-trace-dot" />
         <span>{trace.tokens} tokens</span>
         <span className="rd-trace-dot" />
-        <span>{trace.retrieved}→{trace.reranked} nodes</span>
+        <span>{trace.retrieved} nodes</span>
         <span className={`rd-trace-chevron ${open ? 'open' : ''}`}>▾</span>
       </button>
       {open && (
         <div className="rd-trace-detail">
-          {trace.embed != null && <div className="rd-trace-row"><span>embed</span><span>{trace.embed}s</span></div>}
           <div className="rd-trace-row"><span>retrieve</span><span>{trace.retrieve}s</span></div>
-          {trace.rerank != null && <div className="rd-trace-row"><span>rerank</span><span>{trace.rerank}s</span></div>}
           <div className="rd-trace-row"><span>gemini</span><span>{trace.gemini}s</span></div>
           <div className="rd-trace-row"><span>nodes retrieved</span><span>{trace.retrieved}</span></div>
-          <div className="rd-trace-row"><span>nodes reranked to</span><span>{trace.reranked}</span></div>
           <div className="rd-trace-row"><span>nodes used in context</span><span>{trace.used}</span></div>
           <div className="rd-trace-row"><span>tokens</span><span>{trace.tokens}</span></div>
         </div>
@@ -132,6 +165,7 @@ function FormattedLine({ text, citations, onCite }) {
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkCitations]}
       remarkRehypeOptions={REMARK_REHYPE_OPTIONS}
+      rehypePlugins={[rehypeHighlight]}
       components={mdComponents(citations, onCite)}
     >
       {text}
@@ -144,6 +178,7 @@ export default function SplitView({ doc, onBack }) {
   const [turns, setTurns]     = useState([])
   const [input, setInput]     = useState('')
   const [chapter, setChapter] = useState(doc.startChapter)
+  const [docHtml, setDocHtml] = useState(null)
   const [typing, setTyping]   = useState(false)
   const [docCollapsed, setDocCollapsed] = useState(false)
   const [historyCollapsed, setHistoryCollapsed] = useState(false)
@@ -153,6 +188,11 @@ export default function SplitView({ doc, onBack }) {
   const wsRef                   = useRef(null)
   const pendingHighlight         = useRef(null)  // domId — applied once the target chapter finishes loading
   const pendingMessage           = useRef(null)  // question text queued for send once a freshly-created session's WS opens
+  // typewriter reveal buffer — the backend streams real token chunks over the WS, but
+  // Gemini's chunks can arrive in sentence-sized bursts. Decoupling "text received" from
+  // "text shown" and draining it a few characters at a time gives a smooth, consistent
+  // reveal regardless of how bursty the actual network chunks are.
+  const streamRef = useRef({ buffer: '', timer: null, doneMsg: null })
 
   // ── session bootstrap: restore the last real conversation if one exists —
   //    never create a session just from loading the page. A session is only
@@ -196,6 +236,61 @@ export default function SplitView({ doc, onBack }) {
     const ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws/readar-chat/${chatId}`)
 
     wsRef.current = ws
+    streamRef.current = { buffer: '', timer: null, doneMsg: null }  // fresh per connection
+
+    function finalizeDone(msg) {
+      setTurns(prev => {
+        const next = [...prev]
+        const last = next[next.length - 1]
+        if (last && last.streaming) {
+          next[next.length - 1] = {
+            ...last,
+            streaming: false,
+            citations: msg.citations || [],
+            trace: msg.trace || null,
+          }
+        }
+        return next
+      })
+      setTyping(false)
+      refreshSessions()  // pick up the updated title/turn-count now that a turn actually landed
+    }
+
+    // drains a few characters at a time on a fixed tick — the reveal speed the user
+    // actually sees, independent of chunk size/arrival timing off the wire
+    function pump() {
+      const state = streamRef.current
+      if (state.timer) return
+      state.timer = setInterval(() => {
+        const s = streamRef.current
+        if (s.buffer.length > 0) {
+          // reveal speed scales with backlog — smooth 3-char steps for normal
+          // token pacing, but catches up quickly instead of trailing the actual
+          // response by many seconds once a long/code-heavy answer has already
+          // finished generating and the whole thing is sitting in the buffer
+          const step = Math.max(3, Math.ceil(s.buffer.length / 20))
+          const chunk = s.buffer.slice(0, step)
+          s.buffer = s.buffer.slice(step)
+          setTurns(prev => {
+            const next = [...prev]
+            const last = next[next.length - 1]
+            if (last && last.role === 'ai' && last.streaming) {
+              next[next.length - 1] = { ...last, text: last.text + chunk }
+            }
+            return next
+          })
+        }
+        if (s.buffer.length === 0) {
+          clearInterval(s.timer)
+          s.timer = null
+          if (s.doneMsg) {
+            const doneMsg = s.doneMsg
+            s.doneMsg = null
+            finalizeDone(doneMsg)
+          }
+        }
+      }, 18)
+    }
 
     ws.onopen = () => {
       if (pendingMessage.current) {
@@ -209,35 +304,23 @@ export default function SplitView({ doc, onBack }) {
       try { msg = JSON.parse(e.data) } catch { return }
 
       if (msg.type === 'token') {
-        setTurns(prev => {
-          const next = [...prev]
-          const last = next[next.length - 1]
-          if (last && last.role === 'ai' && last.streaming) {
-            next[next.length - 1] = { ...last, text: last.text + msg.text }
-          } else {
-            next.push({ role: 'ai', text: msg.text, streaming: true, citations: [] })
-          }
-          return next
-        })
         setTyping(false)
+        setTurns(prev => {
+          const last = prev[prev.length - 1]
+          if (last && last.role === 'ai' && last.streaming) return prev
+          return [...prev, { role: 'ai', text: '', streaming: true, citations: [] }]
+        })
+        streamRef.current.buffer += msg.text
+        pump()
       }
 
       if (msg.type === 'done') {
-        setTurns(prev => {
-          const next = [...prev]
-          const last = next[next.length - 1]
-          if (last && last.streaming) {
-            next[next.length - 1] = {
-              ...last,
-              streaming: false,
-              citations: msg.citations || [],
-              trace: msg.trace || null,
-            }
-          }
-          return next
-        })
-        setTyping(false)
-        refreshSessions()  // pick up the updated title/turn-count now that a turn actually landed
+        const state = streamRef.current
+        if (state.buffer.length > 0 || state.timer) {
+          state.doneMsg = msg  // finalize once the reveal buffer finishes draining
+        } else {
+          finalizeDone(msg)
+        }
       }
 
       if (msg.type === 'error') {
@@ -251,7 +334,11 @@ export default function SplitView({ doc, onBack }) {
       setTyping(false)
     }
 
-    return () => { ws.close(); wsRef.current = null }
+    return () => {
+      ws.close()
+      wsRef.current = null
+      if (streamRef.current.timer) clearInterval(streamRef.current.timer)
+    }
   }, [chatId])
 
   function refreshSessions() {
@@ -314,6 +401,19 @@ export default function SplitView({ doc, onBack }) {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [turns])
+
+  // ── fetch + client-side-render the source doc page whenever the chapter changes ──
+  useEffect(() => {
+    let cancelled = false
+    setDocHtml(null)
+    fetchDocPage(doc.id, chapter)
+      .then(({ html, base_href }) => {
+        if (cancelled) return
+        setDocHtml(prepareDocPageHtml(html, base_href))
+      })
+      .catch(() => { if (!cancelled) setDocHtml('<p style="padding:2rem;font-family:sans-serif">Could not load this page.</p>') })
+    return () => { cancelled = true }
+  }, [doc.id, chapter])
 
   // ── messages from the embedded doc page: chapter-link clicks stay inside the app ──
   useEffect(() => {
@@ -417,14 +517,18 @@ export default function SplitView({ doc, onBack }) {
             </button>
           </div>
         </div>
-        <iframe
-          key={chapter}
-          ref={iframeRef}
-          className="rd-doc-frame"
-          title="source document"
-          src={docPageUrl(doc.id, chapter)}
-          onLoad={handleFrameLoad}
-        />
+        {docHtml == null ? (
+          <div className="rd-doc-frame-loading">Loading…</div>
+        ) : (
+          <iframe
+            key={chapter}
+            ref={iframeRef}
+            className="rd-doc-frame"
+            title="source document"
+            srcDoc={docHtml}
+            onLoad={handleFrameLoad}
+          />
+        )}
       </div>
 
       {docCollapsed && (

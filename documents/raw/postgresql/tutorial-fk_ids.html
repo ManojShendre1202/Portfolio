@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 3.3. Foreign Keys</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-fk.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="3.3. Foreign Keys" property="og:title"/>
+<meta content="3.3.&amp;nbsp;Foreign Keys # Recall the weather and cities tables from Chapter&amp;nbsp;2. Consider the following problem: You want to make sure …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-fk.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-fk.html" title="PostgreSQL 18 - 3.3. Foreign Keys">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-fk.html" title="PostgreSQL 18 - 3.3. Foreign Keys">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-fk.html" title="PostgreSQL 17 - 3.3. Foreign Keys">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-fk.html" title="PostgreSQL 16 - 3.3. Foreign Keys">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-fk.html" title="PostgreSQL 15 - 3.3. Foreign Keys">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-fk.html" title="PostgreSQL 14 - 3.3. Foreign Keys">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-fk.html" rel="nofollow" title="PostgreSQL 19 - 3.3. Foreign Keys">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-fk.html" rel="nofollow" title="PostgreSQL devel - 3.3. Foreign Keys">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-fk.html" rel="nofollow" title="PostgreSQL 13 - 3.3. Foreign Keys">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-fk.html" rel="nofollow" title="PostgreSQL 12 - 3.3. Foreign Keys">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-fk.html" rel="nofollow" title="PostgreSQL 11 - 3.3. Foreign Keys">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-fk.html" rel="nofollow" title="PostgreSQL 10 - 3.3. Foreign Keys">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.6 - 3.3. Foreign Keys">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.5 - 3.3. Foreign Keys">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.4 - 3.3. Foreign Keys">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.3 - 3.3. Foreign Keys">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.2 - 3.3. Foreign Keys">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.1 - 3.3. Foreign Keys">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-fk.html" rel="nofollow" title="PostgreSQL 9.0 - 3.3. Foreign Keys">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-fk.html" rel="nofollow" title="PostgreSQL 8.4 - 3.3. Foreign Keys">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-fk.html" rel="nofollow" title="PostgreSQL 8.3 - 3.3. Foreign Keys">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-fk.html" rel="nofollow" title="PostgreSQL 8.2 - 3.3. Foreign Keys">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-fk.html" rel="nofollow" title="PostgreSQL 8.1 - 3.3. Foreign Keys">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-fk.html" rel="nofollow" title="PostgreSQL 8.0 - 3.3. Foreign Keys">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-fk.html" rel="nofollow" title="PostgreSQL 7.4 - 3.3. Foreign Keys">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-fk.html" rel="nofollow" title="PostgreSQL 7.3 - 3.3. Foreign Keys">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-fk.html" rel="nofollow" title="PostgreSQL 7.2 - 3.3. Foreign Keys">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-FK">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">3.3. Foreign Keys </h2>
+</div>
+</div>
+</div><a class="indexterm" id="id-1.4.5.4.2" name="id-1.4.5.4.2"></a><a class="indexterm" id="id-1.4.5.4.3" name="id-1.4.5.4.3"></a>
+<p id="readar-node-0002">Recall the <code class="classname">weather</code> and <code class="classname">cities</code> tables from <a class="xref" href="tutorial-sql.html" title="Chapter 2. The SQL Language">Chapter 2</a>. Consider the following problem: You want to make sure that no one can insert rows in the <code class="classname">weather</code> table that do not have a matching entry in the <code class="classname">cities</code> table. This is called maintaining the <em class="firstterm">referential integrity</em> of your data. In simplistic database systems this would be implemented (if at all) by first looking at the <code class="classname">cities</code> table to check if a matching record exists, and then inserting or rejecting the new <code class="classname">weather</code> records. This approach has a number of problems and is very inconvenient, so <span class="productname">PostgreSQL</span> can do this for you.</p>
+<p id="readar-node-0003">The new declaration of the tables would look like this:</p>
+<pre class="programlisting" id="readar-node-0004">
+CREATE TABLE cities (
+        name     varchar(80) primary key,
+        location point
+);
+
+CREATE TABLE weather (
+        city      varchar(80) references cities(name),
+        temp_lo   int,
+        temp_hi   int,
+        prcp      real,
+        date      date
+);
+</pre>
+<p id="readar-node-0005">Now try inserting an invalid record:</p>
+<pre class="programlisting" id="readar-node-0006">
+INSERT INTO weather VALUES ('Berkeley', 45, 53, 0.0, '1994-11-28');
+</pre>
+<pre class="screen" id="readar-node-0007">
+ERROR:  insert or update on table "weather" violates foreign key constraint "weather_city_fkey"
+DETAIL:  Key (city)=(Berkeley) is not present in table "cities".
+</pre>
+<p id="readar-node-0008">The behavior of foreign keys can be finely tuned to your application. We will not go beyond this simple example in this tutorial, but just refer you to <a class="xref" href="ddl.html" title="Chapter 5. Data Definition">Chapter 5</a> for more information. Making correct use of foreign keys will definitely improve the quality of your database applications, so you are strongly encouraged to learn about them.</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

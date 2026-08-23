@@ -1,0 +1,508 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build, tag, and publish an image — Explanation: In this guide, you will learn the following:",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build, tag, and publish an image — Explanation: - Building images - the process of building an image based on a Dockerfile - Tagging images - the process of giving an image a name, which also determines where the image can be distributed - Publishing images - the process to distribute or share the newly created image using a container registry",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: Most often, images are built using a Dockerfile. The most basic docker build command might look like the following:",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Building images: docker build .",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: The final . in the command provides the path or URL to the build context . At this location, the builder will find the Dockerfile and other referenced files.",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: When you run a build, the builder pulls the base image, if needed, and then runs the instructions specified in the Dockerfile.",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: With the previous command, the image will have no name, but the output will provide the ID of the image. As an example, the previous command might produce the following output:",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Building images: $ docker build .\n[+] Building 3.5s (11/11) FINISHED                                              docker:desktop-linux\n => [internal] load build definition from Dockerfile                                            0.0s\n => => transferring dockerfile: 308B                                                            0.0s\n => [internal] load metadata for docker.io/library/python:3.12                                  0.0s\n => [internal] load .dockerignore                                                               0.0s\n => => transferring context: 2B                                                                 0.0s\n => [1/6] FROM docker.io/library/python:3.12                                                    0.0s\n => [internal] load build context                                                               0.0s\n => => transferring context: 123B                                                               0.0s\n => [2/6] WORKDIR /usr/local/app                                                                0.0s\n => [3/6] RUN useradd app                                                                       0.1s\n => [4/6] COPY ./requirements.txt ./requirements.txt                                            0.0s\n => [5/6] RUN pip install --no-cache-dir --upgrade -r requirements.txt                          3.2s\n => [6/6] COPY ./app ./app                                                                      0.0s\n => exporting to image                                                                          0.1s\n => => exporting layers                                                                         0.1s\n => => writing image sha256:9924dfd9350407b3df01d1a0e1033b1e543523ce7d5d5e2c83a724480ebe8f00    0.0s",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: With the previous output, you could start a container by using the referenced image:",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Building images: docker run sha256:9924dfd9350407b3df01d1a0e1033b1e543523ce7d5d5e2c83a724480ebe8f00",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building images: That name certainly isn't memorable, which is where tagging becomes useful.",
+    "dom_ids": [
+      "building-images",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tagging images: Tagging images is the method to provide an image with a memorable name. However, there is a structure to the name of an image. A full image name has the following structure:",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tagging images: [HOST[:PORT_NUMBER]/]PATH[:TAG]",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0013"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Tagging images: - HOST : The optional registry hostname where the image is located. If no host is specified, Docker's public registry at docker.io is used by default. - PORT_NUMBER : The registry port number if a hostname is provided - PATH : The path of the image, consisting of slash-separated components. For Docker Hub, the format follows [NAMESPACE/]REPOSITORY , where namespace is either a user's or organization's name. If no namespace is specified, library is used, which is the namespace for Docker Official Images. - TAG : A custom, human-readable identifier that's typically used to identify different versions or variants of an image. If no tag is specified, latest is used by default.",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tagging images: Some examples of image names include:",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Tagging images: - nginx , equivalent to docker.io/library/nginx:latest : this pulls an image from the docker.io registry, the library namespace, the nginx image repository, and the latest tag. - docker/welcome-to-docker , equivalent to docker.io/docker/welcome-to-docker:latest : this pulls an image from the docker.io registry, the docker namespace, the welcome-to-docker image repository, and the latest tag - ghcr.io/dockersamples/example-voting-app-vote:pr-311 : this pulls an image from the GitHub Container Registry, the dockersamples namespace, the example-voting-app-vote image repository, and the pr-311 tag",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tagging images: To tag an image during a build, add the -t or --tag flag:",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tagging images: docker build -t my-username/my-image .",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tagging images: If you've already built an image, you can add another tag to the image by using the docker image tag command:",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tagging images: docker image tag my-username/my-image another-username/another-image:v1",
+    "dom_ids": [
+      "tagging-images",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing images: Once you have an image built and tagged, you're ready to push it to a registry. To do so, use the docker push command:",
+    "dom_ids": [
+      "publishing-images",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing images: docker push my-username/my-image",
+    "dom_ids": [
+      "publishing-images",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing images: Within a few seconds, all of the layers for your image will be pushed to the registry.",
+    "dom_ids": [
+      "publishing-images",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing images: Requiring authentication",
+    "dom_ids": [
+      "publishing-images",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing images: Before you're able to push an image to a repository, you will need to be authenticated. To do so, simply use the docker login command.",
+    "dom_ids": [
+      "publishing-images",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this hands-on guide, you will build a simple image using a provided Dockerfile and push it to Docker Hub.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0026"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Set up: - Get the sample application. If you have Git, you can clone the repository for the sample application. Otherwise, you can download the sample application. Choose one of the following options. Use the following command in a terminal to clone the sample application repository. Download the source and extract it. Download the source - Download and install Docker Desktop. - If you don't have a Docker account yet, create one now . Once you've done that, sign in to Docker Desktop using that account.",
+    "dom_ids": [
+      "set-up",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up: $ git clone https://github.com/docker/getting-started-todo-app",
+    "dom_ids": [
+      "set-up",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build an image: Now that you have a repository on Docker Hub, it's time for you to build an image and push it to the repository.",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0029"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build an image: - Using a terminal in the root of the sample app repository, run the following command. Replace YOUR_DOCKER_USERNAME with your Docker Hub username: As an example, if your username is mobywhale , you would run the command: - Once the build has completed, you can view the image by using the following command: The command will produce output similar to the following: - You can actually view the history (or how the image was created) by using the docker image history command: You'll then see output similar to the following: This output shows the layers of the image, highlighting the layers you added and those that were inherited from your base image.",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: $ docker build -t <YOUR_DOCKER_USERNAME>/concepts-build-image-demo .",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: $ docker build -t mobywhale/concepts-build-image-demo .",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: $ docker image ls",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: REPOSITORY                             TAG       IMAGE ID       CREATED          SIZE\nmobywhale/concepts-build-image-demo    latest    746c7e06537f   24 seconds ago   354MB",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: $ docker image history mobywhale/concepts-build-image-demo",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build an image: IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT\nf279389d5f01   8 seconds ago   CMD [\"node\" \"./src/index.js\"]                   0B        buildkit.dockerfile.v0\n<missing>      8 seconds ago   EXPOSE map[3000/tcp:{}]                         0B        buildkit.dockerfile.v0\n<missing>      8 seconds ago   WORKDIR /app                                    8.19kB    buildkit.dockerfile.v0\n<missing>      4 days ago      /bin/sh -c #(nop)  CMD [\"node\"]                 0B\n<missing>      4 days ago      /bin/sh -c #(nop)  ENTRYPOINT [\"docker-entry…   0B\n<missing>      4 days ago      /bin/sh -c #(nop) COPY file:4d192565a7220e13…   20.5kB\n<missing>      4 days ago      /bin/sh -c apk add --no-cache --virtual .bui…   7.92MB\n<missing>      4 days ago      /bin/sh -c #(nop)  ENV YARN_VERSION=1.22.19     0B\n<missing>      4 days ago      /bin/sh -c addgroup -g 1000 node     && addu…   126MB\n<missing>      4 days ago      /bin/sh -c #(nop)  ENV NODE_VERSION=20.12.0     0B\n<missing>      2 months ago    /bin/sh -c #(nop)  CMD [\"/bin/sh\"]              0B\n<missing>      2 months ago    /bin/sh -c #(nop) ADD file:d0764a717d1e9d0af…   8.42MB",
+    "dom_ids": [
+      "build-an-image",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Push the image: Now that you have an image built, it's time to push the image to a registry.",
+    "dom_ids": [
+      "push-the-image",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0037"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Push the image: - Push the image using the docker push command: If you receive a requested access to the resource is denied , make sure you are both logged in and that your Docker username is correct in the image tag. After a moment, your image should be pushed to Docker Hub.",
+    "dom_ids": [
+      "push-the-image",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Push the image: $ docker push <YOUR_DOCKER_USERNAME>/concepts-build-image-demo",
+    "dom_ids": [
+      "push-the-image",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Additional resources: To learn more about building, tagging, and publishing images, visit the following resources:",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0040"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - What is a build context? - docker build reference - docker image tag reference - docker push reference - What is a registry?",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Now that you have learned about building and publishing images, it's time to learn how to speed up the build process using the Docker build cache.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "build_tag_and_publish_an_image",
+    "id": "build_tag_and_publish_an_image__node_0042"
+  }
+]

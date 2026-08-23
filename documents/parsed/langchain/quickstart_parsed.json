@@ -1,0 +1,1148 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This quickstart shows you how to create a fully functional AI agent in just a few minutes.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using an AI coding assistant?",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Install the LangChain Docs MCP server to give your agent access to up-to-date LangChain documentation and examples. - Install LangChain Skills to improve your agent’s performance on LangChain ecosystem tasks.",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Install dependencies: Install the following packages to follow along:",
+    "dom_ids": [
+      "install-dependencies",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install dependencies: uv init\nuv add langchain\nuv sync",
+    "dom_ids": [
+      "install-dependencies",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install dependencies: pip install -U langchain",
+    "dom_ids": [
+      "install-dependencies",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install dependencies: python3 -m venv .venv\nsource .venv/bin/activate\n# Windows: .venv\\Scripts\\activate\npip install -U langchain",
+    "dom_ids": [
+      "install-dependencies",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up API keys: Get an API key from any supported model provider (for example, Google Gemini or OpenAI).",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up API keys: Set the API keys, for example:",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Set up API keys: - OpenAI - Google Gemini - Claude (Anthropic) - OpenRouter - Fireworks - Baseten - Ollama - Azure - AWS Bedrock - HuggingFace - Other",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export OPENAI_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export GOOGLE_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export ANTHROPIC_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export OPENROUTER_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export FIREWORKS_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export BASETEN_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: # Local: Ollama must be running (https://ollama.com)\n# Cloud: Set your Ollama API key for hosted inference\nexport OLLAMA_API_KEY=\"your-api-key\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export AZURE_OPENAI_API_KEY=\"your-api-key\"\nexport AZURE_OPENAI_ENDPOINT=\"https://your-resource.openai.azure.com\"\nexport AZURE_OPENAI_DEPLOYMENT_NAME=\"your-deployment\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export AWS_ACCESS_KEY_ID=\"your-access-key\"\nexport AWS_SECRET_ACCESS_KEY=\"your-secret-key\"\nexport AWS_REGION=\"us-east-1\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set up API keys: export HUGGINGFACEHUB_API_TOKEN=\"hf_...\"",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up API keys: See the full list of supported chat model integrations .",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up API keys: Using LangSmith Gateway",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up API keys: The LangSmith Gateway routes most major providers through LangSmith. You can bring your own provider keys , or use Gateway Credits to access models without a provider key.",
+    "dom_ids": [
+      "set-up-api-keys",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a basic agent: Start by creating a simple agent that can answer questions and call tools. The agent in this example uses the chosen language model, a basic weather function as a tool, and a simple prompt to guide its behavior:",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"google_genai:gemini-2.5-flash-lite\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"claude-sonnet-4-6\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"openrouter:anthropic/claude-sonnet-4-6\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/qwen3p5-397b-a17b\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"ollama:devstral-2\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: import os\nfrom langchain.agents import create_agent\nfrom langchain.chat_models import init_chat_model\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nmodel = init_chat_model(\n    \"azure_openai:gpt-5.5\",\n    azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"],\n)\nagent = create_agent(\n    model=model,\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"bedrock_converse:us.anthropic.claude-sonnet-4-6\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a basic agent: from langchain.agents import create_agent\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    return f\"It's always sunny in {city}!\"\n\nagent = create_agent(\n    model=\"huggingface:microsoft/Phi-3-mini-4k-instruct\",\n    tools=[get_weather],\n    system_prompt=\"You are a helpful assistant\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]}\n)\nprint(result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a basic agent: When you run the code and prompt the agent to tell you about the weather in San Francisco, the agent uses that input and its available context. The agent understands that you are asking about the weather for the city San Francisco and therefore calls the weather tool with the provided city name.",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a basic agent: You can use any supported model by changing the model name and setting up the appropriate API key. Trace what is happening inside your agent with LangSmith . Follow the tracing quickstart to get set up.",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a basic agent: We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "build-a-basic-agent",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: In the following example you will build a research agent that can answer questions about text files. Along the way you will explore the following concepts:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0038"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build a real-world agent: - Detailed system prompts for better agent behavior - Create tools that integrate with external data - Model configuration for consistent responses - Conversational memory for chat-like interactions - Deep Agents for built-in features - Testing your agent",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Define the system prompt",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: The system prompt defines your agent’s role and behavior. Keep it specific and actionable:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: SYSTEM_PROMPT = \"\"\"You are a literary data assistant.\n\n## Capabilities\n\n- `fetch_text_from_url`: loads document text from a URL into the conversation.\nDo not guess line counts or positions—ground them in tool results from the saved file.\"\"\"",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Create tools",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Tools let a model interact with external systems by calling functions you define. Tools can depend on runtime context and also interact with agent memory .",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: This example uses a tool to load a document from a given URL:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: import urllib.error\nimport urllib.request\n\nfrom langchain.tools import tool\n\n\n@tool\ndef fetch_text_from_url(url: str) -> str:\n    \"\"\"Fetch the document from a URL.\n    \"\"\"\n    req = urllib.request.Request(\n        url,\n        headers={\"User-Agent\": \"Mozilla/5.0 (compatible; quickstart-research/1.0)\"},\n    )\n    try:\n        with urllib.request.urlopen(req, timeout=120) as resp:\n            raw = resp.read()\n    except urllib.error.URLError as e:\n        return f\"Fetch failed: {e}\"\n    text = raw.decode(\"utf-8\", errors=\"replace\")\n    return text",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Tools should be well-documented: their name, description, and argument names become part of the model’s prompt. LangChain’s @tool decorator adds metadata and enables runtime injection with the ToolRuntime parameter. Learn more in the tools guide .",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Configure your model",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Set up your language model with the right parameters for your use case. For example:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"openai:gpt-5.5\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"gemini-3.1-pro-preview\",\n    model_provider=\"google-genai\",\n    temperature=0.5,\n    timeout=600,\n    max_tokens=25000,\n    streaming=True,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    temperature=0.5,\n    timeout=600,\n    max_tokens=25000,\n    streaming=True,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"openrouter:anthropic/claude-sonnet-4-6\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"fireworks:accounts/fireworks/models/qwen3p5-397b-a17b\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"baseten:zai-org/GLM-5.2\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"ollama:devstral-2\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: import os\nfrom langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"azure_openai:gpt-5.5\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n    azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"],\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"us.anthropic.claude-sonnet-4-6\",\n    model_provider=\"bedrock_converse\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"microsoft/Phi-3-mini-4k-instruct\",\n    model_provider=\"huggingface\",\n    temperature=0.5,\n    timeout=300,\n    max_tokens=25000,\n)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Depending on the model and provider chosen, initialization parameters may vary; refer to their reference pages for details.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Add memory",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Add memory to your agent to maintain state across interactions. This allows the agent to remember previous conversations and context.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langgraph.checkpoint.memory import InMemorySaver\n\ncheckpointer = InMemorySaver()",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: In production, use a persistent checkpointer that saves message history to a database. See Add and manage memory for more details.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Create and run the agent",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Now assemble your agent with all the components and run it.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: There are two different frameworks for creating agents: LangChain agents and deep agents. Both LangChain and deep agents provide you with fine-grained control over tools, memory, and more. The main difference between both is that deep agents come with a range of commonly useful capabilities already built in, such as planning, file system tools, and subagents.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Use deep agents when you want maximum capability with minimal setup; choose LangChain agents when you need fine-grained control.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: To compare both in this step, install the deepagents package:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: uv add deepagents",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: pip install -U deepagents",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Since the code invokes the model with the entire text from The Great Gatsby, it uses a large amount of tokens.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: You can view example output in the next step.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Let’s try both:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0074"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: from langchain.agents import create_agent\nfrom deepagents import create_deep_agent\n\nagent = create_agent(\n    model=model,\n    tools=[fetch_text_from_url],\n    system_prompt=SYSTEM_PROMPT,\n    checkpointer=checkpointer,\n)\n\ndeep_agent = create_deep_agent(\n    model=model,\n    tools=[fetch_text_from_url],\n    system_prompt=SYSTEM_PROMPT,\n    checkpointer=checkpointer,\n)\n\ncontent = f\"\"\"Project Gutenberg hosts a full plain-text copy of F. Scott Fitzgerald's The Great Gatsby.\nURL: https://www.gutenberg.org/files/64317/64317-0.txt\n\nAnswer as much as you can:\n\n1) How many lines in the complete Gutenberg file contain the substring `Gatsby` (count lines, not occurrences within a line, each line ends with a line break).\n2) The 1-based line number of the first line in the file that contains `Daisy`.\n3) A two-sentence neutral synopsis.\n\nDo your best on (1) and (2). If at any point you realize you cannot **verify** an exact answer with\nyour available tools and reasoning, do not fabricate numbers: use `null` for that field and spell out\nthe limitation in `how_you_computed_counts`. If you encounter any errors please report what the error was and what the error message was.\"\"\"\n\nagent_result = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": content}]},\n    config={\"configurable\": {\"thread_id\": \"great-gatsby-lc\"}},\n)\ndeep_agent_result = deep_agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": content}]},\n    config={\"configurable\": {\"thread_id\": \"great-gatsby-da\"}},\n)\nprint(agent_result[\"messages\"][-1].content_blocks)\nprint(\"\\n\")\nprint(deep_agent_result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Show Full example code",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: import urllib.error\nimport urllib.request\n\nfrom langchain.agents import create_agent\nfrom deepagents import create_deep_agent\nfrom langchain.chat_models import init_chat_model\nfrom langchain.tools import tool\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nSYSTEM_PROMPT = \"\"\"You are a literary data assistant.\n\n## Capabilities\n\n- `fetch_text_from_url`: loads document text from a URL into the conversation.\nDo not guess line counts or positions—ground them in tool results from the saved file.\"\"\"\n\n\n@tool\ndef fetch_text_from_url(url: str) -> str:\n    \"\"\"Fetch the document from a URL.\n    \"\"\"\n    req = urllib.request.Request(\n        url,\n        headers={\"User-Agent\": \"Mozilla/5.0 (compatible; quickstart-research/1.0)\"},\n    )\n    try:\n        with urllib.request.urlopen(req, timeout=120) as resp:\n            raw = resp.read()\n    except urllib.error.URLError as e:\n        return f\"Fetch failed: {e}\"\n    text = raw.decode(\"utf-8\", errors=\"replace\")\n    return text\n\n\nmodel = init_chat_model(\n    \"gemini-3.1-pro-preview\",\n    model_provider=\"google-genai\",\n    temperature=0.5,\n    timeout=600,\n    max_tokens=25000,\n    streaming=True,\n)\n\ncheckpointer = InMemorySaver()\n\nagent = create_agent(\n    model=model,\n    tools=[fetch_text_from_url],\n    system_prompt=SYSTEM_PROMPT,\n    checkpointer=checkpointer,\n)\n\ndeep_agent = create_deep_agent(\n    model=model,\n    tools=[fetch_text_from_url],\n    system_prompt=SYSTEM_PROMPT,\n    checkpointer=checkpointer,\n)\n\ncontent = f\"\"\"Project Gutenberg hosts a full plain-text copy of F. Scott Fitzgerald's The Great Gatsby.\nURL: https://www.gutenberg.org/files/64317/64317-0.txt\n\nAnswer as much as you can:\n\n1) How many lines in the complete Gutenberg file contain the substring `Gatsby` (count lines, not occurrences within a line, each line ends with a line break).\n2) The 1-based line number of the first line in the file that contains `Daisy`.\n3) A two-sentence neutral synopsis.\n\nDo your best on (1) and (2). If at any point you realize you cannot **verify** an exact answer with\nyour available tools and reasoning, do not fabricate numbers: use `null` for that field and spell out\nthe limitation in `how_you_computed_counts`. If you encounter any errors please report what the error was and what the error message was.\"\"\"\n\nagent_result = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": content}]},\n    config={\"configurable\": {\"thread_id\": \"great-gatsby-lc\"}},\n)\ndeep_agent_result = deep_agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": content}]},\n    config={\"configurable\": {\"thread_id\": \"great-gatsby-da\"}},\n)\nprint(agent_result[\"messages\"][-1].content_blocks)\nprint(\"\\n\")\nprint(deep_agent_result[\"messages\"][-1].content_blocks)",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: Review the results",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: The results will differ based on the model and the execution.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0079"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build a real-world agent: - LangChain agents - Deep agents",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0080"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: **1) Number of lines containing `Gatsby`:** `null`\n\n**2) First line containing `Daisy`:** `null`\n\n**3) Synopsis:**\nThe Great Gatsby follows the mysterious millionaire Jay Gatsby and his obsession with reuniting with his former lover, Daisy Buchanan, as narrated by his neighbor Nick Carraway. Set against the backdrop of the Roaring Twenties on Long Island, the novel explores themes of wealth, class, and the elusive nature of the American Dream.\n\n**how_you_computed_counts:**\nI successfully fetched the full text of the eBook using the `fetch_text_from_url` tool. However, because I do not have access to a code execution environment (like Python) or text-processing tools (like `grep`), I cannot deterministically split the text by line breaks, iterate through the thousands of lines, and verify the exact line numbers or match counts. LLMs cannot reliably perform exact line-counting or indexing over massive texts within their context window without external computational tools. As instructed, rather than fabricating or guessing a number, I have output `null` for the exact counts and positions.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0081"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build a real-world agent: Based on the text fetched directly from the Gutenberg URL and analyzed using filesystem search tools, here are the answers to your questions:\n\n**1) Lines containing the substring `Gatsby`**\n**258** lines contain the exact substring `Gatsby`.\n\n**2) First line containing `Daisy`**\nLine **181** is the first line in the file that contains the exact substring `Daisy`.\n*(For context, the line reads: \"Buchanans. Daisy was my second cousin once removed, and I’d known Tom\")*\n\n**3) Two-sentence neutral synopsis**\n*The Great Gatsby* follows the mysterious millionaire Jay Gatsby and his obsessive pursuit to reunite with his former lover, Daisy Buchanan, in 1920s Long Island. The story is narrated by Nick Carraway, who observes the tragic consequences of Gatsby's relentless ambition and the shallow materialism of the era's wealthy elite.\n\n***\n\n**How counts were computed:**\nWhen fetching the document from the URL, the file was too large for the standard output and was automatically saved to the local filesystem by the system (`/large_tool_results/x246ax2x`). I then used the `grep` tool to search the saved file for the exact literal substrings `Gatsby` and `Daisy`. The `grep` tool returned every matching line along with its 1-based line number. I manually counted the exact number of lines returned for `Gatsby` (which totaled 258) and identified the first line number returned for `Daisy` (which was 181). I also verified there were no uppercase variations (`GATSBY` or `DAISY`) that would have been missed. No errors were encountered during this process.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: If you look at the output on both tabs, you notice that the LangChain agent provided answers but they are estimates. The agent lacks the tools to answer this question. You may also get errors that the prompt is too long.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: The deep agent, on the other hand can:",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0084"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Build a real-world agent: - Plans its approach using the built-in write_todos tool to break down the research task. - Loads the file by calling the fetch_text_from_url tool to gather information. - Manages context by using file system tools ( grep and read_file ). - Spawns subagents as needed to delegate complex subtasks to specialized subagents.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build a real-world agent: For LangChain agents, you must implement more capabilities to get a similar level of service and can customize them along the way as needed.",
+    "dom_ids": [
+      "build-a-real-world-agent",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trace agent calls: Most interesting applications you build with LangChain make many calls to LLMs. As these applications get more complex, it becomes important to be able to inspect what exactly is going on inside your agent. The best way to do this is with LangSmith .",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trace agent calls: Sign up for a LangSmith account and set these to start logging traces:",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0088"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Trace agent calls: export LANGSMITH_TRACING=\"true\"\nexport LANGSMITH_API_KEY=\"...\"",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trace agent calls: Once set, run your script again and then inspect what happened during your agent calls on LangSmith .",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trace agent calls: To learn more about tracing your agent with LangSmith, see the LangSmith documentation .",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0091"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trace agent calls: We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "trace-agent-calls",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0092"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: You now have agents that can:",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0093"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Understand context and remember conversations - Use tools intelligently - Provide structured responses in a consistent format - Handle user-specific information through context - Maintain conversation state across interactions - Plan, research, and synthesize (deep agents only)",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0094"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Continue with:",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0095"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - LangChain agents : Add and manage memory , deploy to production - Deep Agents : Customization options , persistent memory , deploy to production",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0096"
+  }
+]

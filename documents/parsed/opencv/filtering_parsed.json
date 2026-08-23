@@ -1,0 +1,372 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "filtering",
+    "id": "filtering__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goals: Learn to:",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goals: - Blur images with various low pass filters - Apply custom-made filters to images (2D convolution)",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): As in one-dimensional signals, images also can be filtered with various low-pass filters (LPF), high-pass filters (HPF), etc. LPF helps in removing noise, blurring images, etc. HPF filters help in finding edges in images.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): OpenCV provides a function cv.filter2D() to convolve a kernel with an image. As an example, we will try an averaging filter on an image. A 5x5 averaging filter kernel will look like the below:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): \\[K = \\frac{1}{25} \\begin{bmatrix} 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): The operation works like this: keep this kernel above a pixel, add all the 25 pixels below this kernel, take the average, and replace the central pixel with the new average value. This operation is continued for all the pixels in the image. Try this code and check the result:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): import numpy as np\nimport cv2 as cv\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('opencv_logo.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\nkernel = np.ones((5,5),np.float32)/25\ndst = cv.filter2D(img,-1,kernel)\n\nplt.subplot(121),plt.imshow(img),plt.title('Original')\nplt.xticks([]), plt.yticks([])\nplt.subplot(122),plt.imshow(dst),plt.title('Averaging')\nplt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): Result:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blurring (Image Smoothing): Image blurring is achieved by convolving the image with a low-pass filter kernel. It is useful for removing noise. It actually removes high frequency content (eg: noise, edges) from the image. So edges are blurred a little bit in this operation (there are also blurring techniques which don't blur the edges). OpenCV provides four main types of blurring techniques.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: This is done by convolving an image with a normalized box filter. It simply takes the average of all the pixels under the kernel area and replaces the central element. This is done by the function cv.blur() or cv.boxFilter() . Check the docs for more details about the kernel. We should specify the width and height of the kernel. A 3x3 normalized box filter would look like the below:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: \\[K = \\frac{1}{9} \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & 1 & 1 \\\\ 1 & 1 & 1 \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: Check a sample demo below with a kernel of 5x5 size:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "1. Averaging: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('opencv-logo-white.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\nblur = cv.blur(img,(5,5))\n\nplt.subplot(121),plt.imshow(img),plt.title('Original')\nplt.xticks([]), plt.yticks([])\nplt.subplot(122),plt.imshow(blur),plt.title('Blurred')\nplt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: Result:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: In this method, instead of a box filter, a Gaussian kernel is used. It is done with the function, cv.GaussianBlur() . We should specify the width and height of the kernel which should be positive and odd. We also should specify the standard deviation in the X and Y directions, sigmaX and sigmaY respectively. If only sigmaX is specified, sigmaY is taken as the same as sigmaX. If both are given as zeros, they are calculated from the kernel size. Gaussian blurring is highly effective in removing Gaussian noise from an image.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: If you want, you can create a Gaussian kernel with the function, cv.getGaussianKernel() .",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: The above code can be modified for Gaussian blurring:",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2. Gaussian Blurring: blur = cv.GaussianBlur(img,(5,5),0)",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: Result:",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: Here, the function cv.medianBlur() takes the median of all the pixels under the kernel area and the central element is replaced with this median value. This is highly effective against salt-and-pepper noise in an image. Interestingly, in the above filters, the central element is a newly calculated value which may be a pixel value in the image or a new value. But in median blurring, the central element is always replaced by some pixel value in the image. It reduces the noise effectively. Its kernel size should be a positive odd integer.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: In this demo, I added a 50% noise to our original image and applied median blurring. Check the result:",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3. Median Blurring: median = cv.medianBlur(img,5)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: Result:",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: cv.bilateralFilter() is highly effective in noise removal while keeping edges sharp. But the operation is slower compared to other filters. We already saw that a Gaussian filter takes the neighbourhood around the pixel and finds its Gaussian weighted average. This Gaussian filter is a function of space alone, that is, nearby pixels are considered while filtering. It doesn't consider whether pixels have almost the same intensity. It doesn't consider whether a pixel is an edge pixel or not. So it blurs the edges also, which we don't want to do.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: Bilateral filtering also takes a Gaussian filter in space, but one more Gaussian filter which is a function of pixel difference. The Gaussian function of space makes sure that only nearby pixels are considered for blurring, while the Gaussian function of intensity difference makes sure that only those pixels with similar intensities to the central pixel are considered for blurring. So it preserves the edges since pixels at edges will have large intensity variation.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: The below sample shows use of a bilateral filter (For details on arguments, visit docs).",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "4. Bilateral Filtering: blur = cv.bilateralFilter(img,9,75,75)",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: Result:",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: See, the texture on the surface is gone, but the edges are still preserved.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - Details about the bilateral filtering",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0031"
+  }
+]

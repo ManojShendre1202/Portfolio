@@ -1,0 +1,552 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "There are several ways you can instantiate clients to connect to your Chroma database.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "clients",
+    "id": "clients__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: You can use the CloudClient to create a client connecting to Chroma Cloud.",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: import chromadb\n\nclient = chromadb.CloudClient(\n    tenant='Tenant ID',\n    database='Database name',\n    api_key='Chroma Cloud API key'\n)",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: import { CloudClient } from \"chromadb\";\n\nconst client = new CloudClient({\n  tenant: \"Tenant ID\",\n  database: \"Database name\",\n  apiKey: \"Chroma Cloud API key\",\n});",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: use chroma::{ChromaHttpClient, ChromaHttpClientOptions};\n\nlet options = ChromaHttpClientOptions::cloud(\n    \"ck-...\",\n    \"Database name\",\n)?;\nlet client = ChromaHttpClient::new(options);",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: The CloudClient can be instantiated just with the API key argument. In which case, we will resolve the tenant and DB from Chroma Cloud. Note our auto-resolution will work only if the provided API key is scoped to a single DB.",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: If you set the CHROMA_API_KEY , CHROMA_TENANT , and the CHROMA_DATABASE environment variables, you can simply instantiate a CloudClient with no arguments:",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: client = chromadb.CloudClient()",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: const client = new CloudClient();",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: use chroma::ChromaHttpClient;\n\nlet client = ChromaHttpClient::cloud()?;",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Connecting to a non-default region: By default, CloudClient connects to api.trychroma.com (AWS us-east-1 ). To target a database in another region — for example, our GCP europe-west1 region — point the client at that region’s hostname. See Regions for the list of available endpoints.",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: import chromadb\n\nclient = chromadb.CloudClient(\n    cloud_host='europe-west1.gcp.trychroma.com',\n    cloud_port=443,\n    api_key='Chroma Cloud API key',\n    tenant='Tenant ID',\n    database='Database name',\n)",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: import { ChromaClient } from \"chromadb\";\n\nconst client = new ChromaClient({\n  host: \"europe-west1.gcp.trychroma.com\",\n  ssl: true,\n  headers: { \"x-chroma-token\": \"Chroma Cloud API key\" },\n  tenant: \"Tenant ID\",\n  database: \"Database name\",\n});",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: use chroma::{ChromaAuthMethod, ChromaHttpClient, ChromaHttpClientOptions};\n\nlet client = ChromaHttpClient::new(ChromaHttpClientOptions {\n    endpoint: \"https://europe-west1.gcp.trychroma.com:443\".parse()?,\n    auth_method: ChromaAuthMethod::cloud_api_key(\"Chroma Cloud API key\")?,\n    database_name: Some(\"Database name\".to_string()),\n    ..Default::default()\n});",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Connecting to a non-default region: The dashboard’s Connect panel generates a ready-to-paste snippet for whichever region a database lives in, including the corresponding .env block. For databases outside aws-us-east-1 , the snippet sets CHROMA_HOST to the region-specific host:",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: CHROMA_HOST=europe-west1.gcp.trychroma.com\nCHROMA_API_KEY=...\nCHROMA_TENANT=...\nCHROMA_DATABASE=...",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: In Python, you can run a Chroma server in-memory and connect to it with the ephemeral client:",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "In-Memory Client: import chromadb\n\nclient = chromadb.Client()",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: The Client() method starts a Chroma server in-memory and also returns a client with which you can connect to it.",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: This is a great tool for experimenting with different embedding functions and retrieval techniques in a Python notebook, for example. If you don’t need data persistence, the ephemeral client is a good choice for getting up and running with Chroma.",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0020"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: You can configure Chroma to save and load the database from your local machine, using the PersistentClient .",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: Data will be persisted automatically and loaded on start (if it exists).",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: import chromadb\n\nclient = chromadb.PersistentClient(path=\"/path/to/save/to\")",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The path is where Chroma will store its database files on disk, and load them on start. If you don’t provide a path, the default is .chroma",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The client object has a few useful convenience methods.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0026"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - heartbeat() - returns a nanosecond heartbeat. Useful for making sure the client remains connected. - reset() - empties and completely resets the database. WARNING: This is destructive and not reversible.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: client.heartbeat()\nclient.reset()",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: To connect with the JS/TS client, you must connect to a Chroma server.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: To run a Chroma server locally that will persist your data, install Chroma from npm using any npm compatible client.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: npm install chromadb",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: And run the server using our CLI:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: npx chroma run --path ./getting-started",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The path is where Chroma will store its database files on disk, and load them on start. The default is .chroma .",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: Alternatively, you can also use our official Docker image:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: docker pull chromadb/chroma\ndocker run -p 8000:8000 chromadb/chroma",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: With a Chroma server running locally, you can connect to it by instantiating a new ChromaClient :",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: import { ChromaClient } from \"chromadb\";\n\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: By default, the ChromaClient is wired to connect to a Chroma server at http://localhost:8000 , with default_tenant and default_database . If you have different settings you can provide them to the ChromaClient constructor:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: const client = new ChromaClient({\n  ssl: false,\n  host: \"localhost\",\n  port: 9000, // non-standard port based on your server config\n  database: \"my-db\",\n  headers: {},\n});",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The client object has a few useful convenience methods.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0041"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - heartbeat() - returns a nanosecond heartbeat. Useful for making sure the client remains connected. - reset() - empties and completely resets the database. WARNING: This is destructive and not reversible.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: await client.heartbeat();\nawait client.reset();",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The Rust client connects to a running Chroma server. For local persistence, run the server with a data path and connect over HTTP.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: chroma run --path /db_path",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: use chroma::{ChromaHttpClient, ChromaHttpClientOptions};\n\nlet mut options = ChromaHttpClientOptions::default();\noptions.endpoint = \"http://localhost:8000\".parse()?;\n\nlet client = ChromaHttpClient::new(options);\nclient.heartbeat().await?;",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0046"
+  }
+]

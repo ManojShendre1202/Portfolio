@@ -1,0 +1,242 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Save and Load the Model: Created On: Feb 09, 2021 | Last Updated: Sep 25, 2025 | Last Verified: Nov 05, 2024",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Save and Load the Model: In this section we will look at how to persist model state with saving, loading and running model predictions.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Save and Load the Model: import torch\nimport torchvision.models as models",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Model Weights: PyTorch models store the learned parameters in an internal state dictionary, called state_dict . These can be persisted via the torch.save method:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Model Weights: model = models.vgg16(weights='IMAGENET1K_V1')\ntorch.save(model.state_dict(), 'model_weights.pth')",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Model Weights: Downloading: \"https://download.pytorch.org/models/vgg16-397923af.pth\" to /var/lib/ci-user/.cache/torch/hub/checkpoints/vgg16-397923af.pth\n\n  0%|          | 0.00/528M [00:00<?, ?B/s]\n  3%|▎         | 15.4M/528M [00:00<00:03, 159MB/s]\n  6%|▌         | 30.6M/528M [00:00<00:03, 159MB/s]\n 14%|█▍        | 73.8M/528M [00:00<00:01, 292MB/s]\n 22%|██▏       | 117M/528M [00:00<00:01, 356MB/s]\n 30%|███       | 159M/528M [00:00<00:01, 385MB/s]\n 38%|███▊      | 201M/528M [00:00<00:00, 405MB/s]\n 46%|████▋     | 244M/528M [00:00<00:00, 419MB/s]\n 54%|█████▍    | 287M/528M [00:00<00:00, 428MB/s]\n 62%|██████▏   | 329M/528M [00:00<00:00, 433MB/s]\n 70%|███████   | 372M/528M [00:01<00:00, 436MB/s]\n 78%|███████▊  | 414M/528M [00:01<00:00, 439MB/s]\n 86%|████████▋ | 456M/528M [00:01<00:00, 437MB/s]\n 94%|█████████▍| 498M/528M [00:01<00:00, 377MB/s]\n100%|██████████| 528M/528M [00:01<00:00, 388MB/s]",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Model Weights: To load model weights, you need to create an instance of the same model first, and then load the parameters using load_state_dict() method.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Model Weights: In the code below, we set weights_only=True to limit the functions executed during unpickling to only those necessary for loading weights. Using weights_only=True is considered a best practice when loading weights.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Model Weights: model = models.vgg16() # we do not specify ``weights``, i.e. create untrained model\nmodel.load_state_dict(torch.load('model_weights.pth', weights_only=True))\nmodel.eval()",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Model Weights: VGG(\n  (features): Sequential(\n    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (1): ReLU(inplace=True)\n    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (3): ReLU(inplace=True)\n    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (6): ReLU(inplace=True)\n    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (8): ReLU(inplace=True)\n    (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (11): ReLU(inplace=True)\n    (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (13): ReLU(inplace=True)\n    (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (15): ReLU(inplace=True)\n    (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (18): ReLU(inplace=True)\n    (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (20): ReLU(inplace=True)\n    (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (22): ReLU(inplace=True)\n    (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n    (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (25): ReLU(inplace=True)\n    (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (27): ReLU(inplace=True)\n    (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))\n    (29): ReLU(inplace=True)\n    (30): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)\n  )\n  (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))\n  (classifier): Sequential(\n    (0): Linear(in_features=25088, out_features=4096, bias=True)\n    (1): ReLU(inplace=True)\n    (2): Dropout(p=0.5, inplace=False)\n    (3): Linear(in_features=4096, out_features=4096, bias=True)\n    (4): ReLU(inplace=True)\n    (5): Dropout(p=0.5, inplace=False)\n    (6): Linear(in_features=4096, out_features=1000, bias=True)\n  )\n)",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Model Weights: Note",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Model Weights: be sure to call model.eval() method before inferencing to set the dropout and batch normalization layers to evaluation mode. Failing to do this will yield inconsistent inference results.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: When loading model weights, we needed to instantiate the model class first, because the class defines the structure of a network. We might want to save the structure of this class together with the model, in which case we can pass model (and not model.state_dict() ) to the saving function:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: torch.save(model, 'model.pth')",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: We can then load the model as demonstrated below.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: As described in Saving and loading torch.nn.Modules , saving state_dict is considered the best practice. However, below we use weights_only=False because this involves loading the model, which is a legacy use case for torch.save .",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: model = torch.load('model.pth', weights_only=False)",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: Note",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving and Loading Models with Shapes: This approach uses Python pickle module when serializing the model, thus it relies on the actual class definition to be available when loading the model.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0019"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Related Tutorials: - Saving and Loading a General Checkpoint in PyTorch - Tips for loading an nn.Module from a checkpoint",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "saveloadrun_tutorial",
+    "id": "saveloadrun_tutorial__node_0020"
+  }
+]

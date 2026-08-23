@@ -1,0 +1,458 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build the Neural Network: Created On: Feb 09, 2021 | Last Updated: Jan 24, 2025 | Last Verified: Not Verified",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build the Neural Network: Neural networks comprise of layers/modules that perform operations on data. The torch.nn namespace provides all the building blocks you need to build your own neural network. Every module in PyTorch subclasses the nn.Module . A neural network is a module itself that consists of other modules (layers). This nested structure allows for building and managing complex architectures easily.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Build the Neural Network: In the following sections, we’ll build a neural network to classify images in the FashionMNIST dataset.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Build the Neural Network: import os\nimport torch\nfrom torch import nn\nfrom torch.utils.data import DataLoader\nfrom torchvision import datasets, transforms",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get Device for Training: We want to be able to train our model on an accelerator such as CUDA, MPS, MTIA, or XPU. If the current accelerator is available, we will use it. Otherwise, we use the CPU.",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get Device for Training: device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else \"cpu\"\nprint(f\"Using {device} device\")",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get Device for Training: Using cuda device",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define the Class: We define our neural network by subclassing nn.Module , and initialize the neural network layers in __init__ . Every nn.Module subclass implements the operations on input data in the forward method.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define the Class: class NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10),\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define the Class: We create an instance of NeuralNetwork , and move it to the device , and print its structure.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define the Class: model = NeuralNetwork().to(device)\nprint(model)",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define the Class: NeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define the Class: To use the model, we pass it the input data. This executes the model’s forward , along with some background operations . Do not call model.forward() directly!",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define the Class: Calling the model on the input returns a 2-dimensional tensor with dim=0 corresponding to each output of 10 raw predicted values for each class, and dim=1 corresponding to the individual values of each output. We get the prediction probabilities by passing it through an instance of the nn.Softmax module.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define the Class: X = torch.rand(1, 28, 28, device=device)\nlogits = model(X)\npred_probab = nn.Softmax(dim=1)(logits)\ny_pred = pred_probab.argmax(1)\nprint(f\"Predicted class: {y_pred}\")",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define the Class: Predicted class: tensor([6], device='cuda:0')",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Model Layers: Let’s break down the layers in the FashionMNIST model. To illustrate it, we will take a sample minibatch of 3 images of size 28x28 and see what happens to it as we pass it through the network.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Model Layers: input_image = torch.rand(3,28,28)\nprint(input_image.size())",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Model Layers: torch.Size([3, 28, 28])",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.Flatten: We initialize the nn.Flatten layer to convert each 2D 28x28 image into a contiguous array of 784 pixel values ( the minibatch dimension (at dim=0) is maintained).",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Flatten: flatten = nn.Flatten()\nflat_image = flatten(input_image)\nprint(flat_image.size())",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Flatten: torch.Size([3, 784])",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.Linear: The linear layer is a module that applies a linear transformation on the input using its stored weights and biases.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Linear: layer1 = nn.Linear(in_features=28*28, out_features=20)\nhidden1 = layer1(flat_image)\nprint(hidden1.size())",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Linear: torch.Size([3, 20])",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.ReLU: Non-linear activations are what create the complex mappings between the model’s inputs and outputs. They are applied after linear transformations to introduce nonlinearity , helping neural networks learn a wide variety of phenomena.",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.ReLU: In this model, we use nn.ReLU between our linear layers, but there’s other activations to introduce non-linearity in your model.",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.ReLU: print(f\"Before ReLU: {hidden1}\\n\\n\")\nhidden1 = nn.ReLU()(hidden1)\nprint(f\"After ReLU: {hidden1}\")",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.ReLU: Before ReLU: tensor([[-0.5757, -0.2051,  0.2219,  0.1653,  0.2269, -0.3000, -0.0075,  0.5093,\n          0.5536, -0.3554,  0.3106, -0.3816,  0.5189, -0.4064,  0.2009,  0.2115,\n         -0.2922,  0.1679,  0.4552,  0.4329],\n        [-0.4265, -0.1786,  0.2039, -0.1326,  0.2536,  0.0722, -0.0337,  0.5537,\n          0.6311, -0.0023, -0.2463, -0.5049, -0.1670, -0.2143,  0.1640, -0.1006,\n         -0.3894,  0.1496,  0.2351,  0.1183],\n        [-0.5288,  0.0085,  0.1626, -0.0128,  0.6092, -0.2227,  0.0349,  0.7733,\n          0.1702,  0.0374, -0.0235, -0.2102,  0.1573, -0.3749, -0.0799,  0.3600,\n         -0.2977, -0.0471,  0.5574,  0.5068]], grad_fn=<AddmmBackward0>)\n\n\nAfter ReLU: tensor([[0.0000, 0.0000, 0.2219, 0.1653, 0.2269, 0.0000, 0.0000, 0.5093, 0.5536,\n         0.0000, 0.3106, 0.0000, 0.5189, 0.0000, 0.2009, 0.2115, 0.0000, 0.1679,\n         0.4552, 0.4329],\n        [0.0000, 0.0000, 0.2039, 0.0000, 0.2536, 0.0722, 0.0000, 0.5537, 0.6311,\n         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.1640, 0.0000, 0.0000, 0.1496,\n         0.2351, 0.1183],\n        [0.0000, 0.0085, 0.1626, 0.0000, 0.6092, 0.0000, 0.0349, 0.7733, 0.1702,\n         0.0374, 0.0000, 0.0000, 0.1573, 0.0000, 0.0000, 0.3600, 0.0000, 0.0000,\n         0.5574, 0.5068]], grad_fn=<ReluBackward0>)",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.Sequential: nn.Sequential is an ordered container of modules. The data is passed through all the modules in the same order as defined. You can use sequential containers to put together a quick network like seq_modules .",
+    "dom_ids": [
+      "readar-node-0037",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Sequential: seq_modules = nn.Sequential(\n    flatten,\n    layer1,\n    nn.ReLU(),\n    nn.Linear(20, 10)\n)\ninput_image = torch.rand(3,28,28)\nlogits = seq_modules(input_image)",
+    "dom_ids": [
+      "readar-node-0037",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "nn.Softmax: The last linear layer of the neural network returns logits - raw values in [-infty, infty] - which are passed to the nn.Softmax module. The logits are scaled to values [0, 1] representing the model’s predicted probabilities for each class. dim parameter indicates the dimension along which the values must sum to 1.",
+    "dom_ids": [
+      "readar-node-0040",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "nn.Softmax: softmax = nn.Softmax(dim=1)\npred_probab = softmax(logits)",
+    "dom_ids": [
+      "readar-node-0040",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Model Parameters: Many layers inside a neural network are parameterized , i.e. have associated weights and biases that are optimized during training. Subclassing nn.Module automatically tracks all fields defined inside your model object, and makes all parameters accessible using your model’s parameters() or named_parameters() methods.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Model Parameters: In this example, we iterate over each parameter, and print its size and a preview of its values.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Model Parameters: print(f\"Model structure: {model}\\n\\n\")\n\nfor name, param in model.named_parameters():\n    print(f\"Layer: {name} | Size: {param.size()} | Values : {param[:2]} \\n\")",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Model Parameters: Model structure: NeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)\n\n\nLayer: linear_relu_stack.0.weight | Size: torch.Size([512, 784]) | Values : tensor([[ 0.0339, -0.0052,  0.0182,  ...,  0.0280, -0.0281,  0.0202],\n        [-0.0023,  0.0018,  0.0197,  ...,  0.0305,  0.0140, -0.0326]],\n       device='cuda:0', grad_fn=<SliceBackward0>)\n\nLayer: linear_relu_stack.0.bias | Size: torch.Size([512]) | Values : tensor([ 0.0115, -0.0104], device='cuda:0', grad_fn=<SliceBackward0>)\n\nLayer: linear_relu_stack.2.weight | Size: torch.Size([512, 512]) | Values : tensor([[ 0.0375, -0.0188, -0.0145,  ..., -0.0028, -0.0197, -0.0436],\n        [-0.0091, -0.0273, -0.0186,  ..., -0.0211,  0.0407,  0.0268]],\n       device='cuda:0', grad_fn=<SliceBackward0>)\n\nLayer: linear_relu_stack.2.bias | Size: torch.Size([512]) | Values : tensor([ 0.0101, -0.0328], device='cuda:0', grad_fn=<SliceBackward0>)\n\nLayer: linear_relu_stack.4.weight | Size: torch.Size([10, 512]) | Values : tensor([[ 0.0136, -0.0203, -0.0403,  ..., -0.0052, -0.0038, -0.0102],\n        [-0.0224,  0.0220,  0.0063,  ..., -0.0317, -0.0263, -0.0200]],\n       device='cuda:0', grad_fn=<SliceBackward0>)\n\nLayer: linear_relu_stack.4.bias | Size: torch.Size([10]) | Values : tensor([-0.0040,  0.0230], device='cuda:0', grad_fn=<SliceBackward0>)",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0037"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Further Reading: - torch.nn API",
+    "dom_ids": [
+      "readar-node-0048",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "buildmodel_tutorial",
+    "id": "buildmodel_tutorial__node_0038"
+  }
+]

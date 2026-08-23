@@ -6,20 +6,13 @@ Flow per question:
     1. Look up the ChatSession's doc_id from chat_id
     2. Embed the question (local nomic model — must match the graph's
        embeddings, see doc_retrieval.py)
-    3. Retrieve candidate nodes from the document graph (top-k + graph-hop
-       expansion, cross-encoder rerank) — the validated pipeline from
-       several stress-testing sessions
-    4. Also retrieve relevant prior turns from this session's own memory
-       graph (session_memory.py) — retrieval-augmented conversation memory,
-       not raw resent history
-    5. Build a numbered context prompt (document context + memory context);
-       ask Gemini to (a) cite using [n] markers and (b) end with a hidden
-       one-line memory summary after a delimiter the browser never sees
-    6. Stream the visible answer back to the browser; once the stream ends,
-       persist both turns (ChatTurn) and embed the hidden summary into the
-       session's memory graph — awaited (not fire-and-forget) since it's
-       cheap local work and a background task here created a real race
-       against a quick next question reading the memory file too early
+    3. Retrieve candidate nodes from the document graph (keyword-seeded,
+       graph-hop expansion, per-cluster confidence threshold) — see
+       doc_retrieval.py's module docstring for why reranking was removed
+    4. Build a numbered context prompt from the retrieved document nodes;
+       ask Gemini to cite using [n] markers
+    5. Stream the answer back to the browser; once the stream ends, persist
+       the turn (ChatTurn)
 
 Concurrency note: chat_ws_server runs one asyncio event loop shared by
 every connected user. Every blocking call here (DB lookups, local model
@@ -40,7 +33,7 @@ from asgiref.sync import sync_to_async
 from google import genai
 
 from api.core.service.ChatSessionService import ChatSessionService
-from backend.RAG.Query import doc_retrieval, session_memory
+from backend.RAG.Query import doc_retrieval
 from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter, persist_usage, GUARD_MESSAGES, GENERIC_ERROR_MESSAGE
 from workflow.engine.ws import live_stats
 
@@ -55,10 +48,10 @@ GEMINI_KEY = os.getenv('GEMINI_API_KEY')
 # 50 slots against a pool of ~6-8 on this small VM, causing ~7x latency
 # (load-tested: 3.2s baseline -> ~20s at 25 concurrent).
 #
-# retrieval_executor: genuinely CPU-bound (local nomic embedder +
-# cross-encoder rerank, no GPU) — capped below actual core count so the
-# host OS and other containers (nginx, django) always keep a free core
-# rather than this pool saturating every CPU on the box.
+# retrieval_executor: genuinely CPU-bound (local nomic embedder, no GPU) —
+# capped below actual core count so the host OS and other containers
+# (nginx, django) always keep a free core rather than this pool saturating
+# every CPU on the box.
 _CPU_COUNT = os.cpu_count() or 2
 RETRIEVAL_WORKERS = max(1, _CPU_COUNT - 1)
 retrieval_executor = ThreadPoolExecutor(max_workers=RETRIEVAL_WORKERS, thread_name_prefix="rd-retrieval")
@@ -74,55 +67,53 @@ CHAT_MODELS = [
     'gemini-3.1-flash-lite-preview',
 ]
 
-# The browser never sees anything from this marker onward — see _stream_model.
-MEMORY_MARKER = "\n###MEMORY_SUMMARY###\n"
-
-SYSTEM_PROMPT = f"""You are Readar, an intelligent document assistant.
-Answer using ONLY two sources: the numbered document context entries
-below (cite these inline like [1], [2] — every factual sentence should
-carry at least one such citation), AND, if present, the "Relevant prior
-exchanges" section — that section is valid grounding too, especially for
-follow-up questions that refer back to something already established
-earlier in this conversation (e.g. "that", "those", "it"). Resolve such
-references using the prior exchanges before deciding whether the
-document context answers the question. If neither source contains the
-answer, say so honestly. Do not make up information.
-
-After your complete answer, output the exact line "{MEMORY_MARKER.strip()}"
-on its own, then on the next line write ONE short sentence summarizing
-this question and answer for future conversation memory — this part is
-never shown to the user, so be terse and information-dense, not
-conversational."""
+SYSTEM_PROMPT = """You are Readar, an intelligent document assistant.
+Answer using ONLY the numbered document context entries below (cite these
+inline like [1], [2] — every factual sentence should carry at least one
+such citation). If the context doesn't contain the answer, say so honestly.
+Do not make up information."""
 
 
 def _estimate_tokens(text: str) -> int:
     return max(1, len(text) // 4)
 
 
-# Serializes retrieval+answer+memory-append per chat_id — without this, two
-# questions fired back-to-back on the same session (double-click, duplicate
-# send, two tabs sharing a chat_id) would both read session_memory before
-# either writes, and the second append_turn silently clobbers the first
-# turn's summary (lost-update race on the per-session pickle file). Plain
-# dict (not locked itself) is safe because get-or-create below never awaits
-# between the check and the set, so it can't interleave with another task
-# on this single event loop.
+# Serializes retrieval+answer per chat_id — without this, two questions
+# fired back-to-back on the same session (double-click, duplicate send, two
+# tabs sharing a chat_id) would both write ChatTurn rows in an
+# unpredictable interleaved order. Plain dict (not locked itself) is safe
+# because get-or-create below never awaits between the check and the set,
+# so it can't interleave with another task on this single event loop.
 _chat_locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
 
 
-def _run_retrieval(doc_id: str, chat_id: str, question: str):
-    """Blocking (model inference + numpy) — call via asyncio.to_thread."""
+def _run_retrieval(doc_id: str, question: str):
+    """Blocking (model inference + numpy) — call via asyncio.to_thread.
+
+    Times each retrieval sub-step individually — graph_load only shows real
+    cost on a cache miss (see doc_retrieval.load_graph), the rest run on
+    every call — so slow questions can be attributed to the right stage
+    instead of one opaque 'retrieval' bucket.
+    """
+    timings = {}
+
+    t = time.perf_counter()
     graph, embeddings = doc_retrieval.load_graph(doc_id)
-    q_norm             = doc_retrieval.embed_query(question)
+    timings['graph_load'] = round(time.perf_counter() - t, 3)
 
-    subgraph  = doc_retrieval.retrieve_subgraph(q_norm, graph, embeddings)
-    reranked  = doc_retrieval.rerank_nodes(question, subgraph)
-    doc_context, citations = doc_retrieval.build_context(reranked)
+    t = time.perf_counter()
+    q_norm = doc_retrieval.embed_query(question)
+    timings['embed_query'] = round(time.perf_counter() - t, 3)
 
-    memory_turns  = session_memory.retrieve(chat_id, q_norm)
-    memory_context = session_memory.build_memory_prompt(memory_turns)
+    t = time.perf_counter()
+    candidates = doc_retrieval.retrieve_subgraph(q_norm, graph, embeddings, question=question, doc_id=doc_id)
+    timings['subgraph_retrieve'] = round(time.perf_counter() - t, 3)
 
-    return doc_context, citations, memory_context, len(subgraph), len(reranked)
+    t = time.perf_counter()
+    doc_context, citations = doc_retrieval.build_context(candidates)
+    timings['build_context'] = round(time.perf_counter() - t, 3)
+
+    return doc_context, citations, len(candidates), timings
 
 
 def _stream_model_sync(client, model: str, prompt: str, chunk_queue: pyqueue.Queue) -> None:
@@ -140,54 +131,31 @@ def _stream_model_sync(client, model: str, prompt: str, chunk_queue: pyqueue.Que
         chunk_queue.put(('error', e))
 
 
-async def _stream_model(client, model: str, prompt: str, send_to_browser) -> tuple[str, str | None, int | None]:
-    """
-    Streams tokens to the browser, but holds back anything from
-    MEMORY_MARKER onward — that part is the hidden summary, never sent.
-    Returns (visible_answer_text, hidden_summary_or_None, usage_tokens).
-
-    Buffers the tail of what's been received (up to len(MEMORY_MARKER)-1
-    chars) before forwarding, since a chunk boundary could split the
-    marker across two chunks — only text we're sure isn't a partial
-    marker match gets sent immediately.
-    """
+async def _stream_model(client, model: str, prompt: str, send_to_browser) -> tuple[str, int | None, float | None]:
+    """Streams tokens to the browser as they arrive.
+    Returns (answer_text, usage_tokens, ttfb) — ttfb is seconds from call start
+    to the first token chunk, i.e. Gemini's queueing+prompt-eval latency
+    before generation is visibly streaming; None if the stream errored
+    before any token arrived."""
     loop        = asyncio.get_event_loop()
     chunk_queue = pyqueue.Queue()
+    t_start     = time.perf_counter()
     loop.run_in_executor(stream_executor, _stream_model_sync, client, model, prompt, chunk_queue)
 
-    buffer     = ""
-    sent_len   = 0
-    marker_idx = -1
+    buffer = ""
+    ttfb   = None
 
     while True:
         kind, payload = await loop.run_in_executor(stream_executor, chunk_queue.get)
 
         if kind == 'token':
+            if ttfb is None:
+                ttfb = round(time.perf_counter() - t_start, 3)
             buffer += payload
-            if marker_idx == -1:
-                idx = buffer.find(MEMORY_MARKER)
-                if idx != -1:
-                    marker_idx = idx
-                    visible = buffer[sent_len:marker_idx]
-                    if visible:
-                        await send_to_browser({'type': 'token', 'text': visible})
-                    sent_len = marker_idx
-                else:
-                    safe_len = max(sent_len, len(buffer) - (len(MEMORY_MARKER) - 1))
-                    if safe_len > sent_len:
-                        await send_to_browser({'type': 'token', 'text': buffer[sent_len:safe_len]})
-                        sent_len = safe_len
-            # once marker_idx is set, everything further is hidden-summary text — never forwarded
+            await send_to_browser({'type': 'token', 'text': payload})
 
         elif kind == 'done':
-            if marker_idx == -1:
-                # marker never showed up — fall back to showing everything (no summary this turn)
-                if len(buffer) > sent_len:
-                    await send_to_browser({'type': 'token', 'text': buffer[sent_len:]})
-                return buffer, None, payload
-            visible_text = buffer[:marker_idx]
-            summary_text = buffer[marker_idx + len(MEMORY_MARKER):].strip() or None
-            return visible_text, summary_text, payload
+            return buffer, payload, ttfb
 
         elif kind == 'error':
             raise payload
@@ -196,26 +164,37 @@ async def _stream_model(client, model: str, prompt: str, send_to_browser) -> tup
 async def handle_question(chat_id: str, question: str, send_to_browser) -> None:
     client = genai.Client(api_key=GEMINI_KEY)
 
+    # t_wall_start is wall-clock from the moment this coroutine was scheduled,
+    # so 'lock_wait' below captures time genuinely lost to another question on
+    # the same chat_id (see _chat_locks) rather than being folded into
+    # whatever segment happens to run after the lock is acquired.
+    t_wall_start = time.perf_counter()
+
     try:
-        # Serializes this whole retrieval -> answer -> memory-append sequence
-        # per chat_id — see _chat_locks comment for why this matters.
         async with _chat_locks[chat_id]:
+            t_lock_acquired = time.perf_counter()
+            lock_wait = round(t_lock_acquired - t_wall_start, 3)
+
+            t = time.perf_counter()
             session = await sync_to_async(ChatSessionService.get_by_chat_id)(chat_id)
             doc_id  = session.doc_id
+            t_db_get_session = round(time.perf_counter() - t, 3)
             logger.info('handle_question start: chat_id=%s doc_id=%s question=%r', chat_id, doc_id, question[:120])
 
+            t = time.perf_counter()
             await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
+            t_db_add_user_turn = round(time.perf_counter() - t, 3)
 
             t0 = time.perf_counter()
             loop = asyncio.get_event_loop()
-            doc_context, citations, memory_context, n_retrieved, n_reranked = await loop.run_in_executor(
-                retrieval_executor, _run_retrieval, doc_id, chat_id, question
+            doc_context, citations, n_retrieved, retrieval_timings = await loop.run_in_executor(
+                retrieval_executor, _run_retrieval, doc_id, question
             )
             t_retrieval = time.perf_counter() - t0
 
             prompt = f"""{SYSTEM_PROMPT}
 
-{memory_context}Document context:
+Document context:
 {doc_context}
 
 Question: {question}
@@ -223,7 +202,9 @@ Question: {question}
 Answer:"""
 
             estimated_tokens = _estimate_tokens(prompt)
+            t = time.perf_counter()
             ok, reason = chat_rate_limiter.can_proceed(estimated_tokens)
+            t_rate_check = round(time.perf_counter() - t, 3)
             if not ok:
                 logger.warning('Chat request for session %s blocked by rate guard: %s', chat_id, reason)
                 await send_to_browser({'type': 'error', 'text': GUARD_MESSAGES[reason]})
@@ -233,7 +214,7 @@ Answer:"""
             for model in CHAT_MODELS:
                 try:
                     t1 = time.perf_counter()
-                    answer_text, summary_text, usage_tokens = await _stream_model(
+                    answer_text, usage_tokens, ttfb = await _stream_model(
                         client, model, prompt, send_to_browser
                     )
                     t_gemini = time.perf_counter() - t1
@@ -242,36 +223,49 @@ Answer:"""
                     chat_rate_limiter.record(token_count)
                     await sync_to_async(persist_usage)(1, token_count)
 
+                    # db_add_ai_turn (the time the DB write itself takes) genuinely
+                    # can't be known before making that write, so it's left out of
+                    # the persisted trace. 'total' doesn't have that problem — it's
+                    # approximated here (everything up to just before the write) so
+                    # a turn reloaded from history still shows a time instead of a
+                    # blank one; the browser gets the fully-accurate version below,
+                    # computed after the write completes.
                     trace = {
-                        'total':     round(t_retrieval + t_gemini, 2),
-                        'retrieve':  round(t_retrieval, 2),
-                        'gemini':    round(t_gemini, 2),
-                        'tokens':    token_count,
-                        'retrieved': n_retrieved,
-                        'reranked':  n_reranked,
-                        'used':      len(citations),
+                        'lock_wait':        lock_wait,
+                        'db_get_session':   t_db_get_session,
+                        'db_add_user_turn': t_db_add_user_turn,
+                        'retrieve':         round(t_retrieval, 2),
+                        'retrieve_detail':  retrieval_timings,
+                        'rate_check':       t_rate_check,
+                        'gemini':           round(t_gemini, 2),
+                        'gemini_ttfb':      ttfb,
+                        'tokens':           token_count,
+                        'retrieved':        n_retrieved,
+                        'used':             len(citations),
+                        'total':            round(time.perf_counter() - t_wall_start, 2),
                     }
 
+                    t = time.perf_counter()
                     await sync_to_async(ChatSessionService.add_turn)(
                         chat_id, role='ai', text=answer_text, citations=citations, trace=trace,
                     )
-                    live_stats.record_call(t_retrieval, t_gemini, t_retrieval + t_gemini)
+                    t_db_add_ai_turn = round(time.perf_counter() - t, 3)
 
-                    if summary_text:
-                        # Awaited (not fire-and-forget) — a background task here created a real
-                        # race: a quick follow-up question could read the memory file before
-                        # this write landed, silently seeing no prior-turn context. Runs on
-                        # retrieval_executor (not the default pool) since embed_document is the
-                        # same CPU-bound local model call as retrieval, not actually "cheap".
-                        await loop.run_in_executor(retrieval_executor, session_memory.append_turn, chat_id, question, summary_text)
-                    else:
-                        logger.warning('No memory summary parsed for session %s — marker missing from response', chat_id)
+                    trace['db_add_ai_turn'] = t_db_add_ai_turn
+                    trace['total'] = round(time.perf_counter() - t_wall_start, 2)
+
+                    live_stats.record_call(t_retrieval, t_gemini, t_retrieval + t_gemini)
 
                     await send_to_browser({'type': 'done', 'citations': citations, 'trace': trace})
                     logger.info(
-                        'handle_question done: chat_id=%s model=%s total=%.2fs retrieve=%.2fs gemini=%.2fs tokens=%d retrieved=%d reranked=%d cited=%d',
-                        chat_id, model, trace['total'], trace['retrieve'], trace['gemini'],
-                        trace['tokens'], trace['retrieved'], trace['reranked'], trace['used'],
+                        'handle_question done: chat_id=%s model=%s total=%.2fs '
+                        'lock_wait=%.3fs db_get_session=%.3fs db_add_user_turn=%.3fs '
+                        'retrieve=%.2fs %s rate_check=%.3fs gemini=%.2fs gemini_ttfb=%s '
+                        'db_add_ai_turn=%.3fs tokens=%d retrieved=%d cited=%d',
+                        chat_id, model, trace['total'],
+                        lock_wait, t_db_get_session, t_db_add_user_turn,
+                        trace['retrieve'], retrieval_timings, t_rate_check, trace['gemini'], ttfb,
+                        t_db_add_ai_turn, trace['tokens'], trace['retrieved'], trace['used'],
                     )
                     return
                 except Exception as e:

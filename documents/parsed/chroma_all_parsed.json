@@ -1,0 +1,4986 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Data: Use .add to insert new records into a collection. Each record needs a unique string id .",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: collection.add(\n    ids=[\"id1\", \"id2\", \"id3\"],\n    documents=[\"lorem ipsum...\", \"doc2\", \"doc3\"],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n)",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: await collection.add({\n    ids: [\"id1\", \"id2\", \"id3\"],\n    documents: [\"lorem ipsum...\", \"doc2\", \"doc3\"],\n    metadatas: [{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n});",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: // pub async fn add(\n//       &self,\n//       ids: Vec<String>,\n//       embeddings: Vec<Vec<f32>>,\n//       documents: Option<Vec<Option<String>>>,\n//       uris: Option<Vec<Option<String>>>,\n//       metadatas: Option<Vec<Option<Metadata>>>,\n//  ) -> Result<AddCollectionRecordsResponse, ChromaHttpClientError>\ncollection.add(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"lorem ipsum...\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Data: You must provide either documents , embeddings , or both. metadatas are always optional. When only providing documents , Chroma will generate embeddings for you using the collection’s embedding function .",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Data: If you’ve already computed embeddings, pass them alongside documents . Chroma will store both as-is without re-embedding the documents.",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: collection.add(\n    ids=[\"id1\", \"id2\", \"id3\"],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2]],\n    documents=[\"doc1\", \"doc2\", \"doc3\"],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n)",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: await collection.add({\n    ids: [\"id1\", \"id2\", \"id3\"],\n    embeddings: [[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2]],\n    documents: [\"doc1\", \"doc2\", \"doc3\"],\n    metadatas: [{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n})",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: collection.add(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"lorem ipsum...\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Data: If your documents are stored elsewhere, you can add just embeddings and metadata. Use the ids to associate records with your external documents. This is a useful pattern if your documents are very large, such as high-resolution images or videos.",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: collection.add(\n    ids=[\"id1\", \"id2\", \"id3\"],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2]],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n)",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: await collection.add({\n    ids: [\"id1\", \"id2\", \"id3\"],\n    embeddings: [[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2]],\n    metadatas: [{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}],\n})",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Data: collection.add(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    None,\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "adding-data",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Metadata: Metadata values can be strings, integers, floats, or booleans. Additionally, you can store arrays of these types.",
+    "dom_ids": [
+      "metadata",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Metadata: collection.add(\n    ids=[\"id1\"],\n    documents=[\"lorem ipsum...\"],\n    metadatas=[{\n        \"chapter\": 3,\n        \"tags\": [\"fiction\", \"adventure\"],\n        \"scores\": [1, 2, 3],\n    }],\n)",
+    "dom_ids": [
+      "metadata",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Metadata: await collection.add({\n    ids: [\"id1\"],\n    documents: [\"lorem ipsum...\"],\n    metadatas: [{\n        chapter: 3,\n        tags: [\"fiction\", \"adventure\"],\n        scores: [1, 2, 3],\n    }],\n});",
+    "dom_ids": [
+      "metadata",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Metadata: use chroma::types::{Metadata, MetadataValue};\n\nlet mut metadata = Metadata::new();\nmetadata.insert(\"chapter\".into(), MetadataValue::Int(3));\nmetadata.insert(\n    \"tags\".into(),\n    MetadataValue::StringArray(vec![\"fiction\".to_string(), \"adventure\".to_string()]),\n);\nmetadata.insert(\"scores\".into(), MetadataValue::IntArray(vec![1, 2, 3]));",
+    "dom_ids": [
+      "metadata",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Metadata: All elements in an array must be the same type, and empty arrays are not allowed. You can filter on array metadata using the $contains and $not_contains operators — see Metadata Filtering for details.",
+    "dom_ids": [
+      "metadata",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0018"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Behaviors: - If you add a record with an ID that already exists in the collection, it will be ignored without throwing an error. In order to overwrite data in your collection, you must update the data. - If the supplied embeddings don’t match the dimensionality of embeddings already in the collection, an exception will be raised.",
+    "dom_ids": [
+      "behaviors",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add_data",
+    "id": "add_data__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "There are several ways you can instantiate clients to connect to your Chroma database.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "clients",
+    "id": "clients__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: You can use the CloudClient to create a client connecting to Chroma Cloud.",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: import chromadb\n\nclient = chromadb.CloudClient(\n    tenant='Tenant ID',\n    database='Database name',\n    api_key='Chroma Cloud API key'\n)",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: import { CloudClient } from \"chromadb\";\n\nconst client = new CloudClient({\n  tenant: \"Tenant ID\",\n  database: \"Database name\",\n  apiKey: \"Chroma Cloud API key\",\n});",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: use chroma::{ChromaHttpClient, ChromaHttpClientOptions};\n\nlet options = ChromaHttpClientOptions::cloud(\n    \"ck-...\",\n    \"Database name\",\n)?;\nlet client = ChromaHttpClient::new(options);",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: The CloudClient can be instantiated just with the API key argument. In which case, we will resolve the tenant and DB from Chroma Cloud. Note our auto-resolution will work only if the provided API key is scoped to a single DB.",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Cloud Client: If you set the CHROMA_API_KEY , CHROMA_TENANT , and the CHROMA_DATABASE environment variables, you can simply instantiate a CloudClient with no arguments:",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: client = chromadb.CloudClient()",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: const client = new CloudClient();",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Cloud Client: use chroma::ChromaHttpClient;\n\nlet client = ChromaHttpClient::cloud()?;",
+    "dom_ids": [
+      "cloud-client",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Connecting to a non-default region: By default, CloudClient connects to api.trychroma.com (AWS us-east-1 ). To target a database in another region — for example, our GCP europe-west1 region — point the client at that region’s hostname. See Regions for the list of available endpoints.",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: import chromadb\n\nclient = chromadb.CloudClient(\n    cloud_host='europe-west1.gcp.trychroma.com',\n    cloud_port=443,\n    api_key='Chroma Cloud API key',\n    tenant='Tenant ID',\n    database='Database name',\n)",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: import { ChromaClient } from \"chromadb\";\n\nconst client = new ChromaClient({\n  host: \"europe-west1.gcp.trychroma.com\",\n  ssl: true,\n  headers: { \"x-chroma-token\": \"Chroma Cloud API key\" },\n  tenant: \"Tenant ID\",\n  database: \"Database name\",\n});",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: use chroma::{ChromaAuthMethod, ChromaHttpClient, ChromaHttpClientOptions};\n\nlet client = ChromaHttpClient::new(ChromaHttpClientOptions {\n    endpoint: \"https://europe-west1.gcp.trychroma.com:443\".parse()?,\n    auth_method: ChromaAuthMethod::cloud_api_key(\"Chroma Cloud API key\")?,\n    database_name: Some(\"Database name\".to_string()),\n    ..Default::default()\n});",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Connecting to a non-default region: The dashboard’s Connect panel generates a ready-to-paste snippet for whichever region a database lives in, including the corresponding .env block. For databases outside aws-us-east-1 , the snippet sets CHROMA_HOST to the region-specific host:",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Connecting to a non-default region: CHROMA_HOST=europe-west1.gcp.trychroma.com\nCHROMA_API_KEY=...\nCHROMA_TENANT=...\nCHROMA_DATABASE=...",
+    "dom_ids": [
+      "connecting-to-a-non-default-region",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: In Python, you can run a Chroma server in-memory and connect to it with the ephemeral client:",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "In-Memory Client: import chromadb\n\nclient = chromadb.Client()",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: The Client() method starts a Chroma server in-memory and also returns a client with which you can connect to it.",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In-Memory Client: This is a great tool for experimenting with different embedding functions and retrieval techniques in a Python notebook, for example. If you don’t need data persistence, the ephemeral client is a good choice for getting up and running with Chroma.",
+    "dom_ids": [
+      "in-memory-client",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0020"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: You can configure Chroma to save and load the database from your local machine, using the PersistentClient .",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: Data will be persisted automatically and loaded on start (if it exists).",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: import chromadb\n\nclient = chromadb.PersistentClient(path=\"/path/to/save/to\")",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The path is where Chroma will store its database files on disk, and load them on start. If you don’t provide a path, the default is .chroma",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The client object has a few useful convenience methods.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0026"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - heartbeat() - returns a nanosecond heartbeat. Useful for making sure the client remains connected. - reset() - empties and completely resets the database. WARNING: This is destructive and not reversible.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: client.heartbeat()\nclient.reset()",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: To connect with the JS/TS client, you must connect to a Chroma server.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: To run a Chroma server locally that will persist your data, install Chroma from npm using any npm compatible client.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: npm install chromadb",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: And run the server using our CLI:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: npx chroma run --path ./getting-started",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The path is where Chroma will store its database files on disk, and load them on start. The default is .chroma .",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: Alternatively, you can also use our official Docker image:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: docker pull chromadb/chroma\ndocker run -p 8000:8000 chromadb/chroma",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: With a Chroma server running locally, you can connect to it by instantiating a new ChromaClient :",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: import { ChromaClient } from \"chromadb\";\n\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: By default, the ChromaClient is wired to connect to a Chroma server at http://localhost:8000 , with default_tenant and default_database . If you have different settings you can provide them to the ChromaClient constructor:",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: const client = new ChromaClient({\n  ssl: false,\n  host: \"localhost\",\n  port: 9000, // non-standard port based on your server config\n  database: \"my-db\",\n  headers: {},\n});",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The client object has a few useful convenience methods.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0041"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Persistent Client: - heartbeat() - returns a nanosecond heartbeat. Useful for making sure the client remains connected. - reset() - empties and completely resets the database. WARNING: This is destructive and not reversible.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: await client.heartbeat();\nawait client.reset();",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistent Client: The Rust client connects to a running Chroma server. For local persistence, run the server with a data path and connect over HTTP.",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: chroma run --path /db_path",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Persistent Client: use chroma::{ChromaHttpClient, ChromaHttpClientOptions};\n\nlet mut options = ChromaHttpClientOptions::default();\noptions.endpoint = \"http://localhost:8000\".parse()?;\n\nlet client = ChromaHttpClient::new(options);\nclient.heartbeat().await?;",
+    "dom_ids": [
+      "persistent-client",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "clients",
+    "id": "clients__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma supports deleting items from a collection by id using .delete . The embeddings, documents, and metadata associated with each item will be deleted.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n    ids=[\"id1\", \"id2\", \"id3\",...],\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.delete({\n    ids: [\"id1\", \"id2\", \"id3\",...],\n})",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n    Some(vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()]),\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": ".delete also supports the where filter. It will delete all items in the collection that match the where filter.",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n\twhere={\"chapter\": \"20\"}\n)",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.delete({\n    where: {\"chapter\": \"20\"} //where\n})",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "use chroma::types::{MetadataComparison, MetadataExpression, MetadataValue, PrimitiveOperator, Where};\n\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"chapter\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"20\".to_string()),\n    ),\n});\n\ncollection.delete(\n    None,\n    Some(where_clause),\n).await?;",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embeddings are numeric representations of your data that capture meaning in a form AI models can work with. They can represent text, images, and eventually audio and video. Chroma stores and indexes embeddings so you can efficiently search for similar content. You can generate them locally with an installed library or remotely through an API.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Embedding functions can be linked to a collection and used whenever you call add , update , upsert or query .",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: For example, this is how you use the OpenAI embedding function:",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: # Set your OPENAI_API_KEY environment variable\nfrom chromadb.utils.embedding_functions import OpenAIEmbeddingFunction\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=OpenAIEmbeddingFunction(\n        model_name=\"text-embedding-3-small\"\n    )\n)\n\n# Chroma will use OpenAIEmbeddingFunction to embed your documents\ncollection.add(\n    ids=[\"id1\", \"id2\"],\n    documents=[\"doc1\", \"doc2\"]\n)",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: You can also use embedding functions directly which can be handy for debugging.",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: from chromadb.utils.embedding_functions import DefaultEmbeddingFunction\n\ndefault_ef = DefaultEmbeddingFunction()\nembeddings = default_ef([\"foo\"])\nprint(embeddings) # [[0.05035809800028801, 0.0626462921500206, -0.061827320605516434...]]\n\ncollection.query(query_embeddings=embeddings)",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: You can create your own embedding function to use with Chroma; it just needs to implement EmbeddingFunction .",
+    "dom_ids": [
+      "custom-embedding-functions",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom Embedding Functions: from typing import Dict, Any\nfrom chromadb import Documents, EmbeddingFunction, Embeddings\nfrom chromadb.utils.embedding_functions import register_embedding_function\n\n@register_embedding_function\nclass MyEmbeddingFunction(EmbeddingFunction):\n\n    def __init__(self, model):\n        self.model = model\n\n    def __call__(self, input: Documents) -> Embeddings:\n        # embed the documents somehow\n        return embeddings\n\n    @staticmethod\n    def name() -> str:\n        return \"my-ef\"\n\n    def get_config(self) -> Dict[str, Any]:\n        return dict(model=self.model)\n\n    @staticmethod\n    def build_from_config(config: Dict[str, Any]) -> \"EmbeddingFunction\":\n        return MyEmbeddingFunction(config['model'])",
+    "dom_ids": [
+      "custom-embedding-functions",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Chroma’s default embedding function uses the Sentence Transformers all-MiniLM-L6-v2 model to create embeddings. This embedding model can create sentence and document embeddings that can be used for a wide variety of tasks. This embedding function runs locally on your machine, and may require you to download the model files (this will happen automatically).",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: If you don’t specify an embedding function when creating a collection, Chroma will set it to be the DefaultEmbeddingFunction :",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: collection = client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Embedding functions can be linked to a collection and used whenever you call add , update , upsert or query .",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: For example, this is how you use the OpenAI embedding function:",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Install the @chroma-core/openai package:",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: npm install @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: pnpm add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: bun add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: yarn add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Create a collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: // Set your OPENAI_API_KEY environment variable\nimport { OpenAIEmbeddingFunction } from \"@chroma-core/openai\";\n\ncollection = await client.createCollection({\n  name: \"my_collection\",\n  embedding_function: new OpenAIEmbeddingFunction({\n    modelName: \"text-embedding-3-small\",\n  }),\n});\n\n// Chroma will use OpenAIEmbeddingFunction to embed your documents\nawait collection.add({\n  ids: [\"id1\", \"id2\"],\n  documents: [\"doc1\", \"doc2\"],\n});",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: You can also use embedding functions directly which can be handy for debugging.",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: import { DefaultEmbeddingFunction } from \"@chroma-core/default-embed\";\n\nconst defaultEF = new DefaultEmbeddingFunction();\nconst embeddings = await defaultEF.generate([\"foo\"]);\nconsole.log(embeddings); // [[0.05035809800028801, 0.0626462921500206, -0.061827320605516434...]]\n\nawait collection.query({ queryEmbeddings: embeddings });",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: You can create your own embedding function to use with Chroma; it just needs to implement EmbeddingFunction .",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom Embedding Functions: export interface MyEmbeddingConfig {\n  model: string;\n}\n\nexport class MyEmbeddingFunction implements EmbeddingFunction {\n  public readonly name = \"my-embedding-function\";\n  private readonly model: string;\n\n  constructor(args: { model: string }) {\n    this.model = args.model;\n  }\n\n  async generate(texts: string[]): Promise<number[][]> {\n    // embed the documents somehow\n    return [];\n  }\n\n  getConfig(): MyEmbeddingConfig {\n    return {\n      model: this.model,\n    };\n  }\n\n  validateConfigUpdate(config: Record<string, any>) {\n    if (\"model\" in config) {\n      throw new ChromaValueError(\"Model cannot be updated\");\n    }\n  }\n\n  static buildFromConfig(\n    config: MyEmbeddingConfig,\n    _client?: ChromaClient,\n  ): MyEmbeddingFunction {\n    return new MyEmbeddingFunction(config);\n  }\n}",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: We welcome contributions! If you create an embedding function that you think would be useful to others, please consider submitting a pull request .",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Chroma’s default embedding function uses the Sentence Transformers all-MiniLM-L6-v2 model to create embeddings. This embedding model can create sentence and document embeddings that can be used for a wide variety of tasks. This embedding function runs locally on your machine, and may require you to download the model files (this will happen automatically).",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: If you don’t specify an embedding function when creating a collection, install the @chroma-core/default-embed package:",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: npm install @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: pnpm add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: bun add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: yarn add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Create a collection without providing an embedding function. It will automatically be set with the DefaultEmbeddingFunction :",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: const collection = await client.createCollection({ name: \"my-collection\" });",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: The Rust client expects embeddings to be provided directly. Use your provider SDK to generate embeddings, then pass them to add , query , and other methods.",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: let embeddings = vec![vec![0.05, 0.06, -0.06]];\n\ncollection\n    .add(\n        vec![\"id1\".to_string()],\n        embeddings,\n        Some(vec![Some(\"doc1\".to_string())]),\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: Chroma provides lightweight wrappers around popular embedding providers, making it easy to use them in your apps. You can set an embedding function when you create a Chroma collection, to be automatically used when adding and querying data, or you can call them directly yourself.",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0037"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Python | Typescript",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0038"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cloudflare Workers AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0039"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cohere",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0040"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Google Generative AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0041"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0042"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face Embedding Server",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0043"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Jina AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0044"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Mistral",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0045"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Morph",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0046"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: OpenAI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0047"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Sentence Transformers",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0048"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Together AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: For TypeScript users, Chroma provides packages for a number of embedding model providers. The Chromadb python package ships with all embedding functions included.",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0050"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Provider | Embedding Function Package",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0051"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: All (installs all packages) | @chroma-core/all",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0052"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cloudflare Workers AI | @chroma-core/cloudflare-worker-ai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0053"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cohere | @chroma-core/cohere",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0054"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Google Gemini | @chroma-core/google-gemini",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0055"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face Server | @chroma-core/huggingface-server",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Jina | @chroma-core/jina",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0057"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Mistral | @chroma-core/mistral",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0058"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Morph | @chroma-core/morph",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0059"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Ollama | @chroma-core/ollama",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: OpenAI | @chroma-core/openai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0061"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Perplexity | @chroma-core/perplexity",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0062"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Qwen (via Chroma Cloud) | @chroma-core/chroma-cloud-qwen",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0063"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Sentence Transformers | @chroma-core/sentence-transformer",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0064"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Together AI | @chroma-core/together-ai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0065"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Voyage AI | @chroma-core/voyageai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: We welcome contributions! If you create an embedding function that you think would be useful to others, please consider submitting a pull request .",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0067"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "getting_started",
+    "id": "getting_started__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For production, Chroma offers Chroma Cloud - a fast, scalable, and serverless database-as-a-service. Get started in 30 seconds - $5 in free credits included.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "getting_started",
+    "id": "getting_started__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Install with AI: Give the following prompt to Claude Code, Cursor, Codex, or your favorite AI agent. It will quickly set you up with Chroma.",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Python project with Chroma set up.\nUse a virtual environment.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nFirst, install `chromadb`.\n\nThe project should be set up with Chroma Cloud. When you install `chromadb`,\nyou get access to the Chroma CLI. You can run `chroma login` to authenticate.\nThis will open a browser for authentication and save a connection profile\nlocally.\n\nYou can also use `chroma profile show` to see if the user already has an\nactive profile saved locally. If so, you can skip the login step.\n\nThen create a DB using the CLI with `chroma db create chroma-getting-started`.\nThis will create a DB with this name.\n\nThen use the CLI command `chroma db connect chroma-getting-started --env-file`.\nThis will create a .env file in the current directory with the connection\nvariables for this DB and account, so the CloudClient can be instantiated\nwith chromadb.CloudClient(api_key=os.getenv(\"CHROMA_API_KEY\"), ...).",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Python project with Chroma set up.\nUse a virtual environment.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nUse Chroma's in-memory client: `chromadb.Client()`",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: pip install chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: poetry add chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: uv pip install chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: import chromadb\nchroma_client = chromadb.Client()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a collection: Collections are where you’ll store your embeddings, documents, and any additional metadata. Collections index your embeddings and documents, and enable efficient retrieval and filtering. You can create a collection with a name:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: collection = chroma_client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: Chroma will store your text and handle embedding and indexing automatically. You can also customize the embedding model. You must provide unique string IDs for your documents.",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: collection.add(\n    ids=[\"id1\", \"id2\"],\n    documents=[\n        \"This is a document about pineapple\",\n        \"This is a document about oranges\"\n    ]\n)",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: You can query the collection with a list of query texts, and Chroma will return the n most similar results. It’s that easy!",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: results = collection.query(\n    query_texts=[\"This is a query document about hawaii\"], # Chroma will embed this for you\n    n_results=2 # how many results to return\n)\nprint(results)",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: If n_results is not provided, Chroma will return 10 results by default. Here we only added 2 documents, so we set n_results=2.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspect Results: From the above - you can see that our query about hawaii is semantically most similar to the document about pineapple.",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspect Results: {\n  'documents': [[\n      'This is a document about pineapple',\n      'This is a document about oranges'\n  ]],\n  'ids': [['id1', 'id2']],\n  'distances': [[1.0404009819030762, 1.243080496788025]],\n  'uris': None,\n  'data': None,\n  'metadatas': [[None, None]],\n  'embeddings': None,\n}",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out yourself: What if we tried querying with “This is a document about florida”? Here is a full example.",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out yourself: import chromadb\nchroma_client = chromadb.Client()\n\n# switch \\`create_collection\\` to \\`get_or_create_collection\\` to avoid creating a new collection every time\ncollection = chroma_client.get_or_create_collection(name=\"my_collection\")\n\n# switch \\`add\\` to \\`upsert\\` to avoid adding the same documents every time\ncollection.upsert(\n    documents=[\n        \"This is a document about pineapple\",\n        \"This is a document about oranges\"\n    ],\n    ids=[\"id1\", \"id2\"]\n)\n\nresults = collection.query(\n    query_texts=[\"This is a query document about florida\"], # Chroma will embed this for you\n    n_results=2 # how many results to return\n)\n\nprint(results)",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: In this guide we used Chroma’s in-memory client for simplicity. It starts a Chroma server in-memory, so any data you ingest will be lost when your program terminates. You can use the persistent client or run Chroma in client-server mode if you need data persistence.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0021"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help - Follow Chroma on X (@trychroma) for updates",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: For production, Chroma offers Chroma Cloud - a fast, scalable, and serverless database-as-a-service. Get started in 30 seconds - $5 in free credits included.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Install with AI: Give the following prompt to Claude Code, Cursor, Codex, or your favorite AI agent. It will quickly set you up with Chroma.",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Typescript project with Chroma set up.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nFirst, install `chromadb`.\n\nThe project should be set up with Chroma Cloud. When you install `chromadb`,\nyou get access to the Chroma CLI. You can run `chroma login` to authenticate.\nThis will open a browser for authentication and save a connection profile\nlocally.\n\nYou can also use `chroma profile show` to see if the user already has an\nactive profile saved locally. If so, you can skip the login step.\n\nThen create a DB using the CLI with `chroma db create chroma-getting-started`.\nThis will create a DB with this name.\n\nThen use the CLI command `chroma db connect chroma-getting-started --env-file`.\nThis will create a .env file in the current directory with the connection\nvariables for this DB and account, so the CloudClient can be instantiated\nwith: new CloudClient().",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Typescript project with Chroma set up.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nYou will have to run a local Chroma server to make this work. When you install\n`chromadb` you get access to the Chroma CLI, which can start a local server\nfor you with `chroma run`.\n\nMake sure to instruct the user on how to start a local Chroma server in your\nsummary.",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: npm install chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: pnpm add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: bun add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: yarn add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Run the Chroma backend:",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: npx chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: pnpm exec chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: bunx chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: yarn chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: docker pull chromadb/chroma\ndocker run -p 8000:8000 chromadb/chroma",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Then create a client which connects to it:",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: import { ChromaClient } from \"chromadb\";\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: const { ChromaClient } = require(\"chromadb\");\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a collection: Collections are where you’ll store your embeddings, documents, and any additional metadata. Collections index your embeddings and documents, and enable efficient retrieval and filtering. You can create a collection with a name:",
+    "dom_ids": [
+      "readar-node-0054",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: const collection = await client.createCollection({\n  name: \"my_collection\",\n});",
+    "dom_ids": [
+      "readar-node-0054",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: Chroma will store your text and handle embedding and indexing automatically. You can also customize the embedding model. You must provide unique string IDs for your documents.",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: await collection.add({\n  ids: [\"id1\", \"id2\"],\n  documents: [\n    \"This is a document about pineapple\",\n    \"This is a document about oranges\",\n  ],\n});",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: You can query the collection with a list of query texts, and Chroma will return the n most similar results. It’s that easy!",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: const results = await collection.query({\n  queryTexts: [\"This is a query document about hawaii\"], // Chroma will embed this for you\n  nResults: 2, // how many results to return\n});\n\nconsole.log(results);",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: If n_results is not provided, Chroma will return 10 results by default. Here we only added 2 documents, so we set n_results=2.",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspect Results: From the above - you can see that our query about hawaii is semantically most similar to the document about pineapple.",
+    "dom_ids": [
+      "readar-node-0064",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspect Results: {\n    documents: [\n        [\n            'This is a document about pineapple',\n            'This is a document about oranges'\n        ]\n    ],\n    ids: [\n        ['id1', 'id2']\n    ],\n    distances: [[1.0404009819030762, 1.243080496788025]],\n    uris: null,\n    data: null,\n    metadatas: [[null, null]],\n    embeddings: null\n}",
+    "dom_ids": [
+      "readar-node-0064",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out yourself: What if we tried querying with “This is a document about florida”? Here is a full example.",
+    "dom_ids": [
+      "readar-node-0067",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out yourself: import { ChromaClient } from \"chromadb\";\nconst client = new ChromaClient();\n\n// switch `createCollection` to `getOrCreateCollection` to avoid creating a new collection every time\nconst collection = await client.getOrCreateCollection({\n  name: \"my_collection\",\n});\n\n// switch `addRecords` to `upsertRecords` to avoid adding the same documents every time\nawait collection.upsert({\n  documents: [\n    \"This is a document about pineapple\",\n    \"This is a document about oranges\",\n  ],\n  ids: [\"id1\", \"id2\"],\n});\n\nconst results = await collection.query({\n  queryTexts: [\"This is a query document about florida\"], // Chroma will embed this for you\n  nResults: 2, // how many results to return\n});\n\nconsole.log(results);",
+    "dom_ids": [
+      "readar-node-0067",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0050"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - We offer first class support for various embedding providers via our embedding function interface. Each embedding function ships in its own npm package. - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help - Follow Chroma on X (@trychroma) for updates",
+    "dom_ids": [
+      "next-steps-2",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Our Rust docs are hosted on docs.rs !",
+    "dom_ids": [
+      "next-steps-2",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually: cargo add chroma",
+    "dom_ids": [
+      "install-manually-3",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Run the Chroma backend:",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: chroma run --path ./getting-started",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Then create a client which connects to it:",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: use chroma::ChromaHttpClient;\n\nlet client = ChromaHttpClient::new(Default::default());",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: let collection = client\n    .create_collection(\"my_collection\", None, None)\n    .await?;",
+    "dom_ids": [
+      "create-a-collection",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: The Rust client expects embeddings to be provided directly. Generate embeddings with your provider SDK, then pass them along with documents.",
+    "dom_ids": [
+      "add-some-text-documents-to-the-collection",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: let embeddings = vec![vec![0.1, 0.2, 0.3], vec![0.4, 0.5, 0.6]];\n\ncollection\n    .add(\n        vec![\"id1\".to_string(), \"id2\".to_string()],\n        embeddings,\n        Some(vec![\n            Some(\"This is a document about pineapple\".to_string()),\n            Some(\"This is a document about oranges\".to_string()),\n        ]),\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "add-some-text-documents-to-the-collection",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0060"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: let results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(2), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "query-the-collection",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0061"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Read the Rust API docs on docs.rs - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help",
+    "dom_ids": [
+      "next-steps-3",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma gives you everything you need for retrieval: store embeddings with metadata, search with dense and sparse vectors, filter by metadata, and retrieve across text, images, and more.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "introduction",
+    "id": "introduction__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What Chroma Offers — Document Storage: Store documents and metadata.",
+    "dom_ids": [
+      "what-chroma-offers",
+      "_R_4kljddbsnlhjiuasnpfiutb_",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embeddings: Use any embedding model. OpenAI, Cohere, Hugging Face, sentence-transformers, and more.",
+    "dom_ids": [
+      "_R_8kljddbsnlhjiuasnpfiutb_",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Vector Search: Dense, sparse, and hybrid search. Query by similarity and combine multiple search strategies.",
+    "dom_ids": [
+      "_R_ckljddbsnlhjiuasnpfiutb_",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Full-Text & Regex Search: Keyword and regex search over your data without embeddings.",
+    "dom_ids": [
+      "_R_gkljddbsnlhjiuasnpfiutb_",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Metadata Filtering: Filter results at query time by metadata conditions.",
+    "dom_ids": [
+      "_R_kkljddbsnlhjiuasnpfiutb_",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multi-Modal Retrieval: Index and search images, audio, and other modalities alongside text.",
+    "dom_ids": [
+      "_R_okljddbsnlhjiuasnpfiutb_",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Quickstart — Getting Started with the Chroma SDK: Create a self-hosted or cloud database and add data to it using the Chroma SDK.",
+    "dom_ids": [
+      "quickstart",
+      "_R_54ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Cloud Database: Create a scalable, zero-ops Chroma Cloud database to store your AI data.",
+    "dom_ids": [
+      "_R_94ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Example Projects — Agentic Search: Build agents that iteratively search and refine results for complex queries.",
+    "dom_ids": [
+      "example-projects",
+      "_R_5kljddbsnlhjiuasnpfiutb_",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Code Search: Index codebases to power coding agents using AST-aware chunking.",
+    "dom_ids": [
+      "_R_9kljddbsnlhjiuasnpfiutb_",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Open Source: Chroma is licensed under Apache 2.0 . Run it locally, self-host, or use Chroma Cloud for a managed, serverless experience.",
+    "dom_ids": [
+      "open-source",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "introduction",
+    "id": "introduction__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma lets you manage collections of embeddings, using the collection primitive. Collections are the fundamental unit of storage and querying in Chroma.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Collections: Chroma collections are created with a name. Collection names are used in the url, so there are a few restrictions on them:",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Creating Collections: - The length of the name must be between 3 and 512 characters. - The name must start and end with a lowercase letter or a digit, and it can contain dots, dashes, and underscores in between. - The name must not contain two consecutive dots. - The name must not be a valid IP address.",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: collection = client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: const collection = await client.createCollection({\n  name: \"my_collection\",\n});",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: let collection = client\n    .create_collection(\"my_collection\", None, None)\n    .await?;",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Collections: Note that collection names must be unique inside a Chroma database. If you try to create a collection with a name of an existing one, you will see an exception.",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: When you add documents to a collection, Chroma will embed them for you by using the collection’s embedding function . Chroma will use sentence transformer embedding function as a default.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Chroma also offers various embedding function, which you can provide upon creating a collection. For example, you can create a collection using the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Embedding Functions: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Install the openai package:",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: pip install openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: poetry add openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: uv pip install openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Create your collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: import os\nfrom chromadb.utils.embedding_functions import OpenAIEmbeddingFunction\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=OpenAIEmbeddingFunction(\n        api_key=os.getenv(\"OPENAI_API_KEY\"),\n        model_name=\"text-embedding-3-small\"\n    )\n)",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Instead of having Chroma embed documents, you can also provide embeddings directly when adding data to a collection. In this case, your collection will not have an embedding function set, and you will be responsible for providing embeddings directly when adding data and querying.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: collection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=None\n)",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Install the @chroma-core/openai package to get access to the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: npm install @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: pnpm add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: bun add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: yarn add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Create your collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: import { OpenAIEmbeddingFunction } from \"@chroma-core/openai\";\n\nconst collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: new OpenAIEmbeddingFunction({\n    apiKey: process.env.OPENAI_API_KEY,\n    modelName: \"text-embedding-3-small\",\n  }),\n});",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Instead of having Chroma embed documents, you can also provide embeddings directly when adding data to a collection. In this case, your collection will not have an embedding function set, and you will be responsible for providing embeddings directly when adding data and querying.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: const collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: null,\n});",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: The Rust client expects embeddings to be provided directly when using add , get , search and other functions. Use your provider SDK to generate embeddings, then pass them to Chroma.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: collection.add(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"lorem ipsum...\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Collection Metadata: When creating collections, you can pass the optional metadata argument to add a mapping of metadata key-value pairs to your collections. This can be useful for adding general information about the collection like creation time, description of the data stored in the collection, and more.",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: from datetime import datetime\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=emb_fn,\n    metadata={\n        \"description\": \"my first Chroma collection\",\n        \"created\": str(datetime.now())\n    }\n)",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: let collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: emb_fn,\n  metadata: {\n    description: \"my first Chroma collection\",\n    created: new Date().toString(),\n  },\n});",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: use chroma::types::Metadata;\n\nlet mut metadata = Metadata::new();\nmetadata.insert(\"description\".to_string(), \"my first Chroma collection\".into());\nmetadata.insert(\"created\".to_string(), \"2024-01-01T00:00:00Z\".into());\n\nlet collection = client\n    .create_collection(\"my_collection\", None, Some(metadata))\n    .await?;",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Getting Collections: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: There are several ways to get a collection after it was created.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The get_collection function will get a collection from Chroma by name. It returns a Collection object with name , metadata , configuration , and embedding_function .",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_collection(name=\"my-collection\")",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The get_or_create_collection function behaves similarly, but will create the collection if it doesn’t exist. You can pass to it the same arguments create_collection expects, and the client will ignore them if the collection already exists.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_or_create_collection(\n    name=\"my-collection\",\n    metadata={\"description\": \"...\"}\n)",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The list_collections function returns the collections you have in your Chroma database. The collections will be ordered by creation time from oldest to newest.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collections = client.list_collections()",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: By default, list_collections returns up to 100 collections. If you have more than 100 collections, or need to get only a subset of your collections, you can use the limit and offset arguments:",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: first_collections_batch = client.list_collections(limit=100) # get the first 100 collections\nsecond_collections_batch = client.list_collections(limit=100, offset=100) # get the next 100 collections\ncollections_subset = client.list_collections(limit=20, offset=50) # get 20 collections starting from the 50th",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Current versions of Chroma store the embedding function you used to create a collection on the server, so the client can resolve it for you on subsequent “get” operations. If you are running an older version of the Chroma client or server (earlier than 1.1.13), you will need to provide the same embedding function you used to create a collection when using get_collection :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_collection(\n    name='my-collection',\n    embedding_function=ef\n)",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: There are several ways to get a collection after it was created.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The getCollection function will get a collection from Chroma by name. It returns a collection object with name , metadata , configuration , and embeddingFunction . If you did not provide an embedding function to createCollection , you can provide it to getCollection .",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getCollection({ name: \"my-collection \" });",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The getOrCreate function behaves similarly, but will create the collection if it doesn’t exist. You can pass to it the same arguments createCollection expects, and the client will ignore them if the collection already exists.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getOrCreateCollection({\n  name: \"my-collection\",\n  metadata: { description: \"...\" },\n});",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: If you need to get multiple collections at once, you can use getCollections() :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const [col1, col2] = client.getCollections([\"col1\", \"col2\"]);",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The listCollections function returns all the collections you have in your Chroma database. The collections will be ordered by creation time from oldest to newest.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collections = await client.listCollections();",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: By default, listCollections returns up to 100 collections. If you have more than 100 collections, or need to get only a subset of your collections, you can use the limit and offset arguments:",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const firstCollectionsBatch = await client.listCollections({ limit: 100 }); // get the first 100 collections\nconst secondCollectionsBatch = await client.listCollections({\n  limit: 100,\n  offset: 100,\n}); // get the next 100 collections\nconst collectionsSubset = await client.listCollections({\n  limit: 20,\n  offset: 50,\n}); // get 20 collections starting from the 50th",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Current versions of Chroma store the embedding function you used to create a collection on the server, so the client can resolve it for you on subsequent “get” operations. If you are running an older version of the Chroma JS/TS client (earlier than 3.04) or server (earlier than 1.1.13), you will need to provide the same embedding function you used to create a collection when using getCollection and getCollections :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getCollection({\n  name: \"my-collection\",\n  embeddingFunction: ef,\n});\n\nconst [col1, col2] = client.getCollections([\n  { name: \"col1\", embeddingFunction: openaiEF },\n  { name: \"col2\", embeddingFunction: defaultEF },\n]);",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Use the client to get collections or list them with pagination.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: let collection = client.get_collection(\"my-collection\").await?;\n\nlet collection = client\n    .get_or_create_collection(\"my-collection\", None, None)\n    .await?;\n\nlet collections = client.list_collections(100, Some(0)).await?;",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Modifying Collections: After a collection is created, you can modify its name, metadata and elements of its index configuration with the modify method:",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0061"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Modifying Collections: collection.modify(\n   name=\"new-name\",\n   metadata={\"description\": \"new description\"}\n)",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Modifying Collections: await collection.modify({\n  name: \"new-name\",\n  metadata: { description: \"new description\" },\n});",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Deleting Collections: You can delete a collection by name. This action will delete a collection, all of its embeddings, and associated documents and records’ metadata.",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Deleting Collections: client.delete_collection(name=\"my-collection\")",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Deleting Collections: await client.deleteCollection({ name: \"my-collection\" });",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Convenience Methods: Collections also offer a few useful convenience methods:",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0067"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Convenience Methods: - count - returns the number of records in the collection. - peek - returns the first 10 records in the collection.",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Convenience Methods: collection.count()\ncollection.peek()",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Convenience Methods: await collection.count();\nawait collection.peek();",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "The where argument in get and query is used to filter records by their metadata. For example, in this query operation, Chroma will only query records that have the page metadata field with the value 10 :",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\"page\": 10}\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: { page: 10 },\n});",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"page\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Int(10),\n    ),\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In order to filter on metadata, you must supply a where filter dictionary to the query. The dictionary must have the following structure:",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    \"metadata_field\": {\n        <Operator>: <Value>\n    }\n}",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    metadata_field: {\n        <Operator>: <Value>\n    }\n}",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"value\".to_string()),\n    ),\n});",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using the $eq operator is equivalent to using the metadata field directly in your where filter.",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    \"metadata_field\": \"search_string\"\n}\n\n# is equivalent to\n\n{\n    \"metadata_field\": {\n        \"$eq\": \"search_string\"\n    }\n}",
+    "dom_ids": [
+      "readar-node-0010"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    metadata_field: \"search_string\"\n}\n\n// is equivalent to\n\n{\n    metadata_field: {\n        \"$eq\":\"search_string\"\n    }\n}",
+    "dom_ids": [
+      "readar-node-0011"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let direct = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"search_string\".to_string()),\n    ),\n});",
+    "dom_ids": [
+      "readar-node-0012"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For example, here we query all records whose page metadata field is greater than 10:",
+    "dom_ids": [
+      "readar-node-0013"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\"page\": { \"$gt\": 10 }}\n)",
+    "dom_ids": [
+      "readar-node-0014"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: { page: { $gt: 10 } },\n});",
+    "dom_ids": [
+      "readar-node-0015"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"page\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::GreaterThan,\n        MetadataValue::Int(10),\n    ),\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "readar-node-0016"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: You can also use the logical operators $and and $or to combine multiple filters.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: An $and operator will return results that match all the filters in the list.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$and\": [\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        },\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$and\": [\n        {\n            metadata_field: { <Operator>: <Value> }\n        },\n        {\n            metadata_field: { <Operator>: <Value> }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::GreaterThanOrEqual,\n                MetadataValue::Int(5),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::LessThanOrEqual,\n                MetadataValue::Int(10),\n            ),\n        }),\n    ],\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: For example, here we query all records whose page metadata field is between 5 and 10:",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\n        \"$and\": [\n            {\"page\": {\"$gte\": 5 }},\n            {\"page\": {\"$lte\": 10 }},\n        ]\n    }\n)",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: {\n    $and: [{ page: { $gte: 5 } }, { page: { $lte: 10 } }],\n  },\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"page\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::GreaterThanOrEqual,\n                MetadataValue::Int(5),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"page\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::LessThanOrEqual,\n                MetadataValue::Int(10),\n            ),\n        }),\n    ],\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: An $or operator will return results that match any of the filters in the list.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$or\": [\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        },\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$or\": [\n        {\n            metadata_field: { <Operator>: <Value> }\n        },\n        {\n            metadata_field: { <Operator>: <Value> }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::Or,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"value1\".to_string()),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"value2\".to_string()),\n            ),\n        }),\n    ],\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: For example, here we get all records whose color metadata field is red or blue :",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: collection.get(\n    where={\n        \"$or\": [\n            {\"color\": \"red\"},\n            {\"color\": \"blue\"},\n        ]\n    }\n)",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: await collection.get({\n  where: {\n    \"$or\": [{ \"color\": \"red\" }, { \"color\": \"blue\" }],\n  },\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::Or,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"color\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"red\".to_string()),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"color\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"blue\".to_string()),\n            ),\n        }),\n    ],\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: The following inclusion operators are supported:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0034"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Using Inclusion Operators: - $in - a value is in predefined list (string, int, float, bool) - $nin - a value is not in predefined list (string, int, float, bool)",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: An $in operator will return results where the metadata attribute is part of a provided list:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n  \"metadata_field\": {\n    \"$in\": [\"value1\", \"value2\", \"value3\"]\n  }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n    metadata_field: {\n        \"$in\": [\"value1\", \"value2\", \"value3\"]\n    }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::In,\n        MetadataSetValue::Str(vec![\n            \"value1\".to_string(),\n            \"value2\".to_string(),\n            \"value3\".to_string(),\n        ]),\n    ),\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: An $nin operator will return results where the metadata attribute is not part of a provided list (or the attribute’s key is not present):",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n  \"metadata_field\": {\n    \"$nin\": [\"value1\", \"value2\", \"value3\"]\n  }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n    metadata_field: {\n        \"$nin\": [\"value1\", \"value2\", \"value3\"]\n    }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::NotIn,\n        MetadataSetValue::Str(vec![\n            \"value1\".to_string(),\n            \"value2\".to_string(),\n            \"value3\".to_string(),\n        ]),\n    ),\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: For example, here we get all records whose author metadata field is in a list of possible values:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: collection.get(\n    where={\n       \"author\": {\"$in\": [\"Rowling\", \"Fitzgerald\", \"Herbert\"]}\n    }\n)",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: await collection.get({\n  where: {\n    author: { $in: [\"Rowling\", \"Fitzgerald\", \"Herbert\"] },\n  },\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"author\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::In,\n        MetadataSetValue::Str(vec![\n            \"Rowling\".to_string(),\n            \"Fitzgerald\".to_string(),\n            \"Herbert\".to_string(),\n        ]),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Array Metadata: Chroma supports storing arrays of values in metadata fields. You can use the $contains and $not_contains operators to filter records based on whether an array field includes a specific value.",
+    "dom_ids": [
+      "using-array-metadata",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Array Metadata: Metadata arrays can contain strings, integers, floats, or booleans. All elements in an array must be the same type.",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: collection.add(\n    ids=[\"m1\", \"m2\", \"m3\"],\n    embeddings=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],\n    metadatas=[\n        {\"genres\": [\"action\", \"comedy\"], \"year\": 2020},\n        {\"genres\": [\"drama\"], \"year\": 2021},\n        {\"genres\": [\"action\", \"thriller\"], \"year\": 2022},\n    ],\n)",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: await collection.add({\n    ids: [\"m1\", \"m2\", \"m3\"],\n    embeddings: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],\n    metadatas: [\n        { genres: [\"action\", \"comedy\"], year: 2020 },\n        { genres: [\"drama\"], year: 2021 },\n        { genres: [\"action\", \"thriller\"], year: 2022 },\n    ],\n});",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: use chroma::types::{Metadata, MetadataValue};\n\nlet mut m = Metadata::new();\nm.insert(\n    \"genres\".into(),\n    MetadataValue::StringArray(vec![\"action\".to_string(), \"comedy\".to_string()]),\n);\nm.insert(\"year\".into(), MetadataValue::Int(2020));\n\n// Also supports IntArray, FloatArray, and BoolArray\nlet mut m2 = Metadata::new();\nm2.insert(\"scores\".into(), MetadataValue::IntArray(vec![10, 20, 30]));\nm2.insert(\"ratings\".into(), MetadataValue::FloatArray(vec![4.5, 3.8]));\nm2.insert(\"flags\".into(), MetadataValue::BoolArray(vec![true, false]));",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: Use $contains to check if a metadata array includes a specific scalar value, and $not_contains to check that it does not.",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: # Get all records where genres contains \"action\"\ncollection.get(\n    where={\"genres\": {\"$contains\": \"action\"}}\n)\n\n# Get all records where genres does NOT contain \"action\"\ncollection.get(\n    where={\"genres\": {\"$not_contains\": \"action\"}}\n)\n\n# Works with integer arrays too\ncollection.get(\n    where={\"scores\": {\"$contains\": 20}}\n)\n\n# Combine with other filters\ncollection.get(\n    where={\n        \"$and\": [\n            {\"genres\": {\"$contains\": \"action\"}},\n            {\"year\": {\"$gte\": 2021}},\n        ]\n    }\n)",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: // Get all records where genres contains \"action\"\nawait collection.get({\n    where: { genres: { $contains: \"action\" } }\n});\n\n// Get all records where genres does NOT contain \"action\"\nawait collection.get({\n    where: { genres: { $not_contains: \"action\" } }\n});\n\n// Works with integer arrays too\nawait collection.get({\n    where: { scores: { $contains: 20 } }\n});\n\n// Combine with other filters\nawait collection.get({\n    where: {\n        $and: [\n            { genres: { $contains: \"action\" } },\n            { year: { $gte: 2021 } },\n        ]\n    }\n});",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: use chroma::types::{\n    ContainsOperator, MetadataComparison, MetadataExpression, MetadataValue, Where,\n};\n\n// Get all records where genres contains \"action\"\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"genres\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::Contains,\n        MetadataValue::Str(\"action\".to_string()),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;\n\n// Get all records where genres does NOT contain \"action\"\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"genres\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::NotContains,\n        MetadataValue::Str(\"action\".to_string()),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;\n\n// Works with integer arrays too\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"scores\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::Contains,\n        MetadataValue::Int(20),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Type | Python | TypeScript | Rust",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0057"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: String | [\"a\", \"b\"] | [\"a\", \"b\"] | MetadataValue::StringArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0058"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Integer | [1, 2, 3] | [1, 2, 3] | MetadataValue::IntArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0059"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Float | [1.5, 2.5] | [1.5, 2.5] | MetadataValue::FloatArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Boolean | [true, false] | [true, false] | MetadataValue::BoolArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Supported Array Types: Constraints:",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0062"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Supported Array Types: - All elements in an array must be the same type. - Empty arrays are not allowed. - Nested arrays (arrays of arrays) are not supported. - The $contains value must be a scalar that matches the array’s element type.",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining with Document Search: .get and .query can handle metadata filtering combined with document search :",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: collection.query(\n    query_texts=[\"doc10\", \"thus spake zarathustra\", ...],\n    n_results=10,\n    where={\"metadata_field\": \"is_equal_to_this\"},\n    where_document={\"$contains\":\"search_string\"}\n)",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: await collection.query({\n    queryTexts: [\"doc10\", \"thus spake zarathustra\", ...],\n    nResults: 10,\n    where: { metadata_field: \"is_equal_to_this\" },\n    whereDocument: { \"$contains\": \"search_string\" }\n})",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: use chroma::types::{\n    BooleanOperator, CompositeExpression, DocumentExpression, DocumentOperator,\n    MetadataComparison, MetadataExpression, MetadataValue, PrimitiveOperator, Where,\n};\n\nlet where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"is_equal_to_this\".to_string()),\n            ),\n        }),\n        Where::Document(DocumentExpression {\n            operator: DocumentOperator::Contains,\n            pattern: \"search_string\".to_string(),\n        }),\n    ],\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "The Query API enables nearest-neighbor similarity search over dense embeddings. Use the Get API when you want to retrieve records without similarity ranking.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_texts=[\"thus spake zarathustra\", \"the oracle speaks\"]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Chroma will use the collection’s embedding function to embed your text queries, and use the output to run a vector similarity search against your collection.",
+    "dom_ids": [
+      "query",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Instead of providing query_texts , you can provide query_embeddings directly. You will be required to do so if your collection does not have an embedding function attached to it. The dimension of your query embedding must match the dimension of the embeddings in your collection.",
+    "dom_ids": [
+      "query",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Python also supports query_images and query_uris as query inputs.",
+    "dom_ids": [
+      "query",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma will return 10 results per input query. You can modify this number using the n_results argument:",
+    "dom_ids": [
+      "query",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100,\n    ids=[\"id1\", \"id2\"]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Both query and get support where for metadata filtering and where_document for full-text search and regex :",
+    "dom_ids": [
+      "query",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100,\n    where={\"page\": 10}, # query records with metadata field 'page' equal to 10\n    where_document={\"$contains\": \"search string\"} # query records with the search string in the records' document\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: collection.get(ids=[\"id1\", \"id2\"]) # by IDs\n\ncollection.get(limit=100, offset=0) # with pagination",
+    "dom_ids": [
+      "get",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryTexts: [\"thus spake zarathustra\", \"the oracle speaks\"],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Chroma will use the collection’s embedding function to embed your text queries, and use the output to run a vector similarity search against your collection.",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Instead of providing queryTexts , you can provide queryEmbeddings directly. You will be required to do so if your collection does not have an embedding function attached to it. The dimension of your query embedding must match the dimension of the embeddings in your collection.",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma will return 10 results per input query. You can modify this number using the nResults argument:",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 100,\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 100,\n  ids: [\"id1\", \"id2\"],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Both query and get support where for metadata filtering and whereDocument for full-text search and regex :",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 5,\n  where: { page: 10 }, // metadata field 'page' equal to 10\n  whereDocument: { $contains: \"search string\" }, // documents containing \"search string\"\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get-2",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: await collection.get({ ids: [\"id1\", \"id2\"] }); // By IDs\n\nawait collection.get({ limit: 100, offset: 0 }); // With pagination",
+    "dom_ids": [
+      "get-2",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Type inference: You can also pass type arguments to .get and .query for the shape of your metadata. This gives you type inference for your metadata objects:",
+    "dom_ids": [
+      "type-inference",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Type inference: const results = await collection.get<{page: number; title: string}>({\n  ids: [\"id1\", \"id2\"],\n});\n\nconst rows = results.rows();\nrows.forEach((row) => {\n  console.log(row.id, row.metadata?.page);\n});",
+    "dom_ids": [
+      "type-inference",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: use chroma_types::IncludeList;\n\n// pub async fn query(\n//    &self,\n//    query_embeddings: Vec<Vec<f32>>,\n//    n_results: Option<u32>,\n//    where: Option<Where>,\n//    ids: Option<Vec<String>>,\n//    include: Option<IncludeList>,\n// ) -> Result<QueryResponse, ChromaHttpClientError>\n\nlet results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        None,\n        None,\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Embeddings must be provided directly to the Rust client.",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma returns 10 results per input query. You can modify this number using n_results :",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: let results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        Some(100), // n_results\n        None,\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: let results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        Some(5),\n        None,\n        Some(vec![\"id1\".to_string(), \"id2\".to_string()]), // ids\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get-3",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: let response = collection\n    .get(\n        Some(vec![\"id1\".to_string(), \"id2\".to_string()]),\n        None,\n        Some(10),\n        Some(0),\n        Some(IncludeList::default_get()),\n    )\n    .await?;",
+    "dom_ids": [
+      "get-3",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Chroma returns .query and .get results in column-major form (arrays per field). .query results are grouped per input query; .get results are a flat list of records.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: class QueryResult(TypedDict):\n    ids: List[IDs]\n    embeddings: Optional[List[Embeddings]]\n    documents: Optional[List[List[Document]]]\n    uris: Optional[List[List[URI]]]\n    metadatas: Optional[List[List[Metadata]]]\n    distances: Optional[List[List[float]]]\n    included: Include\n\nclass GetResult(TypedDict):\n    ids: List[ID]\n    embeddings: Optional[Embeddings]\n    documents: Optional[List[Document]]\n    uris: Optional[URIs]\n    metadatas: Optional[List[Metadata]]\n    included: Include",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: class QueryResult {\n  public readonly ids: string[][];\n  public readonly distances: (number | null)[][];\n  public readonly documents: (string | null)[][];\n  public readonly embeddings: (number[] | null)[][];\n  public readonly metadatas: (Record<string, string | number | boolean> | null)[][];\n  public readonly uris: (string | null)[][];\n  public readonly include: Include[];\n}\n\nclass GetResult {\n  public readonly ids: string[];\n  public readonly documents: (string | null)[];\n  public readonly embeddings: number[][];\n  public readonly metadatas: (Record<string, string | number | boolean> | null)[];\n  public readonly uris: (string | null)[];\n  public readonly include: Include[];\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: pub struct QueryResponse {\n    pub ids: Vec<Vec<String>>,\n    pub embeddings: Option<Vec<Vec<Option<Vec<f32>>>>>,\n    pub documents: Option<Vec<Vec<Option<String>>>>,\n    pub uris: Option<Vec<Vec<Option<String>>>>,\n    pub metadatas: Option<Vec<Vec<Option<HashMap<String, MetadataValue>>>>>,\n    pub distances: Option<Vec<Vec<Option<f32>>>>,\n    pub include: Vec<Include>,\n}\n\npub struct GetResponse {\n    pub ids: Vec<String>,\n    pub embeddings: Option<Vec<Vec<f32>>>,\n    pub documents: Option<Vec<Option<String>>>,\n    pub uris: Option<Vec<Option<String>>>,\n    pub metadatas: Option<Vec<Option<HashMap<String, MetadataValue>>>>,\n    pub include: Vec<Include>,\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Here is a concrete example of what these responses look like in practice:",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: // Query result\n{\n  \"ids\": [[\"doc_1\", \"doc_7\"]],\n  \"embeddings\": [[[1, 2, 3, 4], [1, 2, 3, 4]]],\n  \"documents\": [[\"Chroma stores vectors.\", \"Embeddings power semantic search.\"]],\n  \"metadatas\": [[\n    {\"source\": \"docs\", \"topic\": \"intro\"},\n    {\"source\": \"blog\", \"topic\": \"search\"}\n  ]],\n  \"distances\": [[0.12, 0.21]],\n  \"included\": [\"embeddings\", \"documents\", \"metadatas\", \"distances\"]\n}\n// Get result\n{\n  \"ids\": [\"doc_1\", \"doc_7\"],\n  \"embeddings\": [[1, 2, 3, 4], [1, 2, 3, 4]],\n  \"documents\": [\"Chroma stores vectors.\", \"Embeddings power semantic search.\"],\n  \"metadatas\": [\n    {\"source\": \"docs\", \"topic\": \"intro\"},\n    {\"source\": \"blog\", \"topic\": \"search\"}\n  ],\n  \"included\": [\"documents\", \"metadatas\"]\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: In the results from the Get operation, corresponding elements in each array belong to the same document.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: result = collection.get(include=[\"documents\", \"metadatas\"])\nfor id, document, metadata in zip(result[\"ids\"], result[\"documents\"], result[\"metadatas\"]):\n    print(id, document, metadata)",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: const result = await collection.get();\n\nconst first_document = {\n    id: result[\"ids\"][0],\n    document: result[\"documents\"][0],\n    metadatas: result[\"metadatas\"][0]\n}\n\n// Use the .rows() function for easy iteration\nfor (const row of result.rows()) {\n  console.log(row.id, row.document, row.metadata);\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: let result = collection.get(None, None, None, None, None).await?;\nif let (Some(documents), Some(metadatas)) = (&result.documents, &result.metadatas) {\n    for i in 0..result.ids.len() {\n        let id = &result.ids[i];\n        let document = &documents[i];\n        let metadata = &metadatas[i];\n        println!(\"{id:?} {document:?} {metadata:?}\");\n    }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Query is a batch API and returns results grouped per input. A common pattern is to iterate over each query’s “batch” of results, then iterate within that batch.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: result = collection.query(query_texts=[\"first query\", \"second query\"])\nfor ids, documents, metadatas in zip(result[\"ids\"], result[\"documents\"], result[\"metadatas\"]):\n    for id, document, metadata in zip(ids, documents, metadatas):\n        print(id, document, metadata)",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: const result = await collection.query({ queryTexts: [\"first query\", \"second query\"] });\nfor (const batch of result.rows()) {\n  for (const row of batch) {\n    console.log(row.id, row.document, row.metadata, row.distance);\n  }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: let result = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], None, None, None, None)\n    .await?;\n\nif let (Some(doc_batches), Some(meta_batches)) = (&result.documents, &result.metadatas) {\n    for batch_i in 0..result.ids.len() {\n        let ids = &result.ids[batch_i];\n        let documents = &doc_batches[batch_i];\n        let metadatas = &meta_batches[batch_i];\n        for j in 0..ids.len() {\n            let id = &ids[j];\n            let document = &documents[j];\n            let metadata = &metadatas[j];\n            println!(\"{id:?} {document:?} {metadata:?}\");\n        }\n    }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Choosing Which Data is Returned: By default, Query returns documents , metadatas , and distances , and Get returns documents and metadatas .",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Choosing Which Data is Returned: Use include to control what comes back. ids are always returned.",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: collection.query(\n    query_texts=[\"my query\"],\n    include=[\"documents\", \"metadatas\", \"embeddings\"],\n)\n\ncollection.get(include=[\"documents\"])",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: await collection.query({\n  queryTexts: [\"my query\"],\n  include: [\"documents\", \"metadatas\", \"embeddings\"],\n});\n\nawait collection.get({ include: [\"documents\"] });",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: use chroma_types::{Include, IncludeList};\n\nlet include = IncludeList(vec![Include::Document, Include::Metadata]);\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(5), None, None, Some(include))\n    .await?;",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Any property of records in a collection can be updated with .update :",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.update(\n    ids=[\"id1\", \"id2\", \"id3\", ...],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents=[\"doc1\", \"doc2\", \"doc3\", ...],\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.update({\n    ids: [\"id1\", \"id2\", \"id3\", ...],\n    embeddings: [[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas: [{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents: [\"doc1\", \"doc2\", \"doc3\", ...]\n})",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.update(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    Some(vec![\n        Some(vec![1.1, 2.3, 3.2]),\n        Some(vec![4.5, 6.9, 4.4]),\n        Some(vec![1.1, 2.3, 3.2]),\n    ]),\n    Some(vec![\n        Some(\"doc1\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If an id is not found in the collection, an error will be logged and the update will be ignored. If documents are supplied without corresponding embeddings , the embeddings will be recomputed with the collection’s embedding function.",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Metadata values can include arrays — see Adding Data for supported metadata types.",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If the supplied embeddings are not the same dimension as the collection, an exception will be raised.",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma also supports an upsert operation, which updates existing items, or adds them if they don’t yet exist.",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.upsert(\n    ids=[\"id1\", \"id2\", \"id3\", ...],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents=[\"doc1\", \"doc2\", \"doc3\", ...],\n)",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.upsert({\n  ids: [\"id1\", \"id2\", \"id3\"],\n  embeddings: [\n    [1.1, 2.3, 3.2],\n    [4.5, 6.9, 4.4],\n    [1.1, 2.3, 3.2],\n  ],\n  metadatas: [\n    { chapter: \"3\", verse: \"16\" },\n    { chapter: \"3\", verse: \"5\" },\n    { chapter: \"29\", verse: \"11\" },\n  ],\n  documents: [\"doc1\", \"doc2\", \"doc3\"],\n});",
+    "dom_ids": [
+      "readar-node-0010"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.upsert(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"doc1\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0011"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If an id is not present in the collection, the corresponding items will be created as per add . Items with existing id s will be updated as per update .",
+    "dom_ids": [
+      "readar-node-0012"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0012"
+  }
+]

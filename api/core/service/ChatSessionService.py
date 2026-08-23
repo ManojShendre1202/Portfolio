@@ -25,16 +25,12 @@ class ChatSessionService:
 
     @staticmethod
     def purge_expired() -> int:
-        from backend.RAG.Query import session_memory  # local import — avoids loading embed models at module import time
-
         cutoff = timezone.now() - timezone.timedelta(seconds=SESSION_RETENTION_SECONDS)
         expired_ids = list(ChatSession.objects.filter(updated_at__lt=cutoff).values_list('chat_id', flat=True))
         if not expired_ids:
             return 0
 
         deleted, _ = ChatSession.objects.filter(chat_id__in=expired_ids).delete()
-        for chat_id in expired_ids:
-            session_memory.delete(chat_id)
         logger.info('Purged %d expired session(s)', deleted)
         return deleted
 
@@ -111,10 +107,7 @@ class ChatSessionService:
         """Permanently removes a session and its turns. If it was the active
         session, the next getOrCreateSession call for this (client, doc)
         will simply start a fresh one — no session is left dangling."""
-        from backend.RAG.Query import session_memory  # local import — avoids loading embed models at module import time
-
         ChatSession.objects.filter(client_id=client_id, doc_id=doc_id, chat_id=chat_id).delete()
-        session_memory.delete(chat_id)
         logger.info('Session deleted: chat_id=%s doc_id=%s', chat_id, doc_id)
 
     @staticmethod

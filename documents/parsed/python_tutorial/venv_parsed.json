@@ -1,0 +1,474 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12. Virtual Environments and Packages — 12.1. Introduction: Python applications will often use packages and modules that don’t come as part of the standard library. Applications will sometimes need a specific version of a library, because the application may require that a particular bug has been fixed or the application may be written using an obsolete version of the library’s interface.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12. Virtual Environments and Packages — 12.1. Introduction: This means it may not be possible for one Python installation to meet the requirements of every application. If application A needs version 1.0 of a particular module but application B needs version 2.0, then the requirements are in conflict and installing either version 1.0 or 2.0 will leave one application unable to run.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12. Virtual Environments and Packages — 12.1. Introduction: The solution for this problem is to create a virtual environment , a self-contained directory tree that contains a Python installation for a particular version of Python, plus a number of additional packages.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12. Virtual Environments and Packages — 12.1. Introduction: Different applications can then use different virtual environments. To resolve the earlier example of conflicting requirements, application A can have its own virtual environment with version 1.0 installed while application B has another virtual environment with version 2.0. If application B requires a library be upgraded to version 3.0, this will not affect application A’s environment.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: The module used to create and manage virtual environments is called venv . venv will install the Python version from which the command was run (as reported by the --version option). For instance, executing the command with python3.12 will install version 3.12.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: To create a virtual environment, decide upon a directory where you want to place it, and run the venv module as a script with the directory path:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: python -m venv tutorial-env",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: This will create the tutorial-env directory if it doesn’t exist, and also create directories inside it containing a copy of the Python interpreter and various supporting files.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: A common directory location for a virtual environment is .venv . This name keeps the directory typically hidden in your shell and thus out of the way while giving it a name that explains why the directory exists. It also prevents clashing with .env environment variable definition files that some tooling supports.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: Once you’ve created a virtual environment, you may activate it.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: On Windows, run:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: tutorial-env\\Scripts\\activate",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: On Unix or MacOS, run:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: source tutorial-env/bin/activate",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: (This script is written for the bash shell. If you use the csh or fish shells, there are alternate activate.csh and activate.fish scripts you should use instead.)",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: Activating the virtual environment will change your shell’s prompt to show what virtual environment you’re using, and modify the environment so that running python will get you that particular version and installation of Python. For example:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: $ source ~/envs/tutorial-env/bin/activate\n(tutorial-env) $ python\nPython 3.5.1 (default, May  6 2016, 10:59:36)\n  ...\n>>> import sys\n>>> sys.path\n['', '/usr/local/lib/python35.zip', ...,\n'~/envs/tutorial-env/lib/python3.5/site-packages']\n>>>",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: Note that the activated virtual environment does not alter the PYTHONPATH variable in any way. This may lead to unexpected results if the path includes references to code which is incompatible with the Python version the virtual environment is using. The best practice is to unset PYTHONPATH in bash or the equivalent for the shell you are using.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: To deactivate a virtual environment, type:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: deactivate",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.2. Creating Virtual Environments: into the terminal.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: You can install, upgrade, and remove packages using a program called pip . By default pip will install packages from the Python Package Index . You can browse the Python Package Index by going to it in your web browser.",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: pip has a number of subcommands: “install”, “uninstall”, “freeze”, etc. (Consult the Installing Python modules guide for complete documentation for pip .)",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: You can install the latest version of a package by specifying a package’s name:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip install novas\nCollecting novas\n  Downloading novas-3.1.1.3.tar.gz (136kB)\nInstalling collected packages: novas\n  Running setup.py install for novas\nSuccessfully installed novas-3.1.1.3",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: You can also install a specific version of a package by giving the package name followed by == and the version number:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip install requests==2.6.0\nCollecting requests==2.6.0\n  Using cached requests-2.6.0-py2.py3-none-any.whl\nInstalling collected packages: requests\nSuccessfully installed requests-2.6.0",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: If you re-run this command, pip will notice that the requested version is already installed and do nothing. You can supply a different version number to get that version, or you can run python -m pip install --upgrade to upgrade the package to the latest version:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip install --upgrade requests\nCollecting requests\nInstalling collected packages: requests\n  Found existing installation: requests 2.6.0\n    Uninstalling requests-2.6.0:\n      Successfully uninstalled requests-2.6.0\nSuccessfully installed requests-2.7.0",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: python -m pip uninstall followed by one or more package names will remove the packages from the virtual environment.",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: python -m pip show will display information about a particular package:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip show requests\n---\nMetadata-Version: 2.0\nName: requests\nVersion: 2.7.0\nSummary: Python HTTP for Humans.\nHome-page: http://python-requests.org\nAuthor: Kenneth Reitz\nAuthor-email: me@kennethreitz.com\nLicense: Apache 2.0\nLocation: /Users/akuchling/envs/tutorial-env/lib/python3.4/site-packages\nRequires:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: python -m pip list will display all of the packages installed in the virtual environment:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip list\nnovas (3.1.1.3)\nnumpy (1.9.2)\npip (7.0.3)\nrequests (2.7.0)\nsetuptools (16.0)",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: python -m pip freeze will produce a similar list of the installed packages, but the output uses the format that python -m pip install expects. A common convention is to put this list in a requirements.txt file:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip freeze > requirements.txt\n(tutorial-env) $ cat requirements.txt\nnovas==3.1.1.3\nnumpy==1.9.2\nrequests==2.7.0",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: The requirements.txt can then be committed to version control and shipped as part of an application. Users can then install all the necessary packages with install -r :",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: (tutorial-env) $ python -m pip install -r requirements.txt\nCollecting novas==3.1.1.3 (from -r requirements.txt (line 1))\n  ...\nCollecting numpy==1.9.2 (from -r requirements.txt (line 2))\n  ...\nCollecting requests==2.7.0 (from -r requirements.txt (line 3))\n  ...\nInstalling collected packages: novas, numpy, requests\n  Running setup.py install for novas\nSuccessfully installed novas-3.1.1.3 numpy-1.9.2 requests-2.7.0",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "12.3. Managing Packages with pip: pip has many more options. Consult the Installing Python modules guide for complete documentation for pip . When you’ve written a package and want to make it available on the Python Package Index, consult the Python packaging user guide .",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "venv",
+    "id": "venv__node_0039"
+  }
+]

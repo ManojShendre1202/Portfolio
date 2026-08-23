@@ -1,0 +1,1897 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tools extend what agents can do—letting them fetch real-time data, execute code, query external databases, and take actions in the world.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "tools",
+    "id": "tools__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Under the hood, tools are callable functions with well-defined inputs and outputs that get passed to a chat model . The model decides when to invoke a tool based on the conversation context, and what input arguments to provide.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "tools",
+    "id": "tools__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For details on how models handle tool calls, see Tool calling . Trace tool calls and debug errors with LangSmith . Follow the tracing quickstart to get set up.",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "tools",
+    "id": "tools__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "tools",
+    "id": "tools__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create tools — Basic tool definition: The simplest way to create a tool is with the @tool decorator. By default, the function’s docstring becomes the tool’s description that helps the model understand when to use it:",
+    "dom_ids": [
+      "create-tools",
+      "basic-tool-definition",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create tools — Basic tool definition: from langchain.tools import tool\n\n@tool\ndef search_database(query: str, limit: int = 10) -> str:\n    \"\"\"Search the customer database for records matching the query.\n\n    Args:\n        query: Search terms to look for\n        limit: Maximum number of results to return\n    \"\"\"\n    return f\"Found {limit} results for '{query}'\"",
+    "dom_ids": [
+      "create-tools",
+      "basic-tool-definition",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create tools — Basic tool definition: Type hints are required as they define the tool’s input schema. The docstring should be informative and concise to help the model understand the tool’s purpose.",
+    "dom_ids": [
+      "create-tools",
+      "basic-tool-definition",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create tools — Basic tool definition: Server-side tool use: Some chat models feature built-in tools (web search, code interpreters) that are executed server-side. See Server-side tool use for details.",
+    "dom_ids": [
+      "create-tools",
+      "basic-tool-definition",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create tools — Basic tool definition: Prefer snake_case for tool names (e.g., web_search instead of Web Search ). Some model providers have issues with or reject names containing spaces or special characters with errors. Sticking to alphanumeric characters, underscores, and hyphens helps to improve compatibility across providers.",
+    "dom_ids": [
+      "create-tools",
+      "basic-tool-definition",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customize tool properties — Custom tool name: By default, the tool name comes from the function name. Override it when you need something more descriptive:",
+    "dom_ids": [
+      "customize-tool-properties",
+      "custom-tool-name",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Customize tool properties — Custom tool name: @tool(\"web_search\")  # Custom name\ndef search(query: str) -> str:\n    \"\"\"Search the web for information.\"\"\"\n    return f\"Results for: {query}\"\n\nprint(search.name)  # web_search",
+    "dom_ids": [
+      "customize-tool-properties",
+      "custom-tool-name",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom tool description: Override the auto-generated tool description for clearer model guidance:",
+    "dom_ids": [
+      "custom-tool-description",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom tool description: @tool(\"calculator\", description=\"Performs arithmetic calculations. Use this for any math problems.\")\ndef calc(expression: str) -> str:\n    \"\"\"Evaluate mathematical expressions.\"\"\"\n    return str(eval(expression))",
+    "dom_ids": [
+      "custom-tool-description",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced schema definition: Define complex inputs with Pydantic models or JSON schemas:",
+    "dom_ids": [
+      "advanced-schema-definition",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Advanced schema definition: from pydantic import BaseModel, Field\nfrom typing import Literal\n\nclass WeatherInput(BaseModel):\n    \"\"\"Input for weather queries.\"\"\"\n    location: str = Field(description=\"City name or coordinates\")\n    units: Literal[\"celsius\", \"fahrenheit\"] = Field(\n        default=\"celsius\",\n        description=\"Temperature unit preference\"\n    )\n    include_forecast: bool = Field(\n        default=False,\n        description=\"Include 5-day forecast\"\n    )\n\n@tool(args_schema=WeatherInput)\ndef get_weather(location: str, units: str = \"celsius\", include_forecast: bool = False) -> str:\n    \"\"\"Get current weather and optional forecast.\"\"\"\n    temp = 22 if units == \"celsius\" else 72\n    result = f\"Current weather in {location}: {temp} degrees {units[0].upper()}\"\n    if include_forecast:\n        result += \"\\nNext 5 days: Sunny\"\n    return result",
+    "dom_ids": [
+      "advanced-schema-definition",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Advanced schema definition: weather_schema = {\n    \"type\": \"object\",\n    \"properties\": {\n        \"location\": {\"type\": \"string\"},\n        \"units\": {\"type\": \"string\"},\n        \"include_forecast\": {\"type\": \"boolean\"}\n    },\n    \"required\": [\"location\", \"units\", \"include_forecast\"]\n}\n\n@tool(args_schema=weather_schema)\ndef get_weather(location: str, units: str = \"celsius\", include_forecast: bool = False) -> str:\n    \"\"\"Get current weather and optional forecast.\"\"\"\n    temp = 22 if units == \"celsius\" else 72\n    result = f\"Current weather in {location}: {temp} degrees {units[0].upper()}\"\n    if include_forecast:\n        result += \"\\nNext 5 days: Sunny\"\n    return result",
+    "dom_ids": [
+      "advanced-schema-definition",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Reserved argument names: The following parameter names are reserved and cannot be used as tool arguments. Using these names will cause runtime errors.",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0017"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Reserved argument names: Parameter name | Purpose",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0018"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Reserved argument names: config | Reserved for passing RunnableConfig to tools internally",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0019"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Reserved argument names: runtime | Reserved for ToolRuntime parameter (accessing state, context, store)",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Reserved argument names: To access runtime information, use the ToolRuntime parameter instead of naming your own arguments config or runtime .",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Reserved argument names: If you use InjectedState , InjectedStore , get_runtime() , or InjectedToolCallId , see Migrate from older injection patterns .",
+    "dom_ids": [
+      "reserved-argument-names",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access context: Tools are most powerful when they can access runtime information like conversation history, user data, and persistent memory. This section covers how to access and update this information from within your tools.",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access context: Tools can access runtime information through the ToolRuntime parameter, which provides:",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0024"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Component | Description | Use case",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0025"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: State | Short-term memory - mutable data that exists for the current conversation (messages, counters, custom fields) | Access conversation history, track tool call counts",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0026"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Context | Immutable configuration passed at invocation time (user IDs, session info) | Personalize responses based on user identity",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0027"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Store | Long-term memory - persistent data that survives across conversations | Save user preferences, maintain knowledge base",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0028"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Stream Writer | Emit real-time updates during tool execution | Show progress for long-running operations",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0029"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Execution Info | Identity and retry information for the current execution (thread ID, run ID, attempt number) | Access thread/run IDs, adjust behavior based on retry state",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0030"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Server Info | Server-specific metadata when running on LangGraph Server (assistant ID, graph ID, authenticated user) | Access assistant ID, graph ID, or authenticated user info",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0031"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Config | RunnableConfig for the execution | Access callbacks, tags, and metadata",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0032"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access context: Tool Call ID | Unique identifier for the current tool invocation | Correlate tool calls for logs and model invocations",
+    "dom_ids": [
+      "access-context",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short-term memory (State): State represents short-term memory that exists for the duration of a conversation. It includes the message history and any custom fields you define in your graph state .",
+    "dom_ids": [
+      "short-term-memory-state",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access state: Add runtime: ToolRuntime to your tool signature to access state. At call time, ToolNode injects the value automatically; the parameter is not included in the tool schema sent to the model. Use runtime.state to read the current conversation state:",
+    "dom_ids": [
+      "access-state",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Access state: from langchain.tools import tool, ToolRuntime\nfrom langchain.messages import HumanMessage\n\n@tool\ndef get_last_user_message(runtime: ToolRuntime) -> str:\n    \"\"\"Get the most recent message from the user.\"\"\"\n    messages = runtime.state[\"messages\"]\n\n    # Find the last human message\n    for message in reversed(messages):\n        if isinstance(message, HumanMessage):\n            return message.content\n\n    return \"No user messages found\"\n\n# Access custom state fields\n@tool\ndef get_user_preference(\n    pref_name: str,\n    runtime: ToolRuntime\n) -> str:\n    \"\"\"Get a user preference value.\"\"\"\n    preferences = runtime.state.get(\"user_preferences\", {})\n    return preferences.get(pref_name, \"Not set\")",
+    "dom_ids": [
+      "access-state",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access state: The runtime parameter is hidden from the model. For the example above, the model only sees pref_name in the tool schema.",
+    "dom_ids": [
+      "access-state",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: Use Command to update the agent’s state. This is useful for tools that need to update custom state fields. Include a ToolMessage in the update so the model can see the result of the tool call:",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: from langchain.agents import AgentState\nfrom langchain.messages import ToolMessage\nfrom langchain.tools import ToolRuntime, tool\nfrom langgraph.types import Command\n\n\nclass CustomState(AgentState):\n    user_name: str\n\n\n@tool\ndef set_user_name(new_name: str, runtime: ToolRuntime[None, CustomState]) -> Command:\n    \"\"\"Set the user's name in the conversation state.\"\"\"\n    return Command(\n        update={\n            \"user_name\": new_name,\n            \"messages\": [\n                ToolMessage(\n                    content=f\"User name set to {new_name}.\",\n                    tool_call_id=runtime.tool_call_id,\n                )\n            ],\n        }\n    )",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: When tools update state variables, consider defining a reducer for those fields. Since LLMs can call multiple tools in parallel, a reducer determines how to resolve conflicts when the same state field is updated by concurrent tool calls.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context: Context provides immutable configuration data that is passed at invocation time. Use it for user IDs, session details, or application-specific settings that shouldn’t change during a conversation.",
+    "dom_ids": [
+      "context",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context: While thread_id (passed via config={\"configurable\": {\"thread_id\": ...}} ) scopes the conversation : message history and checkpoints, context carries per-run data your tools and middleware read at invocation time. In production you typically pass both together: a stable thread_id per conversation, and a context object on every invoke.",
+    "dom_ids": [
+      "context",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context: Access context through runtime.context . Pass it alongside a thread_id so the conversation is persisted across turns:",
+    "dom_ids": [
+      "context",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"google_genai:gemini-3.6-flash\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"openai:gpt-5.5\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"anthropic:claude-sonnet-4-6\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"openrouter:z-ai/glm-5.2\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"fireworks:accounts/fireworks/models/glm-5p2\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"baseten:zai-org/GLM-5.2\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_core.utils.uuid import uuid7\nfrom langchain_openai import ChatOpenAI\n\n\nUSER_DATABASE = {\n    \"user123\": {\n        \"name\": \"Alice Johnson\",\n        \"account_type\": \"Premium\",\n        \"balance\": 5000,\n        \"email\": \"alice@example.com\",\n    },\n    \"user456\": {\n        \"name\": \"Bob Smith\",\n        \"account_type\": \"Standard\",\n        \"balance\": 1200,\n        \"email\": \"bob@example.com\",\n    },\n}\n\n\n@dataclass\nclass UserContext:\n    user_id: str\n\n\n@tool\ndef get_account_info(runtime: ToolRuntime[UserContext]) -> str:\n    \"\"\"Get the current user's account information.\"\"\"\n    user_id = runtime.context.user_id\n\n    if user_id in USER_DATABASE:\n        user = USER_DATABASE[user_id]\n        return (\n            f\"Account holder: {user['name']}\\n\"\n            f\"Type: {user['account_type']}\\n\"\n            f\"Balance: ${user['balance']}\"\n        )\n    return \"User not found\"\n\n\nmodel = ChatOpenAI(model=\"ollama:north-mini-code-1.0\")\nagent = create_agent(\n    model,\n    tools=[get_account_info],\n    context_schema=UserContext,\n    system_prompt=\"You are a financial assistant.\",\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my current balance?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=UserContext(user_id=\"user123\"),\n)",
+    "dom_ids": [
+      "context",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long-term memory (Store): The BaseStore provides persistent storage that survives across conversations. Unlike state (short-term memory), data saved to the store remains available in future sessions.",
+    "dom_ids": [
+      "long-term-memory-store",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long-term memory (Store): Access the store through runtime.store . The store uses a namespace/key pattern to organize data:",
+    "dom_ids": [
+      "long-term-memory-store",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long-term memory (Store): For production deployments, use a persistent store implementation like PostgresStore , MongoDBStore , or RedisStore instead of InMemoryStore . See the memory documentation for setup details.",
+    "dom_ids": [
+      "long-term-memory-store",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Long-term memory (Store): from typing import Any\nfrom langgraph.store.memory import InMemoryStore\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool, ToolRuntime\nfrom langchain_openai import ChatOpenAI\n\n# Access memory\n@tool\ndef get_user_info(user_id: str, runtime: ToolRuntime) -> str:\n    \"\"\"Look up user info.\"\"\"\n    store = runtime.store\n    user_info = store.get((\"users\",), user_id)\n    return str(user_info.value) if user_info else \"Unknown user\"\n\n# Update memory\n@tool\ndef save_user_info(user_id: str, user_info: dict[str, Any], runtime: ToolRuntime) -> str:\n    \"\"\"Save user info.\"\"\"\n    store = runtime.store\n    store.put((\"users\",), user_id, user_info)\n    return \"Successfully saved user info.\"\n\nmodel = ChatOpenAI(model=\"gpt-5.5\")\n\nstore = InMemoryStore()\nagent = create_agent(\n    model,\n    tools=[get_user_info, save_user_info],\n    store=store\n)\n\n# First session: save user info\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Save the following user: userid: abc123, name: Foo, age: 25, email: foo@langchain.dev\"}]\n})\n\n# Second session: get user info\nagent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Get user info for user with id 'abc123'\"}]\n})\n# Here is the user info for user with ID \"abc123\":\n# - Name: Foo\n# - Age: 25\n# - Email: foo@langchain.dev",
+    "dom_ids": [
+      "long-term-memory-store",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream writer: Stream real-time updates from tools during execution. This is useful for providing progress feedback to users during long-running operations.",
+    "dom_ids": [
+      "stream-writer",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream writer: Use runtime.stream_writer to emit custom updates:",
+    "dom_ids": [
+      "stream-writer",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stream writer: from langchain.tools import tool, ToolRuntime\n\n@tool\ndef get_weather(city: str, runtime: ToolRuntime) -> str:\n    \"\"\"Get weather for a given city.\"\"\"\n    writer = runtime.stream_writer\n\n    # Stream custom updates as the tool executes\n    writer(f\"Looking up data for city: {city}\")\n    writer(f\"Acquired data for city: {city}\")\n\n    return f\"It's always sunny in {city}!\"",
+    "dom_ids": [
+      "stream-writer",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream writer: If you use runtime.stream_writer inside your tool, the tool must be invoked within a LangGraph execution context. See Streaming for more details.",
+    "dom_ids": [
+      "stream-writer",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution info: Access thread ID, run ID, and retry state from within a tool via runtime.execution_info :",
+    "dom_ids": [
+      "execution-info",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution info: from langchain.tools import tool, ToolRuntime\n\n@tool\ndef log_execution_context(runtime: ToolRuntime) -> str:\n    \"\"\"Log execution identity information.\"\"\"\n    info = runtime.execution_info\n    print(f\"Thread: {info.thread_id}, Run: {info.run_id}\")\n    print(f\"Attempt: {info.node_attempt}\")\n    return \"done\"",
+    "dom_ids": [
+      "execution-info",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution info: Requires deepagents>=0.5.0 (or langgraph>=1.1.5 ).",
+    "dom_ids": [
+      "execution-info",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server info: When your tool runs on LangGraph Server, access the assistant ID, graph ID, and authenticated user via runtime.server_info :",
+    "dom_ids": [
+      "server-info",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Server info: from langchain.tools import tool, ToolRuntime\n\n@tool\ndef get_assistant_scoped_data(runtime: ToolRuntime) -> str:\n    \"\"\"Fetch data scoped to the current assistant.\"\"\"\n    server = runtime.server_info\n    if server is not None:\n        print(f\"Assistant: {server.assistant_id}, Graph: {server.graph_id}\")\n        if server.user is not None:\n            print(f\"User: {server.user.identity}\")\n    return \"done\"",
+    "dom_ids": [
+      "server-info",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server info: server_info is None when the tool is not running on LangGraph Server (e.g., during local development or testing).",
+    "dom_ids": [
+      "server-info",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server info: Requires deepagents>=0.5.0 (or langgraph>=1.1.5 ).",
+    "dom_ids": [
+      "server-info",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server info: Migrate from older injection patterns",
+    "dom_ids": [
+      "server-info",
+      "migrate-from-older-injection-patterns-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server info: Older examples used InjectedState , InjectedStore , get_runtime() , or InjectedToolCallId . Use ToolRuntime instead for one explicit interface to state, context, store, and execution metadata.",
+    "dom_ids": [
+      "server-info",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0067"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Previous pattern: from langchain.tools import tool, InjectedState\n\n@tool\ndef summarize(state: InjectedState) -> str:\n    \"\"\"Summarize the conversation.\"\"\"\n    messages = state[\"messages\"]\n    return f\"Conversation length: {len(messages)} messages.\"",
+    "dom_ids": [
+      "previous-pattern",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Recommended pattern: from langchain.tools import tool, ToolRuntime\n\n@tool\ndef summarize(runtime: ToolRuntime) -> str:\n    \"\"\"Summarize the conversation.\"\"\"\n    messages = runtime.state[\"messages\"]\n    return f\"Conversation length: {len(messages)} messages.\"",
+    "dom_ids": [
+      "recommended-pattern",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Recommended pattern: For agent-level migrations (for example create_react_agent and custom state), see the LangChain v1 migration guide .",
+    "dom_ids": [
+      "recommended-pattern",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool execution: In LangChain, tools are used by agents (for example via create_agent ) and tool error handling is configured through middleware .",
+    "dom_ids": [
+      "tool-execution",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool execution: For LangGraph workflows, tool execution is handled by ToolNode . See ToolNode for Graph API usage, including how tools can access the current graph state and run-scoped context.",
+    "dom_ids": [
+      "tool-execution",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool return values: You can choose different return values for your tools:",
+    "dom_ids": [
+      "tool-return-values",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0073"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Tool return values: - Return a string for human-readable results. - Return an object for structured results the model should parse. - Return a Command with optional message when you need to write to state.",
+    "dom_ids": [
+      "tool-return-values",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a string: Return a string when the tool should provide plain text for the model to read and use in its next response.",
+    "dom_ids": [
+      "return-a-string",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0075"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return a string: from langchain.tools import tool\n\n\n@tool\ndef get_weather(city: str) -> str:\n    \"\"\"Get weather for a city.\"\"\"\n    return f\"It is currently sunny in {city}.\"",
+    "dom_ids": [
+      "return-a-string",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0076"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a string: Behavior:",
+    "dom_ids": [
+      "return-a-string",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0077"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return a string: - The return value is converted to a ToolMessage . - The model sees that text and decides what to do next. - No agent state fields are changed unless the model or another tool does so later.",
+    "dom_ids": [
+      "return-a-string",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a string: Use this when the result is naturally human-readable text.",
+    "dom_ids": [
+      "return-a-string",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0079"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return an object: Return an object (for example, a dict ) when your tool produces structured data that the model should inspect.",
+    "dom_ids": [
+      "return-an-object",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0080"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return an object: from langchain.tools import tool\n\n\n@tool\ndef get_weather_data(city: str) -> dict:\n    \"\"\"Get structured weather data for a city.\"\"\"\n    return {\n        \"city\": city,\n        \"temperature_c\": 22,\n        \"conditions\": \"sunny\",\n    }",
+    "dom_ids": [
+      "return-an-object",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return an object: Behavior:",
+    "dom_ids": [
+      "return-an-object",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0082"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return an object: - The object is serialized and sent back as tool output. - The model can read specific fields and reason over them. - Like string returns, this does not directly update graph state.",
+    "dom_ids": [
+      "return-an-object",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return an object: Use this when downstream reasoning benefits from explicit fields instead of free-form text.",
+    "dom_ids": [
+      "return-an-object",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0084"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return multimodal content: Tools are not limited to plain text. When the model supports multimodal tool results, the tool can return standard content blocks so the model receives text, images, and other media in one tool result.",
+    "dom_ids": [
+      "return-multimodal-content",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0085"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return multimodal content: from langchain.tools import tool\n\n\n@tool\ndef capture_screenshot() -> list[dict]:\n    \"\"\"Capture a screenshot of the current page.\"\"\"\n    return [\n        {\"type\": \"text\", \"text\": \"Screenshot of the current page:\"},\n        {\"type\": \"image\", \"url\": \"https://example.com/page.png\"},\n    ]",
+    "dom_ids": [
+      "return-multimodal-content",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return multimodal content: Behavior:",
+    "dom_ids": [
+      "return-multimodal-content",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0087"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return multimodal content: - The return value is converted to a ToolMessage with multimodal content . - Use message.content_blocks to read the normalized block list after the tool runs. - The model must support the modalities you return. Check your model’s capabilities before returning images, audio, or video.",
+    "dom_ids": [
+      "return-multimodal-content",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0088"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return multimodal content: For block types and provider-specific requirements, see Multimodal messages . MCP tools that return images or mixed content are converted the same way; see Multimodal tool content .",
+    "dom_ids": [
+      "return-multimodal-content",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command: Return a Command when the tool needs to update graph state (for example, setting user preferences or app state). When the Command targets the current graph, include a ToolMessage in the update whose tool call ID matches the current tool call. Every tool call in the message history must have a corresponding ToolMessage .",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command: Use runtime.tool_call_id for the tool_call_id parameter. ToolNode enforces this requirement: if the update has no ToolMessage matching the tool call, it raises a ValueError .",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0091"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return a Command: from langchain.messages import ToolMessage\nfrom langchain.tools import ToolRuntime, tool\nfrom langgraph.types import Command\n\n\n@tool\ndef set_language(language: str, runtime: ToolRuntime) -> Command:\n    \"\"\"Set the preferred response language.\"\"\"\n    return Command(\n        update={\n            \"preferred_language\": language,\n            \"messages\": [\n                ToolMessage(\n                    content=f\"Language set to {language}.\",\n                    tool_call_id=runtime.tool_call_id,\n                )\n            ],\n        }\n    )",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0092"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command: Behavior:",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0093"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return a Command: - The command updates state using update . - Updated state is available to subsequent steps in the same run. - Use reducers for fields that may be updated by parallel tool calls.",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0094"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command: Use this when the tool is not just returning data, but also mutating agent state.",
+    "dom_ids": [
+      "return-a-command",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0095"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return directly from a tool: Set return direct on a tool to short-circuit the agent loop: the agent returns the tool’s output to the caller immediately, without sending it back through the model for further processing.",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0096"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"google_genai:gemini-3.6-flash\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0097"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"openai:gpt-5.5\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0098"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"anthropic:claude-sonnet-4-6\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0099"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"openrouter:z-ai/glm-5.2\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0100"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"fireworks:accounts/fireworks/models/glm-5p2\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0101"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"baseten:zai-org/GLM-5.2\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0102"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return directly from a tool: from langchain.agents import create_agent\nfrom langchain.tools import tool\nfrom langchain_openai import ChatOpenAI\n\n\n@tool(return_direct=True)\ndef fetch_order_status(order_id: str) -> str:\n    \"\"\"Fetch the current status of a customer order.\"\"\"\n    # In production, query your order management system here\n    return f\"Order {order_id} is shipped and will arrive in 2 days.\"\n\n\nagent = create_agent(\n    ChatOpenAI(model=\"ollama:north-mini-code-1.0\"),\n    tools=[fetch_order_status],\n)\n\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"What is the status of order #12345?\"}]\n})\n# The agent returns the tool output directly without another LLM call:\n# \"Order 12345 is shipped and will arrive in 2 days.\"",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0103"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return directly from a tool: Behavior:",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0104"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return directly from a tool: - The tool executes normally and its output is wrapped in a ToolMessage . - The agent stops looping and returns the tool’s output as the final response, bypassing any additional model call. - Multiple parallel tool calls: When the model calls several tools in one step, all of them execute first. After all tools finish, the agent routes to END only if every tool in that batch has return_direct=True . The final response includes the ToolMessage outputs of every tool that was called in that step.",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0130"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0105"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return directly from a tool: Use this when:",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0106"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Return directly from a tool: - The tool’s output is the complete, user-ready answer (for example, a lookup that returns a ready-to-display result). - You want to avoid an extra model call when no additional reasoning is needed. - You need deterministic, unmodified output: the model cannot rephrase, summarize, or act on the tool result.",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0107"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return directly from a tool: Because the model does not process the tool’s output, return_direct=True is not suitable for tools whose results require further reasoning, summarization, or chaining with other tool calls.",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0108"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return directly from a tool: Mixed parallel calls: If the model calls a return_direct=True tool alongside tools that do not have return_direct=True , the agent does not exit after that step. It routes back to the model with every ToolMessage from the batch, so the model can reason over all results. return_direct only short-circuits the loop when every tool call in the step has return_direct=True .",
+    "dom_ids": [
+      "return-directly-from-a-tool",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command with return_direct: A tool with return_direct=True can also return a Command to update graph state before the agent exits. Unlike a plain return value, a Command is not automatically converted into a ToolMessage . When the Command targets the current graph ( graph is not set or is None ), include a ToolMessage in Command.update matching the tool call’s tool_call_id . Omitting it causes ToolNode to raise a ValueError , because every AIMessage tool call must have a corresponding ToolMessage in the message history.",
+    "dom_ids": [
+      "return-a-command-with-return_direct",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0110"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Return a Command with return_direct: from langchain.messages import ToolMessage\nfrom langchain.tools import ToolRuntime, tool\nfrom langgraph.types import Command\n\n\n@tool(return_direct=True)\ndef fetch_and_store_order(order_id: str, runtime: ToolRuntime) -> Command:\n    \"\"\"Fetch order status and store it in state.\"\"\"\n    status = f\"Order {order_id} is shipped and will arrive in 2 days.\"\n    return Command(\n        update={\n            \"last_order_status\": status,\n            # Must include a ToolMessage so the message history stays valid\n            \"messages\": [\n                ToolMessage(\n                    content=status,\n                    tool_call_id=runtime.tool_call_id,\n                )\n            ],\n        }\n    )",
+    "dom_ids": [
+      "return-a-command-with-return_direct",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Return a Command with return_direct: To write to a parent graph instead, set graph=Command.PARENT . In that case the ToolMessage requirement is lifted because execution leaves the current graph entirely.",
+    "dom_ids": [
+      "return-a-command-with-return_direct",
+      "readar-node-0138"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Error handling: Handle tool errors using LangChain agent middleware to retry failed tool calls or return custom error messages:",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0113"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0141"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0114"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0115"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0116"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0117"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0145"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0118"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0119"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Error handling: from collections.abc import Callable\n\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_tool_call\nfrom langchain.messages import ToolMessage\nfrom langchain.tools.tool_node import ToolCallRequest\n\n\n@wrap_tool_call\ndef handle_tool_errors(\n    request: ToolCallRequest,\n    handler: Callable[[ToolCallRequest], ToolMessage],\n) -> ToolMessage:\n    \"\"\"Convert tool exceptions into ToolMessages the model can handle.\"\"\"\n    try:\n        return handler(request)\n    except Exception as e:\n        return ToolMessage(\n            content=f\"Tool error: Please check your input and try again. ({e})\",\n            tool_call_id=request.tool_call[\"id\"],\n        )\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[],\n    middleware=[handle_tool_errors],\n)",
+    "dom_ids": [
+      "error-handling",
+      "readar-node-0147"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "State injection: Tools access graph state through ToolRuntime . See Access context for state, context, store, and streaming APIs.",
+    "dom_ids": [
+      "state-injection",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0121"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "State injection: from langchain.tools import tool, ToolRuntime\n\n@tool\ndef get_message_count(runtime: ToolRuntime) -> str:\n    \"\"\"Get the number of messages in the conversation.\"\"\"\n    messages = runtime.state[\"messages\"]\n    return f\"There are {len(messages)} messages.\"",
+    "dom_ids": [
+      "state-injection",
+      "readar-node-0150"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0122"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "State injection: For more details on accessing state, context, and long-term memory from tools, see Access context .",
+    "dom_ids": [
+      "state-injection",
+      "readar-node-0151"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0123"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: With dynamic tools, the set of tools available to the agent is modified at runtime rather than defined all upfront. Not every tool is appropriate for every situation. Too many tools may overwhelm the model (overload context) and increase errors; too few limit capabilities. Dynamic tool selection enables adapting the available toolset based on authentication state, user permissions, feature flags, or conversation stage.",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0153"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: There are two approaches depending on whether tools are known ahead of time:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0154"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0125"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dynamic tool selection: - Filtering pre-registered tools - Runtime tool registration",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0155"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0126"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: When all possible tools are known at agent creation time, you can pre-register them and dynamically filter which ones are exposed to the model based on state, permissions, or context.",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0156"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0127"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dynamic tool selection: - State - Store - Runtime Context",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0157"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0128"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: Enable advanced tools only after certain conversation milestones:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0158"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0129"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dynamic tool selection: from langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_model_call, ModelRequest, ModelResponse\nfrom typing import Callable\n\n@wrap_model_call\ndef state_based_tools(\n    request: ModelRequest,\n    handler: Callable[[ModelRequest], ModelResponse]\n) -> ModelResponse:\n    \"\"\"Filter tools based on conversation State.\"\"\"\n    # Read from State: check if user has authenticated\n    state = request.state\n    is_authenticated = state.get(\"authenticated\", False)\n    message_count = len(state[\"messages\"])\n\n    # Only enable sensitive tools after authentication\n    if not is_authenticated:\n        tools = [t for t in request.tools if t.name.startswith(\"public_\")]\n        request = request.override(tools=tools)\n    elif message_count < 5:\n        # Limit tools early in conversation\n        tools = [t for t in request.tools if t.name != \"advanced_search\"]\n        request = request.override(tools=tools)\n\n    return handler(request)\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[public_search, private_search, advanced_search],\n    middleware=[state_based_tools]\n)",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0159"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0130"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: Filter tools based on user preferences or feature flags in Store:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0160"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0131"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dynamic tool selection: from dataclasses import dataclass\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_model_call, ModelRequest, ModelResponse\nfrom typing import Callable\nfrom langgraph.store.memory import InMemoryStore\n\n@dataclass\nclass Context:\n    user_id: str\n\n@wrap_model_call\ndef store_based_tools(\n    request: ModelRequest,\n    handler: Callable[[ModelRequest], ModelResponse]\n) -> ModelResponse:\n    \"\"\"Filter tools based on Store preferences.\"\"\"\n    user_id = request.runtime.context.user_id\n\n    # Read from Store: get user's enabled features\n    store = request.runtime.store\n    feature_flags = store.get((\"features\",), user_id)\n\n    if feature_flags:\n        enabled_features = feature_flags.value.get(\"enabled_tools\", [])\n        # Only include tools that are enabled for this user\n        tools = [t for t in request.tools if t.name in enabled_features]\n        request = request.override(tools=tools)\n\n    return handler(request)\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[search_tool, analysis_tool, export_tool],\n    middleware=[store_based_tools],\n    context_schema=Context,\n    store=InMemoryStore()\n)",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0161"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0132"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: Filter tools based on user permissions from Runtime Context:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0162"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0133"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dynamic tool selection: from dataclasses import dataclass\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import wrap_model_call, ModelRequest, ModelResponse\nfrom typing import Callable\n\n@dataclass\nclass Context:\n    user_role: str\n\n@wrap_model_call\ndef context_based_tools(\n    request: ModelRequest,\n    handler: Callable[[ModelRequest], ModelResponse]\n) -> ModelResponse:\n    \"\"\"Filter tools based on Runtime Context permissions.\"\"\"\n    # Read from Runtime Context: get user role\n    if request.runtime is None or request.runtime.context is None:\n        # If no context provided, default to viewer (most restrictive)\n        user_role = \"viewer\"\n    else:\n        user_role = request.runtime.context.user_role\n\n    if user_role == \"admin\":\n        # Admins get all tools\n        pass\n    elif user_role == \"editor\":\n        # Editors can't delete\n        tools = [t for t in request.tools if t.name != \"delete_data\"]\n        request = request.override(tools=tools)\n    else:\n        # Viewers get read-only tools\n        tools = [t for t in request.tools if t.name.startswith(\"read_\")]\n        request = request.override(tools=tools)\n\n    return handler(request)\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[read_data, write_data, delete_data],\n    middleware=[context_based_tools],\n    context_schema=Context\n)",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0163"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0134"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: This approach is best when:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0164"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0135"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dynamic tool selection: - All possible tools are known at compile/startup time - You want to filter based on permissions, feature flags, or conversation state - Tools are static but their availability is dynamic",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0165"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0136"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: See Dynamically selecting tools for more examples.",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0166"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0137"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: When tools are discovered or created at runtime (e.g., loaded from an MCP server, generated based on user data, or fetched from a remote registry), you need to both register the tools and handle their execution dynamically.",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0167"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0138"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: This requires two middleware hooks:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0168"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0139"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dynamic tool selection: - wrap_model_call - Add the dynamic tools to the request - wrap_tool_call - Handle execution of the dynamically added tools",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0169"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0140"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dynamic tool selection: from langchain.tools import tool\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import AgentMiddleware, ModelRequest, ToolCallRequest\n\n# A tool that will be added dynamically at runtime\n@tool\ndef calculate_tip(bill_amount: float, tip_percentage: float = 20.0) -> str:\n    \"\"\"Calculate the tip amount for a bill.\"\"\"\n    tip = bill_amount * (tip_percentage / 100)\n    return f\"Tip: ${tip:.2f}, Total: ${bill_amount + tip:.2f}\"\n\nclass DynamicToolMiddleware(AgentMiddleware):\n    \"\"\"Middleware that registers and handles dynamic tools.\"\"\"\n\n    def wrap_model_call(self, request: ModelRequest, handler):\n        # Add dynamic tool to the request\n        # This could be loaded from an MCP server, database, etc.\n        updated = request.override(tools=[*request.tools, calculate_tip])\n        return handler(updated)\n\n    def wrap_tool_call(self, request: ToolCallRequest, handler):\n        # Handle execution of the dynamic tool\n        if request.tool_call[\"name\"] == \"calculate_tip\":\n            return handler(request.override(tool=calculate_tip))\n        return handler(request)\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[get_weather],  # Only static tools registered here\n    middleware=[DynamicToolMiddleware()],\n)\n\n# The agent can now use both get_weather AND calculate_tip\nresult = agent.invoke({\n    \"messages\": [{\"role\": \"user\", \"content\": \"Calculate a 20% tip on $85\"}]\n})",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0170"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0141"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: This approach is best when:",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0171"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0142"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dynamic tool selection: - Tools are discovered at runtime (e.g., from an MCP server) - Tools are generated dynamically based on user data or configuration - You’re integrating with external tool registries",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0172"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0143"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dynamic tool selection: The wrap_tool_call hook is required for runtime-registered tools because the agent needs to know how to execute tools that weren’t in the original tool list. Without it, the agent won’t know how to invoke the dynamically added tool.",
+    "dom_ids": [
+      "dynamic-tool-selection",
+      "readar-node-0173"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0144"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Headless tools: Some tools should run where your user’s app runs (typically the browser), not inside the process. Headless tools are tool definitions, which include the name, description, and argument schema, that you register on the server with your agent. The implementation is registered only on the client and executed after a short interrupt/resume handshake.",
+    "dom_ids": [
+      "headless-tools",
+      "readar-node-0175"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0145"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Headless tools: This is different from ordinary tools whose function body runs on the server, and from server-side tool use where the model provider executes built-in tools remotely.",
+    "dom_ids": [
+      "headless-tools",
+      "readar-node-0176"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0146"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "When to use headless tools: Use them when the work depends on the environment, device, or UI that only exists on the client. For example:",
+    "dom_ids": [
+      "when-to-use-headless-tools",
+      "readar-node-0178"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0147"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "When to use headless tools: - Browser APIs: Geolocation, IndexedDB, Clipboard, Canvas 2D, file pickers, Battery API, etc. - Privacy and locality: Data stays on the device (for example, local “memory” in IndexedDB). - Latency: No extra server round trip for purely local operations. - Structured, safe effects: Prefer many small, typed tools (for example one tool per canvas primitive) instead of sending arbitrary code to eval .",
+    "dom_ids": [
+      "when-to-use-headless-tools",
+      "readar-node-0179"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0148"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How the pattern works: In both runtimes, the model sees a normal tool it can call, but the actual execution happens outside the server process.",
+    "dom_ids": [
+      "how-the-pattern-works",
+      "readar-node-0181"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0149"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "How the pattern works: - Define a headless tool with tool(name=..., description=..., args_schema=...) from langchain.tools . A headless tool is schema-only, with no in-process implementation. - Register that tool with create_agent or your LangGraph graph so the model can call it normally. - Handle the interrupt payload when the tool is invoked. Instead of running locally, the graph pauses with a payload shaped like {\"type\": \"tool\", \"tool_call\": {\"id\", \"name\", \"args\"}} . - Resume the graph after your app, another service, or a human step performs the action. For browser-based flows, you can mirror the schema in the frontend and attach .implement(...) there.",
+    "dom_ids": [
+      "how-the-pattern-works",
+      "readar-node-0182"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0150"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How the pattern works: If you call tool(...) in Python with only name , description , and args_schema , LangChain returns a HeadlessTool . There is no .implement() API on the Python side.",
+    "dom_ids": [
+      "how-the-pattern-works",
+      "readar-node-0183"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0151"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How the pattern works: When the model issues a tool call for one of these tools, the run interrupts instead of executing the tool locally. Your app can inspect the payload, perform the action in the right environment (for example a browser, another service, or a human review step), then resume the graph with the tool result. When you use the supported JS SDK hooks, they can detect headless-tool interrupts, run the matching client implementation, and submit the resume command for you.",
+    "dom_ids": [
+      "how-the-pattern-works",
+      "readar-node-0184"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0152"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How the pattern works: Use the optional onTool callback to observe lifecycle events ( start , success , error ) for UI feedback such as spinners or toasts.",
+    "dom_ids": [
+      "how-the-pattern-works",
+      "readar-node-0185"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0153"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Headless tools frontend pattern: See an end-to-end example of schema-only tools executed in the client with useStream .",
+    "dom_ids": [
+      "_R_114ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0187"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0154"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Prebuilt tools: LangChain provides a large collection of prebuilt tools and toolkits for common tasks like web search, code interpretation, database access, and more. These ready-to-use tools can be directly integrated into your agents without writing custom code.",
+    "dom_ids": [
+      "prebuilt-tools",
+      "readar-node-0189"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0155"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Prebuilt tools: See the tools and toolkits integration page for a complete list of available tools organized by category.",
+    "dom_ids": [
+      "prebuilt-tools",
+      "readar-node-0190"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0156"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server-side tool use: Some chat models feature built-in tools that are executed server-side by the model provider. These include capabilities like web search and code interpreters that don’t require you to define or host the tool logic.",
+    "dom_ids": [
+      "server-side-tool-use",
+      "readar-node-0192"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0157"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Server-side tool use: Refer to the individual chat model integration pages and the tool calling documentation for details on enabling and using these built-in tools.",
+    "dom_ids": [
+      "server-side-tool-use",
+      "readar-node-0193"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tools",
+    "id": "tools__node_0158"
+  }
+]

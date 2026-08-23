@@ -1,0 +1,305 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Writing a Dockerfile — Explanation: A Dockerfile is a text-based document that's used to create a container image. It provides instructions to the image builder on the commands to run, files to copy, startup command, and more.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Writing a Dockerfile — Explanation: As an example, the following Dockerfile would produce a ready-to-run Python application:",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Writing a Dockerfile — Explanation: FROM python:3.13\nWORKDIR /usr/local/app\n\n# Install the application dependencies\nCOPY requirements.txt ./\nRUN pip install --no-cache-dir -r requirements.txt\n\n# Copy in the source code\nCOPY src ./src\nEXPOSE 8080\n\n# Setup an app user so the container doesn't run as the root user\nRUN useradd app\nUSER app\n\nCMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8080\"]",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Common instructions: Some of the most common instructions in a Dockerfile include:",
+    "dom_ids": [
+      "common-instructions",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Common instructions: - FROM <image> - this specifies the base image that the build will extend. - WORKDIR <path> - this instruction specifies the \"working directory\" or the path in the image where files will be copied and commands will be executed. - COPY <host-path> <image-path> - this instruction tells the builder to copy files from the host and put them into the container image. - RUN <command> - this instruction tells the builder to run the specified command. - ENV <name> <value> - this instruction sets an environment variable that a running container will use. - EXPOSE <port-number> - this instruction sets configuration on the image that indicates a port the image would like to expose. - USER <user-or-uid> - this instruction sets the default user for all subsequent instructions. - CMD [\"<command>\", \"<arg1>\"] - this instruction sets the default command a container using this image will run.",
+    "dom_ids": [
+      "common-instructions",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Common instructions: To read through all of the instructions or go into greater detail, check out the Dockerfile reference .",
+    "dom_ids": [
+      "common-instructions",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: Just as you saw with the previous example, a Dockerfile typically follows these steps:",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Try it out: - Determine your base image - Install application dependencies - Copy in any relevant source code and/or binaries - Configure the final image",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this quick hands-on guide, you'll write a Dockerfile that builds a simple Node.js application. If you're not familiar with JavaScript-based applications, don't worry. It isn't necessary for following along with this guide.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up: Download this ZIP file and extract the contents into a directory on your machine.",
+    "dom_ids": [
+      "set-up",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set up: If you'd rather not download a ZIP file, clone the https://github.com/docker/getting-started-todo-app project and checkout the build-image-from-scratch branch.",
+    "dom_ids": [
+      "set-up",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating the Dockerfile: Now that you have the project, you’re ready to create the Dockerfile .",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0012"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Creating the Dockerfile: - Download and install Docker Desktop. - Examine the project. Explore the contents of getting-started-todo-app/app/ . You'll notice that a Dockerfile already exists. It is a simple text file that you can open in any text or code editor. - Delete the existing Dockerfile . For this exercise, you'll pretend you're starting from scratch and will create a new Dockerfile . - Create a file named Dockerfile in the getting-started-todo-app/app/ folder. Dockerfile file extensions It's important to note that the Dockerfile has no file extension. Some editors will automatically add an extension to the file (or complain it doesn't have one). - In the Dockerfile , define your base image by adding the following line: - Now, define the working directory by using the WORKDIR instruction. This will specify where future commands will run and the directory files will be copied inside the container image. - Copy all of the files from your project on your machine into the container image by using the COPY instruction: - Install the app's dependencies by using the yarn CLI and package manager. To do so, run a command using the RUN instruction: - Finally, specify the default command to run by using the CMD instruction: And with that, you should have the following Dockerfile:",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: FROM node:22-alpine",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: WORKDIR /app",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: COPY . .",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: RUN yarn install --production",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: CMD [\"node\", \"./src/index.js\"]",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating the Dockerfile: FROM node:22-alpine\nWORKDIR /app\nCOPY . .\nRUN yarn install --production\nCMD [\"node\", \"./src/index.js\"]",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating the Dockerfile: This Dockerfile isn't production-ready yet",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating the Dockerfile: It's important to note that this Dockerfile is not following all of the best practices yet (by design). It will build the app, but the builds won't be as fast, or the images as secure, as they could be.",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating the Dockerfile: Keep reading to learn more about how to make the image maximize the build cache, run as a non-root user, and multi-stage builds.",
+    "dom_ids": [
+      "creating-the-dockerfile",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Additional resources: To learn more about writing a Dockerfile, visit the following resources:",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0023"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - Dockerfile reference - Dockerfile best practices - Base images - Gordon — Docker's AI assistant can generate a Dockerfile for your project. Ask Gordon to analyze your code and suggest a Dockerfile optimized for your language and framework.",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Now that you have created a Dockerfile and learned the basics, it's time to learn about building, tagging, and pushing the images.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "writing_a_dockerfile",
+    "id": "writing_a_dockerfile__node_0025"
+  }
+]

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 1.1. Installation</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-install.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="1.1. Installation" property="og:title"/>
+<meta content="1.1.&amp;nbsp;Installation # Before you can use PostgreSQL you need to install it, of course. It is possible that PostgreSQL is …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-install.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-install.html" title="PostgreSQL 18 - 1.1. Installation">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-install.html" title="PostgreSQL 18 - 1.1. Installation">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-install.html" title="PostgreSQL 17 - 1.1. Installation">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-install.html" title="PostgreSQL 16 - 1.1. Installation">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-install.html" title="PostgreSQL 15 - 1.1. Installation">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-install.html" title="PostgreSQL 14 - 1.1. Installation">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-install.html" rel="nofollow" title="PostgreSQL 19 - 1.1. Installation">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-install.html" rel="nofollow" title="PostgreSQL devel - 1.1. Installation">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-install.html" rel="nofollow" title="PostgreSQL 13 - 1.1. Installation">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-install.html" rel="nofollow" title="PostgreSQL 12 - 1.1. Installation">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-install.html" rel="nofollow" title="PostgreSQL 11 - 1.1. Installation">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-install.html" rel="nofollow" title="PostgreSQL 10 - 1.1. Installation">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.6 - 1.1. Installation">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.5 - 1.1. Installation">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.4 - 1.1. Installation">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.3 - 1.1. Installation">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.2 - 1.1. Installation">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.1 - 1.1. Installation">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-install.html" rel="nofollow" title="PostgreSQL 9.0 - 1.1. Installation">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-install.html" rel="nofollow" title="PostgreSQL 8.4 - 1.1. Installation">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-install.html" rel="nofollow" title="PostgreSQL 8.3 - 1.1. Installation">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-install.html" rel="nofollow" title="PostgreSQL 8.2 - 1.1. Installation">8.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-INSTALL">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">1.1. Installation </h2>
+</div>
+</div>
+</div>
+<p id="readar-node-0002">Before you can use <span class="productname">PostgreSQL</span> you need to install it, of course. It is possible that <span class="productname">PostgreSQL</span> is already installed at your site, either because it was included in your operating system distribution or because the system administrator already installed it. If that is the case, you should obtain information from the operating system documentation or your system administrator about how to access <span class="productname">PostgreSQL</span>.</p>
+<p id="readar-node-0003">If you are not sure whether <span class="productname">PostgreSQL</span> is already available or whether you can use it for your experimentation then you can install it yourself. Doing so is not hard and it can be a good exercise. <span class="productname">PostgreSQL</span> can be installed by any unprivileged user; no superuser (<span class="systemitem">root</span>) access is required.</p>
+<p id="readar-node-0004">If you are installing <span class="productname">PostgreSQL</span> yourself, then refer to <a class="xref" href="installation.html" title="Chapter 17. Installation from Source Code">Chapter 17</a> for instructions on installation, and return to this guide when the installation is complete. Be sure to follow closely the section about setting up the appropriate environment variables.</p>
+<p id="readar-node-0005">If your site administrator has not set things up in the default way, you might have some more work to do. For example, if the database server machine is a remote machine, you will need to set the <code class="envar">PGHOST</code> environment variable to the name of the database server machine. The environment variable <code class="envar">PGPORT</code> might also have to be set. The bottom line is this: if you try to start an application program and it complains that it cannot connect to the database, you should consult your site administrator or, if that is you, the documentation to make sure that your environment is properly set up. If you did not understand the preceding paragraph then read the next section.</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

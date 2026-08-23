@@ -19,6 +19,11 @@ COPY requirements.txt .
 # nvidia-* packages on a GPU-less VM.
 RUN pip install --no-cache-dir torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements.txt
+# spaCy language model — not a normal pip package (see requirements.txt's
+# comment), doc_retrieval.py loads it eagerly at import time for keyword-
+# seed POS tagging, so both the django and dockyard services need it or
+# they crash on startup.
+RUN python -m spacy download en_core_web_sm
 
 # Copy the rest of the code
 COPY . .

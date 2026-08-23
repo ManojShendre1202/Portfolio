@@ -1,0 +1,326 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: To retrieve data from a table, the table is queried . An SQL SELECT statement is used to do this. The statement is divided into a select list (the part that lists the columns to be returned), a table list (the part that lists the tables from which to retrieve the data), and an optional qualification (the part that specifies any restrictions). For example, to retrieve all the rows of table weather , type:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT * FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: Here * is a shorthand for “ all columns ” . [2] So the same result would be had with:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT city, temp_lo, temp_hi, prcp, date FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: The output should be:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table:      city      | temp_lo | temp_hi | prcp |    date\n---------------+---------+---------+------+------------\n San Francisco |      46 |      50 | 0.25 | 1994-11-27\n San Francisco |      43 |      57 |    0 | 1994-11-29\n Hayward       |      37 |      54 |      | 1994-11-29\n(3 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: You can write expressions, not just simple column references, in the select list. For example, you can do:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: This should give:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table:      city      | temp_avg |    date\n---------------+----------+------------\n San Francisco |       48 | 1994-11-27\n San Francisco |       50 | 1994-11-29\n Hayward       |       45 | 1994-11-29\n(3 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: Notice how the AS clause is used to relabel the output column. (The AS clause is optional.)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: A query can be “ qualified ” by adding a WHERE clause that specifies which rows are wanted. The WHERE clause contains a Boolean (truth value) expression, and only rows for which the Boolean expression is true are returned. The usual Boolean operators ( AND , OR , and NOT ) are allowed in the qualification. For example, the following retrieves the weather of San Francisco on rainy days:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT * FROM weather\n    WHERE city = 'San Francisco' AND prcp > 0.0;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: Result:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table:      city      | temp_lo | temp_hi | prcp |    date\n---------------+---------+---------+------+------------\n San Francisco |      46 |      50 | 0.25 | 1994-11-27\n(1 row)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: You can request that the results of a query be returned in sorted order:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT * FROM weather\n    ORDER BY city;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table:      city      | temp_lo | temp_hi | prcp |    date\n---------------+---------+---------+------+------------\n Hayward       |      37 |      54 |      | 1994-11-29\n San Francisco |      43 |      57 |    0 | 1994-11-29\n San Francisco |      46 |      50 | 0.25 | 1994-11-27",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: In this example, the sort order isn't fully specified, and so you might get the San Francisco rows in either order. But you'd always get the results shown above if you do:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT * FROM weather\n    ORDER BY city, temp_lo;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: You can request that duplicate rows be removed from the result of a query:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT DISTINCT city\n    FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table:      city\n---------------\n Hayward\n San Francisco\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: Here again, the result row ordering might vary. You can ensure consistent results by using DISTINCT and ORDER BY together: [3]",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.5. Querying a Table: SELECT DISTINCT city\n    FROM weather\n    ORDER BY city;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: [2] While SELECT * is useful for off-the-cuff queries, it is widely considered bad style in production code, since adding a column to the table would change the results.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5. Querying a Table: [3] In some database systems, including older versions of PostgreSQL , the implementation of DISTINCT automatically orders the rows and so ORDER BY is unnecessary. But this is not required by the SQL standard, and current PostgreSQL does not guarantee that DISTINCT causes the rows to be ordered.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-select",
+    "id": "tutorial-select__node_0027"
+  }
+]

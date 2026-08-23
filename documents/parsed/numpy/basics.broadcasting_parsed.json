@@ -1,0 +1,602 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: See also",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: numpy.broadcast",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: The term broadcasting describes how NumPy treats arrays with different shapes during arithmetic operations. Subject to certain constraints, the smaller array is “broadcast” across the larger array so that they have compatible shapes. Broadcasting provides a means of vectorizing array operations so that looping occurs in C instead of Python. It does this without making needless copies of data and usually leads to efficient algorithm implementations. There are, however, cases where broadcasting is a bad idea because it leads to inefficient use of memory that slows computation.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: NumPy operations are usually done on pairs of arrays on an element-by-element basis. In the simplest case, the two arrays must have exactly the same shape, as in the following example:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcasting: >>> import numpy as np\n>>> a = np.array([1.0, 2.0, 3.0])\n>>> b = np.array([2.0, 2.0, 2.0])\n>>> a * b\narray([2.,  4.,  6.])",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: NumPy’s broadcasting rule relaxes this constraint when the arrays’ shapes meet certain constraints. The simplest broadcasting example occurs when an array and a scalar value are combined in an operation:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcasting: >>> import numpy as np\n>>> a = np.array([1.0, 2.0, 3.0])\n>>> b = 2.0\n>>> a * b\narray([2.,  4.,  6.])",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: The result is equivalent to the previous example where b was an array. We can think of the scalar b being stretched during the arithmetic operation into an array with the same shape as a . The new elements in b , as shown in Figure 1 , are simply copies of the original scalar. The stretching analogy is only conceptual. NumPy is smart enough to use the original scalar value without actually making copies so that broadcasting operations are as memory and computationally efficient as possible.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: Figure 1",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: In the simplest example of broadcasting, the scalar b is stretched to become an array of same shape as a so the shapes are compatible for element-by-element multiplication.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcasting: The code in the second example is more efficient than that in the first because broadcasting moves less memory around during the multiplication ( b is a scalar rather than an array).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: When operating on two arrays, NumPy compares their shapes element-wise. It starts with the trailing (i.e. rightmost) dimension and works its way left. Two dimensions are compatible when",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0012"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "General broadcasting rules: - they are equal, or - one of them is 1.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: If these conditions are not met, a ValueError: operands could not be broadcast together exception is thrown, indicating that the arrays have incompatible shapes.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: Input arrays do not need to have the same number of dimensions. The resulting array will have the same number of dimensions as the input array with the greatest number of dimensions, where the size of each dimension is the largest size of the corresponding dimension among the input arrays. Note that missing dimensions are assumed to have size one.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: For example, if you have a 256x256x3 array of RGB values, and you want to scale each color in the image by a different value, you can multiply the image by a one-dimensional array with 3 values. Lining up the sizes of the trailing axes of these arrays according to the broadcast rules, shows that they are compatible:",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "General broadcasting rules: Image  (3d array): 256 x 256 x 3\nScale  (1d array):             3\nResult (3d array): 256 x 256 x 3",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: When either of the dimensions compared is one, the other is used. In other words, dimensions with size 1 are stretched or “copied” to match the other.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "General broadcasting rules: In the following example, both the A and B arrays have axes with length one that are expanded to a larger size during the broadcast operation:",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "General broadcasting rules: A      (4d array):  8 x 1 x 6 x 1\nB      (3d array):      7 x 1 x 5\nResult (4d array):  8 x 7 x 6 x 5",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: A set of arrays is called “broadcastable” to the same shape if the above rules produce a valid result.",
+    "dom_ids": [
+      "readar-node-0023",
+      "index-0"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: For example, if a.shape is (5,1), b.shape is (1,6), c.shape is (6,) and d.shape is () so that d is a scalar, then a , b , c , and d are all broadcastable to dimension (5,6); and",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0022"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Broadcastable arrays: - a acts like a (5,6) array where a[:,0] is broadcast to the other columns, - b acts like a (5,6) array where b[0,:] is broadcast to the other rows, - c acts like a (1,6) array and therefore like a (5,6) array where c[:] is broadcast to every row, and finally, - d acts like a (5,6) array where the single value is repeated.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Here are some more examples:",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcastable arrays: A      (2d array):  5 x 4\nB      (1d array):      1\nResult (2d array):  5 x 4\n\nA      (2d array):  5 x 4\nB      (1d array):      4\nResult (2d array):  5 x 4\n\nA      (3d array):  15 x 3 x 5\nB      (3d array):  15 x 1 x 5\nResult (3d array):  15 x 3 x 5\n\nA      (3d array):  15 x 3 x 5\nB      (2d array):       3 x 5\nResult (3d array):  15 x 3 x 5\n\nA      (3d array):  15 x 3 x 5\nB      (2d array):       3 x 1\nResult (3d array):  15 x 3 x 5",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Here are examples of shapes that do not broadcast:",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcastable arrays: A      (1d array):  3\nB      (1d array):  4 # trailing dimensions do not match\n\nA      (2d array):      2 x 1\nB      (3d array):  8 x 4 x 3 # second from last dimensions mismatched",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: An example of broadcasting when a 1-d array is added to a 2-d array:",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcastable arrays: >>> import numpy as np\n>>> a = np.array([[ 0.0,  0.0,  0.0],\n...               [10.0, 10.0, 10.0],\n...               [20.0, 20.0, 20.0],\n...               [30.0, 30.0, 30.0]])\n>>> b = np.array([1.0, 2.0, 3.0])\n>>> a + b\narray([[  1.,   2.,   3.],\n        [11.,  12.,  13.],\n        [21.,  22.,  23.],\n        [31.,  32.,  33.]])\n>>> b = np.array([1.0, 2.0, 3.0, 4.0])\n>>> a + b\nTraceback (most recent call last):\nValueError: operands could not be broadcast together with shapes (4,3) (4,)",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: As shown in Figure 2 , b is added to each row of a . In Figure 3 , an exception is raised because of the incompatible shapes.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Figure 2",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: A one dimensional array added to a two dimensional array results in broadcasting if number of 1-d array elements matches the number of 2-d array columns.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Figure 3",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: When the trailing dimensions of the arrays are unequal, broadcasting fails because it is impossible to align the values in the rows of the 1st array with the elements of the 2nd arrays for element-by-element addition.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Broadcasting provides a convenient way of taking the outer product (or any other outer operation) of two arrays. The following example shows an outer addition operation of two 1-d arrays:",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Broadcastable arrays: >>> import numpy as np\n>>> a = np.array([0.0, 10.0, 20.0, 30.0])\n>>> b = np.array([1.0, 2.0, 3.0])\n>>> a[:, np.newaxis] + b\narray([[ 1.,   2.,   3.],\n       [11.,  12.,  13.],\n       [21.,  22.,  23.],\n       [31.,  32.,  33.]])",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Figure 4",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: In some cases, broadcasting stretches both arrays to form an output array larger than either of the initial arrays.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Broadcastable arrays: Here the newaxis index operator inserts a new axis into a , making it a two-dimensional 4x1 array. Combining the 4x1 array with b , which has shape (3,) , yields a 4x3 array.",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: Broadcasting comes up quite often in real world problems. A typical example occurs in the vector quantization (VQ) algorithm used in information theory, classification, and other related areas. The basic operation in VQ finds the closest point in a set of points, called codes in VQ jargon, to a given point, called the observation . In the very simple, two-dimensional case shown below, the values in observation describe the weight and height of an athlete to be classified. The codes represent different classes of athletes. [ 1 ] Finding the closest point requires calculating the distance between observation and each of the codes. The shortest distance provides the best match. In this example, codes[0] is the closest class indicating that the athlete is likely a basketball player.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "A practical example: vector quantization: >>> from numpy import array, argmin, sqrt, sum\n>>> observation = array([111.0, 188.0])\n>>> codes = array([[102.0, 203.0],\n...                [132.0, 193.0],\n...                [45.0, 155.0],\n...                [57.0, 173.0]])\n>>> diff = codes - observation    # the broadcast happens here\n>>> dist = sqrt(sum(diff**2,axis=-1))\n>>> argmin(dist)\n0",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: In this example, the observation array is stretched to match the shape of the codes array:",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "A practical example: vector quantization: Observation      (1d array):      2\nCodes            (2d array):  4 x 2\nDiff             (2d array):  4 x 2",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: Figure 5",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: The basic operation of vector quantization calculates the distance between an object to be classified, the dark square, and multiple known codes, the gray circles. In this simple case, the codes represent individual classes. More complex cases use multiple codes per class.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: Typically, a large number of observations , perhaps read from a database, are compared to a set of codes . Consider this scenario:",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "A practical example: vector quantization: Observation      (2d array):      10 x 3\nCodes            (3d array):   5 x 1 x 3\nDiff             (3d array):  5 x 10 x 3",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: The three-dimensional array, diff , is a consequence of broadcasting, not a necessity for the calculation. Large data sets will generate a large intermediate array that is computationally inefficient. Instead, if each observation is calculated individually using a Python loop around the code in the two-dimensional example above, a much smaller array is used.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: Broadcasting is a powerful tool for writing short and usually intuitive code that does its computations very efficiently in C. However, there are cases when broadcasting uses unnecessarily large amounts of memory for a particular algorithm. In these cases, it is better to write the algorithm’s outer loop in Python. This may also produce more readable code, as algorithms that use broadcasting tend to become more difficult to interpret as the number of dimensions in the broadcast increases.",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A practical example: vector quantization: Footnotes",
+    "dom_ids": [
+      "readar-node-0043",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.broadcasting",
+    "id": "basics.broadcasting__node_0050"
+  }
+]

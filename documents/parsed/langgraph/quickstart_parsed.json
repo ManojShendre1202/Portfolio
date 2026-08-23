@@ -1,0 +1,480 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This quickstart demonstrates how to build a calculator agent using the LangGraph Graph API or the Functional API.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using an AI coding assistant?",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Install the LangChain Docs MCP server to give your agent access to up-to-date LangChain documentation and examples. - Install LangChain Skills to improve your agent’s performance on LangChain ecosystem tasks.",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Use the Graph API if you prefer to define your agent as a graph of nodes and edges. - Use the Functional API if you prefer to define your agent as a single function.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For conceptual information, see Graph API overview and Functional API overview .",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For this example, you will need to set up a Claude (Anthropic) account and get an API key. Then, set the ANTHROPIC_API_KEY environment variable in your terminal. See chat model integrations for all available providers. If you use LangSmith Gateway , you can bring your own provider keys or use Gateway Credits to access models without a provider key.",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0006"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Use the Graph API - Use the Functional API",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "quickstart",
+    "id": "quickstart__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Define tools and model: In this example, we’ll use the Claude Sonnet 4.5 model and define tools for addition, multiplication, and division.",
+    "dom_ids": [
+      "1-define-tools-and-model",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "1. Define tools and model: from langchain.tools import tool\nfrom langchain.chat_models import init_chat_model\n\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    temperature=0\n)\n\n\n# Define tools\n@tool\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a * b\n\n\n@tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Adds `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a + b\n\n\n@tool\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a / b\n\n\n# Augment the LLM with tools\ntools = [add, multiply, divide]\ntools_by_name = {tool.name: tool for tool in tools}\nmodel_with_tools = model.bind_tools(tools)",
+    "dom_ids": [
+      "1-define-tools-and-model",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Define state: The graph’s state is used to store the messages and the number of LLM calls.",
+    "dom_ids": [
+      "2-define-state",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Define state: State in LangGraph persists throughout the agent’s execution.",
+    "dom_ids": [
+      "2-define-state",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Define state: The Annotated type with operator.add ensures that new messages are appended to the existing list rather than replacing it.",
+    "dom_ids": [
+      "2-define-state",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2. Define state: from langchain.messages import AnyMessage\nfrom typing_extensions import TypedDict, Annotated\nimport operator\n\n\nclass MessagesState(TypedDict):\n    messages: Annotated[list[AnyMessage], operator.add]\n    llm_calls: int",
+    "dom_ids": [
+      "2-define-state",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Define model node: The model node is used to call the LLM and decide whether to call a tool or not.",
+    "dom_ids": [
+      "3-define-model-node",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3. Define model node: from langchain.messages import SystemMessage\n\n\ndef llm_call(state: dict):\n    \"\"\"LLM decides whether to call a tool or not\"\"\"\n\n    return {\n        \"messages\": [\n            model_with_tools.invoke(\n                [\n                    SystemMessage(\n                        content=\"You are a helpful assistant tasked with performing arithmetic on a set of inputs.\"\n                    )\n                ]\n                + state[\"messages\"]\n            )\n        ],\n        \"llm_calls\": state.get('llm_calls', 0) + 1\n    }",
+    "dom_ids": [
+      "3-define-model-node",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define tool node: The tool node is used to call the tools and return the results.",
+    "dom_ids": [
+      "4-define-tool-node",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "4. Define tool node: from langchain.messages import ToolMessage\n\n\ndef tool_node(state: dict):\n    \"\"\"Performs the tool call\"\"\"\n\n    result = []\n    for tool_call in state[\"messages\"][-1].tool_calls:\n        tool = tools_by_name[tool_call[\"name\"]]\n        observation = tool.invoke(tool_call[\"args\"])\n        result.append(ToolMessage(content=observation, tool_call_id=tool_call[\"id\"]))\n    return {\"messages\": result}",
+    "dom_ids": [
+      "4-define-tool-node",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5. Define end logic: The conditional edge function is used to route to the tool node or end based upon whether the LLM made a tool call.",
+    "dom_ids": [
+      "5-define-end-logic",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5. Define end logic: from typing import Literal\nfrom langgraph.graph import StateGraph, START, END\n\n\ndef should_continue(state: MessagesState) -> Literal[\"tool_node\", END]:\n    \"\"\"Decide if we should continue the loop or stop based upon whether the LLM made a tool call\"\"\"\n\n    messages = state[\"messages\"]\n    last_message = messages[-1]\n\n    # If the LLM makes a tool call, then perform an action\n    if last_message.tool_calls:\n        return \"tool_node\"\n\n    # Otherwise, we stop (reply to the user)\n    return END",
+    "dom_ids": [
+      "5-define-end-logic",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "6. Build and compile the agent: The agent is built using the StateGraph class and compiled using the compile method.",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "6. Build and compile the agent: # Build workflow\nagent_builder = StateGraph(MessagesState)\n\n# Add nodes\nagent_builder.add_node(\"llm_call\", llm_call)\nagent_builder.add_node(\"tool_node\", tool_node)\n\n# Add edges to connect nodes\nagent_builder.add_edge(START, \"llm_call\")\nagent_builder.add_conditional_edges(\n    \"llm_call\",\n    should_continue,\n    [\"tool_node\", END]\n)\nagent_builder.add_edge(\"tool_node\", \"llm_call\")\n\n# Compile the agent\nagent = agent_builder.compile()\n\n# Show the agent\nfrom IPython.display import Image, display\ndisplay(Image(agent.get_graph(xray=True).draw_mermaid_png()))\n\n# Invoke\nfrom langchain.messages import HumanMessage\nmessages = [HumanMessage(content=\"Add 3 and 4.\")]\nmessages = agent.invoke({\"messages\": messages})\nfor m in messages[\"messages\"]:\n    m.pretty_print()",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "6. Build and compile the agent: Trace and debug your agent with LangSmith . Follow the tracing quickstart to get set up. When ready for production, see Deploy for hosting options.",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "6. Build and compile the agent: We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "6. Build and compile the agent: Congratulations! You’ve built your first agent using the LangGraph Graph API.",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "6. Build and compile the agent: Full code example",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "full-code-example-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "6. Build and compile the agent: # Step 1: Define tools and model\n\nfrom langchain.tools import tool\nfrom langchain.chat_models import init_chat_model\n\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    temperature=0\n)\n\n\n# Define tools\n@tool\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a * b\n\n\n@tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Adds `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a + b\n\n\n@tool\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a / b\n\n\n# Augment the LLM with tools\ntools = [add, multiply, divide]\ntools_by_name = {tool.name: tool for tool in tools}\nmodel_with_tools = model.bind_tools(tools)\n\n# Step 2: Define state\n\nfrom langchain.messages import AnyMessage\nfrom typing_extensions import TypedDict, Annotated\nimport operator\n\n\nclass MessagesState(TypedDict):\n    messages: Annotated[list[AnyMessage], operator.add]\n    llm_calls: int\n\n# Step 3: Define model node\nfrom langchain.messages import SystemMessage\n\n\ndef llm_call(state: MessagesState):\n    \"\"\"LLM decides whether to call a tool or not\"\"\"\n\n    return {\n        \"messages\": [\n            model_with_tools.invoke(\n                [\n                    SystemMessage(\n                        content=\"You are a helpful assistant tasked with performing arithmetic on a set of inputs.\"\n                    )\n                ]\n                + state[\"messages\"]\n            )\n        ],\n        \"llm_calls\": state.get('llm_calls', 0) + 1\n    }\n\n\n# Step 4: Define tool node\n\nfrom langchain.messages import ToolMessage\n\n\ndef tool_node(state: MessagesState):\n    \"\"\"Performs the tool call\"\"\"\n\n    result = []\n    for tool_call in state[\"messages\"][-1].tool_calls:\n        tool = tools_by_name[tool_call[\"name\"]]\n        observation = tool.invoke(tool_call[\"args\"])\n        result.append(ToolMessage(content=observation, tool_call_id=tool_call[\"id\"]))\n    return {\"messages\": result}\n\n# Step 5: Define logic to determine whether to end\n\nfrom typing import Literal\nfrom langgraph.graph import StateGraph, START, END\n\n\n# Conditional edge function to route to the tool node or end based upon whether the LLM made a tool call\ndef should_continue(state: MessagesState) -> Literal[\"tool_node\", END]:\n    \"\"\"Decide if we should continue the loop or stop based upon whether the LLM made a tool call\"\"\"\n\n    messages = state[\"messages\"]\n    last_message = messages[-1]\n\n    # If the LLM makes a tool call, then perform an action\n    if last_message.tool_calls:\n        return \"tool_node\"\n\n    # Otherwise, we stop (reply to the user)\n    return END\n\n# Step 6: Build agent\n\n# Build workflow\nagent_builder = StateGraph(MessagesState)\n\n# Add nodes\nagent_builder.add_node(\"llm_call\", llm_call)\nagent_builder.add_node(\"tool_node\", tool_node)\n\n# Add edges to connect nodes\nagent_builder.add_edge(START, \"llm_call\")\nagent_builder.add_conditional_edges(\n    \"llm_call\",\n    should_continue,\n    [\"tool_node\", END]\n)\nagent_builder.add_edge(\"tool_node\", \"llm_call\")\n\n# Compile the agent\nagent = agent_builder.compile()\n\n\nfrom IPython.display import Image, display\n# Show the agent\ndisplay(Image(agent.get_graph(xray=True).draw_mermaid_png()))\n\n# Invoke\nfrom langchain.messages import HumanMessage\nmessages = [HumanMessage(content=\"Add 3 and 4.\")]\nmessages = agent.invoke({\"messages\": messages})\nfor m in messages[\"messages\"]:\n    m.pretty_print()",
+    "dom_ids": [
+      "6-build-and-compile-the-agent",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Define tools and model: In this example, we’ll use the Claude Sonnet 4.5 model and define tools for addition, multiplication, and division.",
+    "dom_ids": [
+      "1-define-tools-and-model-2",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "1. Define tools and model: from langchain.tools import tool\nfrom langchain.chat_models import init_chat_model\n\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    temperature=0\n)\n\n\n# Define tools\n@tool\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a * b\n\n\n@tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Adds `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a + b\n\n\n@tool\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a / b\n\n\n# Augment the LLM with tools\ntools = [add, multiply, divide]\ntools_by_name = {tool.name: tool for tool in tools}\nmodel_with_tools = model.bind_tools(tools)\n\nfrom langgraph.graph import add_messages\nfrom langchain.messages import (\n    SystemMessage,\n    HumanMessage,\n    ToolCall,\n)\nfrom langchain_core.messages import BaseMessage\nfrom langgraph.func import entrypoint, task",
+    "dom_ids": [
+      "1-define-tools-and-model-2",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Define model node: The model node is used to call the LLM and decide whether to call a tool or not.",
+    "dom_ids": [
+      "2-define-model-node",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Define model node: The @task decorator marks a function as a task that can be executed as part of the agent. Tasks can be called synchronously or asynchronously within your entrypoint function.",
+    "dom_ids": [
+      "2-define-model-node",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2. Define model node: @task\ndef call_llm(messages: list[BaseMessage]):\n    \"\"\"LLM decides whether to call a tool or not\"\"\"\n    return model_with_tools.invoke(\n        [\n            SystemMessage(\n                content=\"You are a helpful assistant tasked with performing arithmetic on a set of inputs.\"\n            )\n        ]\n        + messages\n    )",
+    "dom_ids": [
+      "2-define-model-node",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Define tool node: The tool node is used to call the tools and return the results.",
+    "dom_ids": [
+      "3-define-tool-node",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3. Define tool node: @task\ndef call_tool(tool_call: ToolCall):\n    \"\"\"Performs the tool call\"\"\"\n    tool = tools_by_name[tool_call[\"name\"]]\n    return tool.invoke(tool_call)",
+    "dom_ids": [
+      "3-define-tool-node",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: The agent is built using the @entrypoint function.",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: In the Functional API, instead of defining nodes and edges explicitly, you write standard control flow logic (loops, conditionals) within a single function.",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "4. Define agent: @entrypoint()\ndef agent(messages: list[BaseMessage]):\n    model_response = call_llm(messages).result()\n\n    while True:\n        if not model_response.tool_calls:\n            break\n\n        # Execute tools\n        tool_result_futures = [\n            call_tool(tool_call) for tool_call in model_response.tool_calls\n        ]\n        tool_results = [fut.result() for fut in tool_result_futures]\n        messages = add_messages(messages, [model_response, *tool_results])\n        model_response = call_llm(messages).result()\n\n    messages = add_messages(messages, model_response)\n    return messages\n\n# Invoke\nmessages = [HumanMessage(content=\"Add 3 and 4.\")]\nstream = agent.stream_events(messages, version=\"v3\")\nfor snapshot in stream.values:\n    print(snapshot)\n    print(\"\\n\")",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: Trace and debug your agent with LangSmith . Follow the tracing quickstart to get set up. When ready for production, see Deploy for hosting options.",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: Congratulations! You’ve built your first agent using the LangGraph Functional API.",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Define agent: Full code example",
+    "dom_ids": [
+      "4-define-agent",
+      "full-code-example-1-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "4. Define agent: # Step 1: Define tools and model\n\nfrom langchain.tools import tool\nfrom langchain.chat_models import init_chat_model\n\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    temperature=0\n)\n\n\n# Define tools\n@tool\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a * b\n\n\n@tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Adds `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a + b\n\n\n@tool\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide `a` and `b`.\n\n    Args:\n        a: First int\n        b: Second int\n    \"\"\"\n    return a / b\n\n\n# Augment the LLM with tools\ntools = [add, multiply, divide]\ntools_by_name = {tool.name: tool for tool in tools}\nmodel_with_tools = model.bind_tools(tools)\n\nfrom langgraph.graph import add_messages\nfrom langchain.messages import (\n    SystemMessage,\n    HumanMessage,\n    ToolCall,\n)\nfrom langchain_core.messages import BaseMessage\nfrom langgraph.func import entrypoint, task\n\n\n# Step 2: Define model node\n\n@task\ndef call_llm(messages: list[BaseMessage]):\n    \"\"\"LLM decides whether to call a tool or not\"\"\"\n    return model_with_tools.invoke(\n        [\n            SystemMessage(\n                content=\"You are a helpful assistant tasked with performing arithmetic on a set of inputs.\"\n            )\n        ]\n        + messages\n    )\n\n\n# Step 3: Define tool node\n\n@task\ndef call_tool(tool_call: ToolCall):\n    \"\"\"Performs the tool call\"\"\"\n    tool = tools_by_name[tool_call[\"name\"]]\n    return tool.invoke(tool_call)\n\n\n# Step 4: Define agent\n\n@entrypoint()\ndef agent(messages: list[BaseMessage]):\n    model_response = call_llm(messages).result()\n\n    while True:\n        if not model_response.tool_calls:\n            break\n\n        # Execute tools\n        tool_result_futures = [\n            call_tool(tool_call) for tool_call in model_response.tool_calls\n        ]\n        tool_results = [fut.result() for fut in tool_result_futures]\n        messages = add_messages(messages, [model_response, *tool_results])\n        model_response = call_llm(messages).result()\n\n    messages = add_messages(messages, model_response)\n    return messages\n\n# Invoke\nmessages = [HumanMessage(content=\"Add 3 and 4.\")]\nstream = agent.stream_events(messages, version=\"v3\")\nfor snapshot in stream.values:\n    print(snapshot)\n    print(\"\\n\")",
+    "dom_ids": [
+      "4-define-agent",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart",
+    "id": "quickstart__node_0041"
+  }
+]

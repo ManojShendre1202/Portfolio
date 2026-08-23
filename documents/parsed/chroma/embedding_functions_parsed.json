@@ -1,0 +1,802 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embeddings are numeric representations of your data that capture meaning in a form AI models can work with. They can represent text, images, and eventually audio and video. Chroma stores and indexes embeddings so you can efficiently search for similar content. You can generate them locally with an installed library or remotely through an API.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Embedding functions can be linked to a collection and used whenever you call add , update , upsert or query .",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: For example, this is how you use the OpenAI embedding function:",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: # Set your OPENAI_API_KEY environment variable\nfrom chromadb.utils.embedding_functions import OpenAIEmbeddingFunction\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=OpenAIEmbeddingFunction(\n        model_name=\"text-embedding-3-small\"\n    )\n)\n\n# Chroma will use OpenAIEmbeddingFunction to embed your documents\ncollection.add(\n    ids=[\"id1\", \"id2\"],\n    documents=[\"doc1\", \"doc2\"]\n)",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: You can also use embedding functions directly which can be handy for debugging.",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: from chromadb.utils.embedding_functions import DefaultEmbeddingFunction\n\ndefault_ef = DefaultEmbeddingFunction()\nembeddings = default_ef([\"foo\"])\nprint(embeddings) # [[0.05035809800028801, 0.0626462921500206, -0.061827320605516434...]]\n\ncollection.query(query_embeddings=embeddings)",
+    "dom_ids": [
+      "using-embedding-functions",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: You can create your own embedding function to use with Chroma; it just needs to implement EmbeddingFunction .",
+    "dom_ids": [
+      "custom-embedding-functions",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom Embedding Functions: from typing import Dict, Any\nfrom chromadb import Documents, EmbeddingFunction, Embeddings\nfrom chromadb.utils.embedding_functions import register_embedding_function\n\n@register_embedding_function\nclass MyEmbeddingFunction(EmbeddingFunction):\n\n    def __init__(self, model):\n        self.model = model\n\n    def __call__(self, input: Documents) -> Embeddings:\n        # embed the documents somehow\n        return embeddings\n\n    @staticmethod\n    def name() -> str:\n        return \"my-ef\"\n\n    def get_config(self) -> Dict[str, Any]:\n        return dict(model=self.model)\n\n    @staticmethod\n    def build_from_config(config: Dict[str, Any]) -> \"EmbeddingFunction\":\n        return MyEmbeddingFunction(config['model'])",
+    "dom_ids": [
+      "custom-embedding-functions",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Chroma’s default embedding function uses the Sentence Transformers all-MiniLM-L6-v2 model to create embeddings. This embedding model can create sentence and document embeddings that can be used for a wide variety of tasks. This embedding function runs locally on your machine, and may require you to download the model files (this will happen automatically).",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: If you don’t specify an embedding function when creating a collection, Chroma will set it to be the DefaultEmbeddingFunction :",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: collection = client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "default-all-minilm-l6-v2",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Embedding functions can be linked to a collection and used whenever you call add , update , upsert or query .",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: For example, this is how you use the OpenAI embedding function:",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Install the @chroma-core/openai package:",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: npm install @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: pnpm add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: bun add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: yarn add @chroma-core/openai",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: Create a collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: // Set your OPENAI_API_KEY environment variable\nimport { OpenAIEmbeddingFunction } from \"@chroma-core/openai\";\n\ncollection = await client.createCollection({\n  name: \"my_collection\",\n  embedding_function: new OpenAIEmbeddingFunction({\n    modelName: \"text-embedding-3-small\",\n  }),\n});\n\n// Chroma will use OpenAIEmbeddingFunction to embed your documents\nawait collection.add({\n  ids: [\"id1\", \"id2\"],\n  documents: [\"doc1\", \"doc2\"],\n});",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Embedding Functions: You can also use embedding functions directly which can be handy for debugging.",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Embedding Functions: import { DefaultEmbeddingFunction } from \"@chroma-core/default-embed\";\n\nconst defaultEF = new DefaultEmbeddingFunction();\nconst embeddings = await defaultEF.generate([\"foo\"]);\nconsole.log(embeddings); // [[0.05035809800028801, 0.0626462921500206, -0.061827320605516434...]]\n\nawait collection.query({ queryEmbeddings: embeddings });",
+    "dom_ids": [
+      "using-embedding-functions-2",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: You can create your own embedding function to use with Chroma; it just needs to implement EmbeddingFunction .",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom Embedding Functions: export interface MyEmbeddingConfig {\n  model: string;\n}\n\nexport class MyEmbeddingFunction implements EmbeddingFunction {\n  public readonly name = \"my-embedding-function\";\n  private readonly model: string;\n\n  constructor(args: { model: string }) {\n    this.model = args.model;\n  }\n\n  async generate(texts: string[]): Promise<number[][]> {\n    // embed the documents somehow\n    return [];\n  }\n\n  getConfig(): MyEmbeddingConfig {\n    return {\n      model: this.model,\n    };\n  }\n\n  validateConfigUpdate(config: Record<string, any>) {\n    if (\"model\" in config) {\n      throw new ChromaValueError(\"Model cannot be updated\");\n    }\n  }\n\n  static buildFromConfig(\n    config: MyEmbeddingConfig,\n    _client?: ChromaClient,\n  ): MyEmbeddingFunction {\n    return new MyEmbeddingFunction(config);\n  }\n}",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom Embedding Functions: We welcome contributions! If you create an embedding function that you think would be useful to others, please consider submitting a pull request .",
+    "dom_ids": [
+      "custom-embedding-functions-2",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Chroma’s default embedding function uses the Sentence Transformers all-MiniLM-L6-v2 model to create embeddings. This embedding model can create sentence and document embeddings that can be used for a wide variety of tasks. This embedding function runs locally on your machine, and may require you to download the model files (this will happen automatically).",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: If you don’t specify an embedding function when creating a collection, install the @chroma-core/default-embed package:",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: npm install @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: pnpm add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: bun add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: yarn add @chroma-core/default-embed",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: Create a collection without providing an embedding function. It will automatically be set with the DefaultEmbeddingFunction :",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: const collection = await client.createCollection({ name: \"my-collection\" });",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: The Rust client expects embeddings to be provided directly. Use your provider SDK to generate embeddings, then pass them to add , query , and other methods.",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Default: all-MiniLM-L6-v2: let embeddings = vec![vec![0.05, 0.06, -0.06]];\n\ncollection\n    .add(\n        vec![\"id1\".to_string()],\n        embeddings,\n        Some(vec![Some(\"doc1\".to_string())]),\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "default-all-minilm-l6-v2-2",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: Chroma provides lightweight wrappers around popular embedding providers, making it easy to use them in your apps. You can set an embedding function when you create a Chroma collection, to be automatically used when adding and querying data, or you can call them directly yourself.",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0037"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Python | Typescript",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0038"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cloudflare Workers AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0039"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cohere",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0040"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Google Generative AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0041"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0042"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face Embedding Server",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0043"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Jina AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0044"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Mistral",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0045"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Morph",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0046"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: OpenAI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0047"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Sentence Transformers",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0048"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Together AI",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: For TypeScript users, Chroma provides packages for a number of embedding model providers. The Chromadb python package ships with all embedding functions included.",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0050"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Provider | Embedding Function Package",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0051"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: All (installs all packages) | @chroma-core/all",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0052"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cloudflare Workers AI | @chroma-core/cloudflare-worker-ai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0053"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Cohere | @chroma-core/cohere",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0054"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Google Gemini | @chroma-core/google-gemini",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0055"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Hugging Face Server | @chroma-core/huggingface-server",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Jina | @chroma-core/jina",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0057"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Mistral | @chroma-core/mistral",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0058"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Morph | @chroma-core/morph",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0059"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Ollama | @chroma-core/ollama",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: OpenAI | @chroma-core/openai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0061"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Perplexity | @chroma-core/perplexity",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0062"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Qwen (via Chroma Cloud) | @chroma-core/chroma-cloud-qwen",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0063"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Sentence Transformers | @chroma-core/sentence-transformer",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0064"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Together AI | @chroma-core/together-ai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0065"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "All Embedding Functions: Voyage AI | @chroma-core/voyageai",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "All Embedding Functions: We welcome contributions! If you create an embedding function that you think would be useful to others, please consider submitting a pull request .",
+    "dom_ids": [
+      "all-embedding-functions",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "embedding_functions",
+    "id": "embedding_functions__node_0067"
+  }
+]

@@ -1,0 +1,1086 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.2 Git Basics - Recording Changes to the Repository — Recording Changes to the Repository: At this point, you should have a bona fide Git repository on your local machine, and a checkout or working copy of all of its files in front of you. Typically, you’ll want to start making changes and committing snapshots of those changes into your repository each time the project reaches a state you want to record.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_recording_changes_to_the_repository",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.2 Git Basics - Recording Changes to the Repository — Recording Changes to the Repository: Remember that each file in your working directory can be in one of two states: tracked or untracked . Tracked files are files that were in the last snapshot, as well as any newly staged files; they can be unmodified, modified, or staged. In short, tracked files are files that Git knows about.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_recording_changes_to_the_repository",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.2 Git Basics - Recording Changes to the Repository — Recording Changes to the Repository: Untracked files are everything else — any files in your working directory that were not in your last snapshot and are not in your staging area. When you first clone a repository, all of your files will be tracked and unmodified because Git just checked them out and you haven’t edited anything.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_recording_changes_to_the_repository",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.2 Git Basics - Recording Changes to the Repository — Recording Changes to the Repository: As you edit files, Git sees them as modified, because you’ve changed them since your last commit. As you work, you selectively stage these modified files and then commit all those staged changes, and the cycle repeats.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_recording_changes_to_the_repository",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking the Status of Your Files: The main tool you use to determine which files are in which state is the git status command. If you run this command directly after a clone, you should see something like this:",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checking the Status of Your Files: $ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nnothing to commit, working tree clean",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking the Status of Your Files: This means you have a clean working directory; in other words, none of your tracked files are modified. Git also doesn’t see any untracked files, or they would be listed here. Finally, the command tells you which branch you’re on and informs you that it has not diverged from the same branch on the server. For now, that branch is always master , which is the default; you won’t worry about it here. Git Branching will go over branches and references in detail.",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0007"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checking the Status of Your Files: Note | GitHub changed the default branch name from master to main in mid-2020, and other Git hosts followed suit. So you may find that the default branch name in some newly created repositories is main and not master . In addition, the default branch name can be changed (as you have seen in Your default branch name ), so you may see a different name for the default branch. However, Git itself still uses master as the default, so we will use it throughout the book.",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking the Status of Your Files: Let’s say you add a new file to your project, a simple README file. If the file didn’t exist before, and you run git status , you see your untracked file like so:",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checking the Status of Your Files: $ echo 'My Project' > README\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\n    README\n\nnothing added to commit but untracked files present (use \"git add\" to track)",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking the Status of Your Files: You can see that your new README file is untracked, because it’s under the “Untracked files” heading in your status output. Untracked basically means that Git sees a file you didn’t have in the previous snapshot (commit), and which hasn’t yet been staged; Git won’t start including it in your commit snapshots until you explicitly tell it to do so. It does this so you don’t accidentally begin including generated binary files or other files that you did not mean to include. You do want to start including README , so let’s start tracking the file.",
+    "dom_ids": [
+      "_checking_status",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tracking New Files: In order to begin tracking a new file, you use the command git add . To begin tracking the README file, you can run this:",
+    "dom_ids": [
+      "_tracking_files",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tracking New Files: $ git add README",
+    "dom_ids": [
+      "_tracking_files",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tracking New Files: If you run your status command again, you can see that your README file is now tracked and staged to be committed:",
+    "dom_ids": [
+      "_tracking_files",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tracking New Files: $ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\n    new file:   README",
+    "dom_ids": [
+      "_tracking_files",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tracking New Files: You can tell that it’s staged because it’s under the “Changes to be committed” heading. If you commit at this point, the version of the file at the time you ran git add is what will be in the subsequent historical snapshot. You may recall that when you ran git init earlier, you then ran git add <files> — that was to begin tracking files in your directory. The git add command takes a path name for either a file or a directory; if it’s a directory, the command adds all the files in that directory recursively.",
+    "dom_ids": [
+      "_tracking_files",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Staging Modified Files: Let’s change a file that was already tracked. If you change a previously tracked file called CONTRIBUTING.md and then run your git status command again, you get something that looks like this:",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Staging Modified Files: $ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    new file:   README\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Staging Modified Files: The CONTRIBUTING.md file appears under a section named “Changes not staged for commit” — which means that a file that is tracked has been modified in the working directory but not yet staged. To stage it, you run the git add command. git add is a multipurpose command — you use it to begin tracking new files, to stage files, and to do other things like marking merge-conflicted files as resolved. It may be helpful to think of it more as “add precisely this content to the next commit” rather than “add this file to the project”. Let’s run git add now to stage the CONTRIBUTING.md file, and then run git status again:",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Staging Modified Files: $ git add CONTRIBUTING.md\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    new file:   README\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Staging Modified Files: Both files are staged and will go into your next commit. At this point, suppose you remember one little change that you want to make in CONTRIBUTING.md before you commit it. You open it again and make that change, and you’re ready to commit. However, let’s run git status one more time:",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Staging Modified Files: $ vim CONTRIBUTING.md\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    new file:   README\n    modified:   CONTRIBUTING.md\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Staging Modified Files: What the heck? Now CONTRIBUTING.md is listed as both staged and unstaged. How is that possible? It turns out that Git stages a file exactly as it is when you run the git add command. If you commit now, the version of CONTRIBUTING.md as it was when you last ran the git add command is how it will go into the commit, not the version of the file as it looks in your working directory when you run git commit . If you modify a file after you run git add , you have to run git add again to stage the latest version of the file:",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Staging Modified Files: $ git add CONTRIBUTING.md\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    new file:   README\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_staging_modified_files",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short Status: While the git status output is pretty comprehensive, it’s also quite wordy. Git also has a short status flag so you can see your changes in a more compact way. If you run git status -s or git status --short you get a far more simplified output from the command:",
+    "dom_ids": [
+      "_short_status",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Short Status: $ git status -s\n M README\nMM Rakefile\nA  lib/git.rb\nM  lib/simplegit.rb\n?? LICENSE.txt",
+    "dom_ids": [
+      "_short_status",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short Status: New files that aren’t tracked have a ?? next to them, new files that have been added to the staging area have an A , modified files have an M and so on. There are two columns to the output — the left-hand column indicates the status of the staging area and the right-hand column indicates the status of the working tree. So for example in that output, the README file is modified in the working directory but not yet staged, while the lib/simplegit.rb file is modified and staged. The Rakefile was modified, staged and then modified again, so there are changes to it that are both staged and unstaged.",
+    "dom_ids": [
+      "_short_status",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Ignoring Files: Often, you’ll have a class of files that you don’t want Git to automatically add or even show you as being untracked. These are generally automatically generated files such as log files or files produced by your build system. In such cases, you can create a file listing patterns to match them named .gitignore . Here is an example .gitignore file:",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Ignoring Files: $ cat .gitignore\n*.[oa]\n*~",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Ignoring Files: The first line tells Git to ignore any files ending in “.o” or “.a” — object and archive files that may be the product of building your code. The second line tells Git to ignore all files whose names end with a tilde ( ~ ), which is used by many text editors such as Emacs to mark temporary files. You may also include a log, tmp, or pid directory; automatically generated documentation; and so on. Setting up a .gitignore file for your new repository before you get going is generally a good idea so you don’t accidentally commit files that you really don’t want in your Git repository.",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Ignoring Files: The rules for the patterns you can put in the .gitignore file are as follows:",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0031"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Ignoring Files: - Blank lines or lines starting with # are ignored. - Standard glob patterns work, and will be applied recursively throughout the entire working tree. - You can start patterns with a forward slash ( / ) to avoid recursivity. - You can end patterns with a forward slash ( / ) to specify a directory. - You can negate a pattern by starting it with an exclamation point ( ! ).",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Ignoring Files: Glob patterns are like simplified regular expressions that shells use. An asterisk ( * ) matches zero or more characters; [abc] matches any character inside the brackets (in this case a, b, or c); a question mark ( ? ) matches a single character; and brackets enclosing characters separated by a hyphen ( [0-9] ) matches any character between them (in this case 0 through 9). You can also use two asterisks to match nested directories; a/**/z would match a/z , a/b/z , a/b/c/z , and so on.",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Ignoring Files: Here is another example .gitignore file:",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Ignoring Files: # ignore all .a files\n*.a\n\n# but do track lib.a, even though you're ignoring .a files above\n!lib.a\n\n# only ignore the TODO file in the current directory, not subdir/TODO\n/TODO\n\n# ignore all files in any directory named build\nbuild/\n\n# ignore doc/notes.txt, but not doc/server/arch.txt\ndoc/*.txt\n\n# ignore all .pdf files in the doc/ directory and any of its subdirectories\ndoc/**/*.pdf",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0035"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Ignoring Files: Tip | GitHub maintains a fairly comprehensive list of good .gitignore file examples for dozens of projects and languages at https://github.com/github/gitignore if you want a starting point for your project.",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0036"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Ignoring Files: Note | In the simple case, a repository might have a single .gitignore file in its root directory, which applies recursively to the entire repository. However, it is also possible to have additional .gitignore files in subdirectories. The rules in these nested .gitignore files apply only to the files under the directory where they are located. The Linux kernel source repository has 206 .gitignore files. It is beyond the scope of this book to get into the details of multiple .gitignore files; see man gitignore for the details.",
+    "dom_ids": [
+      "_ignoring",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: If the git status command is too vague for you — you want to know exactly what you changed, not just which files were changed — you can use the git diff command. We’ll cover git diff in more detail later, but you’ll probably use it most often to answer these two questions: What have you changed but not yet staged? And what have you staged that you are about to commit? Although git status answers those questions very generally by listing the file names, git diff shows you the exact lines added and removed — the patch, as it were.",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: Let’s say you edit and stage the README file again and then edit the CONTRIBUTING.md file without staging it. If you run your git status command, you once again see something like this:",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    modified:   README\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: To see what you’ve changed but not yet staged, type git diff with no other arguments:",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git diff\ndiff --git a/CONTRIBUTING.md b/CONTRIBUTING.md\nindex 8ebb991..643e24f 100644\n--- a/CONTRIBUTING.md\n+++ b/CONTRIBUTING.md\n@@ -65,7 +65,8 @@ branch directly, things can get messy.\n Please include a nice description of your changes when you submit your PR;\n if we have to read the whole diff to figure out why you're contributing\n in the first place, you're less likely to get feedback and have your change\n-merged in.\n+merged in. Also, split your changes into comprehensive chunks if your patch is\n+longer than a dozen lines.\n\n If you are starting to work on a particular area, feel free to submit a PR\n that highlights your work in progress (and note in the PR title that it's",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: That command compares what is in your working directory with what is in your staging area. The result tells you the changes you’ve made that you haven’t yet staged.",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: If you want to see what you’ve staged that will go into your next commit, you can use git diff --staged . This command compares your staged changes to your last commit:",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git diff --staged\ndiff --git a/README b/README\nnew file mode 100644\nindex 0000000..03902a1\n--- /dev/null\n+++ b/README\n@@ -0,0 +1 @@\n+My Project",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: It’s important to note that git diff by itself doesn’t show all changes made since your last commit — only changes that are still unstaged. If you’ve staged all of your changes, git diff will give you no output.",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: For another example, if you stage the CONTRIBUTING.md file and then edit it, you can use git diff to see the changes in the file that are staged and the changes that are unstaged. If our environment looks like this:",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git add CONTRIBUTING.md\n$ echo '# test line' >> CONTRIBUTING.md\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    modified:   CONTRIBUTING.md\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: Now you can use git diff to see what is still unstaged:",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git diff\ndiff --git a/CONTRIBUTING.md b/CONTRIBUTING.md\nindex 643e24f..87f08c8 100644\n--- a/CONTRIBUTING.md\n+++ b/CONTRIBUTING.md\n@@ -119,3 +119,4 @@ at the\n ## Starter Projects\n\n See our [projects list](https://github.com/libgit2/libgit2/blob/development/PROJECTS.md).\n+# test line",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: and git diff --cached to see what you’ve staged so far ( --staged and --cached are synonyms):",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: $ git diff --cached\ndiff --git a/CONTRIBUTING.md b/CONTRIBUTING.md\nindex 8ebb991..643e24f 100644\n--- a/CONTRIBUTING.md\n+++ b/CONTRIBUTING.md\n@@ -65,7 +65,8 @@ branch directly, things can get messy.\n Please include a nice description of your changes when you submit your PR;\n if we have to read the whole diff to figure out why you're contributing\n in the first place, you're less likely to get feedback and have your change\n-merged in.\n+merged in. Also, split your changes into comprehensive chunks if your patch is\n+longer than a dozen lines.\n\n If you are starting to work on a particular area, feel free to submit a PR\n that highlights your work in progress (and note in the PR title that it's",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0052"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Viewing Your Staged and Unstaged Changes: Note | Git Diff in an External Tool We will continue to use the git diff command in various ways throughout the rest of the book. There is another way to look at these diffs if you prefer a graphical or external diff viewing program instead. If you run git difftool instead of git diff , you can view any of these diffs in software like emerge, vimdiff and many more (including commercial products). Run git difftool --tool-help to see what is available on your system.",
+    "dom_ids": [
+      "_git_diff_staged",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: Now that your staging area is set up the way you want it, you can commit your changes. Remember that anything that is still unstaged — any files you have created or modified that you haven’t run git add on since you edited them — won’t go into this commit. They will stay as modified files on your disk. In this case, let’s say that the last time you ran git status , you saw that everything was staged, so you’re ready to commit your changes. The simplest way to commit is to type git commit :",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Committing Your Changes: $ git commit",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: Doing so launches your editor of choice.",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Committing Your Changes: Note | This is set by your shell’s EDITOR environment variable — usually vim or emacs, although you can configure it with whatever you want using the git config --global core.editor command as you saw in Getting Started .",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: The editor displays the following text (this example is a Vim screen):",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Committing Your Changes: # Please enter the commit message for your changes. Lines starting\n# with '#' will be ignored, and an empty message aborts the commit.\n# On branch master\n# Your branch is up-to-date with 'origin/master'.\n#\n# Changes to be committed:\n#\tnew file:   README\n#\tmodified:   CONTRIBUTING.md\n#\n~\n~\n~\n\".git/COMMIT_EDITMSG\" 9L, 283C",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: You can see that the default commit message contains the latest output of the git status command commented out and one empty line on top. You can remove these comments and type your commit message, or you can leave them there to help you remember what you’re committing.",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Committing Your Changes: Note | For an even more explicit reminder of what you’ve modified, you can pass the -v option to git commit . Doing so also puts the diff of your change in the editor so you can see exactly what changes you’re committing.",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: When you exit the editor, Git creates your commit with that commit message (with the comments and diff stripped out).",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: Alternatively, you can type your commit message inline with the commit command by specifying it after a -m flag, like this:",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Committing Your Changes: $ git commit -m \"Story 182: fix benchmarks for speed\"\n[master 463dc4f] Story 182: fix benchmarks for speed\n 2 files changed, 2 insertions(+)\n create mode 100644 README",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: Now you’ve created your first commit! You can see that the commit has given you some output about itself: which branch you committed to ( master ), what SHA-1 checksum the commit has ( 463dc4f ), how many files were changed, and statistics about lines added and removed in the commit.",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Committing Your Changes: Remember that the commit records the snapshot you set up in your staging area. Anything you didn’t stage is still sitting there modified; you can do another commit to add it to your history. Every time you perform a commit, you’re recording a snapshot of your project that you can revert to or compare to later.",
+    "dom_ids": [
+      "_committing_changes",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Skipping the Staging Area: Although it can be amazingly useful for crafting commits exactly how you want them, the staging area is sometimes a bit more complex than you need in your workflow. If you want to skip the staging area, Git provides a simple shortcut. Adding the -a option to the git commit command makes Git automatically stage every file that is already tracked before doing the commit, letting you skip the git add part:",
+    "dom_ids": [
+      "_skipping_the_staging_area",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0067"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Skipping the Staging Area: $ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n$ git commit -a -m 'Add new benchmarks'\n[master 83e38c7] Add new benchmarks\n 1 file changed, 5 insertions(+), 0 deletions(-)",
+    "dom_ids": [
+      "_skipping_the_staging_area",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Skipping the Staging Area: Notice how you don’t have to run git add on the CONTRIBUTING.md file in this case before you commit. That’s because the -a flag includes all changed files. This is convenient, but be careful; sometimes this flag will cause you to include unwanted changes.",
+    "dom_ids": [
+      "_skipping_the_staging_area",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: To remove a file from Git, you have to remove it from your tracked files (more accurately, remove it from your staging area) and then commit. The git rm command does that, and also removes the file from your working directory so you don’t see it as an untracked file the next time around.",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: If you simply remove the file from your working directory, it shows up under the “Changes not staged for commit” (that is, unstaged ) area of your git status output:",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Removing Files: $ rm PROJECTS.md\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges not staged for commit:\n  (use \"git add/rm <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n        deleted:    PROJECTS.md\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: Then, if you run git rm , it stages the file’s removal:",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Removing Files: $ git rm PROJECTS.md\nrm 'PROJECTS.md'\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    deleted:    PROJECTS.md",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: The next time you commit, the file will be gone and no longer tracked. If you modified the file or had already added it to the staging area, you must force the removal with the -f option. This is a safety feature to prevent accidental removal of data that hasn’t yet been recorded in a snapshot and that can’t be recovered from Git.",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: Another useful thing you may want to do is to keep the file in your working tree but remove it from your staging area. In other words, you may want to keep the file on your hard drive but not have Git track it anymore. This is particularly useful if you forgot to add something to your .gitignore file and accidentally staged it, like a large log file or a bunch of .a compiled files. To do this, use the --cached option:",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Removing Files: $ git rm --cached README",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: You can pass files, directories, and file-glob patterns to the git rm command. That means you can do things such as:",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0078"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Removing Files: $ git rm log/\\*.log",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0079"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: Note the backslash ( \\ ) in front of the * . This is necessary because Git does its own filename expansion in addition to your shell’s filename expansion. This command removes all files that have the .log extension in the log/ directory. Or, you can do something like this:",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0080"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Removing Files: $ git rm \\*~",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Removing Files: This command removes all files whose names end with a ~ .",
+    "dom_ids": [
+      "_removing_files",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Moving Files: Unlike many other VCSs, Git doesn’t explicitly track file movement. If you rename a file in Git, no metadata is stored in Git that tells it you renamed the file. However, Git is pretty smart about figuring that out after the fact — we’ll deal with detecting file movement a bit later.",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Moving Files: Thus it’s a bit confusing that Git has a mv command. If you want to rename a file in Git, you can run something like:",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0084"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Moving Files: $ git mv file_from file_to",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Moving Files: and it works fine. In fact, if you run something like this and look at the status, you’ll see that Git considers it a renamed file:",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0086"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Moving Files: $ git mv README.md README\n$ git status\nOn branch master\nYour branch is up-to-date with 'origin/master'.\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    renamed:    README.md -> README",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Moving Files: However, this is equivalent to running something like this:",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0088"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Moving Files: $ mv README.md README\n$ git rm README.md\n$ git add README",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Moving Files: Git figures out that it’s a rename implicitly, so it doesn’t matter if you rename a file that way or with the mv command. The only real difference is that git mv is one command instead of three — it’s a convenience function. More importantly, you can use any tool you like to rename a file, and address the add / rm later, before you commit.",
+    "dom_ids": [
+      "_git_mv",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "recording_changes",
+    "id": "recording_changes__node_0090"
+  }
+]

@@ -1,0 +1,1975 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "An agent is a model calling tools in a loop until a given task is complete.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A harness is everything around that loop: the prompt, the tools, and any middleware that shapes the model’s behavior.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent = Model + Harness",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "The job of a harness: get the model the right context at the right time for the given task.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "create_agent is a highly configurable harness. At its simplest, you can create one with:",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"google_genai:gemini-3.6-flash\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"openai:gpt-5.5\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"anthropic:claude-sonnet-4-6\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"openrouter:z-ai/glm-5.2\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"fireworks:accounts/fireworks/models/glm-5p2\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0010"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"baseten:zai-org/GLM-5.2\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0011"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "from langchain.agents import create_agent\n\nagent = create_agent(model=\"ollama:north-mini-code-1.0\", tools=tools)",
+    "dom_ids": [
+      "readar-node-0012"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Building on that, you can configure the basics directly with the model= , tools= , and system_prompt= parameters. For more advanced capabilities, extend the harness with middleware .",
+    "dom_ids": [
+      "readar-node-0013"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Deep Agents builds on create_agent and comes with commonly useful capabilities already assembled, such as planning, file system tools, subagents, and memory. Use create_agent when you need to configure the harness yourself.",
+    "dom_ids": [
+      "readar-node-0014"
+    ],
+    "chapter": "agents",
+    "id": "agents__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Core components — Model: Pass a model identifier string ( \"provider:model\" ) or an initialized model instance to select the model for your agent. See Models for parameters, provider setup, and dynamic model selection.",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"google_genai:gemini-3.6-flash\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"openai:gpt-5.5\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"anthropic:claude-sonnet-4-6\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"openrouter:z-ai/glm-5.2\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"fireworks:accounts/fireworks/models/glm-5p2\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"baseten:zai-org/GLM-5.2\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Core components — Model: from langchain.agents import create_agent\n\nagent = create_agent(model=\"ollama:north-mini-code-1.0\", tools=tools)",
+    "dom_ids": [
+      "core-components",
+      "model",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tools: To provide the agent with tools, pass any Python callable, LangChain tool, or tool dict. See Tools for tool definition, context access, and dynamic tool selection.",
+    "dom_ids": [
+      "tools",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"google_genai:gemini-3.6-flash\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"openai:gpt-5.5\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"anthropic:claude-sonnet-4-6\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"openrouter:z-ai/glm-5.2\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"fireworks:accounts/fireworks/models/glm-5p2\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"baseten:zai-org/GLM-5.2\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools: from langchain.agents import create_agent\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for information.\"\"\"\n    return f\"Results for: {query}\"\n\n\nagent = create_agent(model=\"ollama:north-mini-code-1.0\", tools=[search])",
+    "dom_ids": [
+      "tools",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "System prompt: Shape how the agent approaches tasks. The system prompt parameter accepts a string or SystemMessage . For dynamic prompts at runtime, use middleware .",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System prompt: agent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=tools,\n    system_prompt=\"You are a helpful assistant. Be concise and accurate.\",\n)",
+    "dom_ids": [
+      "system-prompt",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Structured output: Return a validated schema from the agent using response_format= . See Structured output for strategies and examples.",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"google_genai:gemini-3.6-flash\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"openai:gpt-5.5\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"anthropic:claude-sonnet-4-6\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"openrouter:z-ai/glm-5.2\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"fireworks:accounts/fireworks/models/glm-5p2\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"baseten:zai-org/GLM-5.2\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Structured output: from pydantic import BaseModel\nfrom langchain.agents import create_agent\n\n\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\n\n\nagent = create_agent(model=\"ollama:north-mini-code-1.0\", tools=tools, response_format=Answer)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Summarize AI trends\"}]})\nresult[\"structured_response\"]  # Answer(summary=..., confidence=...)",
+    "dom_ids": [
+      "structured-output",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent state: Every agent manages its execution context through AgentState , a typed dictionary that holds the current conversation history and any custom fields your tools and middleware need.",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent state: The built-in field is:",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0048"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Agent state: Field | Type | Description",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0049"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Agent state: messages | list[BaseMessage] | The full conversation history for the current thread. Append-only: new messages are added, never replaced.",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent state: AgentState is also the type signature for every node-style middleware hook ( before_model , after_model , and similar). Hooks receive the current state and can return a dict of updates to merge back into it.",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent state: To add custom fields (for example, a user_id or a counter), subclass AgentState and pass the subclass to create_agent via state_schema= :",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Agent state: from langchain.agents import AgentState, create_agent\n\n\nclass MyState(AgentState):\n    user_id: str\n    call_count: int\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[],\n    state_schema=MyState,\n)",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Agent state: For full details, examples, and middleware-level state schemas, see Short-term memory and Custom middleware .",
+    "dom_ids": [
+      "agent-state",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Invocation: Trace each step of this loop, debug tool calls, and evaluate agent outputs with LangSmith . Follow the tracing quickstart to get set up. We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Invocation: You can invoke an agent with a message. Behind the scenes that passes an update to the agent’s State . All agents include a sequence of messages in their state; to invoke the agent, pass a new message along with a thread_id so the agent can persist and resume conversation history:",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0067"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[],\n    checkpointer=InMemorySaver(),\n)\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid7())}}\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config=config,\n)\n\n# A follow-up turn on the same conversation: reuse the same thread_id to keep history\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What about tomorrow?\"}]},\n    config=config,\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Invocation: Persisting conversation history with thread_id requires the agent to be configured with a checkpointer . When deployed on LangSmith , a checkpointer is provisioned automatically. Locally, pass one explicitly, for example create_agent(..., checkpointer=InMemorySaver()) .",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Invocation: If you also need to pass per-run configuration (such as a user ID, API keys, or feature flags) to tools and middleware, pass it as context alongside config . Define the shape of that data with context_schema and access it through runtime.context :",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0072"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0074"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0075"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0077"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Invocation: from dataclasses import dataclass\n\nfrom langchain.agents import create_agent\nfrom langchain_core.utils.uuid import uuid7\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\n@dataclass\nclass Context:\n    user_id: str\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[],\n    context_schema=Context,\n    checkpointer=InMemorySaver(),\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's the weather in San Francisco?\"}]},\n    config={\"configurable\": {\"thread_id\": str(uuid7())}},\n    context=Context(user_id=\"user-123\"),\n)",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Invocation: thread_id scopes the conversation (message history, checkpoints), while context carries per-run data your tools and middleware read at invocation time. Both are commonly passed together. See tool context and Runtime for more.",
+    "dom_ids": [
+      "invocation",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0079"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Streaming: invoke returns the final response at the end of a run. If an agent executes multiple tool calls, users often need progress updates before completion. Use streaming to surface intermediate messages and tool activity as they happen.",
+    "dom_ids": [
+      "streaming",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0080"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Streaming: from langchain.messages import AIMessage, HumanMessage\n\n\nstream = agent.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Search for AI news and summarize the findings\"}]},\n    version=\"v3\",\n)\nfor snapshot in stream.values:\n    # Each snapshot contains the full state at that point\n    latest_message = snapshot[\"messages\"][-1]\n    if latest_message.content:\n        if isinstance(latest_message, HumanMessage):\n            print(f\"User: {latest_message.content}\")\n        elif isinstance(latest_message, AIMessage):\n            print(f\"Agent: {latest_message.content}\")\n    elif latest_message.tool_calls:\n        print(f\"Calling tools: {[tc['name'] for tc in latest_message.tool_calls]}\")",
+    "dom_ids": [
+      "streaming",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Streaming: For streaming modes, event types, and UI patterns, see Streaming .",
+    "dom_ids": [
+      "streaming",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure the harness: create_agent is highly extensible. Middleware is the primitive for customization: each piece handles one concern, hooks into the agent loop at the right moment, and composes freely with any other. Take exactly what your use case needs and skip the rest.",
+    "dom_ids": [
+      "configure-the-harness",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure the harness: Common patterns are prebuilt as first-class middleware. You can build anything else as custom middleware .",
+    "dom_ids": [
+      "configure-the-harness",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0084"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure the harness: As agents take on complex work, they need support across a few key areas. The middleware ecosystem provides:",
+    "dom_ids": [
+      "configure-the-harness",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution environment: Tools, filesystem, sandboxes, and code execution",
+    "dom_ids": [
+      "_R_1bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context management: Summarization, memory, skills, and prompt caching",
+    "dom_ids": [
+      "_R_2bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Planning and delegation: Todo lists and subagents for parallel, isolated work",
+    "dom_ids": [
+      "_R_3bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0088"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fault tolerance: Retries, fallbacks, and call limits",
+    "dom_ids": [
+      "_R_4bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Guardrails: PII detection and content controls",
+    "dom_ids": [
+      "_R_5bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Steering: Human-in-the-loop approval before high-impact actions",
+    "dom_ids": [
+      "_R_6bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0091"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Steering: create_deep_agent pre-assembles this stack for long-running coding and research tasks (filesystem, summarization, subagents, and prompt caching included by default). See Deep Agents for the full prebuilt harness.",
+    "dom_ids": [
+      "_R_6bsljddbsnlhjiuasnpfiutb_",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0092"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution environment: Agents are especially useful when they can take action rather than just generate text. The execution environment gives the agent a workspace: tools it can call, a filesystem for reading and writing files across turns, and code execution for running scripts or shell commands.",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0093"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0094"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0095"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0096"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0097"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0098"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0099"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: from langchain.agents import create_agent\nfrom deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[search],\n    middleware=[FilesystemMiddleware(backend=StateBackend())],\n)",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0100"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution environment: See FilesystemMiddleware , Sandboxes , Interpreters .",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0101"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Execution environment: This example imports from the deepagents package. Install it with:",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0102"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: pip install deepagents",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0103"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Execution environment: uv add deepagents",
+    "dom_ids": [
+      "execution-environment",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0104"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context management: Every model call has a fixed context window. As an agent runs, that window fills with accumulating history, tool results, and intermediate steps. Summarization compresses history before overflow hits; memory loads persistent instructions at startup so knowledge carries across sessions; skills surface domain knowledge on demand rather than loading everything upfront.",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0105"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"google_genai:gemini-3.6-flash\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0106"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"openai:gpt-5.5\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0107"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"anthropic:claude-sonnet-4-6\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0108"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"openrouter:z-ai/glm-5.2\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0109"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"fireworks:accounts/fireworks/models/glm-5p2\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0110"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"baseten:zai-org/GLM-5.2\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0111"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware, MemoryMiddleware, SkillsMiddleware, SummarizationMiddleware\n\nbackend = StateBackend()\nmodel = \"ollama:north-mini-code-1.0\"\n\nagent = create_agent(\n    model=model,\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        SummarizationMiddleware(model=model, backend=backend),\n        MemoryMiddleware(backend=backend, sources=[\"./AGENTS.md\"]),\n        SkillsMiddleware(backend=backend, sources=[\"./skills/\"]),\n    ],\n)",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context management: See SummarizationMiddleware , MemoryMiddleware , Skills , Context engineering .",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0130"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0113"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Context management: This example imports from the deepagents package. Install it with:",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0114"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: pip install deepagents",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0115"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Context management: uv add deepagents",
+    "dom_ids": [
+      "context-management",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0116"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Planning and delegation: Complex tasks often exceed what one context window can handle. Delegation lets the main agent break work into pieces, hand them to subagents that each run in their own isolated context, and stay focused on coordination rather than execution. Work can run in parallel; the main agent’s context stays clean.",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0135"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0117"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0118"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0119"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0138"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0120"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0121"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0122"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0141"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0123"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: from deepagents.backends import StateBackend\nfrom deepagents.middleware import FilesystemMiddleware\nfrom deepagents.middleware.subagents import SubAgentMiddleware\nfrom langchain.agents import create_agent\nfrom langchain.agents.middleware import TodoListMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nbackend = StateBackend()\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[search],\n    middleware=[\n        FilesystemMiddleware(backend=backend),\n        TodoListMiddleware(),\n        SubAgentMiddleware(\n            backend=backend,\n            subagents=[\n                {\n                    \"name\": \"researcher\",\n                    \"description\": \"Searches and returns a structured summary.\",\n                    \"system_prompt\": \"Use the search tool to research the question and summarize key points.\",\n                    \"tools\": [search],\n                    \"model\": \"anthropic:claude-sonnet-4-6\",\n                    \"middleware\": [],\n                }\n            ],\n        ),\n    ],\n)",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Planning and delegation: See Subagents .",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0125"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Planning and delegation: This example imports from the deepagents package. Install it with:",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0126"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: pip install deepagents",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0145"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0127"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Planning and delegation: uv add deepagents",
+    "dom_ids": [
+      "planning-and-delegation",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0128"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Name your agent: Optionally use an identifier for the agent. This is especially useful when embedding the agent as a subgraph in multi-agent systems.",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0148"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0129"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"google_genai:gemini-3.6-flash\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0130"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"openai:gpt-5.5\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0150"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0131"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"anthropic:claude-sonnet-4-6\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0151"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0132"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"openrouter:z-ai/glm-5.2\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0152"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0133"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"fireworks:accounts/fireworks/models/glm-5p2\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0153"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0134"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"baseten:zai-org/GLM-5.2\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0154"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0135"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Name your agent: agent = create_agent(model=\"ollama:north-mini-code-1.0\", tools=tools, name=\"research_assistant\")",
+    "dom_ids": [
+      "name-your-agent",
+      "readar-node-0155"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0136"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fault tolerance: Agents in production encounter failures that rarely appear in development: rate limits, model timeouts, transient API errors. Fault tolerance middleware handles these at the infrastructure level so your tools and business logic don’t need try/catch around every call.",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0157"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0137"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0158"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0138"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0159"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0139"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0160"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0140"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0161"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0141"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0162"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0142"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0163"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0143"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fault tolerance: from langchain.agents import create_agent\nfrom langchain.agents.middleware import ModelRetryMiddleware, ToolRetryMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[search],\n    middleware=[\n        ModelRetryMiddleware(max_retries=3),\n        ToolRetryMiddleware(max_retries=2),\n    ],\n)",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0164"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0144"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fault tolerance: See ModelRetryMiddleware , ToolRetryMiddleware , Prebuilt middleware .",
+    "dom_ids": [
+      "fault-tolerance",
+      "readar-node-0165"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0145"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Guardrails: Some policies can’t live in a prompt—they need to be enforced deterministically regardless of what the model does. Guardrails intercept data as it flows through the agent loop, applying compliance rules or content policies before tool results reach the model’s context.",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0167"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0146"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0168"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0147"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0169"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0148"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0170"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0149"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0171"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0150"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0172"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0151"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0173"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0152"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Guardrails: from langchain.agents import create_agent\nfrom langchain.agents.middleware import PIIMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[search],\n    middleware=[PIIMiddleware(\"email\")],\n)",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0174"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0153"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Guardrails: See PIIMiddleware , Prebuilt middleware .",
+    "dom_ids": [
+      "guardrails",
+      "readar-node-0175"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0154"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Steering: Full autonomy isn’t always appropriate. Steering lets you place humans at specific decision points—before destructive writes, expensive API calls, or anything requiring judgment—without restructuring your agent. The agent pauses and waits; a human approves, edits, or rejects; execution continues.",
+    "dom_ids": [
+      "steering",
+      "readar-node-0177"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0155"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0178"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0156"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0179"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0157"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0180"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0158"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0181"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0159"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0182"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0160"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0183"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0161"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Steering: from langchain.agents import create_agent\nfrom langchain.agents.middleware import HumanInTheLoopMiddleware\nfrom langchain.tools import tool\n\n\n@tool\ndef search(query: str) -> str:\n    \"\"\"Search for a query and return a short summary.\"\"\"\n    return f\"Search results for: {query}\"\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[search],\n    middleware=[HumanInTheLoopMiddleware(interrupt_on={\"write_file\": True})],\n)",
+    "dom_ids": [
+      "steering",
+      "readar-node-0184"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0162"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Steering: See HumanInTheLoopMiddleware , Human-in-the-loop .",
+    "dom_ids": [
+      "steering",
+      "readar-node-0185"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0163"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Middleware resources — Middleware overview: How the middleware stack works and when hooks fire",
+    "dom_ids": [
+      "middleware-resources",
+      "_R_1k4ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0188"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0164"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Prebuilt middleware: Full reference with configuration examples",
+    "dom_ids": [
+      "_R_2k4ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0190"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0165"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom middleware: Write your own hooks for business logic, PII scrubbing, and more",
+    "dom_ids": [
+      "_R_3k4ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0192"
+    ],
+    "merge": "heading_fold",
+    "chapter": "agents",
+    "id": "agents__node_0166"
+  }
+]

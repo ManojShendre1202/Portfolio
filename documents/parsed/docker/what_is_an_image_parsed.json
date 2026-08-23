@@ -1,0 +1,356 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is an image? — Explanation: Seeing as a container is an isolated process, where does it get its files and configuration? How do you share those environments?",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is an image? — Explanation: That's where container images come in. A container image is a standardized package that includes all of the files, binaries, libraries, and configurations to run a container.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is an image? — Explanation: For a PostgreSQL image, that image will package the database binaries, config files, and other dependencies. For a Python web app, it'll include the Python runtime, your app code, and all of its dependencies.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is an image? — Explanation: There are two important principles of images:",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "What is an image? — Explanation: - Images are immutable. Once an image is created, it can't be modified. You can only make a new image or add changes on top of it. - Container images are composed of layers. Each layer represents a set of file system changes that add, remove, or modify files.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is an image? — Explanation: These two principles let you to extend or add to existing images. For example, if you are building a Python app, you can start from the Python image and add additional layers to install your app's dependencies and add your code. This lets you focus on your app, rather than Python itself.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Finding images: Docker Hub is the default global marketplace for storing and distributing images. It has over 100,000 images created by developers that you can run locally. You can search for Docker Hub images and run them directly from Docker Desktop.",
+    "dom_ids": [
+      "finding-images",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Finding images: Docker Hub provides a variety of Docker-supported and endorsed images known as Docker Trusted Content. These provide fully managed services or great starters for your own images. These include:",
+    "dom_ids": [
+      "finding-images",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0008"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Finding images: - Docker Official Images - a curated set of Docker repositories, serve as the starting point for the majority of users, and are some of the most secure on Docker Hub - Docker Hardened Images - minimal, secure, production-ready images with near-zero CVEs, designed to reduce attack surface and simplify compliance. Free and open source under Apache 2.0 - Docker Verified Publishers - high-quality images from commercial publishers verified by Docker - Docker-Sponsored Open Source - images published and maintained by open-source projects sponsored by Docker through Docker's open source program",
+    "dom_ids": [
+      "finding-images",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Finding images: For example, Redis and Memcached are a few popular ready-to-go Docker Official Images. You can download these images and have these services up and running in a matter of seconds. There are also base images, like the Node.js Docker image, that you can use as a starting point and add your own files and configurations. For production workloads requiring enhanced security, Docker Hardened Images offer minimal variants of popular images like Node.js, Python, and Go.",
+    "dom_ids": [
+      "finding-images",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this hands-on, you will learn how to search and pull a container image using the Docker Desktop GUI.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0011"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Search for and download an image: - Open the Docker Desktop Dashboard and select the Images view in the left-hand navigation menu. - Select the Search images to run button. If you don't see it, select the global search bar at the top of the screen. - In the Search field, enter \"welcome-to-docker\". Once the search has completed, select the docker/welcome-to-docker image. - Select Pull to download the image.",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn about the image: Once you have an image downloaded, you can learn quite a few details about the image either through the GUI or the CLI.",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0013"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Learn about the image: - In the Docker Desktop Dashboard, select the Images view. - Select the docker/welcome-to-docker image to open details about the image. - The image details page presents you with information regarding the layers of the image, the packages and libraries installed in the image, and any discovered vulnerabilities.",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn about the image: Follow the instructions to search and pull a Docker image using CLI to view its layers.",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Search for and download an image: - Open a terminal and search for images using the docker search command: You will see output like the following: This output shows you information about relevant images available on Docker Hub. - Pull the image using the docker pull command. You will see output like the following: Each of line represents a different downloaded layer of the image. Remember that each layer is a set of filesystem changes and provides functionality of the image.",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Search for and download an image: docker search docker/welcome-to-docker",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Search for and download an image: NAME                       DESCRIPTION                                     STARS     OFFICIAL\ndocker/welcome-to-docker   Docker image for new users getting started w…   20",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Search for and download an image: docker pull docker/welcome-to-docker",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Search for and download an image: Using default tag: latest\nlatest: Pulling from docker/welcome-to-docker\n579b34f0a95b: Download complete\nd11a451e6399: Download complete\n1c2214f9937c: Download complete\nb42a2f288f4d: Download complete\n54b19e12c655: Download complete\n1fb28e078240: Download complete\n94be7e780731: Download complete\n89578ce72c35: Download complete\nDigest: sha256:eedaff45e3c78538087bdd9dc7afafac7e110061bbdd836af4104b10f10ab693\nStatus: Downloaded newer image for docker/welcome-to-docker:latest\ndocker.io/docker/welcome-to-docker:latest",
+    "dom_ids": [
+      "search-for-and-download-an-image",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0020"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Learn about the image: - List your downloaded images using the docker image ls command: You will see output like the following: The command shows a list of Docker images currently available on your system. The docker/welcome-to-docker has a total size of approximately 29.7MB. Image size The image size represented here reflects the uncompressed size of the image, not the download size of the layers. - List the image's layers using the docker image history command: You will see output like the following: This output shows you all of the layers, their sizes, and the command used to create the layer. Viewing the full command If you add the --no-trunc flag to the command, you will see the full command. Note that, since the output is in a table-like format, longer commands will cause the output to be very difficult to navigate.",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Learn about the image: docker image ls",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Learn about the image: REPOSITORY                 TAG       IMAGE ID       CREATED        SIZE\ndocker/welcome-to-docker   latest    eedaff45e3c7   4 months ago   29.7MB",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Learn about the image: docker image history docker/welcome-to-docker",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Learn about the image: IMAGE          CREATED        CREATED BY                                      SIZE      COMMENT\n648f93a1ba7d   4 months ago   COPY /app/build /usr/share/nginx/html # buil…   1.6MB     buildkit.dockerfile.v0\n<missing>      5 months ago   /bin/sh -c #(nop)  CMD [\"nginx\" \"-g\" \"daemon…   0B\n<missing>      5 months ago   /bin/sh -c #(nop)  STOPSIGNAL SIGQUIT           0B\n<missing>      5 months ago   /bin/sh -c #(nop)  EXPOSE 80                    0B\n<missing>      5 months ago   /bin/sh -c #(nop)  ENTRYPOINT [\"/docker-entr…   0B\n<missing>      5 months ago   /bin/sh -c #(nop) COPY file:9e3b2b63db9f8fc7…   4.62kB\n<missing>      5 months ago   /bin/sh -c #(nop) COPY file:57846632accc8975…   3.02kB\n<missing>      5 months ago   /bin/sh -c #(nop) COPY file:3b1b9915b7dd898a…   298B\n<missing>      5 months ago   /bin/sh -c #(nop) COPY file:caec368f5a54f70a…   2.12kB\n<missing>      5 months ago   /bin/sh -c #(nop) COPY file:01e75c6dd0ce317d…   1.62kB\n<missing>      5 months ago   /bin/sh -c set -x     && addgroup -g 101 -S …   9.7MB\n<missing>      5 months ago   /bin/sh -c #(nop)  ENV PKG_RELEASE=1            0B\n<missing>      5 months ago   /bin/sh -c #(nop)  ENV NGINX_VERSION=1.25.3     0B\n<missing>      5 months ago   /bin/sh -c #(nop)  LABEL maintainer=NGINX Do…   0B\n<missing>      5 months ago   /bin/sh -c #(nop)  CMD [\"/bin/sh\"]              0B\n<missing>      5 months ago   /bin/sh -c #(nop) ADD file:ff3112828967e8004…   7.66MB",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn about the image: In this walkthrough, you searched and pulled a Docker image. In addition to pulling a Docker image, you also learned about the layers of a Docker Image.",
+    "dom_ids": [
+      "learn-about-the-image",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Additional resources: The following resources will help you learn more about exploring, finding, and building images:",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0027"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - Docker trusted content - Explore the Image view in Docker Desktop - Docker Build overview - Docker Hub",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Now that you have learned the basics of images, it's time to learn about distributing images through registries.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_an_image",
+    "id": "what_is_an_image__node_0029"
+  }
+]

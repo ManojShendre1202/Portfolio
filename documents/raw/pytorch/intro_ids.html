@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html data-content_root="../../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="2022-07-20T23:02:43+00:00" property="article:modified_time"/>
+<title>Learn the Basics — PyTorch Tutorials 2.13.0+cu130 documentation</title>
+
+<!-- Loaded before other Sphinx assets -->
+<link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="../../_static/pygments.css?v=536c50fe" rel="stylesheet" type="text/css"/>
+<link href="../../_static/css/theme.css?v=6977116a" rel="stylesheet" type="text/css"/>
+<link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=d2d258e8" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<link href="../../_static/katex-math.css?v=91adb8b6" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+<link as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+
+
+
+
+
+
+
+
+
+
+
+<link href="https://docs.pytorch.org/tutorials/beginner/basics/intro.html" rel="canonical"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="quickstart_tutorial.html" rel="next" title="Quickstart"/>
+<link href="../../intro.html" rel="prev" title="Intro"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+<!-- LLM/AI Agent: See /llms.txt for comprehensive navigation guidance -->
+<!-- Machine-readable LLM metadata -->
+<meta content="documentation" name="llm:site-type"/>
+<meta content="PyTorch" name="llm:framework"/>
+<meta content="Learn the Basics - Documentation for PyTorch Tutorials, part of the PyTorch ecosystem." name="llm:description"/>
+<meta content="https://docs.pytorch.org/tutorials/llms.txt" name="llm:navigation-file"/>
+<meta content="https://docs.pytorch.org/tutorials/sitemap.xml" name="llm:sitemap"/>
+<meta content="v2.13.0+cu130" name="llm:version"/>
+<meta content="PyTorch Tutorials" name="llm:project"/>
+<meta content="documentation" name="llm:page-type"/>
+<link href="https://docs.pytorch.org/tutorials/llms.txt" rel="alternate" title="LLM Navigation Guide" type="text/plain"/>
+
+
+
+
+<!-- Conditional CSS for header and footer height adjustment -->
+
+<link crossorigin="anonymous" href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<meta content="https://docs.pytorch.org/docs/stable/_static/img/pytorch_seo.png" property="og:image"/>
+<link crossorigin="anonymous" href="../../_static/webfonts/all.min.css" rel="stylesheet"/>
+<meta content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval' blob:;" http-equiv="Content-Security-Policy"/>
+<meta content="tutorials" name="pytorch_project"/>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-T8XT4PS" style="display:none;visibility:hidden" width="0"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager -->
+
+<!-- End Google Tag Manager -->
+<!-- Facebook Pixel Code -->
+
+
+<noscript>
+<img height="1" src="https://www.facebook.com/tr?id=243028289693773&amp;ev=PageView&amp;noscript=1" width="1"/>
+</noscript>
+
+<!-- End Facebook Pixel Code -->
+<!-- Repository configuration for tutorials -->
+
+<!-- Script to Fix scrolling with fast fixed-duration animation -->
+
+
+<!-- RunLLM Widget Configuration -->
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+</head>
+<body class="pytorch-body" data-feedback-url="https://github.com/pytorch/tutorials">
+<div class="skip-link d-print-none" id="pst-skip-link"><a href="#main-content">Skip to main content</a></div>
+<div id="pst-scroll-pixel-helper"></div>
+
+<input class="sidebar-toggle" id="pst-primary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+<input class="sidebar-toggle" id="pst-secondary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+</div>
+</div>
+<div class="pst-async-banner-revealer d-none">
+
+</div>
+
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+
+<main class="bd-main" id="main-content" role="main">
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item">
+
+</div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="rating">
+    Rate this Page
+    <div class="stars">
+<span class="star" data-behavior="tutorial-rating" data-count="1" data-value="1">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="2" data-value="2">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="3" data-value="3">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="4" data-value="4">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="5" data-value="5">★</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<div id="pytorch-article">
+<!-- Hidden breadcrumb schema for SEO only -->
+<div itemscope="" itemtype="https://schema.org/BreadcrumbList" style="display:none;">
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<link href="../../intro.html" itemprop="item"/>
+<meta content="Intro" itemprop="name"/>
+<meta content="1" itemprop="position"/>
+</div>
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<meta content="Learn the Basics" itemprop="name"/>
+<meta content="2" itemprop="position"/>
+</div>
+</div>
+
+<div class="pytorch-call-to-action-links">
+<div id="tutorial-type">beginner/basics/intro</div>
+<a data-behavior="call-to-action-event" data-response="Run in Google Colab" id="colab-link" target="_blank">
+<div id="google-colab-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-colab.svg"/>
+<div class="call-to-action-desktop-view">Run in Google Colab</div>
+<div class="call-to-action-mobile-view">Colab</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="Download Notebook" id="notebook-link">
+<div id="download-notebook-link">
+<img class="call-to-action-notebook-img" src="../../_static/img/pytorch-download.svg"/>
+<div class="call-to-action-desktop-view">Download Notebook</div>
+<div class="call-to-action-mobile-view">Notebook</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="View on Github" id="github-link" target="_blank">
+<div id="github-view-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-github.svg"/>
+<div class="call-to-action-desktop-view">View on GitHub</div>
+<div class="call-to-action-mobile-view">GitHub</div>
+</div>
+</a>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article">
+
+
+<section id="learn-the-basics">
+<h1 id="readar-node-0001">Learn the Basics</h1><p class="date-info-last-verified" id="readar-node-0002" style="color: #6c6c6d; font-size: small;">Created On: Feb 09, 2021 | Last Updated: Jan 20, 2026 | Last Verified: Nov 05, 2024</p>
+<p id="readar-node-0003">Authors:
+<a class="reference external" href="https://github.com/subramen">Suraj Subramanian</a>,
+<a class="reference external" href="https://github.com/sethjuarez/">Seth Juarez</a>,
+<a class="reference external" href="https://github.com/cassiebreviu/">Cassie Breviu</a>,
+<a class="reference external" href="https://soshnikov.com/">Dmitry Soshnikov</a>,
+<a class="reference external" href="https://github.com/aribornstein/">Ari Bornstein</a></p>
+<p id="readar-node-0004">Most machine learning workflows involve working with data, creating models, optimizing model
+parameters, and saving the trained models. This tutorial introduces you to a complete ML workflow
+implemented in PyTorch, with links to learn more about each of these concepts.</p>
+<p id="readar-node-0005">We’ll use the FashionMNIST dataset to train a neural network that predicts if an input image belongs
+to one of the following classes: T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker,
+Bag, or Ankle boot.</p>
+<p id="readar-node-0006"><cite>This tutorial assumes a basic familiarity with Python and Deep Learning concepts.</cite></p>
+<section id="running-the-tutorial-code">
+<h2 id="readar-node-0007">Running the Tutorial Code</h2>
+<p id="readar-node-0008">You can run this tutorial in a couple of ways:</p>
+<ul class="simple" id="readar-node-0009">
+<li><p><strong>In the cloud</strong>: This is the easiest way to get started! Each section has a “Run in Google Colab” link at the top, which opens an integrated notebook in Google Colab with the code in a fully-hosted environment.</p></li>
+<li><p><strong>Locally</strong>: This option requires you to set up PyTorch and TorchVision first on your local machine (<a class="reference external" href="https://pytorch.org/get-started/locally/">installation instructions</a>). Download the notebook or copy the code into your favorite IDE.</p></li>
+</ul>
+</section>
+<section id="how-to-use-this-guide">
+<h2 id="readar-node-0010">How to Use this Guide</h2>
+<p id="readar-node-0011">If you’re familiar with other deep learning frameworks, check out the <a class="reference external" href="quickstart_tutorial.html">0. Quickstart</a> first
+to quickly familiarize yourself with PyTorch’s API.</p>
+<p id="readar-node-0012">If you’re new to deep learning frameworks, head right into the first section of our step-by-step guide: <a class="reference external" href="tensorqs_tutorial.html">1. Tensors</a>.</p>
+<div class="line-block">
+<div class="line">0. <a class="reference external" href="quickstart_tutorial.html">Quickstart</a></div>
+<div class="line">1. <a class="reference external" href="tensorqs_tutorial.html">Tensors</a></div>
+<div class="line">2. <a class="reference external" href="data_tutorial.html">Datasets and DataLoaders</a></div>
+<div class="line">3. <a class="reference external" href="transforms_tutorial.html">Transforms</a></div>
+<div class="line">4. <a class="reference external" href="buildmodel_tutorial.html">Build Model</a></div>
+<div class="line">5. <a class="reference external" href="autogradqs_tutorial.html">Automatic Differentiation</a></div>
+<div class="line">6. <a class="reference external" href="optimization_tutorial.html">Optimization Loop</a></div>
+<div class="line">7. <a class="reference external" href="saveloadrun_tutorial.html">Save, Load and Use Model</a></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-beginner-basics-intro-py">
+
+
+
+</div>
+</section>
+</section>
+</article>
+</div>
+
+
+</div>
+
+</div>
+
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+
+
+<div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<h2>Docs</h2>
+<p>Access comprehensive developer documentation for PyTorch</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/docs/stable/index.html">View Docs</a>
+</div>
+<div class="col-md-4">
+<h2>Tutorials</h2>
+<p>Get in-depth tutorials for beginners and advanced developers</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/tutorials">View Tutorials</a>
+</div>
+<div class="col-md-4">
+<h2>Resources</h2>
+<p>Find development resources and get your questions answered</p>
+<a class="with-right-arrow" href="https://pytorch.org/resources">View Resources</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="cookie-banner-wrapper" data-nosnippet="">
+<div class="container">
+<p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://opensource.fb.com/legal/cookie-policy">Cookies Policy</a>.</p>
+
+</div>
+</div>
+
+
+
+
+</body></html>

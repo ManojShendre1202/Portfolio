@@ -1,0 +1,290 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Thus far, our queries have only accessed one table at a time. Queries can access multiple tables at once, or access the same table in such a way that multiple rows of the table are being processed at the same time. Queries that access multiple tables (or multiple instances of the same table) at one time are called join queries. They combine rows from one table with rows from a second table, with an expression specifying which rows are to be paired. For example, to return all the weather records together with the location of the associated city, the database needs to compare the city column of each row of the weather table with the name column of all rows in the cities table, and select the pairs of rows where these values match. [4] This would be accomplished by the following query:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT * FROM weather JOIN cities ON city = name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables:      city      | temp_lo | temp_hi | prcp |    date    |     name      | location\n---------------+---------+---------+------+------------+---------------+-----------\n San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)\n San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Observe two things about the result set:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "2.6. Joins Between Tables: - There is no result row for the city of Hayward. This is because there is no matching entry in the cities table for Hayward, so the join ignores the unmatched rows in the weather table. We will see shortly how this can be fixed. - There are two columns containing the city name. This is correct because the lists of columns from the weather and cities tables are concatenated. In practice this is undesirable, though, so you will probably want to list the output columns explicitly rather than using * :",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT city, temp_lo, temp_hi, prcp, date, location\n    FROM weather JOIN cities ON city = name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Since the columns all had different names, the parser automatically found which table they belong to. If there were duplicate column names in the two tables you'd need to qualify the column names to show which one you meant, as in:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT weather.city, weather.temp_lo, weather.temp_hi,\n       weather.prcp, weather.date, cities.location\n    FROM weather JOIN cities ON weather.city = cities.name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: It is widely considered good style to qualify all column names in a join query, so that the query won't fail if a duplicate column name is later added to one of the tables.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Join queries of the kind seen thus far can also be written in this form:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT *\n    FROM weather, cities\n    WHERE city = name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: This syntax pre-dates the JOIN / ON syntax, which was introduced in SQL-92. The tables are simply listed in the FROM clause, and the comparison expression is added to the WHERE clause. The results from this older implicit syntax and the newer explicit JOIN / ON syntax are identical. But for a reader of the query, the explicit syntax makes its meaning easier to understand: The join condition is introduced by its own key word whereas previously the condition was mixed into the WHERE clause together with other conditions.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Now we will figure out how we can get the Hayward records back in. What we want the query to do is to scan the weather table and for each row to find the matching cities row(s). If no matching row is found we want some “ empty values ” to be substituted for the cities table's columns. This kind of query is called an outer join . (The joins we have seen so far are inner joins .) The command looks like this:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT *\n    FROM weather LEFT OUTER JOIN cities ON weather.city = cities.name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables:      city      | temp_lo | temp_hi | prcp |    date    |     name      | location\n---------------+---------+---------+------+------------+---------------+-----------\n Hayward       |      37 |      54 |      | 1994-11-29 |               |\n San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)\n San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)\n(3 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: This query is called a left outer join because the table mentioned on the left of the join operator will have each of its rows in the output at least once, whereas the table on the right will only have those rows output that match some row of the left table. When outputting a left-table row for which there is no right-table match, empty (null) values are substituted for the right-table columns.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Exercise: There are also right outer joins and full outer joins. Try to find out what those do.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: We can also join a table against itself. This is called a self join . As an example, suppose we wish to find all the weather records that are in the temperature range of other weather records. So we need to compare the temp_lo and temp_hi columns of each weather row to the temp_lo and temp_hi columns of all other weather rows. We can do this with the following query:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT w1.city, w1.temp_lo AS low, w1.temp_hi AS high,\n       w2.city, w2.temp_lo AS low, w2.temp_hi AS high\n    FROM weather w1 JOIN weather w2\n        ON w1.temp_lo < w2.temp_lo AND w1.temp_hi > w2.temp_hi;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables:      city      | low | high |     city      | low | high\n---------------+-----+------+---------------+-----+------\n San Francisco |  43 |   57 | San Francisco |  46 |   50\n Hayward       |  37 |   54 | San Francisco |  46 |   50\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: Here we have relabeled the weather table as w1 and w2 to be able to distinguish the left and right side of the join. You can also use these kinds of aliases in other queries to save some typing, e.g.:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.6. Joins Between Tables: SELECT *\n    FROM weather w JOIN cities c ON w.city = c.name;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: You will encounter this style of abbreviating quite frequently.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.6. Joins Between Tables: [4] This is only a conceptual model. The join is usually performed in a more efficient manner than actually comparing each possible pair of rows, but this is invisible to the user.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-join",
+    "id": "tutorial-join__node_0024"
+  }
+]

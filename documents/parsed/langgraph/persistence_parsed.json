@@ -1,0 +1,309 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Persistence lets LangGraph applications keep useful information beyond a single graph run. It matters when an agent needs to continue a conversation, resume after an interruption, recover from a failure, or remember information across interactions.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "persistence",
+    "id": "persistence__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LangGraph provides two complementary persistence systems:",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "persistence",
+    "id": "persistence__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Checkpointers persist a thread’s graph state as checkpoints. Use them for short-term, thread-scoped memory, including conversation continuity, human-in-the-loop workflows, time travel, and fault tolerance. - Stores persist application-defined data outside the graph state. Use them for long-term, cross-thread memory, including user preferences, facts, and shared knowledge.",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "persistence",
+    "id": "persistence__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Most applications can use both: a checkpointer tracks the current thread, and a store tracks durable information across threads.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "persistence",
+    "id": "persistence__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Quickstart: Compile your graph with a checkpointer, a store, or both:",
+    "dom_ids": [
+      "quickstart",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Quickstart: from langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.store.memory import InMemoryStore\n\ncheckpointer = InMemorySaver()\nstore = InMemoryStore()\n\ngraph = builder.compile(checkpointer=checkpointer, store=store)\n\nresult = graph.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi, my name is Bob.\"}]},\n    {\"configurable\": {\"thread_id\": \"thread-1\"}},\n)",
+    "dom_ids": [
+      "quickstart",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Quickstart: Agent Server handles persistence automatically When using the Agent Server , you do not need to implement or configure checkpointers or stores manually. The server handles persistence infrastructure behind the scenes.",
+    "dom_ids": [
+      "quickstart",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0007"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Checkpointer | Store",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0008"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Persists | Graph state snapshots | Application-defined key-value data",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0009"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Scope | A single thread | Across threads",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0010"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Memory type | Short-term, thread-scoped memory | Long-term, cross-thread memory",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0011"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Use for | Conversation continuity, human-in-the-loop, time travel, and fault tolerance | User preferences, facts, and shared knowledge",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0012"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Access pattern | Pass a thread_id in graph config | Read and write items from nodes or application code",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0013"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checkpointer vs. store: Full guide | Checkpointers | Stores",
+    "dom_ids": [
+      "checkpointer-vs-store",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Troubleshooting common issues — PostgresSaver: thread_id too long: When using PostgresSaver (or AsyncPostgresSaver ), the thread_id is stored in a column with limited length. If your thread_id exceeds the column size, you will see a database error.",
+    "dom_ids": [
+      "troubleshooting-common-issues",
+      "postgressaver-thread_id-too-long",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Troubleshooting common issues — PostgresSaver: thread_id too long: Fix: Keep thread_id values under 255 characters. Use a UUID or hash if you need deterministic IDs:",
+    "dom_ids": [
+      "troubleshooting-common-issues",
+      "postgressaver-thread_id-too-long",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Troubleshooting common issues — PostgresSaver: thread_id too long: import uuid\n\nconfig = {\"configurable\": {\"thread_id\": str(uuid.uuid4())[:255]}}",
+    "dom_ids": [
+      "troubleshooting-common-issues",
+      "postgressaver-thread_id-too-long",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "MemorySaver does not persist between restarts: MemorySaver and InMemorySaver store checkpoints in RAM. When the process restarts, all checkpoints are lost.",
+    "dom_ids": [
+      "memorysaver-does-not-persist-between-restarts",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "MemorySaver does not persist between restarts: Fix: Use a persistent checkpointer for production:",
+    "dom_ids": [
+      "memorysaver-does-not-persist-between-restarts",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0019"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "MemorySaver does not persist between restarts: - PostgresSaver : PostgreSQL with async support - SqliteSaver : Local file-based storage for development",
+    "dom_ids": [
+      "memorysaver-does-not-persist-between-restarts",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checkpoints growing unboundedly: Over long conversations, checkpoints accumulate. This can increase latency and storage costs.",
+    "dom_ids": [
+      "checkpoints-growing-unboundedly",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checkpoints growing unboundedly: Fix: Prune old checkpoints periodically or set a retention policy:",
+    "dom_ids": [
+      "checkpoints-growing-unboundedly",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checkpoints growing unboundedly: from langgraph.checkpoint.postgres import PostgresSaver\n\ncheckpointer = PostgresSaver.from_conn_string(\"postgresql://...\")\ncheckpointer.setup()  # Creates tables with indexes\n# Consider adding a cron job to delete checkpoints older than N days",
+    "dom_ids": [
+      "checkpoints-growing-unboundedly",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "State access from parent graph to subgraph: When a subgraph updates state, the parent graph may not see the changes immediately. This is because each subgraph manages its own checkpoint namespace.",
+    "dom_ids": [
+      "state-access-from-parent-graph-to-subgraph",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "State access from parent graph to subgraph: Fix: Use shared state via Store for data that needs to cross graph boundaries, or configure your subgraph to write to the parent checkpoint.",
+    "dom_ids": [
+      "state-access-from-parent-graph-to-subgraph",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0025"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Use checkpointers to persist and inspect thread state. - Use stores to persist durable data across threads.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "persistence",
+    "id": "persistence__node_0026"
+  }
+]

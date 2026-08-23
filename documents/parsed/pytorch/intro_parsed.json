@@ -1,0 +1,110 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn the Basics: Created On: Feb 09, 2021 | Last Updated: Jan 20, 2026 | Last Verified: Nov 05, 2024",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn the Basics: Authors: Suraj Subramanian , Seth Juarez , Cassie Breviu , Dmitry Soshnikov , Ari Bornstein",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn the Basics: Most machine learning workflows involve working with data, creating models, optimizing model parameters, and saving the trained models. This tutorial introduces you to a complete ML workflow implemented in PyTorch, with links to learn more about each of these concepts.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn the Basics: We’ll use the FashionMNIST dataset to train a neural network that predicts if an input image belongs to one of the following classes: T-shirt/top, Trouser, Pullover, Dress, Coat, Sandal, Shirt, Sneaker, Bag, or Ankle boot.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Learn the Basics: This tutorial assumes a basic familiarity with Python and Deep Learning concepts.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Running the Tutorial Code: You can run this tutorial in a couple of ways:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0006"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Running the Tutorial Code: - In the cloud : This is the easiest way to get started! Each section has a “Run in Google Colab” link at the top, which opens an integrated notebook in Google Colab with the code in a fully-hosted environment. - Locally : This option requires you to set up PyTorch and TorchVision first on your local machine ( installation instructions ). Download the notebook or copy the code into your favorite IDE.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to Use this Guide: If you’re familiar with other deep learning frameworks, check out the 0. Quickstart first to quickly familiarize yourself with PyTorch’s API.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to Use this Guide: If you’re new to deep learning frameworks, head right into the first section of our step-by-step guide: 1. Tensors .",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "intro",
+    "id": "intro__node_0009"
+  }
+]

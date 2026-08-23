@@ -1,0 +1,1358 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5. Data Structures: This chapter describes some things you’ve learned about already in more detail, and adds some new things as well.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: The list data type has some more methods. Here are all of the methods of list objects:",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Add an item to the end of the list. Similar to a[len(a):] = [x] .",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Extend the list by appending all the items from the iterable. Similar to a[len(a):] = iterable .",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Insert an item at a given position. The first argument is the index of the element before which to insert, so a.insert(0, x) inserts at the front of the list, and a.insert(len(a), x) is equivalent to a.append(x) .",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Remove the first item from the list whose value is equal to value . It raises a ValueError if there is no such item.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Remove the item at the given position in the list, and return it. If no index is specified, a.pop() removes and returns the last item in the list. It raises an IndexError if the list is empty or the index is outside the list range.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Remove all items from the list. Similar to del a[:] .",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Return zero-based index of the first occurrence of value in the list. Raises a ValueError if there is no such item.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: The optional arguments start and end are interpreted as in the slice notation and are used to limit the search to a particular subsequence of the list. The returned index is computed relative to the beginning of the full sequence rather than the start argument.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Return the number of times value appears in the list.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Sort the items of the list in place (the arguments can be used for sort customization, see sorted() for their explanation).",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Reverse the elements of the list in place.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Return a shallow copy of the list. Similar to a[:] .",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: An example that uses most of the list methods:",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1. More on Lists: >>> fruits = ['orange', 'apple', 'pear', 'banana', 'kiwi', 'apple', 'banana']\n>>> fruits.count('apple')\n2\n>>> fruits.count('tangerine')\n0\n>>> fruits.index('banana')\n3\n>>> fruits.index('banana', 4)  # Find next banana starting at position 4\n6\n>>> fruits.reverse()\n>>> fruits\n['banana', 'apple', 'kiwi', 'banana', 'pear', 'apple', 'orange']\n>>> fruits.append('grape')\n>>> fruits\n['banana', 'apple', 'kiwi', 'banana', 'pear', 'apple', 'orange', 'grape']\n>>> fruits.sort()\n>>> fruits\n['apple', 'apple', 'banana', 'banana', 'grape', 'kiwi', 'orange', 'pear']\n>>> fruits.pop()\n'pear'",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: You might have noticed that methods like insert , remove or sort that only modify the list have no return value printed – they return the default None . [ 1 ] This is a design principle for all mutable data structures in Python.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1. More on Lists: Another thing you might notice is that not all data can be sorted or compared. For instance, [None, 'hello', 10] doesn’t sort because integers can’t be compared to strings and None can’t be compared to other types. Also, there are some types that don’t have a defined ordering relation. For example, 3+4j < 5+7j isn’t a valid comparison.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.1. Using Lists as Stacks: The list methods make it very easy to use a list as a stack, where the last element added is the first element retrieved (“last-in, first-out”). To add an item to the top of the stack, use append() . To retrieve an item from the top of the stack, use pop() without an explicit index. For example:",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.1. Using Lists as Stacks: >>> stack = [3, 4, 5]\n>>> stack.append(6)\n>>> stack.append(7)\n>>> stack\n[3, 4, 5, 6, 7]\n>>> stack.pop()\n7\n>>> stack\n[3, 4, 5, 6]\n>>> stack.pop()\n6\n>>> stack.pop()\n5\n>>> stack\n[3, 4]",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.2. Using Lists as Queues: It is also possible to use a list as a queue, where the first element added is the first element retrieved (“first-in, first-out”); however, lists are not efficient for this purpose. While appends and pops from the end of list are fast, doing inserts or pops from the beginning of a list is slow (because all of the other elements have to be shifted by one).",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.2. Using Lists as Queues: To implement a queue, use collections.deque which was designed to have fast appends and pops from both ends. For example:",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.2. Using Lists as Queues: >>> from collections import deque\n>>> queue = deque([\"Eric\", \"John\", \"Michael\"])\n>>> queue.append(\"Terry\")           # Terry arrives\n>>> queue.append(\"Graham\")          # Graham arrives\n>>> queue.popleft()                 # The first to arrive now leaves\n'Eric'\n>>> queue.popleft()                 # The second to arrive now leaves\n'John'\n>>> queue                           # Remaining queue in order of arrival\ndeque(['Michael', 'Terry', 'Graham'])",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: List comprehensions provide a concise way to create lists. Common applications are to make new lists where each element is the result of some operations applied to each member of another sequence or iterable, or to create a subsequence of those elements that satisfy a certain condition.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: For example, assume we want to create a list of squares, like:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: >>> squares = []\n>>> for x in range(10):\n...     squares.append(x**2)\n...\n>>> squares\n[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: Note that this creates (or overwrites) a variable named x that still exists after the loop completes. We can calculate the list of squares without any side effects using:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: squares = list(map(lambda x: x**2, range(10)))",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: or, equivalently:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: squares = [x**2 for x in range(10)]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: which is more concise and readable.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: A list comprehension consists of brackets containing an expression followed by a for clause, then zero or more for or if clauses. The result will be a new list resulting from evaluating the expression in the context of the for and if clauses which follow it. For example, this listcomp combines the elements of two lists if they are not equal:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: >>> [(x, y) for x in [1,2,3] for y in [3,1,4] if x != y]\n[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: and it’s equivalent to:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: >>> combs = []\n>>> for x in [1,2,3]:\n...     for y in [3,1,4]:\n...         if x != y:\n...             combs.append((x, y))\n...\n>>> combs\n[(1, 3), (1, 4), (2, 3), (2, 1), (2, 4), (3, 1), (3, 4)]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: Note how the order of the for and if statements is the same in both these snippets.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: If the expression is a tuple (e.g. the (x, y) in the previous example), it must be parenthesized.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: >>> vec = [-4, -2, 0, 2, 4]\n>>> # create a new list with the values doubled\n>>> [x*2 for x in vec]\n[-8, -4, 0, 4, 8]\n>>> # filter the list to exclude negative numbers\n>>> [x for x in vec if x >= 0]\n[0, 2, 4]\n>>> # apply a function to all the elements\n>>> [abs(x) for x in vec]\n[4, 2, 0, 2, 4]\n>>> # call a method on each element\n>>> freshfruit = ['  banana', '  loganberry ', 'passion fruit  ']\n>>> [weapon.strip() for weapon in freshfruit]\n['banana', 'loganberry', 'passion fruit']\n>>> # create a list of 2-tuples like (number, square)\n>>> [(x, x**2) for x in range(6)]\n[(0, 0), (1, 1), (2, 4), (3, 9), (4, 16), (5, 25)]\n>>> # the tuple must be parenthesized, otherwise an error is raised\n>>> [x, x**2 for x in range(6)]\n  File \"<stdin>\", line 1\n    [x, x**2 for x in range(6)]\n     ^^^^^^^\nSyntaxError: did you forget parentheses around the comprehension target?\n>>> # flatten a list using a listcomp with two 'for'\n>>> vec = [[1,2,3], [4,5,6], [7,8,9]]\n>>> [num for elem in vec for num in elem]\n[1, 2, 3, 4, 5, 6, 7, 8, 9]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: List comprehensions can contain complex expressions and nested functions:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.3. List Comprehensions: >>> from math import pi\n>>> [str(round(pi, i)) for i in range(1, 6)]\n['3.1', '3.14', '3.142', '3.1416', '3.14159']",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: The initial expression in a list comprehension can be any arbitrary expression, including another list comprehension.",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: Consider the following example of a 3x4 matrix implemented as a list of 3 lists of length 4:",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: >>> matrix = [\n...     [1, 2, 3, 4],\n...     [5, 6, 7, 8],\n...     [9, 10, 11, 12],\n... ]",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: The following list comprehension will transpose rows and columns:",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: >>> [[row[i] for row in matrix] for i in range(4)]\n[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: As we saw in the previous section, the inner list comprehension is evaluated in the context of the for that follows it, so this example is equivalent to:",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: >>> transposed = []\n>>> for i in range(4):\n...     transposed.append([row[i] for row in matrix])\n...\n>>> transposed\n[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: which, in turn, is the same as:",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: >>> transposed = []\n>>> for i in range(4):\n...     # the following 3 lines implement the nested listcomp\n...     transposed_row = []\n...     for row in matrix:\n...         transposed_row.append(row[i])\n...     transposed.append(transposed_row)\n...\n>>> transposed\n[[1, 5, 9], [2, 6, 10], [3, 7, 11], [4, 8, 12]]",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: In the real world, you should prefer built-in functions to complex flow statements. The zip() function would do a great job for this use case:",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: >>> list(zip(*matrix))\n[(1, 5, 9), (2, 6, 10), (3, 7, 11), (4, 8, 12)]",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.1.4. Nested List Comprehensions: See Unpacking Argument Lists for details on the asterisk in this line.",
+    "dom_ids": [
+      "readar-node-0046",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.2. The del statement: There is a way to remove an item from a list given its index instead of its value: the del statement. This differs from the pop() method which returns a value. The del statement can also be used to remove slices from a list or clear the entire list (which we did earlier by assignment of an empty list to the slice). For example:",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.2. The del statement: >>> a = [-1, 1, 66.25, 333, 333, 1234.5]\n>>> del a[0]\n>>> a\n[1, 66.25, 333, 333, 1234.5]\n>>> del a[2:4]\n>>> a\n[1, 66.25, 1234.5]\n>>> del a[:]\n>>> a\n[]",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.2. The del statement: del can also be used to delete entire variables:",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.2. The del statement: >>> del a",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.2. The del statement: Referencing the name a hereafter is an error (at least until another value is assigned to it). We’ll find other uses for del later.",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: We saw that lists and strings have many common properties, such as indexing and slicing operations. They are two examples of sequence data types (see Sequence Types — list, tuple, range ). Since Python is an evolving language, other sequence data types may be added. There is also another standard sequence data type: the tuple .",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: A tuple consists of a number of values separated by commas, for instance:",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: >>> t = 12345, 54321, 'hello!'\n>>> t[0]\n12345\n>>> t\n(12345, 54321, 'hello!')\n>>> # Tuples may be nested:\n>>> u = t, (1, 2, 3, 4, 5)\n>>> u\n((12345, 54321, 'hello!'), (1, 2, 3, 4, 5))\n>>> # Tuples are immutable:\n>>> t[0] = 88888\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nTypeError: 'tuple' object does not support item assignment\n>>> # but they can contain mutable objects:\n>>> v = ([1, 2, 3], [3, 2, 1])\n>>> v\n([1, 2, 3], [3, 2, 1])",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: As you see, on output tuples are always enclosed in parentheses, so that nested tuples are interpreted correctly; they may be input with or without surrounding parentheses, although often parentheses are necessary anyway (if the tuple is part of a larger expression). It is not possible to assign to the individual items of a tuple, however it is possible to create tuples which contain mutable objects, such as lists.",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: Though tuples may seem similar to lists, they are often used in different situations and for different purposes. Tuples are immutable , and usually contain a heterogeneous sequence of elements that are accessed via unpacking (see later in this section) or indexing (or even by attribute in the case of namedtuples ). Lists are mutable , and their elements are usually homogeneous and are accessed by iterating over the list.",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: A special problem is the construction of tuples containing 0 or 1 items: the syntax has some extra quirks to accommodate these. Empty tuples are constructed by an empty pair of parentheses; a tuple with one item is constructed by following a value with a comma (it is not sufficient to enclose a single value in parentheses). Ugly, but effective. For example:",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: >>> empty = ()\n>>> singleton = 'hello',    # <-- note trailing comma\n>>> len(empty)\n0\n>>> len(singleton)\n1\n>>> singleton\n('hello',)",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: The statement t = 12345, 54321, 'hello!' is an example of tuple packing : the values 12345 , 54321 and 'hello!' are packed together in a tuple. The reverse operation is also possible:",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: >>> x, y, z = t",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.3. Tuples and Sequences: This is called, appropriately enough, sequence unpacking and works for any sequence on the right-hand side. Sequence unpacking requires that there are as many variables on the left side of the equals sign as there are elements in the sequence. Note that multiple assignment is really just a combination of tuple packing and sequence unpacking.",
+    "dom_ids": [
+      "readar-node-0065",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.4. Sets: Python also includes a data type for sets . A set is an unordered collection with no duplicate elements. Basic uses include membership testing and eliminating duplicate entries. Set objects also support mathematical operations like union, intersection, difference, and symmetric difference.",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.4. Sets: Curly braces or the set() function can be used to create sets. Note: to create an empty set you have to use set() , not {} ; the latter creates an empty dictionary, a data structure that we discuss in the next section.",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.4. Sets: Because sets are unordered, iterating over them or printing them can produce the elements in a different order than you expect.",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.4. Sets: Here is a brief demonstration:",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.4. Sets: >>> basket = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}\n>>> print(basket)                      # show that duplicates have been removed\n{'orange', 'banana', 'pear', 'apple'}\n>>> 'orange' in basket                 # fast membership testing\nTrue\n>>> 'crabgrass' in basket\nFalse\n\n>>> # Demonstrate set operations on unique letters from two words\n>>>\n>>> a = set('abracadabra')\n>>> b = set('alacazam')\n>>> a                                  # unique letters in a\n{'a', 'r', 'b', 'c', 'd'}\n>>> a - b                              # letters in a but not in b\n{'r', 'd', 'b'}\n>>> a | b                              # letters in a or b or both\n{'a', 'c', 'r', 'd', 'b', 'm', 'z', 'l'}\n>>> a & b                              # letters in both a and b\n{'a', 'c'}\n>>> a ^ b                              # letters in a or b but not both\n{'r', 'd', 'b', 'm', 'z', 'l'}",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.4. Sets: Similarly to list comprehensions , set comprehensions are also supported:",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.4. Sets: >>> a = {x for x in 'abracadabra' if x not in 'abc'}\n>>> a\n{'r', 'd'}",
+    "dom_ids": [
+      "readar-node-0076",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: Another useful data type built into Python is the dictionary (see Mapping Types — dict ). Dictionaries are sometimes found in other languages as “associative memories” or “associative arrays”. Unlike sequences, which are indexed by a range of numbers, dictionaries are indexed by keys , which can be any immutable type; strings and numbers can always be keys. Tuples can be used as keys if they contain only strings, numbers, or tuples; if a tuple contains any mutable object either directly or indirectly, it cannot be used as a key. You can’t use lists as keys, since lists can be modified in place using index assignments, slice assignments, or methods like append() and extend() .",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: It is best to think of a dictionary as a set of key: value pairs, with the requirement that the keys are unique (within one dictionary). A pair of braces creates an empty dictionary: {} . Placing a comma-separated list of key:value pairs within the braces adds initial key:value pairs to the dictionary; this is also the way dictionaries are written on output.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0076"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: The main operations on a dictionary are storing a value with some key and extracting the value given the key. It is also possible to delete a key:value pair with del . If you store using a key that is already in use, the old value associated with that key is forgotten.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: Extracting a value for a non-existent key by subscripting ( d[key] ) raises a KeyError . To avoid getting this error when trying to access a possibly non-existent key, use the get() method instead, which returns None (or a specified default value) if the key is not in the dictionary.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: Performing list(d) on a dictionary returns a list of all the keys used in the dictionary, in insertion order (if you want it sorted, just use sorted(d) instead). To check whether a single key is in the dictionary, use the in keyword.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0079"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: Here is a small example using a dictionary:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0080"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.5. Dictionaries: >>> tel = {'jack': 4098, 'sape': 4139}\n>>> tel['guido'] = 4127\n>>> tel\n{'jack': 4098, 'sape': 4139, 'guido': 4127}\n>>> tel['jack']\n4098\n>>> tel['irv']\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nKeyError: 'irv'\n>>> print(tel.get('irv'))\nNone\n>>> del tel['sape']\n>>> tel['irv'] = 4127\n>>> tel\n{'jack': 4098, 'guido': 4127, 'irv': 4127}\n>>> list(tel)\n['jack', 'guido', 'irv']\n>>> sorted(tel)\n['guido', 'irv', 'jack']\n>>> 'guido' in tel\nTrue\n>>> 'jack' not in tel\nFalse",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: The dict() constructor builds dictionaries directly from sequences of key-value pairs:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0082"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.5. Dictionaries: >>> dict([('sape', 4139), ('guido', 4127), ('jack', 4098)])\n{'sape': 4139, 'guido': 4127, 'jack': 4098}",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: In addition, dict comprehensions can be used to create dictionaries from arbitrary key and value expressions:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0084"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.5. Dictionaries: >>> {x: x**2 for x in (2, 4, 6)}\n{2: 4, 4: 16, 6: 36}",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.5. Dictionaries: When the keys are simple strings, it is sometimes easier to specify pairs using keyword arguments:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0086"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.5. Dictionaries: >>> dict(sape=4139, guido=4127, jack=4098)\n{'sape': 4139, 'guido': 4127, 'jack': 4098}",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: When looping through dictionaries, the key and corresponding value can be retrieved at the same time using the items() method.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0088"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> knights = {'gallahad': 'the pure', 'robin': 'the brave'}\n>>> for k, v in knights.items():\n...     print(k, v)\n...\ngallahad the pure\nrobin the brave",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: When looping through a sequence, the position index and corresponding value can be retrieved at the same time using the enumerate() function.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0090"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> for i, v in enumerate(['tic', 'tac', 'toe']):\n...     print(i, v)\n...\n0 tic\n1 tac\n2 toe",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0091"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: To loop over two or more sequences at the same time, the entries can be paired with the zip() function.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0092"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> questions = ['name', 'quest', 'favorite color']\n>>> answers = ['lancelot', 'the holy grail', 'blue']\n>>> for q, a in zip(questions, answers):\n...     print('What is your {0}?  It is {1}.'.format(q, a))\n...\nWhat is your name?  It is lancelot.\nWhat is your quest?  It is the holy grail.\nWhat is your favorite color?  It is blue.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0093"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: To loop over a sequence in reverse, first specify the sequence in a forward direction and then call the reversed() function.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0094"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> for i in reversed(range(1, 10, 2)):\n...     print(i)\n...\n9\n7\n5\n3\n1",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0095"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: To loop over a sequence in sorted order, use the sorted() function which returns a new sorted list while leaving the source unaltered.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0096"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> basket = ['apple', 'orange', 'apple', 'pear', 'orange', 'banana']\n>>> for i in sorted(basket):\n...     print(i)\n...\napple\napple\nbanana\norange\norange\npear",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0097"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: Using set() on a sequence eliminates duplicate elements. The use of sorted() in combination with set() over a sequence is an idiomatic way to loop over unique elements of the sequence in sorted order.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0098"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> basket = ['apple', 'orange', 'apple', 'pear', 'orange', 'banana']\n>>> for f in sorted(set(basket)):\n...     print(f)\n...\napple\nbanana\norange\npear",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0099"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.6. Looping Techniques: It is sometimes tempting to change a list while you are looping over it; however, it is often simpler and safer to create a new list instead.",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0100"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.6. Looping Techniques: >>> import math\n>>> raw_data = [56.2, float('NaN'), 51.7, 55.3, 52.5, float('NaN'), 47.8]\n>>> filtered_data = []\n>>> for value in raw_data:\n...     if not math.isnan(value):\n...         filtered_data.append(value)\n...\n>>> filtered_data\n[56.2, 51.7, 55.3, 52.5, 47.8]",
+    "dom_ids": [
+      "readar-node-0098",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0101"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: The conditions used in while and if statements can contain any operators, not just comparisons.",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0102"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: The comparison operators in and not in are membership tests that determine whether a value is in (or not in) a container. The operators is and is not compare whether two objects are really the same object. All comparison operators have the same priority, which is lower than that of all numerical operators.",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0103"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: Comparisons can be chained. For example, a < b == c tests whether a is less than b and moreover b equals c .",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0104"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: Comparisons may be combined using the Boolean operators and and or , and the outcome of a comparison (or of any other Boolean expression) may be negated with not . These have lower priorities than comparison operators; between them, not has the highest priority and or the lowest, so that A and not B or C is equivalent to (A and (not B)) or C . As always, parentheses can be used to express the desired composition.",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0105"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: The Boolean operators and and or are so-called short-circuit operators: their arguments are evaluated from left to right, and evaluation stops as soon as the outcome is determined. For example, if A and C are true but B is false, A and B and C does not evaluate the expression C . When used as a general value and not as a Boolean, the return value of a short-circuit operator is the last evaluated argument.",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0106"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: It is possible to assign the result of a comparison or other Boolean expression to a variable. For example,",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0107"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.7. More on Conditions: >>> string1, string2, string3 = '', 'Trondheim', 'Hammer Dance'\n>>> non_null = string1 or string2 or string3\n>>> non_null\n'Trondheim'",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0108"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.7. More on Conditions: Note that in Python, unlike C, assignment inside expressions must be done explicitly with the walrus operator := . This avoids a common class of problems encountered in C programs: typing = in an expression when == was intended.",
+    "dom_ids": [
+      "readar-node-0113",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.8. Comparing Sequences and Other Types: Sequence objects typically may be compared to other objects with the same sequence type. The comparison uses lexicographical ordering: first the first two items are compared, and if they differ this determines the outcome of the comparison; if they are equal, the next two items are compared, and so on, until either sequence is exhausted. If two items to be compared are themselves sequences of the same type, the lexicographical comparison is carried out recursively. If all items of two sequences compare equal, the sequences are considered equal. If one sequence is an initial sub-sequence of the other, the shorter sequence is the smaller (lesser) one. Lexicographical ordering for strings uses the Unicode code point number to order individual characters. Some examples of comparisons between sequences of the same type:",
+    "dom_ids": [
+      "readar-node-0122",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0110"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "5.8. Comparing Sequences and Other Types: (1, 2, 3)              < (1, 2, 4)\n[1, 2, 3]              < [1, 2, 4]\n'ABC' < 'C' < 'Pascal' < 'Python'\n(1, 2, 3, 4)           < (1, 2, 4)\n(1, 2)                 < (1, 2, -1)\n(1, 2, 3)             == (1.0, 2.0, 3.0)\n(1, 2, ('aa', 'ab'))   < (1, 2, ('abc', 'a'), 4)",
+    "dom_ids": [
+      "readar-node-0122",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.8. Comparing Sequences and Other Types: Note that comparing objects of different types with < or > is legal provided that the objects have appropriate comparison methods. For example, mixed numeric types are compared according to their numeric value, so 0 equals 0.0, etc. Otherwise, rather than providing an arbitrary ordering, the interpreter will raise a TypeError exception.",
+    "dom_ids": [
+      "readar-node-0122",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "5.8. Comparing Sequences and Other Types: Footnotes",
+    "dom_ids": [
+      "readar-node-0122",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "datastructures",
+    "id": "datastructures__node_0113"
+  }
+]

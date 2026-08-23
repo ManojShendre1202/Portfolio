@@ -1,0 +1,436 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.5 Git Basics - Working with Remotes — Working with Remotes: To be able to collaborate on any Git project, you need to know how to manage your remote repositories. Remote repositories are versions of your project that are hosted on the Internet or network somewhere. You can have several of them, each of which generally is either read-only or read/write for you. Collaborating with others involves managing these remote repositories and pushing and pulling data to and from them when you need to share work. Managing remote repositories includes knowing how to add remote repositories, remove remotes that are no longer valid, manage various remote branches and define them as being tracked or not, and more. In this section, we’ll cover some of these remote-management skills.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_remote_repos",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0001"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.5 Git Basics - Working with Remotes — Working with Remotes: Note | Remote repositories can be on your local machine. It is entirely possible that you can be working with a “remote” repository that is, in fact, on the same host you are. The word “remote” does not necessarily imply that the repository is somewhere else on the network or Internet, only that it is elsewhere. Working with such a remote repository would still involve all the standard pushing, pulling and fetching operations as with any other remote.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_remote_repos",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Showing Your Remotes: To see which remote servers you have configured, you can run the git remote command. It lists the shortnames of each remote handle you’ve specified. If you’ve cloned your repository, you should at least see origin — that is the default name Git gives to the server you cloned from:",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Showing Your Remotes: $ git clone https://github.com/schacon/ticgit\nCloning into 'ticgit'...\nremote: Reusing existing pack: 1857, done.\nremote: Total 1857 (delta 0), reused 0 (delta 0)\nReceiving objects: 100% (1857/1857), 374.35 KiB | 268.00 KiB/s, done.\nResolving deltas: 100% (772/772), done.\nChecking connectivity... done.\n$ cd ticgit\n$ git remote\norigin",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Showing Your Remotes: You can also specify -v , which shows you the URLs that Git has stored for the shortname to be used when reading and writing to that remote:",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Showing Your Remotes: $ git remote -v\norigin\thttps://github.com/schacon/ticgit (fetch)\norigin\thttps://github.com/schacon/ticgit (push)",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Showing Your Remotes: If you have more than one remote, the command lists them all. For example, a repository with multiple remotes for working with several collaborators might look something like this.",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Showing Your Remotes: $ cd grit\n$ git remote -v\nbakkdoor  https://github.com/bakkdoor/grit (fetch)\nbakkdoor  https://github.com/bakkdoor/grit (push)\ncho45     https://github.com/cho45/grit (fetch)\ncho45     https://github.com/cho45/grit (push)\ndefunkt   https://github.com/defunkt/grit (fetch)\ndefunkt   https://github.com/defunkt/grit (push)\nkoke      git://github.com/koke/grit.git (fetch)\nkoke      git://github.com/koke/grit.git (push)\norigin    git@github.com:mojombo/grit.git (fetch)\norigin    git@github.com:mojombo/grit.git (push)",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Showing Your Remotes: This means we can pull contributions from any of these users pretty easily. We may additionally have permission to push to one or more of these, though we can’t tell that here.",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Showing Your Remotes: Notice that these remotes use a variety of protocols; we’ll cover more about this in Getting Git on a Server .",
+    "dom_ids": [
+      "_showing_your_remotes",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Remote Repositories: We’ve mentioned and given some demonstrations of how the git clone command implicitly adds the origin remote for you. Here’s how to add a new remote explicitly. To add a new remote Git repository as a shortname you can reference easily, run git remote add <shortname> <url> :",
+    "dom_ids": [
+      "_adding_remote_repositories",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Remote Repositories: $ git remote\norigin\n$ git remote add pb https://github.com/paulboone/ticgit\n$ git remote -v\norigin\thttps://github.com/schacon/ticgit (fetch)\norigin\thttps://github.com/schacon/ticgit (push)\npb\thttps://github.com/paulboone/ticgit (fetch)\npb\thttps://github.com/paulboone/ticgit (push)",
+    "dom_ids": [
+      "_adding_remote_repositories",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Remote Repositories: Now you can use the string pb on the command line instead of the whole URL. For example, if you want to fetch all the information that Paul has but that you don’t yet have in your repository, you can run git fetch pb :",
+    "dom_ids": [
+      "_adding_remote_repositories",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Remote Repositories: $ git fetch pb\nremote: Counting objects: 43, done.\nremote: Compressing objects: 100% (36/36), done.\nremote: Total 43 (delta 10), reused 31 (delta 5)\nUnpacking objects: 100% (43/43), done.\nFrom https://github.com/paulboone/ticgit\n * [new branch]      master     -> pb/master\n * [new branch]      ticgit     -> pb/ticgit",
+    "dom_ids": [
+      "_adding_remote_repositories",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Remote Repositories: Paul’s master branch is now accessible locally as pb/master — you can merge it into one of your branches, or you can check out a local branch at that point if you want to inspect it. We’ll go over what branches are and how to use them in much more detail in Git Branching .",
+    "dom_ids": [
+      "_adding_remote_repositories",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: As you just saw, to get data from your remote projects, you can run:",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: $ git fetch <remote>",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: The command goes out to that remote project and pulls down all the data from that remote project that you don’t have yet. After you do this, you should have references to all the branches from that remote, which you can merge in or inspect at any time.",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: If you clone a repository, the command automatically adds that remote repository under the name “origin”. So, git fetch origin fetches any new work that has been pushed to that server since you cloned (or last fetched from) it. It’s important to note that the git fetch command only downloads the data to your local repository — it doesn’t automatically merge it with any of your work or modify what you’re currently working on. You have to merge it manually into your work when you’re ready.",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: If your current branch is set up to track a remote branch (see the next section and Git Branching for more information), you can use the git pull command to automatically fetch and then merge that remote branch into your current branch. This may be an easier or more comfortable workflow for you; and by default, the git clone command automatically sets up your local master branch to track the remote master branch (or whatever the default branch is called) on the server you cloned from. Running git pull generally fetches data from the server you originally cloned from and automatically tries to merge it into the code you’re currently working on.",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0020"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Fetching and Pulling from Your Remotes: Note | From Git version 2.27 onward, git pull will give a warning if the pull.rebase variable is not set. Git will keep warning you until you set the variable. If you want the default behavior of Git (fast-forward if possible, else create a merge commit): git config --global pull.rebase \"false\" If you want to rebase when pulling: git config --global pull.rebase \"true\"",
+    "dom_ids": [
+      "_fetching_and_pulling",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Pushing to Your Remotes: When you have your project at a point that you want to share, you have to push it upstream. The command for this is simple: git push <remote> <branch> . If you want to push your master branch to your origin server (again, cloning generally sets up both of those names for you automatically), then you can run this to push any commits you’ve done back up to the server:",
+    "dom_ids": [
+      "_pushing_remotes",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Pushing to Your Remotes: $ git push origin master",
+    "dom_ids": [
+      "_pushing_remotes",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Pushing to Your Remotes: This command works only if you cloned from a server to which you have write access and if nobody has pushed in the meantime. If you and someone else clone at the same time and they push upstream and then you push upstream, your push will rightly be rejected. You’ll have to fetch their work first and incorporate it into yours before you’ll be allowed to push. See Git Branching for more detailed information on how to push to remote servers.",
+    "dom_ids": [
+      "_pushing_remotes",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspecting a Remote: If you want to see more information about a particular remote, you can use the git remote show <remote> command. If you run this command with a particular shortname, such as origin , you get something like this:",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspecting a Remote: $ git remote show origin\n* remote origin\n  Fetch URL: https://github.com/schacon/ticgit\n  Push  URL: https://github.com/schacon/ticgit\n  HEAD branch: master\n  Remote branches:\n    master                               tracked\n    dev-branch                           tracked\n  Local branch configured for 'git pull':\n    master merges with remote master\n  Local ref configured for 'git push':\n    master pushes to master (up to date)",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspecting a Remote: It lists the URL for the remote repository as well as the tracking branch information. The command helpfully tells you that if you’re on the master branch and you run git pull , it will automatically merge the remote’s master branch into the local one after it has been fetched. It also lists all the remote references it has pulled down.",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspecting a Remote: That is a simple example you’re likely to encounter. When you’re using Git more heavily, however, you may see much more information from git remote show :",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspecting a Remote: $ git remote show origin\n* remote origin\n  URL: https://github.com/my-org/complex-project\n  Fetch URL: https://github.com/my-org/complex-project\n  Push  URL: https://github.com/my-org/complex-project\n  HEAD branch: master\n  Remote branches:\n    master                           tracked\n    dev-branch                       tracked\n    markdown-strip                   tracked\n    issue-43                         new (next fetch will store in remotes/origin)\n    issue-45                         new (next fetch will store in remotes/origin)\n    refs/remotes/origin/issue-11     stale (use 'git remote prune' to remove)\n  Local branches configured for 'git pull':\n    dev-branch merges with remote dev-branch\n    master     merges with remote master\n  Local refs configured for 'git push':\n    dev-branch                     pushes to dev-branch                     (up to date)\n    markdown-strip                 pushes to markdown-strip                 (up to date)\n    master                         pushes to master                         (up to date)",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspecting a Remote: This command shows which branch is automatically pushed to when you run git push while on certain branches. It also shows you which remote branches on the server you don’t yet have, which remote branches you have that have been removed from the server, and multiple local branches that are able to merge automatically with their remote-tracking branch when you run git pull .",
+    "dom_ids": [
+      "_inspecting_remote",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Renaming and Removing Remotes: You can run git remote rename to change a remote’s shortname. For instance, if you want to rename pb to paul , you can do so with git remote rename :",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Renaming and Removing Remotes: $ git remote rename pb paul\n$ git remote\norigin\npaul",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Renaming and Removing Remotes: It’s worth mentioning that this changes all your remote-tracking branch names, too. What used to be referenced at pb/master is now at paul/master .",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Renaming and Removing Remotes: If you want to remove a remote for some reason — you’ve moved the server or are no longer using a particular mirror, or perhaps a contributor isn’t contributing anymore — you can either use git remote remove or git remote rm :",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Renaming and Removing Remotes: $ git remote remove paul\n$ git remote\norigin",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Renaming and Removing Remotes: Once you delete the reference to a remote this way, all remote-tracking branches and configuration settings associated with that remote are also deleted.",
+    "dom_ids": [
+      "_renaming_and_removing_remotes",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "working_with_remotes",
+    "id": "working_with_remotes__node_0036"
+  }
+]

@@ -1,0 +1,456 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: At any stage, you may want to undo something. Here, we’ll review a few basic tools for undoing changes that you’ve made. Be careful, because you can’t always undo some of these undos. This is one of the few areas in Git where you may lose some work if you do it wrong.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: One of the common undos takes place when you commit too early and possibly forget to add some files, or you mess up your commit message. If you want to redo that commit, make the additional changes you forgot, stage them, and commit again using the --amend option:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: $ git commit --amend",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: This command takes your staging area and uses it for the commit. If you’ve made no changes since your last commit (for instance, you run this command immediately after your previous commit), then your snapshot will look exactly the same, and all you’ll change is your commit message.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: The same commit-message editor fires up, but it already contains the message of your previous commit. You can edit the message the same as always, but it overwrites your previous commit.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: As an example, if you commit and then realize you forgot to stage the changes in a file you wanted to add to this commit, you can do something like this:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: $ git commit -m 'Initial commit'\n$ git add forgotten_file\n$ git commit --amend",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: You end up with a single commit — the second commit replaces the results of the first.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0008"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: Note | It’s important to understand that when you’re amending your last commit, you’re not so much fixing it as replacing it entirely with a new, improved commit that pushes the old commit out of the way and puts the new commit in its place. Effectively, it’s as if the previous commit never happened, and it won’t show up in your repository history. The obvious value to amending commits is to make minor improvements to your last commit, without cluttering your repository history with commit messages of the form, “Oops, forgot to add a file” or “Darn, fixing a typo in last commit”.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0009"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.4 Git Basics - Undoing Things — Undoing Things: Note | Only amend commits that are still local and have not been pushed somewhere. Amending previously pushed commits and force pushing the branch will cause problems for your collaborators. For more on what happens when you do this and how to recover if you’re on the receiving end read The Perils of Rebasing .",
+    "dom_ids": [
+      "readar-node-0001",
+      "_undoing",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File: The next two sections demonstrate how to work with your staging area and working directory changes. The nice part is that the command you use to determine the state of those two areas also reminds you how to undo changes to them. For example, let’s say you’ve changed two files and want to commit them as two separate changes, but you accidentally type git add * and stage them both. How can you unstage one of the two? The git status command reminds you:",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unstaging a Staged File: $ git add *\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    renamed:    README.md -> README\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File: Right below the “Changes to be committed” text, it says use git reset HEAD <file>… to unstage. So, let’s use that advice to unstage the CONTRIBUTING.md file:",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unstaging a Staged File: $ git reset HEAD CONTRIBUTING.md\nUnstaged changes after reset:\nM\tCONTRIBUTING.md\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    renamed:    README.md -> README\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File: The command is a bit strange, but it works. The CONTRIBUTING.md file is modified but once again unstaged.",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0015"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Unstaging a Staged File: Note | It’s true that git reset can be a dangerous command, especially if you provide the --hard flag. However, in the scenario described above, the file in your working directory is not touched, so it’s relatively safe.",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File: For now this magic invocation is all you need to know about the git reset command. We’ll go into much more detail about what reset does and how to master it to do really interesting things in Reset Demystified .",
+    "dom_ids": [
+      "_unstaging",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File: What if you realize that you don’t want to keep your changes to the CONTRIBUTING.md file? How can you easily unmodify it — revert it back to what it looked like when you last committed (or initially cloned, or however you got it into your working directory)? Luckily, git status tells you how to do that, too. In the last example output, the unstaged area looks like this:",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unmodifying a Modified File: Changes not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git checkout -- <file>...\" to discard changes in working directory)\n\n    modified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File: It tells you pretty explicitly how to discard the changes you’ve made. Let’s do what it says:",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unmodifying a Modified File: $ git checkout -- CONTRIBUTING.md\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git reset HEAD <file>...\" to unstage)\n\n    renamed:    README.md -> README",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File: You can see that the changes have been reverted.",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0022"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Unmodifying a Modified File: Important | It’s important to understand that git checkout -- <file> is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the last staged or committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File: If you would like to keep the changes you’ve made to that file but still need to get it out of the way for now, we’ll go over stashing and branching in Git Branching ; these are generally better ways to go.",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File: Remember, anything that is committed in Git can almost always be recovered. Even commits that were on branches that were deleted or commits that were overwritten with an --amend commit can be recovered (see Data Recovery for data recovery). However, anything you lose that was never committed is likely never to be seen again.",
+    "dom_ids": [
+      "_unmodifying_a_modified_file",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Undoing things with git restore: Git version 2.23.0 introduced a new command: git restore . It’s basically an alternative to git reset which we just covered. From Git version 2.23.0 onwards, Git will use git restore instead of git reset for many undo operations.",
+    "dom_ids": [
+      "undoing_git_restore",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Undoing things with git restore: Let’s retrace our steps, and undo things with git restore instead of git reset .",
+    "dom_ids": [
+      "undoing_git_restore",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File with git restore: The next two sections demonstrate how to work with your staging area and working directory changes with git restore . The nice part is that the command you use to determine the state of those two areas also reminds you how to undo changes to them. For example, let’s say you’ve changed two files and want to commit them as two separate changes, but you accidentally type git add * and stage them both. How can you unstage one of the two? The git status command reminds you:",
+    "dom_ids": [
+      "_unstaging_a_staged_file_with_git_restore",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unstaging a Staged File with git restore: $ git add *\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\tmodified:   CONTRIBUTING.md\n\trenamed:    README.md -> README",
+    "dom_ids": [
+      "_unstaging_a_staged_file_with_git_restore",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File with git restore: Right below the “Changes to be committed” text, it says use git restore --staged <file>… to unstage. So, let’s use that advice to unstage the CONTRIBUTING.md file:",
+    "dom_ids": [
+      "_unstaging_a_staged_file_with_git_restore",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unstaging a Staged File with git restore: $ git restore --staged CONTRIBUTING.md\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\trenamed:    README.md -> README\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_unstaging_a_staged_file_with_git_restore",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unstaging a Staged File with git restore: The CONTRIBUTING.md file is modified but once again unstaged.",
+    "dom_ids": [
+      "_unstaging_a_staged_file_with_git_restore",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File with git restore: What if you realize that you don’t want to keep your changes to the CONTRIBUTING.md file? How can you easily unmodify it — revert it back to what it looked like when you last committed (or initially cloned, or however you got it into your working directory)? Luckily, git status tells you how to do that, too. In the last example output, the unstaged area looks like this:",
+    "dom_ids": [
+      "_unmodifying_a_modified_file_with_git_restore",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unmodifying a Modified File with git restore: Changes not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   CONTRIBUTING.md",
+    "dom_ids": [
+      "_unmodifying_a_modified_file_with_git_restore",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Unmodifying a Modified File with git restore: It tells you pretty explicitly how to discard the changes you’ve made. Let’s do what it says:",
+    "dom_ids": [
+      "_unmodifying_a_modified_file_with_git_restore",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Unmodifying a Modified File with git restore: $ git restore CONTRIBUTING.md\n$ git status\nOn branch master\nChanges to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\trenamed:    README.md -> README",
+    "dom_ids": [
+      "_unmodifying_a_modified_file_with_git_restore",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0036"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Unmodifying a Modified File with git restore: Important | It’s important to understand that git restore <file> is a dangerous command. Any local changes you made to that file are gone — Git just replaced that file with the last staged or committed version. Don’t ever use this command unless you absolutely know that you don’t want those unsaved local changes.",
+    "dom_ids": [
+      "_unmodifying_a_modified_file_with_git_restore",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "undoing_things",
+    "id": "undoing_things__node_0037"
+  }
+]

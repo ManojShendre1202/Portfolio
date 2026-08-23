@@ -1,0 +1,706 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "The Query API enables nearest-neighbor similarity search over dense embeddings. Use the Get API when you want to retrieve records without similarity ranking.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_texts=[\"thus spake zarathustra\", \"the oracle speaks\"]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Chroma will use the collection’s embedding function to embed your text queries, and use the output to run a vector similarity search against your collection.",
+    "dom_ids": [
+      "query",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Instead of providing query_texts , you can provide query_embeddings directly. You will be required to do so if your collection does not have an embedding function attached to it. The dimension of your query embedding must match the dimension of the embeddings in your collection.",
+    "dom_ids": [
+      "query",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Python also supports query_images and query_uris as query inputs.",
+    "dom_ids": [
+      "query",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma will return 10 results per input query. You can modify this number using the n_results argument:",
+    "dom_ids": [
+      "query",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100,\n    ids=[\"id1\", \"id2\"]\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Both query and get support where for metadata filtering and where_document for full-text search and regex :",
+    "dom_ids": [
+      "query",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: collection.query(\n    query_embeddings=[[11.1, 12.1, 13.1], [1.1, 2.3, 3.2]],\n    n_results=100,\n    where={\"page\": 10}, # query records with metadata field 'page' equal to 10\n    where_document={\"$contains\": \"search string\"} # query records with the search string in the records' document\n)",
+    "dom_ids": [
+      "query",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: collection.get(ids=[\"id1\", \"id2\"]) # by IDs\n\ncollection.get(limit=100, offset=0) # with pagination",
+    "dom_ids": [
+      "get",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryTexts: [\"thus spake zarathustra\", \"the oracle speaks\"],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Chroma will use the collection’s embedding function to embed your text queries, and use the output to run a vector similarity search against your collection.",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Instead of providing queryTexts , you can provide queryEmbeddings directly. You will be required to do so if your collection does not have an embedding function attached to it. The dimension of your query embedding must match the dimension of the embeddings in your collection.",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma will return 10 results per input query. You can modify this number using the nResults argument:",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 100,\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 100,\n  ids: [\"id1\", \"id2\"],\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Both query and get support where for metadata filtering and whereDocument for full-text search and regex :",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: await collection.query({\n  queryEmbeddings: [\n    [11.1, 12.1, 13.1],\n    [1.1, 2.3, 3.2],\n  ],\n  nResults: 5,\n  where: { page: 10 }, // metadata field 'page' equal to 10\n  whereDocument: { $contains: \"search string\" }, // documents containing \"search string\"\n});",
+    "dom_ids": [
+      "query-2",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get-2",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: await collection.get({ ids: [\"id1\", \"id2\"] }); // By IDs\n\nawait collection.get({ limit: 100, offset: 0 }); // With pagination",
+    "dom_ids": [
+      "get-2",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Type inference: You can also pass type arguments to .get and .query for the shape of your metadata. This gives you type inference for your metadata objects:",
+    "dom_ids": [
+      "type-inference",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Type inference: const results = await collection.get<{page: number; title: string}>({\n  ids: [\"id1\", \"id2\"],\n});\n\nconst rows = results.rows();\nrows.forEach((row) => {\n  console.log(row.id, row.metadata?.page);\n});",
+    "dom_ids": [
+      "type-inference",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: You can query a collection to run a similarity search using .query :",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: use chroma_types::IncludeList;\n\n// pub async fn query(\n//    &self,\n//    query_embeddings: Vec<Vec<f32>>,\n//    n_results: Option<u32>,\n//    where: Option<Where>,\n//    ids: Option<Vec<String>>,\n//    include: Option<IncludeList>,\n// ) -> Result<QueryResponse, ChromaHttpClientError>\n\nlet results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        None,\n        None,\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: Embeddings must be provided directly to the Rust client.",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: By default, Chroma returns 10 results per input query. You can modify this number using n_results :",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: let results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        Some(100), // n_results\n        None,\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query: The ids argument lets you constrain the search only to records with the IDs from the provided list:",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query: let results = collection\n    .query(\n        vec![vec![11.1, 12.1, 13.1], vec![1.1, 2.3, 3.2]],\n        Some(5),\n        None,\n        Some(vec![\"id1\".to_string(), \"id2\".to_string()]), // ids\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "query-3",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get: Use .get to retrieve records by ID and/or filters without similarity ranking:",
+    "dom_ids": [
+      "get-3",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get: let response = collection\n    .get(\n        Some(vec![\"id1\".to_string(), \"id2\".to_string()]),\n        None,\n        Some(10),\n        Some(0),\n        Some(IncludeList::default_get()),\n    )\n    .await?;",
+    "dom_ids": [
+      "get-3",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Chroma returns .query and .get results in column-major form (arrays per field). .query results are grouped per input query; .get results are a flat list of records.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: class QueryResult(TypedDict):\n    ids: List[IDs]\n    embeddings: Optional[List[Embeddings]]\n    documents: Optional[List[List[Document]]]\n    uris: Optional[List[List[URI]]]\n    metadatas: Optional[List[List[Metadata]]]\n    distances: Optional[List[List[float]]]\n    included: Include\n\nclass GetResult(TypedDict):\n    ids: List[ID]\n    embeddings: Optional[Embeddings]\n    documents: Optional[List[Document]]\n    uris: Optional[URIs]\n    metadatas: Optional[List[Metadata]]\n    included: Include",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: class QueryResult {\n  public readonly ids: string[][];\n  public readonly distances: (number | null)[][];\n  public readonly documents: (string | null)[][];\n  public readonly embeddings: (number[] | null)[][];\n  public readonly metadatas: (Record<string, string | number | boolean> | null)[][];\n  public readonly uris: (string | null)[][];\n  public readonly include: Include[];\n}\n\nclass GetResult {\n  public readonly ids: string[];\n  public readonly documents: (string | null)[];\n  public readonly embeddings: number[][];\n  public readonly metadatas: (Record<string, string | number | boolean> | null)[];\n  public readonly uris: (string | null)[];\n  public readonly include: Include[];\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: pub struct QueryResponse {\n    pub ids: Vec<Vec<String>>,\n    pub embeddings: Option<Vec<Vec<Option<Vec<f32>>>>>,\n    pub documents: Option<Vec<Vec<Option<String>>>>,\n    pub uris: Option<Vec<Vec<Option<String>>>>,\n    pub metadatas: Option<Vec<Vec<Option<HashMap<String, MetadataValue>>>>>,\n    pub distances: Option<Vec<Vec<Option<f32>>>>,\n    pub include: Vec<Include>,\n}\n\npub struct GetResponse {\n    pub ids: Vec<String>,\n    pub embeddings: Option<Vec<Vec<f32>>>,\n    pub documents: Option<Vec<Option<String>>>,\n    pub uris: Option<Vec<Option<String>>>,\n    pub metadatas: Option<Vec<Option<HashMap<String, MetadataValue>>>>,\n    pub include: Vec<Include>,\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Here is a concrete example of what these responses look like in practice:",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: // Query result\n{\n  \"ids\": [[\"doc_1\", \"doc_7\"]],\n  \"embeddings\": [[[1, 2, 3, 4], [1, 2, 3, 4]]],\n  \"documents\": [[\"Chroma stores vectors.\", \"Embeddings power semantic search.\"]],\n  \"metadatas\": [[\n    {\"source\": \"docs\", \"topic\": \"intro\"},\n    {\"source\": \"blog\", \"topic\": \"search\"}\n  ]],\n  \"distances\": [[0.12, 0.21]],\n  \"included\": [\"embeddings\", \"documents\", \"metadatas\", \"distances\"]\n}\n// Get result\n{\n  \"ids\": [\"doc_1\", \"doc_7\"],\n  \"embeddings\": [[1, 2, 3, 4], [1, 2, 3, 4]],\n  \"documents\": [\"Chroma stores vectors.\", \"Embeddings power semantic search.\"],\n  \"metadatas\": [\n    {\"source\": \"docs\", \"topic\": \"intro\"},\n    {\"source\": \"blog\", \"topic\": \"search\"}\n  ],\n  \"included\": [\"documents\", \"metadatas\"]\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: In the results from the Get operation, corresponding elements in each array belong to the same document.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: result = collection.get(include=[\"documents\", \"metadatas\"])\nfor id, document, metadata in zip(result[\"ids\"], result[\"documents\"], result[\"metadatas\"]):\n    print(id, document, metadata)",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: const result = await collection.get();\n\nconst first_document = {\n    id: result[\"ids\"][0],\n    document: result[\"documents\"][0],\n    metadatas: result[\"metadatas\"][0]\n}\n\n// Use the .rows() function for easy iteration\nfor (const row of result.rows()) {\n  console.log(row.id, row.document, row.metadata);\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: let result = collection.get(None, None, None, None, None).await?;\nif let (Some(documents), Some(metadatas)) = (&result.documents, &result.metadatas) {\n    for i in 0..result.ids.len() {\n        let id = &result.ids[i];\n        let document = &documents[i];\n        let metadata = &metadatas[i];\n        println!(\"{id:?} {document:?} {metadata:?}\");\n    }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Results Shape: Query is a batch API and returns results grouped per input. A common pattern is to iterate over each query’s “batch” of results, then iterate within that batch.",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: result = collection.query(query_texts=[\"first query\", \"second query\"])\nfor ids, documents, metadatas in zip(result[\"ids\"], result[\"documents\"], result[\"metadatas\"]):\n    for id, document, metadata in zip(ids, documents, metadatas):\n        print(id, document, metadata)",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: const result = await collection.query({ queryTexts: [\"first query\", \"second query\"] });\nfor (const batch of result.rows()) {\n  for (const row of batch) {\n    console.log(row.id, row.document, row.metadata, row.distance);\n  }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Results Shape: let result = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], None, None, None, None)\n    .await?;\n\nif let (Some(doc_batches), Some(meta_batches)) = (&result.documents, &result.metadatas) {\n    for batch_i in 0..result.ids.len() {\n        let ids = &result.ids[batch_i];\n        let documents = &doc_batches[batch_i];\n        let metadatas = &meta_batches[batch_i];\n        for j in 0..ids.len() {\n            let id = &ids[j];\n            let document = &documents[j];\n            let metadata = &metadatas[j];\n            println!(\"{id:?} {document:?} {metadata:?}\");\n        }\n    }\n}",
+    "dom_ids": [
+      "results-shape",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Choosing Which Data is Returned: By default, Query returns documents , metadatas , and distances , and Get returns documents and metadatas .",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Choosing Which Data is Returned: Use include to control what comes back. ids are always returned.",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: collection.query(\n    query_texts=[\"my query\"],\n    include=[\"documents\", \"metadatas\", \"embeddings\"],\n)\n\ncollection.get(include=[\"documents\"])",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: await collection.query({\n  queryTexts: [\"my query\"],\n  include: [\"documents\", \"metadatas\", \"embeddings\"],\n});\n\nawait collection.get({ include: [\"documents\"] });",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Choosing Which Data is Returned: use chroma_types::{Include, IncludeList};\n\nlet include = IncludeList(vec![Include::Document, Include::Metadata]);\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(5), None, None, Some(include))\n    .await?;",
+    "dom_ids": [
+      "choosing-which-data-is-returned",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "query_and_get",
+    "id": "query_and_get__node_0059"
+  }
+]

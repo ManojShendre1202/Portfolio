@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Git - Getting a Git Repository</title>
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="/application.min.9d93621c70c90c2679ed59592eecb0dc4aeb91d03de793285fc27edb4872e13a.css" rel="stylesheet"/>
+
+</head>
+<body id="learn">
+<div class="inner">
+
+</div>
+<div class="inner">
+<div id="content-wrapper">
+<div class="sidebar-btn" tabindex="1"></div>
+
+<div id="content">
+<div id="book-chapters">
+<a class="dropdown-trigger" data-panel-id="chapters-dropdown" href="#" id="book-chapters-trigger">Chapters ▾</a>
+<div class="dropdown-panel" id="chapters-dropdown">
+<div class="three-column">
+<div class="column-left">
+
+</div>
+<div class="column-middle">
+
+</div>
+<div class="column-right">
+
+</div>
+</div>
+</div>
+<span class="light" id="edition">
+              2nd Edition
+            </span>
+</div>
+<div class="book edition2" data-pagefind-body="" data-pagefind-filter="category:book" data-pagefind-meta="category:Book" data-pagefind-weight="0.05" id="main">
+<h1 id="readar-node-0001">2.1 Git Basics - Getting a Git Repository</h1>
+<div>
+<p id="readar-node-0002">If you can read only one chapter to get going with Git, this is it.
+This chapter covers every basic command you need to do the vast majority of the things you’ll eventually spend your time doing with Git.
+By the end of the chapter, you should be able to configure and initialize a repository, begin and stop tracking files, and stage and commit changes.
+We’ll also show you how to set up Git to ignore certain files and file patterns, how to undo mistakes quickly and easily, how to browse the history of your project and view changes between commits, and how to push and pull from remote repositories.</p>
+<h2 id="_getting_a_repo">Getting a Git Repository</h2>
+<div class="paragraph">
+<p id="readar-node-0004">You typically obtain a Git repository in one of two ways:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic" id="readar-node-0005">
+<li>
+<p>You can take a local directory that is currently not under version control, and turn it into a Git repository, or</p>
+</li>
+<li>
+<p>You can <em>clone</em> an existing Git repository from elsewhere.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p id="readar-node-0006">In either case, you end up with a Git repository on your local machine, ready for work.</p>
+</div>
+<div class="sect3">
+<h3 id="_initializing_a_repository_in_an_existing_directory">Initializing a Repository in an Existing Directory</h3>
+<div class="paragraph">
+<p id="readar-node-0008">If you have a project directory that is currently not under version control and you want to start controlling it with Git, you first need to go to that project’s directory.
+If you’ve never done this, it looks a little different depending on which system you’re running:</p>
+</div>
+<div class="paragraph">
+<p id="readar-node-0009">for Linux:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0010"><code class="language-console" data-lang="console">$ cd /home/user/my_project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0011">for macOS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0012"><code class="language-console" data-lang="console">$ cd /Users/user/my_project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0013">for Windows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0014"><code class="language-console" data-lang="console">$ cd C:/Users/user/my_project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0015">and type:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0016"><code class="language-console" data-lang="console">$ git init</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0017">This creates a new subdirectory named <code>.git</code> that contains all of your necessary repository files — a Git repository skeleton.
+At this point, nothing in your project is tracked yet.
+See <a href="/book/en/v2/ch00/ch10-git-internals">Git Internals</a> for more information about exactly what files are contained in the <code>.git</code> directory you just created.</p>
+</div>
+<div class="paragraph">
+<p id="readar-node-0018">If you want to start version-controlling existing files (as opposed to an empty directory), you should probably begin tracking those files and do an initial commit.
+You can accomplish that with a few <code>git add</code> commands that specify the files you want to track, followed by a <code>git commit</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0019"><code class="language-console" data-lang="console">$ git add *.c
+$ git add LICENSE
+$ git commit -m 'Initial project version'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0020">We’ll go over what these commands do in just a minute.
+At this point, you have a Git repository with tracked files and an initial commit.</p>
+</div>
+</div>
+<div class="sect3">
+<h3 id="_git_cloning">Cloning an Existing Repository</h3>
+<div class="paragraph">
+<p id="readar-node-0022">If you want to get a copy of an existing Git repository — for example, a project you’d like to contribute to — the command you need is <code>git clone</code>.
+If you’re familiar with other VCSs such as Subversion, you’ll notice that the command is "clone" and not "checkout".
+This is an important distinction — instead of getting just a working copy, Git receives a full copy of nearly all data that the server has.
+Every version of every file for the history of the project is pulled down by default when you run <code>git clone</code>.
+In fact, if your server disk gets corrupted, you can often use nearly any of the clones on any client to set the server back to the state it was in when it was cloned (you may lose some server-side hooks and such, but all the versioned data would be there — see <a href="/book/en/v2/ch00/_getting_git_on_a_server">Getting Git on a Server</a> for more details).</p>
+</div>
+<div class="paragraph">
+<p id="readar-node-0023">You clone a repository with <code>git clone &lt;url&gt;</code>.
+For example, if you want to clone the Git linkable library called <code>libgit2</code>, you can do so like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0024"><code class="language-console" data-lang="console">$ git clone https://github.com/libgit2/libgit2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0025">That creates a directory named <code>libgit2</code>, initializes a <code>.git</code> directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version.
+If you go into the new <code>libgit2</code> directory that was just created, you’ll see the project files in there, ready to be worked on or used.</p>
+</div>
+<div class="paragraph">
+<p id="readar-node-0026">If you want to clone the repository into a directory named something other than <code>libgit2</code>, you can specify the new directory name as an additional argument:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight" id="readar-node-0027"><code class="language-console" data-lang="console">$ git clone https://github.com/libgit2/libgit2 mylibgit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p id="readar-node-0028">That command does the same thing as the previous one, but the target directory is called <code>mylibgit</code>.</p>
+</div>
+<div class="paragraph">
+<p id="readar-node-0029">Git has a number of different transfer protocols you can use.
+The previous example uses the <code>https://</code> protocol, but you may also see <code>git://</code> or <code>user@server:path/to/repo.git</code>, which uses the SSH transfer protocol.
+<a href="/book/en/v2/ch00/_getting_git_on_a_server">Getting Git on a Server</a> will introduce all of the available options the server can set up to access your Git repository and the pros and cons of each.</p>
+</div>
+</div>
+<div id="nav"><a href="/book/en/v2/Getting-Started-Summary">prev</a> | <a href="/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository">next</a></div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+</div>
+</body>
+</html>

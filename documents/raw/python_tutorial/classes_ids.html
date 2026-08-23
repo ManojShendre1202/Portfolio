@@ -57,7 +57,7 @@
 <div class="bodywrapper">
 <div class="body" role="main">
 <section id="classes">
-<span id="tut-classes"></span><h1 id="readar-node-0001"><span class="section-number">9. </span>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h1>
+<span id="tut-classes"></span><h1 id="readar-node-0001"><span class="section-number">9. </span>Classes</h1>
 <p id="readar-node-0002">Classes provide a means of bundling data and functionality together.  Creating
 a new class creates a new <em>type</em> of object, allowing new <em>instances</em> of that
 type to be made.  Each class instance can have attributes attached to it for
@@ -87,7 +87,7 @@ occasional use of Smalltalk and C++ terms.  I would use Modula-3 terms, since
 its object-oriented semantics are closer to those of Python than C++, but I
 expect that few readers have heard of it.)</p>
 <section id="a-word-about-names-and-objects">
-<span id="tut-object"></span><h2 id="readar-node-0006"><span class="section-number">9.1. </span>A Word About Names and Objects<a class="headerlink" href="#a-word-about-names-and-objects" title="Link to this heading">¶</a></h2>
+<span id="tut-object"></span><h2 id="readar-node-0006"><span class="section-number">9.1. </span>A Word About Names and Objects</h2>
 <p id="readar-node-0007">Objects have individuality, and multiple names (in multiple scopes) can be bound
 to the same object.  This is known as aliasing in other languages.  This is
 usually not appreciated on a first glance at Python, and can be safely ignored
@@ -101,7 +101,7 @@ passed as an argument, the caller will see the change — this eliminates the
 need for two different argument passing mechanisms as in Pascal.</p>
 </section>
 <section id="python-scopes-and-namespaces">
-<span id="tut-scopes"></span><h2 id="readar-node-0008"><span class="section-number">9.2. </span>Python Scopes and Namespaces<a class="headerlink" href="#python-scopes-and-namespaces" title="Link to this heading">¶</a></h2>
+<span id="tut-scopes"></span><h2 id="readar-node-0008"><span class="section-number">9.2. </span>Python Scopes and Namespaces</h2>
 <p id="readar-node-0009">Before introducing classes, I first have to tell you something about Python’s
 scope rules.  Class definitions play some neat tricks with namespaces, and you
 need to know how scopes and namespaces work to fully understand what’s going on.
@@ -186,7 +186,7 @@ variables live in the global scope and should be rebound there; the
 <a class="reference internal" href="../reference/simple_stmts.html#nonlocal"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">nonlocal</span></code></a> statement indicates that particular variables live in
 an enclosing scope and should be rebound there.</p>
 <section id="scopes-and-namespaces-example">
-<span id="tut-scopeexample"></span><h3 id="readar-node-0024"><span class="section-number">9.2.1. </span>Scopes and Namespaces Example<a class="headerlink" href="#scopes-and-namespaces-example" title="Link to this heading">¶</a></h3>
+<span id="tut-scopeexample"></span><h3 id="readar-node-0024"><span class="section-number">9.2.1. </span>Scopes and Namespaces Example</h3>
 <p id="readar-node-0025">This is an example demonstrating how to reference the different scopes and
 namespaces, and how <a class="reference internal" href="../reference/simple_stmts.html#global"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">global</span></code></a> and <a class="reference internal" href="../reference/simple_stmts.html#nonlocal"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">nonlocal</span></code></a> affect variable
 binding:</p>
@@ -230,11 +230,11 @@ binding.</p>
 </section>
 </section>
 <section id="a-first-look-at-classes">
-<span id="tut-firstclasses"></span><h2 id="readar-node-0031"><span class="section-number">9.3. </span>A First Look at Classes<a class="headerlink" href="#a-first-look-at-classes" title="Link to this heading">¶</a></h2>
+<span id="tut-firstclasses"></span><h2 id="readar-node-0031"><span class="section-number">9.3. </span>A First Look at Classes</h2>
 <p id="readar-node-0032">Classes introduce a little bit of new syntax, three new object types, and some
 new semantics.</p>
 <section id="class-definition-syntax">
-<span id="tut-classdefinition"></span><h3 id="readar-node-0033"><span class="section-number">9.3.1. </span>Class Definition Syntax<a class="headerlink" href="#class-definition-syntax" title="Link to this heading">¶</a></h3>
+<span id="tut-classdefinition"></span><h3 id="readar-node-0033"><span class="section-number">9.3.1. </span>Class Definition Syntax</h3>
 <p id="readar-node-0034">The simplest form of class definition looks like this:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0035"><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ClassName</span><span class="p">:</span>
     <span class="o">&lt;</span><span class="n">statement</span><span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span>
@@ -265,7 +265,7 @@ class name given in the class definition header (<code class="xref py py-class d
 example).</p>
 </section>
 <section id="class-objects">
-<span id="tut-classobjects"></span><h3 id="readar-node-0040"><span class="section-number">9.3.2. </span>Class Objects<a class="headerlink" href="#class-objects" title="Link to this heading">¶</a></h3>
+<span id="tut-classobjects"></span><h3 id="readar-node-0040"><span class="section-number">9.3.2. </span>Class Objects</h3>
 <p id="readar-node-0041">Class objects support two kinds of operations: attribute references and
 instantiation.</p>
 <p id="readar-node-0042"><em>Attribute references</em> use the standard syntax used for all attribute references
@@ -322,7 +322,7 @@ are passed on to <code class="xref py py-meth docutils literal notranslate"><spa
 </div>
 </section>
 <section id="instance-objects">
-<span id="tut-instanceobjects"></span><h3 id="readar-node-0054"><span class="section-number">9.3.3. </span>Instance Objects<a class="headerlink" href="#instance-objects" title="Link to this heading">¶</a></h3>
+<span id="tut-instanceobjects"></span><h3 id="readar-node-0054"><span class="section-number">9.3.3. </span>Instance Objects</h3>
 <p id="readar-node-0055">Now what can we do with instance objects?  The only operations understood by
 instance objects are attribute references.  There are two kinds of valid
 attribute names: data attributes and methods.</p>
@@ -348,7 +348,7 @@ reference, since <code class="docutils literal notranslate"><span class="pre">My
 is a <em>method object</em>, not a function object.</p>
 </section>
 <section id="method-objects">
-<span id="tut-methodobjects"></span><h3 id="readar-node-0060"><span class="section-number">9.3.4. </span>Method Objects<a class="headerlink" href="#method-objects" title="Link to this heading">¶</a></h3>
+<span id="tut-methodobjects"></span><h3 id="readar-node-0060"><span class="section-number">9.3.4. </span>Method Objects</h3>
 <p id="readar-node-0061">Usually, a method is called right after it is bound:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0062"><span></span><span class="n">x</span><span class="o">.</span><span class="n">f</span><span class="p">()</span>
 </pre></div>
@@ -383,7 +383,7 @@ object and the argument list, and the function object is called with this new
 argument list.</p>
 </section>
 <section id="class-and-instance-variables">
-<span id="tut-class-and-instance-variables"></span><h3 id="readar-node-0069"><span class="section-number">9.3.5. </span>Class and Instance Variables<a class="headerlink" href="#class-and-instance-variables" title="Link to this heading">¶</a></h3>
+<span id="tut-class-and-instance-variables"></span><h3 id="readar-node-0069"><span class="section-number">9.3.5. </span>Class and Instance Variables</h3>
 <p id="readar-node-0070">Generally speaking, instance variables are for data unique to each instance
 and class variables are for attributes and methods shared by all instances
 of the class:</p>
@@ -452,7 +452,7 @@ instances:</p>
 </section>
 </section>
 <section id="random-remarks">
-<span id="tut-remarks"></span><h2 id="readar-node-0076"><span class="section-number">9.4. </span>Random Remarks<a class="headerlink" href="#random-remarks" title="Link to this heading">¶</a></h2>
+<span id="tut-remarks"></span><h2 id="readar-node-0076"><span class="section-number">9.4. </span>Random Remarks</h2>
 <p id="readar-node-0077">If the same attribute name occurs in both an instance and in a class,
 then attribute lookup prioritizes the instance:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0078"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">Warehouse</span><span class="p">:</span>
@@ -537,7 +537,7 @@ reasons why a method would want to reference its own class.</p>
 It is stored as <code class="docutils literal notranslate"><span class="pre">object.__class__</span></code>.</p>
 </section>
 <section id="inheritance">
-<span id="tut-inheritance"></span><h2 id="readar-node-0090"><span class="section-number">9.5. </span>Inheritance<a class="headerlink" href="#inheritance" title="Link to this heading">¶</a></h2>
+<span id="tut-inheritance"></span><h2 id="readar-node-0090"><span class="section-number">9.5. </span>Inheritance</h2>
 <p id="readar-node-0091">Of course, a language feature would not be worthy of the name “class” without
 supporting inheritance.  The syntax for a derived class definition looks like
 this:</p>
@@ -589,7 +589,7 @@ is <code class="docutils literal notranslate"><span class="pre">True</span></cod
 subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>.</p></li>
 </ul>
 <section id="multiple-inheritance">
-<span id="tut-multiple"></span><h3 id="readar-node-0101"><span class="section-number">9.5.1. </span>Multiple Inheritance<a class="headerlink" href="#multiple-inheritance" title="Link to this heading">¶</a></h3>
+<span id="tut-multiple"></span><h3 id="readar-node-0101"><span class="section-number">9.5.1. </span>Multiple Inheritance</h3>
 <p id="readar-node-0102">Python supports a form of multiple inheritance as well.  A class definition with
 multiple base classes looks like this:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0103"><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DerivedClassName</span><span class="p">(</span><span class="n">Base1</span><span class="p">,</span> <span class="n">Base2</span><span class="p">,</span> <span class="n">Base3</span><span class="p">):</span>
@@ -626,7 +626,7 @@ extensible classes with multiple inheritance.  For more detail, see
 </section>
 </section>
 <section id="private-variables">
-<span id="tut-private"></span><h2 id="readar-node-0107"><span class="section-number">9.6. </span>Private Variables<a class="headerlink" href="#private-variables" title="Link to this heading">¶</a></h2>
+<span id="tut-private"></span><h2 id="readar-node-0107"><span class="section-number">9.6. </span>Private Variables</h2>
 <p id="readar-node-0108">“Private” instance variables that cannot be accessed except from inside an
 object don’t exist in Python.  However, there is a convention that is followed
 by most Python code: a name prefixed with an underscore (e.g. <code class="docutils literal notranslate"><span class="pre">_spam</span></code>) should
@@ -683,7 +683,7 @@ to code that is byte-compiled together.  The same restriction applies to
 <code class="docutils literal notranslate"><span class="pre">__dict__</span></code> directly.</p>
 </section>
 <section id="odds-and-ends">
-<span id="tut-odds"></span><h2 id="readar-node-0117"><span class="section-number">9.7. </span>Odds and Ends<a class="headerlink" href="#odds-and-ends" title="Link to this heading">¶</a></h2>
+<span id="tut-odds"></span><h2 id="readar-node-0117"><span class="section-number">9.7. </span>Odds and Ends</h2>
 <p id="readar-node-0118">Sometimes it is useful to have a data type similar to the Pascal “record” or C
 “struct”, bundling together a few named data items. The idiomatic approach
 is to use <a class="reference internal" href="../library/dataclasses.html#module-dataclasses" title="dataclasses: Generate special methods on user-defined classes."><code class="xref py py-mod docutils literal notranslate"><span class="pre">dataclasses</span></code></a> for this purpose:</p>
@@ -716,7 +716,7 @@ the <a class="reference internal" href="../reference/datamodel.html#user-defined
 corresponding to the method.</p>
 </section>
 <section id="iterators">
-<span id="tut-iterators"></span><h2 id="readar-node-0123"><span class="section-number">9.8. </span>Iterators<a class="headerlink" href="#iterators" title="Link to this heading">¶</a></h2>
+<span id="tut-iterators"></span><h2 id="readar-node-0123"><span class="section-number">9.8. </span>Iterators</h2>
 <p id="readar-node-0124">By now you have probably noticed that most container objects can be looped over
 using a <a class="reference internal" href="../reference/compound_stmts.html#for"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">for</span></code></a> statement:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre id="readar-node-0125"><span></span><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
@@ -790,7 +790,7 @@ defines <code class="xref py py-meth docutils literal notranslate"><span class="
 </div>
 </section>
 <section id="generators">
-<span id="tut-generators"></span><h2 id="readar-node-0131"><span class="section-number">9.9. </span>Generators<a class="headerlink" href="#generators" title="Link to this heading">¶</a></h2>
+<span id="tut-generators"></span><h2 id="readar-node-0131"><span class="section-number">9.9. </span>Generators</h2>
 <p id="readar-node-0132"><a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">Generators</span></a> are a simple and powerful tool for creating iterators.  They
 are written like regular functions but use the <a class="reference internal" href="../reference/simple_stmts.html#yield"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">yield</span></code></a> statement
 whenever they want to return data.  Each time <a class="reference internal" href="../library/functions.html#next" title="next"><code class="xref py py-func docutils literal notranslate"><span class="pre">next()</span></code></a> is called on it, the
@@ -825,7 +825,7 @@ combination, these features make it easy to create iterators with no more effort
 than writing a regular function.</p>
 </section>
 <section id="generator-expressions">
-<span id="tut-genexps"></span><h2 id="readar-node-0138"><span class="section-number">9.10. </span>Generator Expressions<a class="headerlink" href="#generator-expressions" title="Link to this heading">¶</a></h2>
+<span id="tut-genexps"></span><h2 id="readar-node-0138"><span class="section-number">9.10. </span>Generator Expressions</h2>
 <p id="readar-node-0139">Some simple generators can be coded succinctly as expressions using a syntax
 similar to list comprehensions but with parentheses instead of square brackets.
 These expressions are designed for situations where the generator is used right

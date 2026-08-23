@@ -27,7 +27,7 @@ services:
       - PYTHONUNBUFFERED=1
     volumes:
       - media_data:/app/media        # same volume — reads files django wrote
-      - hf_cache:/root/.cache/huggingface   # embedder/reranker weights — survives rebuilds
+      - hf_cache:/root/.cache/huggingface   # embedder weights — survives rebuilds
     restart: unless-stopped
 
   # ── Nginx ────────────────────────────────────────────────────────────────

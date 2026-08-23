@@ -1,0 +1,98 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.9. Deletions: Rows can be removed from a table using the DELETE command. Suppose you are no longer interested in the weather of Hayward. Then you can do the following to delete those rows from the table:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.9. Deletions: DELETE FROM weather WHERE city = 'Hayward';",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.9. Deletions: All weather records belonging to Hayward are removed.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.9. Deletions: SELECT * FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.9. Deletions:      city      | temp_lo | temp_hi | prcp |    date\n---------------+---------+---------+------+------------\n San Francisco |      46 |      50 | 0.25 | 1994-11-27\n San Francisco |      41 |      55 |    0 | 1994-11-29\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.9. Deletions: One should be wary of statements of the form",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.9. Deletions: DELETE FROM tablename;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.9. Deletions: Without a qualification, DELETE will remove all rows from the given table, leaving it empty. The system will not request confirmation before doing this!",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-delete",
+    "id": "tutorial-delete__node_0008"
+  }
+]

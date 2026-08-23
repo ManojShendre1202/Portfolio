@@ -1,0 +1,938 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8. Errors and Exceptions: Until now error messages haven’t been more than mentioned, but if you have tried out the examples you have probably seen some. There are (at least) two distinguishable kinds of errors: syntax errors and exceptions .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.1. Syntax Errors: Syntax errors, also known as parsing errors, are perhaps the most common kind of complaint you get while you are still learning Python:",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.1. Syntax Errors: >>> while True print('Hello world')\n  File \"<stdin>\", line 1\n    while True print('Hello world')\n               ^^^^^\nSyntaxError: invalid syntax",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.1. Syntax Errors: The parser repeats the offending line and displays little arrows pointing at the place where the error was detected. Note that this is not always the place that needs to be fixed. In the example, the error is detected at the function print() , since a colon ( ':' ) is missing just before it.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.1. Syntax Errors: The file name ( <stdin> in our example) and line number are printed so you know where to look in case the input came from a file.",
+    "dom_ids": [
+      "readar-node-0003",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.2. Exceptions: Even if a statement or expression is syntactically correct, it may cause an error when an attempt is made to execute it. Errors detected during execution are called exceptions and are not unconditionally fatal: you will soon learn how to handle them in Python programs. Most exceptions are not handled by programs, however, and result in error messages as shown here:",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.2. Exceptions: >>> 10 * (1/0)\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n    10 * (1/0)\n          ~^~\nZeroDivisionError: division by zero\n>>> 4 + spam*3\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n    4 + spam*3\n        ^^^^\nNameError: name 'spam' is not defined\n>>> '2' + 2\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n    '2' + 2\n    ~~~~^~~\nTypeError: can only concatenate str (not \"int\") to str",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.2. Exceptions: The last line of the error message indicates what happened. Exceptions come in different types, and the type is printed as part of the message: the types in the example are ZeroDivisionError , NameError and TypeError . The string printed as the exception type is the name of the built-in exception that occurred. This is true for all built-in exceptions, but need not be true for user-defined exceptions (although it is a useful convention). Standard exception names are built-in identifiers (not reserved keywords).",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.2. Exceptions: The rest of the line provides detail based on the type of exception and what caused it.",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.2. Exceptions: The preceding part of the error message shows the context where the exception occurred, in the form of a stack traceback. In general it contains a stack traceback listing source lines; however, it will not display lines read from standard input.",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.2. Exceptions: Built-in Exceptions lists the built-in exceptions and their meanings.",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: It is possible to write programs that handle selected exceptions. Look at the following example, which asks the user for input until a valid integer has been entered, but allows the user to interrupt the program (using Control - C or whatever the operating system supports); note that a user-generated interruption is signalled by raising the KeyboardInterrupt exception.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: >>> while True:\n...     try:\n...         x = int(input(\"Please enter a number: \"))\n...         break\n...     except ValueError:\n...         print(\"Oops!  That was no valid number.  Try again...\")\n...",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The try statement works as follows.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "8.3. Handling Exceptions: - First, the try clause (the statement(s) between the try and except keywords) is executed. - If no exception occurs, the except clause is skipped and execution of the try statement is finished. - If an exception occurs during execution of the try clause, the rest of the clause is skipped. Then, if its type matches the exception named after the except keyword, the except clause is executed, and then execution continues after the try/except block. - If an exception occurs which does not match the exception named in the except clause , it is passed on to outer try statements; if no handler is found, it is an unhandled exception and execution stops with an error message.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: A try statement may have more than one except clause , to specify handlers for different exceptions. At most one handler will be executed. Handlers only handle exceptions that occur in the corresponding try clause , not in other handlers of the same try statement. An except clause may name multiple exceptions, for example:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: ... except RuntimeError, TypeError, NameError:\n...     pass",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: A class in an except clause matches exceptions which are instances of the class itself or one of its derived classes (but not the other way around — an except clause listing a derived class does not match instances of its base classes). For example, the following code will print B, C, D in that order:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: class B(Exception):\n    pass\n\nclass C(B):\n    pass\n\nclass D(C):\n    pass\n\nfor cls in [B, C, D]:\n    try:\n        raise cls()\n    except D:\n        print(\"D\")\n    except C:\n        print(\"C\")\n    except B:\n        print(\"B\")",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: Note that if the except clauses were reversed (with except B first), it would have printed B, B, B — the first matching except clause is triggered.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: When an exception occurs, it may have associated values, also known as the exception’s arguments . The presence and types of the arguments depend on the exception type.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The except clause may specify a variable after the exception name. The variable is bound to the exception instance which typically has an args attribute that stores the arguments. For convenience, builtin exception types define __str__() to print all the arguments without explicitly accessing .args .",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: >>> try:\n...     raise Exception('spam', 'eggs')\n... except Exception as inst:\n...     print(type(inst))    # the exception type\n...     print(inst.args)     # arguments stored in .args\n...     print(inst)          # __str__ allows args to be printed directly,\n...                          # but may be overridden in exception subclasses\n...     x, y = inst.args     # unpack args\n...     print('x =', x)\n...     print('y =', y)\n...\n<class 'Exception'>\n('spam', 'eggs')\n('spam', 'eggs')\nx = spam\ny = eggs",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The exception’s __str__() output is printed as the last part (‘detail’) of the message for unhandled exceptions.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: BaseException is the common base class of all exceptions. One of its subclasses, Exception , is the base class of all the non-fatal exceptions. Exceptions which are not subclasses of Exception are not typically handled, because they are used to indicate that the program should terminate. They include SystemExit which is raised by sys.exit() and KeyboardInterrupt which is raised when a user wishes to interrupt the program.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: Exception can be used as a wildcard that catches (almost) everything. However, it is good practice to be as specific as possible with the types of exceptions that we intend to handle, and to allow any unexpected exceptions to propagate on.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The most common pattern for handling Exception is to print or log the exception and then re-raise it (allowing a caller to handle the exception as well):",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: import sys\n\ntry:\n    f = open('myfile.txt')\n    s = f.readline()\n    i = int(s.strip())\nexcept OSError as err:\n    print(\"OS error:\", err)\nexcept ValueError:\n    print(\"Could not convert data to an integer.\")\nexcept Exception as err:\n    print(f\"Unexpected {err=}, {type(err)=}\")\n    raise",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The try … except statement has an optional else clause , which, when present, must follow all except clauses . It is useful for code that must be executed if the try clause does not raise an exception. For example:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: for arg in sys.argv[1:]:\n    try:\n        f = open(arg, 'r')\n    except OSError:\n        print('cannot open', arg)\n    else:\n        print(arg, 'has', len(f.readlines()), 'lines')\n        f.close()",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: The use of the else clause is better than adding additional code to the try clause because it avoids accidentally catching an exception that wasn’t raised by the code being protected by the try … except statement.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.3. Handling Exceptions: Exception handlers do not handle only exceptions that occur immediately in the try clause , but also those that occur inside functions that are called (even indirectly) in the try clause . For example:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.3. Handling Exceptions: >>> def this_fails():\n...     x = 1/0\n...\n>>> try:\n...     this_fails()\n... except ZeroDivisionError as err:\n...     print('Handling run-time error:', err)\n...\nHandling run-time error: division by zero",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.4. Raising Exceptions: The raise statement allows the programmer to force a specified exception to occur. For example:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.4. Raising Exceptions: >>> raise NameError('HiThere')\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n    raise NameError('HiThere')\nNameError: HiThere",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.4. Raising Exceptions: The sole argument to raise indicates the exception to be raised. This must be either an exception instance or an exception class (a class that derives from BaseException , such as Exception or one of its subclasses). If an exception class is passed, it will be implicitly instantiated by calling its constructor with no arguments:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.4. Raising Exceptions: raise ValueError  # shorthand for 'raise ValueError()'",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.4. Raising Exceptions: If you need to determine whether an exception was raised but don’t intend to handle it, a simpler form of the raise statement allows you to re-raise the exception:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.4. Raising Exceptions: >>> try:\n...     raise NameError('HiThere')\n... except NameError:\n...     print('An exception flew by!')\n...     raise\n...\nAn exception flew by!\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n    raise NameError('HiThere')\nNameError: HiThere",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.5. Exception Chaining: If an unhandled exception occurs inside an except section, it will have the exception being handled attached to it and included in the error message:",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.5. Exception Chaining: >>> try:\n...     open(\"database.sqlite\")\n... except OSError:\n...     raise RuntimeError(\"unable to handle error\")\n...\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n    open(\"database.sqlite\")\n    ~~~~^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'database.sqlite'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n    raise RuntimeError(\"unable to handle error\")\nRuntimeError: unable to handle error",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.5. Exception Chaining: To indicate that an exception is a direct consequence of another, the raise statement allows an optional from clause:",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.5. Exception Chaining: # exc must be exception instance or None.\nraise RuntimeError from exc",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.5. Exception Chaining: This can be useful when you are transforming exceptions. For example:",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.5. Exception Chaining: >>> def func():\n...     raise ConnectionError\n...\n>>> try:\n...     func()\n... except ConnectionError as exc:\n...     raise RuntimeError('Failed to open database') from exc\n...\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n    func()\n    ~~~~^^\n  File \"<stdin>\", line 2, in func\nConnectionError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n    raise RuntimeError('Failed to open database') from exc\nRuntimeError: Failed to open database",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.5. Exception Chaining: It also allows disabling automatic exception chaining using the from None idiom:",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.5. Exception Chaining: >>> try:\n...     open('database.sqlite')\n... except OSError:\n...     raise RuntimeError from None\n...\nTraceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n    raise RuntimeError from None\nRuntimeError",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.5. Exception Chaining: For more information about chaining mechanics, see Built-in Exceptions .",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.6. User-defined Exceptions: Programs may name their own exceptions by creating a new exception class (see Classes for more about Python classes). Exceptions should typically be derived from the Exception class, either directly or indirectly.",
+    "dom_ids": [
+      "readar-node-0055",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.6. User-defined Exceptions: Exception classes can be defined which do anything any other class can do, but are usually kept simple, often only offering a number of attributes that allow information about the error to be extracted by handlers for the exception.",
+    "dom_ids": [
+      "readar-node-0055",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.6. User-defined Exceptions: Most exceptions are defined with names that end in “Error”, similar to the naming of the standard exceptions.",
+    "dom_ids": [
+      "readar-node-0055",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.6. User-defined Exceptions: Many standard modules define their own exceptions to report errors that may occur in functions they define.",
+    "dom_ids": [
+      "readar-node-0055",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: The try statement has another optional clause which is intended to define clean-up actions that must be executed under all circumstances. For example:",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: >>> try:\n...     raise KeyboardInterrupt\n... finally:\n...     print('Goodbye, world!')\n...\nGoodbye, world!\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n    raise KeyboardInterrupt\nKeyboardInterrupt",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: If a finally clause is present, the finally clause will execute as the last task before the try statement completes. The finally clause runs whether or not the try statement produces an exception. The following points discuss more complex cases when an exception occurs:",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0055"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: - If an exception occurs during execution of the try clause, the exception may be handled by an except clause. If the exception is not handled by an except clause, the exception is re-raised after the finally clause has been executed. - An exception could occur during execution of an except or else clause. Again, the exception is re-raised after the finally clause has been executed. - If the finally clause executes a break , continue or return statement, exceptions are not re-raised. This can be confusing and is therefore discouraged. From version 3.14 the compiler emits a SyntaxWarning for it (see PEP 765 ). - If the try statement reaches a break , continue or return statement, the finally clause will execute just prior to the break , continue or return statement’s execution. - If a finally clause includes a return statement, the returned value will be the one from the finally clause’s return statement, not the value from the try clause’s return statement. This can be confusing and is therefore discouraged. From version 3.14 the compiler emits a SyntaxWarning for it (see PEP 765 ).",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: For example:",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: >>> def bool_return():\n...     try:\n...         return True\n...     finally:\n...         return False\n...\n>>> bool_return()\nFalse",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: A more complicated example:",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: >>> def divide(x, y):\n...     try:\n...         result = x / y\n...     except ZeroDivisionError:\n...         print(\"division by zero!\")\n...     else:\n...         print(\"result is\", result)\n...     finally:\n...         print(\"executing finally clause\")\n...\n>>> divide(2, 1)\nresult is 2.0\nexecuting finally clause\n>>> divide(2, 0)\ndivision by zero!\nexecuting finally clause\n>>> divide(\"2\", \"1\")\nexecuting finally clause\nTraceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\n    divide(\"2\", \"1\")\n    ~~~~~~^^^^^^^^^^\n  File \"<stdin>\", line 3, in divide\n    result = x / y\n             ~~^~~\nTypeError: unsupported operand type(s) for /: 'str' and 'str'",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: As you can see, the finally clause is executed in any event. The TypeError raised by dividing two strings is not handled by the except clause and therefore re-raised after the finally clause has been executed.",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.7. Defining Clean-up Actions: In real world applications, the finally clause is useful for releasing external resources (such as files or network connections), regardless of whether the use of the resource was successful.",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.8. Predefined Clean-up Actions: Some objects define standard clean-up actions to be undertaken when the object is no longer needed, regardless of whether or not the operation using the object succeeded or failed. Look at the following example, which tries to open a file and print its contents to the screen.",
+    "dom_ids": [
+      "readar-node-0071",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.8. Predefined Clean-up Actions: for line in open(\"myfile.txt\"):\n    print(line, end=\"\")",
+    "dom_ids": [
+      "readar-node-0071",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.8. Predefined Clean-up Actions: The problem with this code is that it leaves the file open for an indeterminate amount of time after this part of the code has finished executing. This is not an issue in simple scripts, but can be a problem for larger applications. The with statement allows objects like files to be used in a way that ensures they are always cleaned up promptly and correctly.",
+    "dom_ids": [
+      "readar-node-0071",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.8. Predefined Clean-up Actions: with open(\"myfile.txt\") as f:\n    for line in f:\n        print(line, end=\"\")",
+    "dom_ids": [
+      "readar-node-0071",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.8. Predefined Clean-up Actions: After the statement is executed, the file f is always closed, even if a problem was encountered while processing the lines. Objects which, like files, provide predefined clean-up actions will indicate this in their documentation.",
+    "dom_ids": [
+      "readar-node-0071",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: There are situations where it is necessary to report several exceptions that have occurred. This is often the case in concurrency frameworks, when several tasks may have failed in parallel, but there are also other use cases where it is desirable to continue execution and collect multiple errors rather than raise the first exception.",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: The builtin ExceptionGroup wraps a list of exception instances so that they can be raised together. It is an exception itself, so it can be caught like any other exception.",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: >>> def f():\n...     excs = [OSError('error 1'), SystemError('error 2')]\n...     raise ExceptionGroup('there were problems', excs)\n...\n>>> f()\n  + Exception Group Traceback (most recent call last):\n  |   File \"<stdin>\", line 1, in <module>\n  |     f()\n  |     ~^^\n  |   File \"<stdin>\", line 3, in f\n  |     raise ExceptionGroup('there were problems', excs)\n  | ExceptionGroup: there were problems (2 sub-exceptions)\n  +-+---------------- 1 ----------------\n    | OSError: error 1\n    +---------------- 2 ----------------\n    | SystemError: error 2\n    +------------------------------------\n>>> try:\n...     f()\n... except Exception as e:\n...     print(f'caught {type(e)}: {e}')\n...\ncaught <class 'ExceptionGroup'>: there were problems (2 sub-exceptions)\n>>>",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: By using except* instead of except , we can selectively handle only the exceptions in the group that match a certain type. In the following example, which shows a nested exception group, each except* clause extracts from the group exceptions of a certain type while letting all other exceptions propagate to other clauses and eventually to be reraised.",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: >>> def f():\n...     raise ExceptionGroup(\n...         \"group1\",\n...         [\n...             OSError(1),\n...             SystemError(2),\n...             ExceptionGroup(\n...                 \"group2\",\n...                 [\n...                     OSError(3),\n...                     RecursionError(4)\n...                 ]\n...             )\n...         ]\n...     )\n...\n>>> try:\n...     f()\n... except* OSError as e:\n...     print(\"There were OSErrors\")\n... except* SystemError as e:\n...     print(\"There were SystemErrors\")\n...\nThere were OSErrors\nThere were SystemErrors\n  + Exception Group Traceback (most recent call last):\n  |   File \"<stdin>\", line 2, in <module>\n  |     f()\n  |     ~^^\n  |   File \"<stdin>\", line 2, in f\n  |     raise ExceptionGroup(\n  |     ...<12 lines>...\n  |     )\n  | ExceptionGroup: group1 (1 sub-exception)\n  +-+---------------- 1 ----------------\n    | ExceptionGroup: group2 (1 sub-exception)\n    +-+---------------- 1 ----------------\n      | RecursionError: 4\n      +------------------------------------\n>>>",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: Note that the exceptions nested in an exception group must be instances, not types. This is because in practice the exceptions would typically be ones that have already been raised and caught by the program, along the following pattern:",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.9. Raising and Handling Multiple Unrelated Exceptions: >>> excs = []\n... for test in tests:\n...     try:\n...         test.run()\n...     except Exception as e:\n...         excs.append(e)\n...\n>>> if excs:\n...    raise ExceptionGroup(\"Test Failures\", excs)\n...",
+    "dom_ids": [
+      "readar-node-0077",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.10. Enriching Exceptions with Notes: When an exception is created in order to be raised, it is usually initialized with information that describes the error that has occurred. There are cases where it is useful to add information after the exception was caught. For this purpose, exceptions have a method add_note(note) that accepts a string and adds it to the exception’s notes list. The standard traceback rendering includes all notes, in the order they were added, after the exception.",
+    "dom_ids": [
+      "readar-node-0085",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0075"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.10. Enriching Exceptions with Notes: >>> try:\n...     raise TypeError('bad type')\n... except Exception as e:\n...     e.add_note('Add some information')\n...     e.add_note('Add some more information')\n...     raise\n...\nTraceback (most recent call last):\n  File \"<stdin>\", line 2, in <module>\n    raise TypeError('bad type')\nTypeError: bad type\nAdd some information\nAdd some more information\n>>>",
+    "dom_ids": [
+      "readar-node-0085",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0076"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "8.10. Enriching Exceptions with Notes: For example, when collecting exceptions into an exception group, we may want to add context information for the individual errors. In the following each exception in the group has a note indicating when this error has occurred.",
+    "dom_ids": [
+      "readar-node-0085",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0077"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "8.10. Enriching Exceptions with Notes: >>> def f():\n...     raise OSError('operation failed')\n...\n>>> excs = []\n>>> for i in range(3):\n...     try:\n...         f()\n...     except Exception as e:\n...         e.add_note(f'Happened in Iteration {i+1}')\n...         excs.append(e)\n...\n>>> raise ExceptionGroup('We have some problems', excs)\n  + Exception Group Traceback (most recent call last):\n  |   File \"<stdin>\", line 1, in <module>\n  |     raise ExceptionGroup('We have some problems', excs)\n  | ExceptionGroup: We have some problems (3 sub-exceptions)\n  +-+---------------- 1 ----------------\n    | Traceback (most recent call last):\n    |   File \"<stdin>\", line 3, in <module>\n    |     f()\n    |     ~^^\n    |   File \"<stdin>\", line 2, in f\n    |     raise OSError('operation failed')\n    | OSError: operation failed\n    | Happened in Iteration 1\n    +---------------- 2 ----------------\n    | Traceback (most recent call last):\n    |   File \"<stdin>\", line 3, in <module>\n    |     f()\n    |     ~^^\n    |   File \"<stdin>\", line 2, in f\n    |     raise OSError('operation failed')\n    | OSError: operation failed\n    | Happened in Iteration 2\n    +---------------- 3 ----------------\n    | Traceback (most recent call last):\n    |   File \"<stdin>\", line 3, in <module>\n    |     f()\n    |     ~^^\n    |   File \"<stdin>\", line 2, in f\n    |     raise OSError('operation failed')\n    | OSError: operation failed\n    | Happened in Iteration 3\n    +------------------------------------\n>>>",
+    "dom_ids": [
+      "readar-node-0085",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "errors",
+    "id": "errors__node_0078"
+  }
+]

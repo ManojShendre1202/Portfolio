@@ -1,0 +1,134 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: You can create a new table by specifying the table name, along with all column names and their types:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3. Creating a New Table: CREATE TABLE weather (\n    city            varchar(80),\n    temp_lo         int,           -- low temperature\n    temp_hi         int,           -- high temperature\n    prcp            real,          -- precipitation\n    date            date\n);",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: You can enter this into psql with the line breaks. psql will recognize that the command is not terminated until the semicolon.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: White space (i.e., spaces, tabs, and newlines) can be used freely in SQL commands. That means you can type the command aligned differently than above, or even all on one line. Two dashes ( “ -- ” ) introduce comments. Whatever follows them is ignored up to the end of the line. SQL is case-insensitive about key words and identifiers, except when identifiers are double-quoted to preserve the case (not done above).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: varchar(80) specifies a data type that can store arbitrary character strings up to 80 characters in length. int is the normal integer type. real is a type for storing single precision floating-point numbers. date should be self-explanatory. (Yes, the column of type date is also named date . This might be convenient or confusing — you choose.)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: PostgreSQL supports the standard SQL types int , smallint , real , double precision , char( N ) , varchar( N ) , date , time , timestamp , and interval , as well as other types of general utility and a rich set of geometric types. PostgreSQL can be customized with an arbitrary number of user-defined data types. Consequently, type names are not key words in the syntax, except where required to support special cases in the SQL standard.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: The second example will store cities and their associated geographical location:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3. Creating a New Table: CREATE TABLE cities (\n    name            varchar(80),\n    location        point\n);",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: The point type is an example of a PostgreSQL -specific data type.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3. Creating a New Table: Finally, it should be mentioned that if you don't need a table any longer or want to recreate it differently you can remove it using the following command:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3. Creating a New Table: DROP TABLE tablename;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-table",
+    "id": "tutorial-table__node_0011"
+  }
+]

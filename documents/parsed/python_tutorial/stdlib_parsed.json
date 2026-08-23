@@ -1,0 +1,585 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: The os module provides dozens of functions for interacting with the operating system:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: >>> import os\n>>> os.getcwd()      # Return the current working directory\n'C:\\\\Python314'\n>>> os.chdir('/server/accesslogs')   # Change current working directory\n>>> os.system('mkdir today')   # Run the command mkdir in the system shell\n0",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: Be sure to use the import os style instead of from os import * . This will keep os.open() from shadowing the built-in open() function which operates much differently.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: The built-in dir() and help() functions are useful as interactive aids for working with large modules like os :",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "index-0"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: >>> import os\n>>> dir(os)\n<returns a list of all module functions>\n>>> help(os)\n<returns an extensive manual page created from the module's docstrings>",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: For daily file and directory management tasks, the shutil module provides a higher level interface that is easier to use:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10. Brief tour of the standard library — 10.1. Operating system interface: >>> import shutil\n>>> shutil.copyfile('data.db', 'archive.db')\n'archive.db'\n>>> shutil.move('/build/executables', 'installdir')\n'installdir'",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.2. File wildcards: The glob module provides a function for making file lists from directory wildcard searches:",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.2. File wildcards: >>> import glob\n>>> glob.glob('*.py')\n['primes.py', 'random.py', 'quote.py']",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.3. Command-line arguments: Common utility scripts often need to process command line arguments. These arguments are stored in the sys module’s argv attribute as a list. For instance, let’s take the following demo.py file:",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.3. Command-line arguments: # File demo.py\nimport sys\nprint(sys.argv)",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.3. Command-line arguments: Here is the output from running python demo.py one two three at the command line:",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.3. Command-line arguments: ['demo.py', 'one', 'two', 'three']",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.3. Command-line arguments: The argparse module provides a more sophisticated mechanism to process command line arguments. The following script extracts one or more filenames and an optional number of lines to be displayed:",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.3. Command-line arguments: import argparse\n\nparser = argparse.ArgumentParser(\n    prog='top',\n    description='Show top lines from each file')\nparser.add_argument('filenames', nargs='+')\nparser.add_argument('-l', '--lines', type=int, default=10)\nargs = parser.parse_args()\nprint(args)",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.3. Command-line arguments: When run at the command line with python top.py --lines=5 alpha.txt beta.txt , the script sets args.lines to 5 and args.filenames to ['alpha.txt', 'beta.txt'] .",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.4. Error output redirection and program termination: The sys module also has attributes for stdin , stdout , and stderr . The latter is useful for emitting warnings and error messages to make them visible even when stdout has been redirected:",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.4. Error output redirection and program termination: >>> sys.stderr.write('Warning, log file not found starting a new one\\n')\nWarning, log file not found starting a new one",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.4. Error output redirection and program termination: The most direct way to terminate a script is to use sys.exit() .",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.5. String pattern matching: The re module provides regular expression tools for advanced string processing. For complex matching and manipulation, regular expressions offer succinct, optimized solutions:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.5. String pattern matching: >>> import re\n>>> re.findall(r'\\bf[a-z]*', 'which foot or hand fell fastest')\n['foot', 'fell', 'fastest']\n>>> re.sub(r'(\\b[a-z]+) \\1', r'\\1', 'cat in the the hat')\n'cat in the hat'",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.5. String pattern matching: When only simple capabilities are needed, string methods are preferred because they are easier to read and debug:",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.5. String pattern matching: >>> 'tea for too'.replace('too', 'two')\n'tea for two'",
+    "dom_ids": [
+      "readar-node-0025",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.6. Mathematics: The math module gives access to the underlying C library functions for floating-point math:",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.6. Mathematics: >>> import math\n>>> math.cos(math.pi / 4)\n0.70710678118654757\n>>> math.log(1024, 2)\n10.0",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.6. Mathematics: The random module provides tools for making random selections:",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.6. Mathematics: >>> import random\n>>> random.choice(['apple', 'pear', 'banana'])\n'apple'\n>>> random.sample(range(100), 10)   # sampling without replacement\n[30, 83, 16, 4, 8, 81, 41, 50, 18, 33]\n>>> random.random()    # random float from the interval [0.0, 1.0)\n0.17970987693706186\n>>> random.randrange(6)    # random integer chosen from range(6)\n4",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.6. Mathematics: The statistics module calculates basic statistical properties (the mean, median, variance, etc.) of numeric data:",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.6. Mathematics: >>> import statistics\n>>> data = [2.75, 1.75, 1.25, 0.25, 0.5, 1.25, 3.5]\n>>> statistics.mean(data)\n1.6071428571428572\n>>> statistics.median(data)\n1.25\n>>> statistics.variance(data)\n1.3720238095238095",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.6. Mathematics: The SciPy project < https://scipy.org > has many other modules for numerical computations.",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.7. Internet access: There are a number of modules for accessing the internet and processing internet protocols. Two of the simplest are urllib.request for retrieving data from URLs and smtplib for sending mail:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.7. Internet access: >>> from urllib.request import urlopen\n>>> with urlopen('https://docs.python.org/3/') as response:\n...     for line in response:\n...         line = line.decode()             # Convert bytes to a str\n...         if 'updated' in line:\n...             print(line.rstrip())         # Remove trailing newline\n...\n      Last updated on Nov 11, 2025 (20:11 UTC).\n\n>>> import smtplib\n>>> server = smtplib.SMTP('localhost')\n>>> server.sendmail('soothsayer@example.org', 'jcaesar@example.org',\n... \"\"\"To: jcaesar@example.org\n... From: soothsayer@example.org\n...\n... Beware the Ides of March.\n... \"\"\")\n>>> server.quit()",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.7. Internet access: (Note that the second example needs a mailserver running on localhost.)",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.8. Dates and times: The datetime module supplies classes for manipulating dates and times in both simple and complex ways. While date and time arithmetic is supported, the focus of the implementation is on efficient member extraction for output formatting and manipulation. The module also supports objects that are timezone aware.",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.8. Dates and times: >>> # dates are easily constructed and formatted\n>>> import datetime as dt\n>>> now = dt.date.today()\n>>> now\ndatetime.date(2003, 12, 2)\n>>> now.strftime(\"%m-%d-%y. %d %b %Y is a %A on the %d day of %B.\")\n'12-02-03. 02 Dec 2003 is a Tuesday on the 02 day of December.'\n\n>>> # dates support calendar arithmetic\n>>> birthday = dt.date(1964, 7, 31)\n>>> age = now - birthday\n>>> age.days\n14368",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.9. Data compression: Common data archiving and compression formats are directly supported by modules including: zlib , gzip , bz2 , lzma , zipfile and tarfile .",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.9. Data compression: >>> import zlib\n>>> s = b'witch which has which witches wrist watch'\n>>> len(s)\n41\n>>> t = zlib.compress(s)\n>>> len(t)\n37\n>>> zlib.decompress(t)\nb'witch which has which witches wrist watch'\n>>> zlib.crc32(s)\n226805979",
+    "dom_ids": [
+      "readar-node-0045",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.10. Performance measurement: Some Python users develop a deep interest in knowing the relative performance of different approaches to the same problem. Python provides a measurement tool that answers those questions immediately.",
+    "dom_ids": [
+      "readar-node-0048",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.10. Performance measurement: For example, it may be tempting to use the tuple packing and unpacking feature instead of the traditional approach to swapping arguments. The timeit module quickly demonstrates a modest performance advantage:",
+    "dom_ids": [
+      "readar-node-0048",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.10. Performance measurement: >>> from timeit import Timer\n>>> Timer('t=a; a=b; b=t', 'a=1; b=2').timeit()\n0.57535828626024577\n>>> Timer('a,b = b,a', 'a=1; b=2').timeit()\n0.54962537085770791",
+    "dom_ids": [
+      "readar-node-0048",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.10. Performance measurement: In contrast to timeit ’s fine level of granularity, the profile and pstats modules provide tools for identifying time critical sections in larger blocks of code.",
+    "dom_ids": [
+      "readar-node-0048",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.11. Quality control: One approach for developing high quality software is to write tests for each function as it is developed and to run those tests frequently during the development process.",
+    "dom_ids": [
+      "readar-node-0053",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.11. Quality control: The doctest module provides a tool for scanning a module and validating tests embedded in a program’s docstrings. Test construction is as simple as cutting-and-pasting a typical call along with its results into the docstring. This improves the documentation by providing the user with an example and it allows the doctest module to make sure the code remains true to the documentation:",
+    "dom_ids": [
+      "readar-node-0053",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0043"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.11. Quality control: def average(values):\n    \"\"\"Computes the arithmetic mean of a list of numbers.\n\n    >>> print(average([20, 30, 70]))\n    40.0\n    \"\"\"\n    return sum(values) / len(values)\n\nimport doctest\ndoctest.testmod()   # automatically validate the embedded tests",
+    "dom_ids": [
+      "readar-node-0053",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.11. Quality control: The unittest module is not as effortless as the doctest module, but it allows a more comprehensive set of tests to be maintained in a separate file:",
+    "dom_ids": [
+      "readar-node-0053",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "10.11. Quality control: import unittest\n\nclass TestStatisticalFunctions(unittest.TestCase):\n\n    def test_average(self):\n        self.assertEqual(average([20, 30, 70]), 40.0)\n        self.assertEqual(round(average([1, 5, 7]), 1), 4.3)\n        with self.assertRaises(ZeroDivisionError):\n            average([])\n        with self.assertRaises(TypeError):\n            average(20, 30, 70)\n\nunittest.main()  # Calling from the command line invokes all tests",
+    "dom_ids": [
+      "readar-node-0053",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "10.12. Batteries included: Python has a “batteries included” philosophy. This is best seen through the sophisticated and robust capabilities of its larger packages. For example:",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0047"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "10.12. Batteries included: - The xmlrpc.client and xmlrpc.server modules make implementing remote procedure calls into an almost trivial task. Despite the modules’ names, no direct knowledge or handling of XML is needed. - The email package is a library for managing email messages, including MIME and other RFC 5322 -based message documents. Unlike smtplib and poplib which actually send and receive messages, the email package has a complete toolset for building or decoding complex message structures (including attachments) and for implementing internet encoding and header protocols. - The json package provides robust support for parsing this popular data interchange format. The csv module supports direct reading and writing of files in Comma-Separated Value format, commonly supported by databases and spreadsheets. XML processing is supported by the xml.etree.ElementTree , xml.dom and xml.sax packages. Together, these modules and packages greatly simplify data interchange between Python applications and other tools. - The sqlite3 module is a wrapper for the SQLite database library, providing a persistent database that can be updated and accessed using slightly nonstandard SQL syntax. - Internationalization is supported by a number of modules including gettext , locale , and the codecs package.",
+    "dom_ids": [
+      "readar-node-0059",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "stdlib",
+    "id": "stdlib__node_0048"
+  }
+]

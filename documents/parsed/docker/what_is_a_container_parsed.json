@@ -1,0 +1,525 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: Imagine you're developing a killer web app that has three main components - a React frontend, a Python API, and a PostgreSQL database. If you wanted to work on this project, you'd have to install Node, Python, and PostgreSQL.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: How do you make sure you have the same versions as the other developers on your team? Or your CI/CD system? Or what's used in production?",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: How do you ensure the version of Python (or Node or the database) your app needs isn't affected by what's already on your machine? How do you manage potential conflicts?",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: Enter containers!",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: What is a container? Simply put, containers are isolated processes for each of your app's components. Each component - the frontend React app, the Python API engine, and the database - runs in its own isolated environment, completely isolated from everything else on your machine.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "What is a container? — Explanation: Here's what makes them awesome. Containers are:",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0006"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "What is a container? — Explanation: - Self-contained. Each container has everything it needs to function with no reliance on any pre-installed dependencies on the host machine. - Isolated. Since containers run in isolation, they have minimal influence on the host and other containers, increasing the security of your applications. - Independent. Each container is independently managed. Deleting one container won't affect any others. - Portable. Containers can run anywhere! The container that runs on your development machine will work the same way in a data center or anywhere in the cloud!",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Containers versus virtual machines (VMs): Without getting too deep, a VM is an entire operating system with its own kernel, hardware drivers, programs, and applications. Spinning up a VM only to isolate a single application is a lot of overhead.",
+    "dom_ids": [
+      "containers-versus-virtual-machines-vms",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Containers versus virtual machines (VMs): A container is simply an isolated process with all of the files it needs to run. If you run multiple containers, they all share the same kernel, allowing you to run more applications on less infrastructure.",
+    "dom_ids": [
+      "containers-versus-virtual-machines-vms",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Containers versus virtual machines (VMs): Using VMs and containers together",
+    "dom_ids": [
+      "containers-versus-virtual-machines-vms",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Containers versus virtual machines (VMs): Quite often, you will see containers and VMs used together. As an example, in a cloud environment, the provisioned machines are typically VMs. However, instead of provisioning one machine to run one application, a VM with a container runtime can run multiple containerized applications, increasing resource utilization and reducing costs.",
+    "dom_ids": [
+      "containers-versus-virtual-machines-vms",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this hands-on, you will see how to run a Docker container using the Docker Desktop GUI.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: Use the following instructions to run a container.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0013"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Try it out: - Open Docker Desktop and select the Search field on the top navigation bar. - Specify welcome-to-docker in the search input and then select the Pull button. - Once the image is successfully pulled, select the Run button. - Expand the Optional settings . - In the Container name , specify welcome-to-docker . - In the Host port , specify 8080 . - Select Run to start your container.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: Congratulations! You just ran your first container! 🎉",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your container: You can view all of your containers by going to the Containers view of the Docker Desktop Dashboard.",
+    "dom_ids": [
+      "view-your-container",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your container: This container runs a web server that displays a simple website. When working with more complex projects, you'll run different parts in different containers. For example, you might run a different container for the frontend, backend, and database.",
+    "dom_ids": [
+      "view-your-container",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access the frontend: When you launched the container, you exposed one of the container's ports onto your machine. Think of this as creating configuration to let you connect through the isolated environment of the container.",
+    "dom_ids": [
+      "access-the-frontend",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access the frontend: For this container, the frontend is accessible on port 8080 . To open the website, select the link in the Port(s) column of your container or visit http://localhost:8080 in your browser.",
+    "dom_ids": [
+      "access-the-frontend",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explore your container: Docker Desktop lets you explore and interact with different aspects of your container. Try it out yourself.",
+    "dom_ids": [
+      "explore-your-container",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0020"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Explore your container: - Go to the Containers view in the Docker Desktop Dashboard. - Select your container. - Select the Files tab to explore your container's isolated file system.",
+    "dom_ids": [
+      "explore-your-container",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stop your container: The docker/welcome-to-docker container continues to run until you stop it.",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0022"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Stop your container: - Go to the Containers view in the Docker Desktop Dashboard. - Locate the container you'd like to stop. - Select the Stop action in the Actions column.",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stop your container: Follow the instructions to run a container using the CLI:",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0024"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Stop your container: - Open your CLI terminal and start a container by using the docker run command: The output from this command is the full container ID.",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stop your container: $ docker run -d -p 8080:80 docker/welcome-to-docker",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stop your container: Congratulations! You just fired up your first container! 🎉",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your running containers: You can verify if the container is up and running by using the docker ps command:",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View your running containers: docker ps",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your running containers: You will see output like the following:",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View your running containers:  CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS          PORTS                      NAMES\n a1f7a4bb3a27   docker/welcome-to-docker   \"/docker-entrypoint.…\"   11 seconds ago   Up 11 seconds   0.0.0.0:8080->80/tcp       gracious_keldysh",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your running containers: This container runs a web server that displays a simple website. When working with more complex projects, you'll run different parts in different containers. For example, a different container for the frontend , backend , and database .",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "View your running containers: The docker ps command will show you only running containers. To view stopped containers, add the -a flag to list all containers: docker ps -a",
+    "dom_ids": [
+      "view-your-running-containers",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access the frontend: When you launched the container, you exposed one of the container's ports onto your machine. Think of this as creating configuration to let you to connect through the isolated environment of the container.",
+    "dom_ids": [
+      "access-the-frontend",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access the frontend: For this container, the frontend is accessible on port 8080 . To open the website, select the link in the Port(s) column of your container or visit http://localhost:8080 in your browser.",
+    "dom_ids": [
+      "access-the-frontend",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stop your container: The docker/welcome-to-docker container continues to run until you stop it. You can stop a container using the docker stop command.",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0036"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Stop your container: - Run docker ps to get the ID of the container - Provide the container ID or name to the docker stop command:",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stop your container: docker stop <the-container-id>",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stop your container: When referencing containers by ID, you don't need to provide the full ID. You only need to provide enough of the ID to make it unique. As an example, the previous container could be stopped by running the following command:",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0039"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stop your container: docker stop a1f",
+    "dom_ids": [
+      "stop-your-container",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Additional resources: The following links provide additional guidance into containers:",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0041"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - Running a container - Overview of container - Why Docker?",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Now that you have learned the basics of a Docker container, it's time to learn about Docker images.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "what_is_a_container",
+    "id": "what_is_a_container__node_0043"
+  }
+]

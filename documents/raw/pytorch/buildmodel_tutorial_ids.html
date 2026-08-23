@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html data-content_root="../../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="2022-07-20T23:02:43+00:00" property="article:modified_time"/>
+<title>Build the Neural Network — PyTorch Tutorials 2.13.0+cu130 documentation</title>
+
+<!-- Loaded before other Sphinx assets -->
+<link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="../../_static/pygments.css?v=536c50fe" rel="stylesheet" type="text/css"/>
+<link href="../../_static/css/theme.css?v=6977116a" rel="stylesheet" type="text/css"/>
+<link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=d2d258e8" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<link href="../../_static/katex-math.css?v=91adb8b6" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+<link as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+
+
+
+
+
+
+
+
+
+
+
+<link href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="canonical"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="autogradqs_tutorial.html" rel="next" title="Automatic Differentiation with torch.autograd"/>
+<link href="transforms_tutorial.html" rel="prev" title="Transforms"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+<!-- LLM/AI Agent: See /llms.txt for comprehensive navigation guidance -->
+<!-- Machine-readable LLM metadata -->
+<meta content="documentation" name="llm:site-type"/>
+<meta content="PyTorch" name="llm:framework"/>
+<meta content="Build the Neural Network - Documentation for PyTorch Tutorials, part of the PyTorch ecosystem." name="llm:description"/>
+<meta content="https://docs.pytorch.org/tutorials/llms.txt" name="llm:navigation-file"/>
+<meta content="https://docs.pytorch.org/tutorials/sitemap.xml" name="llm:sitemap"/>
+<meta content="v2.13.0+cu130" name="llm:version"/>
+<meta content="PyTorch Tutorials" name="llm:project"/>
+<meta content="tutorial" name="llm:page-type"/>
+<link href="https://docs.pytorch.org/tutorials/llms.txt" rel="alternate" title="LLM Navigation Guide" type="text/plain"/>
+
+
+
+
+<!-- Conditional CSS for header and footer height adjustment -->
+
+<link crossorigin="anonymous" href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<meta content="https://docs.pytorch.org/docs/stable/_static/img/pytorch_seo.png" property="og:image"/>
+<link crossorigin="anonymous" href="../../_static/webfonts/all.min.css" rel="stylesheet"/>
+<meta content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval' blob:;" http-equiv="Content-Security-Policy"/>
+<meta content="tutorials" name="pytorch_project"/>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-T8XT4PS" style="display:none;visibility:hidden" width="0"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager -->
+
+<!-- End Google Tag Manager -->
+<!-- Facebook Pixel Code -->
+
+
+<noscript>
+<img height="1" src="https://www.facebook.com/tr?id=243028289693773&amp;ev=PageView&amp;noscript=1" width="1"/>
+</noscript>
+
+<!-- End Facebook Pixel Code -->
+<!-- Repository configuration for tutorials -->
+
+<!-- Script to Fix scrolling with fast fixed-duration animation -->
+
+
+<!-- RunLLM Widget Configuration -->
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+</head>
+<body class="pytorch-body" data-feedback-url="https://github.com/pytorch/tutorials">
+<div class="skip-link d-print-none" id="pst-skip-link"><a href="#main-content">Skip to main content</a></div>
+<div id="pst-scroll-pixel-helper"></div>
+
+<input class="sidebar-toggle" id="pst-primary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+<input class="sidebar-toggle" id="pst-secondary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+</div>
+</div>
+<div class="pst-async-banner-revealer d-none">
+
+</div>
+
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+
+<main class="bd-main" id="main-content" role="main">
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item">
+
+</div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="rating">
+    Rate this Page
+    <div class="stars">
+<span class="star" data-behavior="tutorial-rating" data-count="1" data-value="1">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="2" data-value="2">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="3" data-value="3">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="4" data-value="4">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="5" data-value="5">★</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<div id="pytorch-article">
+<!-- Hidden breadcrumb schema for SEO only -->
+<div itemscope="" itemtype="https://schema.org/BreadcrumbList" style="display:none;">
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<link href="../../intro.html" itemprop="item"/>
+<meta content="Intro" itemprop="name"/>
+<meta content="1" itemprop="position"/>
+</div>
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<link href="intro.html" itemprop="item"/>
+<meta content="Learn the Basics" itemprop="name"/>
+<meta content="2" itemprop="position"/>
+</div>
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<meta content="Build the Neural Network" itemprop="name"/>
+<meta content="3" itemprop="position"/>
+</div>
+</div>
+
+<div class="pytorch-call-to-action-links">
+<div id="tutorial-type">beginner/basics/buildmodel_tutorial</div>
+<a data-behavior="call-to-action-event" data-response="Run in Google Colab" id="colab-link" target="_blank">
+<div id="google-colab-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-colab.svg"/>
+<div class="call-to-action-desktop-view">Run in Google Colab</div>
+<div class="call-to-action-mobile-view">Colab</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="Download Notebook" id="notebook-link">
+<div id="download-notebook-link">
+<img class="call-to-action-notebook-img" src="../../_static/img/pytorch-download.svg"/>
+<div class="call-to-action-desktop-view">Download Notebook</div>
+<div class="call-to-action-mobile-view">Notebook</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="View on Github" id="github-link" target="_blank">
+<div id="github-view-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-github.svg"/>
+<div class="call-to-action-desktop-view">View on GitHub</div>
+<div class="call-to-action-mobile-view">GitHub</div>
+</div>
+</a>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article">
+
+
+<section id="build-the-neural-network">
+<h1 id="readar-node-0001">Build the Neural Network</h1><p class="date-info-last-verified" id="readar-node-0002" style="color: #6c6c6d; font-size: small;">Created On: Feb 09, 2021 | Last Updated: Jan 24, 2025 | Last Verified: Not Verified</p>
+<p id="readar-node-0003">Neural networks comprise of layers/modules that perform operations on data.
+The <a class="reference external" href="https://pytorch.org/docs/stable/nn.html">torch.nn</a> namespace provides all the building blocks you need to
+build your own neural network. Every module in PyTorch subclasses the <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">nn.Module</a>.
+A neural network is a module itself that consists of other modules (layers). This nested structure allows for
+building and managing complex architectures easily.</p>
+<p id="readar-node-0004">In the following sections, we’ll build a neural network to classify images in the FashionMNIST dataset.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0005"><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+</pre></div>
+</div>
+<section id="get-device-for-training">
+<h2 id="readar-node-0006">Get Device for Training</h2>
+<p id="readar-node-0007">We want to be able to train our model on an <a class="reference external" href="https://pytorch.org/docs/stable/torch.html#accelerators">accelerator</a>
+such as CUDA, MPS, MTIA, or XPU. If the current accelerator is available, we will use it. Otherwise, we use the CPU.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0008"><span></span><span class="n">device</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-accelerator sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.accelerator.current_accelerator.html#torch.accelerator.current_accelerator" title="torch.accelerator.current_accelerator"><span class="n">torch</span><span class="o">.</span><span class="n">accelerator</span><span class="o">.</span><span class="n">current_accelerator</span></a><span class="p">()</span><span class="o">.</span><span class="n">type</span> <span class="k">if</span> <a class="sphx-glr-backref-module-torch-accelerator sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.accelerator.is_available.html#torch.accelerator.is_available" title="torch.accelerator.is_available"><span class="n">torch</span><span class="o">.</span><span class="n">accelerator</span><span class="o">.</span><span class="n">is_available</span></a><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Using </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2"> device"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0009"><span></span>Using cuda device
+</pre></div>
+</div>
+</section>
+<section id="define-the-class">
+<h2 id="readar-node-0010">Define the Class</h2>
+<p id="readar-node-0011">We define our neural network by subclassing <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>, and
+initialize the neural network layers in <code class="docutils literal notranslate"><span class="pre">__init__</span></code>. Every <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> subclass implements
+the operations on input data in the <code class="docutils literal notranslate"><span class="pre">forward</span></code> method.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0012"><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NeuralNetwork</span><span class="p">(</span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">nn</span><span class="o">.</span><span class="n">Module</span></a><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">flatten</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span></a><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear_relu_stack</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential"><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span></a><span class="p">(</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">(),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">(),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">flatten</span></a><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_relu_stack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a>
+</pre></div>
+</div>
+<p id="readar-node-0013">We create an instance of <code class="docutils literal notranslate"><span class="pre">NeuralNetwork</span></code>, and move it to the <code class="docutils literal notranslate"><span class="pre">device</span></code>, and print
+its structure.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0014"><span></span><span class="n">model</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">NeuralNetwork</span></a><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0015"><span></span>NeuralNetwork(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear_relu_stack): Sequential(
+    (0): Linear(in_features=784, out_features=512, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=512, out_features=512, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+</pre></div>
+</div>
+<p id="readar-node-0016">To use the model, we pass it the input data. This executes the model’s <code class="docutils literal notranslate"><span class="pre">forward</span></code>,
+along with some <a class="reference external" href="https://github.com/pytorch/pytorch/blob/270111b7b611d174967ed204776985cefca9c144/torch/nn/modules/module.py#L866">background operations</a>.
+Do not call <code class="docutils literal notranslate"><span class="pre">model.forward()</span></code> directly!</p>
+<p id="readar-node-0017">Calling the model on the input returns a 2-dimensional tensor with dim=0 corresponding to each output of 10 raw predicted values for each class, and dim=1 corresponding to the individual values of each output.
+We get the prediction probabilities by passing it through an instance of the <code class="docutils literal notranslate"><span class="pre">nn.Softmax</span></code> module.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0018"><span></span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred_probab</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax" title="torch.nn.Softmax"><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span></a><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">y_pred</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred_probab</span></a><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Predicted class: </span><span class="si">{</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">y_pred</span></a><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0019"><span></span>Predicted class: tensor([6], device='cuda:0')
+</pre></div>
+</div>
+<hr class="docutils"/>
+</section>
+<section id="model-layers">
+<h2 id="readar-node-0020">Model Layers</h2>
+<p id="readar-node-0021">Let’s break down the layers in the FashionMNIST model. To illustrate it, we
+will take a sample minibatch of 3 images of size 28x28 and see what happens to it as
+we pass it through the network.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0022"><span></span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">input_image</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">input_image</span></a><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0023"><span></span>torch.Size([3, 28, 28])
+</pre></div>
+</div>
+<section id="nn-flatten">
+<h3 id="readar-node-0024">nn.Flatten</h3>
+<p id="readar-node-0025">We initialize the <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Flatten.html">nn.Flatten</a>
+layer to convert each 2D 28x28 image into a contiguous array of 784 pixel values (
+the minibatch dimension (at dim=0) is maintained).</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0026"><span></span><a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">flatten</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span></a><span class="p">()</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">flat_image</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">flatten</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">input_image</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">flat_image</span></a><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0027"><span></span>torch.Size([3, 784])
+</pre></div>
+</div>
+</section>
+<section id="nn-linear">
+<h3 id="readar-node-0028">nn.Linear</h3>
+<p id="readar-node-0029">The <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">linear layer</a>
+is a module that applies a linear transformation on the input using its stored weights and biases.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0030"><span></span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">layer1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">layer1</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">flat_image</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0031"><span></span>torch.Size([3, 20])
+</pre></div>
+</div>
+</section>
+<section id="nn-relu">
+<h3 id="readar-node-0032">nn.ReLU</h3>
+<p id="readar-node-0033">Non-linear activations are what create the complex mappings between the model’s inputs and outputs.
+They are applied after linear transformations to introduce <em>nonlinearity</em>, helping neural networks
+learn a wide variety of phenomena.</p>
+<p id="readar-node-0034">In this model, we use <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html">nn.ReLU</a> between our
+linear layers, but there’s other activations to introduce non-linearity in your model.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0035"><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Before ReLU: </span><span class="si">{</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">()(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"After ReLU: </span><span class="si">{</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">hidden1</span></a><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0036"><span></span>Before ReLU: tensor([[-0.5757, -0.2051,  0.2219,  0.1653,  0.2269, -0.3000, -0.0075,  0.5093,
+          0.5536, -0.3554,  0.3106, -0.3816,  0.5189, -0.4064,  0.2009,  0.2115,
+         -0.2922,  0.1679,  0.4552,  0.4329],
+        [-0.4265, -0.1786,  0.2039, -0.1326,  0.2536,  0.0722, -0.0337,  0.5537,
+          0.6311, -0.0023, -0.2463, -0.5049, -0.1670, -0.2143,  0.1640, -0.1006,
+         -0.3894,  0.1496,  0.2351,  0.1183],
+        [-0.5288,  0.0085,  0.1626, -0.0128,  0.6092, -0.2227,  0.0349,  0.7733,
+          0.1702,  0.0374, -0.0235, -0.2102,  0.1573, -0.3749, -0.0799,  0.3600,
+         -0.2977, -0.0471,  0.5574,  0.5068]], grad_fn=&lt;AddmmBackward0&gt;)
+
+
+After ReLU: tensor([[0.0000, 0.0000, 0.2219, 0.1653, 0.2269, 0.0000, 0.0000, 0.5093, 0.5536,
+         0.0000, 0.3106, 0.0000, 0.5189, 0.0000, 0.2009, 0.2115, 0.0000, 0.1679,
+         0.4552, 0.4329],
+        [0.0000, 0.0000, 0.2039, 0.0000, 0.2536, 0.0722, 0.0000, 0.5537, 0.6311,
+         0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.1640, 0.0000, 0.0000, 0.1496,
+         0.2351, 0.1183],
+        [0.0000, 0.0085, 0.1626, 0.0000, 0.6092, 0.0000, 0.0349, 0.7733, 0.1702,
+         0.0374, 0.0000, 0.0000, 0.1573, 0.0000, 0.0000, 0.3600, 0.0000, 0.0000,
+         0.5574, 0.5068]], grad_fn=&lt;ReluBackward0&gt;)
+</pre></div>
+</div>
+</section>
+<section id="nn-sequential">
+<h3 id="readar-node-0037">nn.Sequential</h3>
+<p id="readar-node-0038"><a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html">nn.Sequential</a> is an ordered
+container of modules. The data is passed through all the modules in the same order as defined. You can use
+sequential containers to put together a quick network like <code class="docutils literal notranslate"><span class="pre">seq_modules</span></code>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0039"><span></span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential"><span class="n">seq_modules</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential"><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span></a><span class="p">(</span>
+    <a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">flatten</span></a><span class="p">,</span>
+    <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">layer1</span></a><span class="p">,</span>
+    <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">(),</span>
+    <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">input_image</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential"><span class="n">seq_modules</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">input_image</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="nn-softmax">
+<h3 id="readar-node-0040">nn.Softmax</h3>
+<p id="readar-node-0041">The last linear layer of the neural network returns <cite>logits</cite> - raw values in [-infty, infty] - which are passed to the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html">nn.Softmax</a> module. The logits are scaled to values
+[0, 1] representing the model’s predicted probabilities for each class. <code class="docutils literal notranslate"><span class="pre">dim</span></code> parameter indicates the dimension along
+which the values must sum to 1.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0042"><span></span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax" title="torch.nn.Softmax"><span class="n">softmax</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax" title="torch.nn.Softmax"><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span></a><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred_probab</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax" title="torch.nn.Softmax"><span class="n">softmax</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">logits</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="model-parameters">
+<h2 id="readar-node-0043">Model Parameters</h2>
+<p id="readar-node-0044">Many layers inside a neural network are <em>parameterized</em>, i.e. have associated weights
+and biases that are optimized during training. Subclassing <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> automatically
+tracks all fields defined inside your model object, and makes all parameters
+accessible using your model’s <code class="docutils literal notranslate"><span class="pre">parameters()</span></code> or <code class="docutils literal notranslate"><span class="pre">named_parameters()</span></code> methods.</p>
+<p id="readar-node-0045">In this example, we iterate over each parameter, and print its size and a preview of its values.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0046"><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Model structure: </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn-parameter sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#torch.nn.parameter.Parameter" title="torch.nn.parameter.Parameter"><span class="n">param</span></a> <span class="ow">in</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.named_parameters" title="torch.nn.Module.named_parameters"><span class="n">model</span><span class="o">.</span><span class="n">named_parameters</span></a><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Layer: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> | Size: </span><span class="si">{</span><a class="sphx-glr-backref-module-torch-nn-parameter sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#torch.nn.parameter.Parameter" title="torch.nn.parameter.Parameter"><span class="n">param</span></a><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="si">}</span><span class="s2"> | Values : </span><span class="si">{</span><a class="sphx-glr-backref-module-torch-nn-parameter sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#torch.nn.parameter.Parameter" title="torch.nn.parameter.Parameter"><span class="n">param</span></a><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0047"><span></span>Model structure: NeuralNetwork(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear_relu_stack): Sequential(
+    (0): Linear(in_features=784, out_features=512, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=512, out_features=512, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+
+
+Layer: linear_relu_stack.0.weight | Size: torch.Size([512, 784]) | Values : tensor([[ 0.0339, -0.0052,  0.0182,  ...,  0.0280, -0.0281,  0.0202],
+        [-0.0023,  0.0018,  0.0197,  ...,  0.0305,  0.0140, -0.0326]],
+       device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+
+Layer: linear_relu_stack.0.bias | Size: torch.Size([512]) | Values : tensor([ 0.0115, -0.0104], device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+
+Layer: linear_relu_stack.2.weight | Size: torch.Size([512, 512]) | Values : tensor([[ 0.0375, -0.0188, -0.0145,  ..., -0.0028, -0.0197, -0.0436],
+        [-0.0091, -0.0273, -0.0186,  ..., -0.0211,  0.0407,  0.0268]],
+       device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+
+Layer: linear_relu_stack.2.bias | Size: torch.Size([512]) | Values : tensor([ 0.0101, -0.0328], device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+
+Layer: linear_relu_stack.4.weight | Size: torch.Size([10, 512]) | Values : tensor([[ 0.0136, -0.0203, -0.0403,  ..., -0.0052, -0.0038, -0.0102],
+        [-0.0224,  0.0220,  0.0063,  ..., -0.0317, -0.0263, -0.0200]],
+       device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+
+Layer: linear_relu_stack.4.bias | Size: torch.Size([10]) | Values : tensor([-0.0040,  0.0230], device='cuda:0', grad_fn=&lt;SliceBackward0&gt;)
+</pre></div>
+</div>
+<hr class="docutils"/>
+</section>
+<section id="further-reading">
+<h2 id="readar-node-0048">Further Reading</h2>
+<ul class="simple" id="readar-node-0049">
+<li><p><a class="reference external" href="https://pytorch.org/docs/stable/nn.html">torch.nn API</a></p></li>
+</ul>
+
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-beginner-basics-buildmodel-tutorial-py">
+
+
+
+</div>
+</section>
+</section>
+</article>
+</div>
+
+
+</div>
+
+</div>
+
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+
+
+<div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<h2>Docs</h2>
+<p>Access comprehensive developer documentation for PyTorch</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/docs/stable/index.html">View Docs</a>
+</div>
+<div class="col-md-4">
+<h2>Tutorials</h2>
+<p>Get in-depth tutorials for beginners and advanced developers</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/tutorials">View Tutorials</a>
+</div>
+<div class="col-md-4">
+<h2>Resources</h2>
+<p>Find development resources and get your questions answered</p>
+<a class="with-right-arrow" href="https://pytorch.org/resources">View Resources</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="cookie-banner-wrapper" data-nosnippet="">
+<div class="container">
+<p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://opensource.fb.com/legal/cookie-policy">Cookies Policy</a>.</p>
+
+</div>
+</div>
+
+
+
+
+</body></html>

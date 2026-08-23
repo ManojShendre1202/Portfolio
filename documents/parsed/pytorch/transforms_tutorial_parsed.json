@@ -1,0 +1,122 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Transforms: Created On: Feb 09, 2021 | Last Updated: May 07, 2026 | Last Verified: Not Verified",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Transforms: Data does not always come in its final processed form that is required for training machine learning algorithms. We use transforms to perform some manipulation of the data and make it suitable for training.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Transforms: All TorchVision datasets have two parameters - transform to modify the features and target_transform to modify the labels - that accept callables containing the transformation logic. The torchvision.transforms module offers several commonly-used transforms out of the box.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Transforms: The FashionMNIST features are in PIL Image format, and the labels are integers. For training, we need the features as normalized tensors, and the labels as one-hot encoded tensors. To make these transformations, we use the torchvision.transforms.v2 API along with torch.nn.functional.one_hot .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Transforms: import torch\nimport torch.nn.functional as F\nfrom torchvision import datasets\nfrom torchvision.transforms import v2\n\nds = datasets.FashionMNIST(\n    root=\"data\",\n    train=True,\n    download=True,\n    transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)]),\n    target_transform=v2.Lambda(\n        lambda y: F.one_hot(torch.tensor(y), num_classes=10).float()\n    ),\n)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Transforms:   0%|          | 0.00/26.4M [00:00<?, ?B/s]\n  0%|          | 65.5k/26.4M [00:00<01:12, 364kB/s]\n  1%|          | 229k/26.4M [00:00<00:38, 682kB/s]\n  3%|▎         | 918k/26.4M [00:00<00:12, 2.10MB/s]\n 14%|█▍        | 3.67M/26.4M [00:00<00:03, 7.27MB/s]\n 37%|███▋      | 9.90M/26.4M [00:00<00:00, 17.0MB/s]\n 60%|██████    | 16.0M/26.4M [00:01<00:00, 22.6MB/s]\n 78%|███████▊  | 20.7M/26.4M [00:01<00:00, 27.9MB/s]\n 93%|█████████▎| 24.6M/26.4M [00:01<00:00, 26.1MB/s]\n100%|██████████| 26.4M/26.4M [00:01<00:00, 19.3MB/s]\n\n  0%|          | 0.00/29.5k [00:00<?, ?B/s]\n100%|██████████| 29.5k/29.5k [00:00<00:00, 333kB/s]\n\n  0%|          | 0.00/4.42M [00:00<?, ?B/s]\n  1%|▏         | 65.5k/4.42M [00:00<00:11, 374kB/s]\n  5%|▌         | 229k/4.42M [00:00<00:05, 705kB/s]\n 20%|██        | 885k/4.42M [00:00<00:01, 2.09MB/s]\n 81%|████████  | 3.57M/4.42M [00:00<00:00, 7.32MB/s]\n100%|██████████| 4.42M/4.42M [00:00<00:00, 6.30MB/s]\n\n  0%|          | 0.00/5.15k [00:00<?, ?B/s]\n100%|██████████| 5.15k/5.15k [00:00<00:00, 59.6MB/s]",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "ToImage() and ToDtype(): The torchvision.transforms.v2 API replaces the legacy ToTensor transform with a two-step pipeline. v2.ToImage converts a PIL image or NumPy ndarray into a torchvision.tv_tensors.Image tensor, and v2.ToDtype with scale=True casts it to float32 and scales the pixel intensity values to the range [0., 1.].",
+    "dom_ids": [
+      "readar-node-0008",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Lambda Transforms: Lambda transforms apply any user-defined lambda function. Here, we use torch.nn.functional.one_hot to turn the integer label into a one-hot encoded tensor of size 10 (the number of labels in our dataset), then cast it to float to match the expected dtype.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Lambda Transforms: target_transform = v2.Lambda(\n    lambda y: F.one_hot(torch.tensor(y), num_classes=10).float()\n)",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Further Reading: - Getting started with transforms v2 - torchvision.transforms.v2 API",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "transforms_tutorial",
+    "id": "transforms_tutorial__node_0010"
+  }
+]

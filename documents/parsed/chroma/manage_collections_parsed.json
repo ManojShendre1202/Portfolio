@@ -1,0 +1,840 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma lets you manage collections of embeddings, using the collection primitive. Collections are the fundamental unit of storage and querying in Chroma.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Collections: Chroma collections are created with a name. Collection names are used in the url, so there are a few restrictions on them:",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Creating Collections: - The length of the name must be between 3 and 512 characters. - The name must start and end with a lowercase letter or a digit, and it can contain dots, dashes, and underscores in between. - The name must not contain two consecutive dots. - The name must not be a valid IP address.",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: collection = client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: const collection = await client.createCollection({\n  name: \"my_collection\",\n});",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Collections: let collection = client\n    .create_collection(\"my_collection\", None, None)\n    .await?;",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Collections: Note that collection names must be unique inside a Chroma database. If you try to create a collection with a name of an existing one, you will see an exception.",
+    "dom_ids": [
+      "creating-collections",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: When you add documents to a collection, Chroma will embed them for you by using the collection’s embedding function . Chroma will use sentence transformer embedding function as a default.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Chroma also offers various embedding function, which you can provide upon creating a collection. For example, you can create a collection using the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Embedding Functions: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Install the openai package:",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: pip install openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: poetry add openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: uv pip install openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Create your collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: import os\nfrom chromadb.utils.embedding_functions import OpenAIEmbeddingFunction\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=OpenAIEmbeddingFunction(\n        api_key=os.getenv(\"OPENAI_API_KEY\"),\n        model_name=\"text-embedding-3-small\"\n    )\n)",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Instead of having Chroma embed documents, you can also provide embeddings directly when adding data to a collection. In this case, your collection will not have an embedding function set, and you will be responsible for providing embeddings directly when adding data and querying.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: collection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=None\n)",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Install the @chroma-core/openai package to get access to the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: npm install @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: pnpm add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: bun add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: yarn add @chroma-core/openai",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Create your collection with the OpenAIEmbeddingFunction :",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: import { OpenAIEmbeddingFunction } from \"@chroma-core/openai\";\n\nconst collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: new OpenAIEmbeddingFunction({\n    apiKey: process.env.OPENAI_API_KEY,\n    modelName: \"text-embedding-3-small\",\n  }),\n});",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: Instead of having Chroma embed documents, you can also provide embeddings directly when adding data to a collection. In this case, your collection will not have an embedding function set, and you will be responsible for providing embeddings directly when adding data and querying.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: const collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: null,\n});",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Embedding Functions: The Rust client expects embeddings to be provided directly when using add , get , search and other functions. Use your provider SDK to generate embeddings, then pass them to Chroma.",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Embedding Functions: collection.add(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"lorem ipsum...\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "embedding-functions",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Collection Metadata: When creating collections, you can pass the optional metadata argument to add a mapping of metadata key-value pairs to your collections. This can be useful for adding general information about the collection like creation time, description of the data stored in the collection, and more.",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: from datetime import datetime\n\ncollection = client.create_collection(\n    name=\"my_collection\",\n    embedding_function=emb_fn,\n    metadata={\n        \"description\": \"my first Chroma collection\",\n        \"created\": str(datetime.now())\n    }\n)",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: let collection = await client.createCollection({\n  name: \"my_collection\",\n  embeddingFunction: emb_fn,\n  metadata: {\n    description: \"my first Chroma collection\",\n    created: new Date().toString(),\n  },\n});",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Collection Metadata: use chroma::types::Metadata;\n\nlet mut metadata = Metadata::new();\nmetadata.insert(\"description\".to_string(), \"my first Chroma collection\".into());\nmetadata.insert(\"created\".to_string(), \"2024-01-01T00:00:00Z\".into());\n\nlet collection = client\n    .create_collection(\"my_collection\", None, Some(metadata))\n    .await?;",
+    "dom_ids": [
+      "collection-metadata",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Getting Collections: - Python - TypeScript - Rust",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: There are several ways to get a collection after it was created.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The get_collection function will get a collection from Chroma by name. It returns a Collection object with name , metadata , configuration , and embedding_function .",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_collection(name=\"my-collection\")",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The get_or_create_collection function behaves similarly, but will create the collection if it doesn’t exist. You can pass to it the same arguments create_collection expects, and the client will ignore them if the collection already exists.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_or_create_collection(\n    name=\"my-collection\",\n    metadata={\"description\": \"...\"}\n)",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The list_collections function returns the collections you have in your Chroma database. The collections will be ordered by creation time from oldest to newest.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collections = client.list_collections()",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: By default, list_collections returns up to 100 collections. If you have more than 100 collections, or need to get only a subset of your collections, you can use the limit and offset arguments:",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: first_collections_batch = client.list_collections(limit=100) # get the first 100 collections\nsecond_collections_batch = client.list_collections(limit=100, offset=100) # get the next 100 collections\ncollections_subset = client.list_collections(limit=20, offset=50) # get 20 collections starting from the 50th",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Current versions of Chroma store the embedding function you used to create a collection on the server, so the client can resolve it for you on subsequent “get” operations. If you are running an older version of the Chroma client or server (earlier than 1.1.13), you will need to provide the same embedding function you used to create a collection when using get_collection :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: collection = client.get_collection(\n    name='my-collection',\n    embedding_function=ef\n)",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: There are several ways to get a collection after it was created.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The getCollection function will get a collection from Chroma by name. It returns a collection object with name , metadata , configuration , and embeddingFunction . If you did not provide an embedding function to createCollection , you can provide it to getCollection .",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getCollection({ name: \"my-collection \" });",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The getOrCreate function behaves similarly, but will create the collection if it doesn’t exist. You can pass to it the same arguments createCollection expects, and the client will ignore them if the collection already exists.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getOrCreateCollection({\n  name: \"my-collection\",\n  metadata: { description: \"...\" },\n});",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: If you need to get multiple collections at once, you can use getCollections() :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const [col1, col2] = client.getCollections([\"col1\", \"col2\"]);",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: The listCollections function returns all the collections you have in your Chroma database. The collections will be ordered by creation time from oldest to newest.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collections = await client.listCollections();",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: By default, listCollections returns up to 100 collections. If you have more than 100 collections, or need to get only a subset of your collections, you can use the limit and offset arguments:",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const firstCollectionsBatch = await client.listCollections({ limit: 100 }); // get the first 100 collections\nconst secondCollectionsBatch = await client.listCollections({\n  limit: 100,\n  offset: 100,\n}); // get the next 100 collections\nconst collectionsSubset = await client.listCollections({\n  limit: 20,\n  offset: 50,\n}); // get 20 collections starting from the 50th",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Current versions of Chroma store the embedding function you used to create a collection on the server, so the client can resolve it for you on subsequent “get” operations. If you are running an older version of the Chroma JS/TS client (earlier than 3.04) or server (earlier than 1.1.13), you will need to provide the same embedding function you used to create a collection when using getCollection and getCollections :",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: const collection = await client.getCollection({\n  name: \"my-collection\",\n  embeddingFunction: ef,\n});\n\nconst [col1, col2] = client.getCollections([\n  { name: \"col1\", embeddingFunction: openaiEF },\n  { name: \"col2\", embeddingFunction: defaultEF },\n]);",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Getting Collections: Use the client to get collections or list them with pagination.",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Getting Collections: let collection = client.get_collection(\"my-collection\").await?;\n\nlet collection = client\n    .get_or_create_collection(\"my-collection\", None, None)\n    .await?;\n\nlet collections = client.list_collections(100, Some(0)).await?;",
+    "dom_ids": [
+      "getting-collections",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Modifying Collections: After a collection is created, you can modify its name, metadata and elements of its index configuration with the modify method:",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0061"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Modifying Collections: collection.modify(\n   name=\"new-name\",\n   metadata={\"description\": \"new description\"}\n)",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Modifying Collections: await collection.modify({\n  name: \"new-name\",\n  metadata: { description: \"new description\" },\n});",
+    "dom_ids": [
+      "modifying-collections",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Deleting Collections: You can delete a collection by name. This action will delete a collection, all of its embeddings, and associated documents and records’ metadata.",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Deleting Collections: client.delete_collection(name=\"my-collection\")",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Deleting Collections: await client.deleteCollection({ name: \"my-collection\" });",
+    "dom_ids": [
+      "deleting-collections",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Convenience Methods: Collections also offer a few useful convenience methods:",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0067"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Convenience Methods: - count - returns the number of records in the collection. - peek - returns the first 10 records in the collection.",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Convenience Methods: collection.count()\ncollection.peek()",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Convenience Methods: await collection.count();\nawait collection.peek();",
+    "dom_ids": [
+      "convenience-methods",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "manage_collections",
+    "id": "manage_collections__node_0070"
+  }
+]

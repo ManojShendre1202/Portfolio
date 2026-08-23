@@ -1,0 +1,1765 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Indexing on ndarrays: See also",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Indexing on ndarrays: Indexing routines",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Indexing on ndarrays: ndarrays can be indexed using the standard Python x[obj] syntax, where x is the array and obj the selection. There are different kinds of indexing available depending on obj : basic indexing, advanced indexing and field access.",
+    "dom_ids": [
+      "readar-node-0001",
+      "index-0"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Indexing on ndarrays: Most of the following examples show the use of indexing when referencing data in an array. The examples work just as well when assigning to an array. See Assigning values to indexed arrays for specific examples and explanations on how assignments work.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Indexing on ndarrays: Note that in Python, x[(exp1, exp2, ..., expN)] is equivalent to x[exp1, exp2, ..., expN] ; the latter is just syntactic sugar for the former.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: Single element indexing works exactly like that for other standard Python sequences. It is 0-based, and accepts negative indices for indexing from the end of the array.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: >>> x = np.arange(10)\n>>> x[2]\n2\n>>> x[-2]\n8",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: It is not necessary to separate each dimension’s index into its own set of square brackets.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: >>> x = x.reshape((2, 5))  # now x is 2-dimensional\n>>> x[1, 3]\n8\n>>> x[1, -1]\n9",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: Note that if one indexes a multidimensional array with fewer indices than dimensions, one gets a subdimensional array. For example:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: >>> x[0]\narray([0, 1, 2, 3, 4])",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: That is, each index specified selects the array corresponding to the rest of the dimensions selected. In the above example, choosing 0 means that the remaining dimension of length 5 is being left unspecified, and that what is returned is an array of that dimensionality and size. It must be noted that the returned array is a view , i.e., it is not a copy of the original, but points to the same values in memory as does the original array. In this case, the 1-D array at the first position (0) is returned. So using a single index on the returned array, results in a single element being returned. That is:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: >>> x[0][2]\n2",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: So note that x[0, 2] == x[0][2] though the second case is more inefficient as a new temporary array is created after the first index that is subsequently indexed by 2.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: Note",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic indexing — Single element indexing: NumPy uses C-order indexing. That means that the last index usually represents the most rapidly changing memory location, unlike Fortran or IDL, where the first index represents the most rapidly changing location in memory. This difference represents a great potential for confusion.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: Basic slicing extends Python’s basic concept of slicing to N dimensions. Basic slicing occurs when obj is a slice object (constructed by start:stop:step notation inside of brackets), an integer, or a tuple of slice objects and integers. Ellipsis and newaxis objects can be interspersed with these as well.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: The simplest case of indexing with N integers returns an array scalar representing the corresponding item. As in Python, all indices are zero-based: for the i -th index \\(n_i\\) , the valid range is \\(0 \\le n_i < d_i\\) where \\(d_i\\) is the i -th element of the shape of the array. Negative indices are interpreted as counting from the end of the array ( i.e. , if \\(n_i < 0\\) , it means \\(n_i + d_i\\) ).",
+    "dom_ids": [
+      "readar-node-0020",
+      "index-1"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: All arrays generated by basic slicing are always views of the original array.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: Note",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: NumPy slicing creates a view instead of a copy as in the case of built-in Python sequences such as string, tuple and list. Care must be taken when extracting a small portion from a large array which becomes useless after the extraction, because the small portion extracted contains a reference to the large original array whose memory will not be released until all arrays derived from it are garbage-collected. In such cases an explicit copy() is recommended.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Slicing and striding: The standard rules of sequence slicing apply to basic slicing on a per-dimension basis (including using a step index). Some useful concepts to remember include:",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0022"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Slicing and striding: - The basic slice syntax is i:j:k where i is the starting index, j is the stopping index, and k is the step ( \\(k\\neq0\\) ). This selects the m elements (in the corresponding dimension) with index values i , i + k , …, i + (m - 1) k where \\(m = q + (r\\neq0)\\) and q and r are the quotient and remainder obtained by dividing j - i by k : j - i = q k + r , so that i + (m - 1) k < j . For example: - Negative i and j are interpreted as n + i and n + j where n is the number of elements in the corresponding dimension. Negative k makes stepping go towards smaller indices. From the above example: - Assume n is the number of elements in the dimension being sliced. Then, if i is not given it defaults to 0 for k > 0 and n - 1 for k < 0 . If j is not given it defaults to n for k > 0 and -n-1 for k < 0 . If k is not given it defaults to 1. Note that :: is the same as : and means select all indices along this axis. From the above example: - If the number of objects in the selection tuple is less than N , then : is assumed for any subsequent dimensions. For example: - An integer, i , returns the same values as i:i+1 except the dimensionality of the returned object is reduced by 1. In particular, a selection tuple with the p -th element an integer (and all other entries : ) returns the corresponding sub-array with dimension N - 1 . If N = 1 then the returned object is an array scalar. These objects are explained in Scalars . - If the selection tuple has all entries : except the p -th entry which is a slice object i:j:k , then the returned array has dimension N formed by stacking, along the p -th axis, the sub-arrays returned by integer indexing of elements i , i+k , …, i + (m - 1) k < j . - Basic slicing with more than one non- : entry in the slicing tuple, acts like repeated application of slicing using a single non- : entry, where the non- : entries are successively taken (with all other non- : entries replaced by : ). Thus, x[ind1, ..., ind2,:] acts like x[ind1][..., ind2, :] under basic slicing. Warning The above is not true for advanced indexing. - You may use slicing to set values in the array, but (unlike lists) you can never grow the array. The size of the value to be set in x[obj] = value must be (broadcastable to) the same shape as x[obj] . - A slicing tuple can always be constructed as obj and used in the x[obj] notation. Slice objects can be used in the construction in place of the [start:stop:step] notation. For example, x[1:10:5, ::-1] can also be implemented as obj = (slice(1, 10, 5), slice(None, None, -1)); x[obj] . This can be useful for constructing generic code that works on arrays of arbitrary dimensions. See Dealing with variable numbers of indices within programs for more information.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Slicing and striding: >>> x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])\n>>> x[1:7:2]\narray([1, 3, 5])",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Slicing and striding: >>> x[-2:10]\narray([8, 9])\n>>> x[-3:3:-1]\narray([7, 6, 5, 4])",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Slicing and striding: >>> x[5:]\narray([5, 6, 7, 8, 9])",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Slicing and striding: >>> x = np.array([[[1],[2],[3]], [[4],[5],[6]]])\n>>> x.shape\n(2, 3, 1)\n>>> x[1:2]\narray([[[4],\n        [5],\n        [6]]])",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dimensional indexing tools: There are some tools to facilitate the easy matching of array shapes with expressions and in assignments.",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dimensional indexing tools: Ellipsis expands to the number of : objects needed for the selection tuple to index all dimensions. In most cases, this means that the length of the expanded selection tuple is x.ndim . There may only be a single ellipsis present. From the above example:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dimensional indexing tools: >>> x[..., 0]\narray([[1, 2, 3],\n      [4, 5, 6]])",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dimensional indexing tools: This is equivalent to:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dimensional indexing tools: >>> x[:, :, 0]\narray([[1, 2, 3],\n      [4, 5, 6]])",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dimensional indexing tools: Each newaxis object in the selection tuple serves to expand the dimensions of the resulting selection by one unit-length dimension. The added dimension is the position of the newaxis object in the selection tuple. newaxis is an alias for None , and None can be used in place of this with the same result. From the above example:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dimensional indexing tools: >>> x[:, np.newaxis, :, :].shape\n(2, 1, 3, 1)\n>>> x[:, None, :, :].shape\n(2, 1, 3, 1)",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dimensional indexing tools: This can be handy to combine two arrays in a way that otherwise would require explicit reshaping operations. For example:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dimensional indexing tools: >>> x = np.arange(5)\n>>> x[:, np.newaxis] + x[np.newaxis, :]\narray([[0, 1, 2, 3, 4],\n      [1, 2, 3, 4, 5],\n      [2, 3, 4, 5, 6],\n      [3, 4, 5, 6, 7],\n      [4, 5, 6, 7, 8]])",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced indexing: Advanced indexing is triggered when the selection object, obj , is a non-tuple sequence object, an ndarray (of data type integer or bool), or a tuple with at least one sequence object or ndarray (of data type integer or bool). There are two types of advanced indexing: integer and Boolean.",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced indexing: Advanced indexing always returns a copy of the data (contrast with basic slicing that returns a view ).",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced indexing: Warning",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced indexing: The definition of advanced indexing means that x[(1, 2, 3),] is fundamentally different than x[(1, 2, 3)] . The latter is equivalent to x[1, 2, 3] which will trigger basic selection while the former will trigger advanced indexing. Be sure to understand why this occurs.",
+    "dom_ids": [
+      "readar-node-0042",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Integer array indexing allows selection of arbitrary items in the array based on their N -dimensional index. Each integer array represents a number of indices into that dimension.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Negative values are permitted in the index arrays and work as they do with single indices or slices:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x = np.arange(10, 1, -1)\n>>> x\narray([10,  9,  8,  7,  6,  5,  4,  3,  2])\n>>> x[np.array([3, 3, 1, 8])]\narray([7, 7, 9, 2])\n>>> x[np.array([3, 3, -3, 8])]\narray([7, 7, 4, 2])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: If the index values are out of bounds then an IndexError is thrown:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x = np.array([[1, 2], [3, 4], [5, 6]])\n>>> x[np.array([1, -1])]\narray([[3, 4],\n      [5, 6]])\n>>> x[np.array([3, 4])]\nTraceback (most recent call last):\n  ...\nIndexError: index 3 is out of bounds for axis 0 with size 3",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: When the index consists of as many integer arrays as dimensions of the array being indexed, the indexing is straightforward, but different from slicing.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Advanced indices always are broadcast and iterated as one :",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: result[i_1, ..., i_M] == x[ind_1[i_1, ..., i_M], ind_2[i_1, ..., i_M],\n                           ..., ind_N[i_1, ..., i_M]]",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Note that the resulting shape is identical to the (broadcast) indexing array shapes ind_1, ..., ind_N . If the indices cannot be broadcast to the same shape, an exception IndexError: shape mismatch: indexing arrays could not be broadcast together with shapes... is raised.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Indexing with multidimensional index arrays tend to be more unusual uses, but they are permitted, and they are useful for some problems. We’ll start with the simplest multidimensional case:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> y = np.arange(35).reshape(5, 7)\n>>> y\narray([[ 0,  1,  2,  3,  4,  5,  6],\n       [ 7,  8,  9, 10, 11, 12, 13],\n       [14, 15, 16, 17, 18, 19, 20],\n       [21, 22, 23, 24, 25, 26, 27],\n       [28, 29, 30, 31, 32, 33, 34]])\n>>> y[np.array([0, 2, 4]), np.array([0, 1, 2])]\narray([ 0, 15, 30])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: In this case, if the index arrays have a matching shape, and there is an index array for each dimension of the array being indexed, the resultant array has the same shape as the index arrays, and the values correspond to the index set for each position in the index arrays. In this example, the first index value is 0 for both index arrays, and thus the first value of the resultant array is y[0, 0] . The next value is y[2, 1] , and the last is y[4, 2] .",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: If the index arrays do not have the same shape, there is an attempt to broadcast them to the same shape. If they cannot be broadcast to the same shape, an exception is raised:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> y[np.array([0, 2, 4]), np.array([0, 1])]\nTraceback (most recent call last):\n  ...\nIndexError: shape mismatch: indexing arrays could not be broadcast\ntogether with shapes (3,) (2,)",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: The broadcasting mechanism permits index arrays to be combined with scalars for other indices. The effect is that the scalar value is used for all the corresponding values of the index arrays:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> y[np.array([0, 2, 4]), 1]\narray([ 1, 15, 29])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Jumping to the next level of complexity, it is possible to only partially index an array with index arrays. It takes a bit of thought to understand what happens in such cases. For example if we just use one index array with y:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> y[np.array([0, 2, 4])]\narray([[ 0,  1,  2,  3,  4,  5,  6],\n       [14, 15, 16, 17, 18, 19, 20],\n       [28, 29, 30, 31, 32, 33, 34]])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: It results in the construction of a new array where each value of the index array selects one row from the array being indexed and the resultant array has the resulting shape (number of index elements, size of row).",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: In general, the shape of the resultant array will be the concatenation of the shape of the index array (or the shape that all the index arrays were broadcast to) with the shape of any unused dimensions (those not indexed) in the array being indexed.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Example",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: From each row, a specific element should be selected. The row index is just [0, 1, 2] and the column index specifies the element to choose for the corresponding row, here [0, 1, 0] . Using both together the task can be solved using advanced indexing:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x = np.array([[1, 2], [3, 4], [5, 6]])\n>>> x[[0, 1, 2], [0, 1, 0]]\narray([1, 4, 5])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: To achieve a behaviour similar to the basic slicing above, broadcasting can be used. The function ix_ can help with this broadcasting. This is best understood with an example.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Example",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: From a 4x3 array the corner elements should be selected using advanced indexing. Thus all elements for which the column is one of [0, 2] and the row is one of [0, 3] need to be selected. To use advanced indexing one needs to select all elements explicitly . Using the method explained previously one could write:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x = np.array([[ 0,  1,  2],\n...               [ 3,  4,  5],\n...               [ 6,  7,  8],\n...               [ 9, 10, 11]])\n>>> rows = np.array([[0, 0],\n...                  [3, 3]], dtype=np.intp)\n>>> columns = np.array([[0, 2],\n...                     [0, 2]], dtype=np.intp)\n>>> x[rows, columns]\narray([[ 0,  2],\n       [ 9, 11]])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: However, since the indexing arrays above just repeat themselves, broadcasting can be used (compare operations such as rows[:, np.newaxis] + columns ) to simplify this:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> rows = np.array([0, 3], dtype=np.intp)\n>>> columns = np.array([0, 2], dtype=np.intp)\n>>> rows[:, np.newaxis]\narray([[0],\n       [3]])\n>>> x[rows[:, np.newaxis], columns]\narray([[ 0,  2],\n       [ 9, 11]])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: This broadcasting can also be achieved using the function ix_ :",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x[np.ix_(rows, columns)]\narray([[ 0,  2],\n       [ 9, 11]])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Note that without the np.ix_ call, only the diagonal elements would be selected:",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0072"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Integer array indexing: >>> x[rows, columns]\narray([ 0, 11])",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: This difference is the most important thing to remember about indexing with multiple advanced indices.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: Example",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Integer array indexing: A real-life example of where advanced indexing may be useful is for a color lookup table where we want to map the values of an image into RGB triples for display. The lookup table could have a shape (nlookup, 3). Indexing such an array with an image with shape (ny, nx) with dtype=np.uint8 (or any integer type so long as values are with the bounds of the lookup table) will result in an array of shape (ny, nx, 3) where a triple of RGB values is associated with each pixel location.",
+    "dom_ids": [
+      "readar-node-0047",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0076"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: This advanced indexing occurs when obj is an array object of Boolean type, such as may be returned from comparison operators. A single boolean index array is practically identical to x[obj.nonzero()] where, as described above, obj.nonzero() returns a tuple (of length obj.ndim ) of integer index arrays showing the True elements of obj . However, it is faster when obj.shape == x.shape .",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: If obj.ndim == x.ndim , x[obj] returns a 1-dimensional array filled with the elements of x corresponding to the True values of obj . The search order will be row-major , C-style. An index error will be raised if the shape of obj does not match the corresponding dimensions of x , regardless of whether those values are True or False .",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: A common use case for this is filtering for desired element values. For example, one may wish to select all entries from an array which are not numpy.nan :",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0079"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.array([[1., 2.], [np.nan, 3.], [np.nan, np.nan]])\n>>> x[~np.isnan(x)]\narray([1., 2., 3.])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0080"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Or wish to add a constant to all negative elements:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0081"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.array([1., -1., -2., 3])\n>>> x[x < 0] += 20\n>>> x\narray([ 1., 19., 18., 3.])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: In general if an index includes a Boolean array, the result will be identical to inserting obj.nonzero() into the same position and using the integer array indexing mechanism described above. x[ind_1, boolean_array, ind_2] is equivalent to x[(ind_1,) + boolean_array.nonzero() + (ind_2,)] .",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: If there is only one Boolean array and no integer indexing array present, this is straightforward. Care must only be taken to make sure that the boolean index has exactly as many dimensions as it is supposed to work with.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0084"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: In general, when the boolean array has fewer dimensions than the array being indexed, this is equivalent to x[b, ...] , which means x is indexed by b followed by as many : as are needed to fill out the rank of x. Thus the shape of the result is one dimension containing the number of True elements of the boolean array, followed by the remaining dimensions of the array being indexed:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0085"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.arange(35).reshape(5, 7)\n>>> b = x > 20\n>>> b[:, 5]\narray([False, False, False,  True,  True])\n>>> x[b[:, 5]]\narray([[21, 22, 23, 24, 25, 26, 27],\n      [28, 29, 30, 31, 32, 33, 34]])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Here the 4th and 5th rows are selected from the indexed array and combined to make a 2-D array.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Example",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0088"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: From an array, select all rows which sum up to less or equal two:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0089"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.array([[0, 1], [1, 1], [2, 2]])\n>>> rowsum = x.sum(-1)\n>>> x[rowsum <= 2, :]\narray([[0, 1],\n       [1, 1]])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Combining multiple Boolean indexing arrays or a Boolean with an integer indexing array can best be understood with the obj.nonzero() analogy. The function ix_ also supports boolean arrays and will work without any surprises.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0091"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Example",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0092"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Use boolean indexing to select all rows adding up to an even number. At the same time columns 0 and 2 should be selected with an advanced integer index. Using the ix_ function this can be done with:",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0093"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.array([[ 0,  1,  2],\n...               [ 3,  4,  5],\n...               [ 6,  7,  8],\n...               [ 9, 10, 11]])\n>>> rows = (x.sum(-1) % 2) == 0\n>>> rows\narray([False,  True, False,  True])\n>>> columns = [0, 2]\n>>> x[np.ix_(rows, columns)]\narray([[ 3,  5],\n       [ 9, 11]])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0094"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Without the np.ix_ call, only the diagonal elements would be selected.",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0095"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Or without np.ix_ (compare the integer array examples):",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0096"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> rows = rows.nonzero()[0]\n>>> x[rows[:, np.newaxis], columns]\narray([[ 3,  5],\n       [ 9, 11]])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0097"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Example",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0098"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Boolean array indexing: Use a 2-D boolean array of shape (2, 3) with four True elements to select rows from a 3-D array of shape (2, 3, 5) results in a 2-D result of shape (4, 5):",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0099"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Boolean array indexing: >>> x = np.arange(30).reshape(2, 3, 5)\n>>> x\narray([[[ 0,  1,  2,  3,  4],\n        [ 5,  6,  7,  8,  9],\n        [10, 11, 12, 13, 14]],\n      [[15, 16, 17, 18, 19],\n        [20, 21, 22, 23, 24],\n        [25, 26, 27, 28, 29]]])\n>>> b = np.array([[True, True, False], [False, True, True]])\n>>> x[b]\narray([[ 0,  1,  2,  3,  4],\n      [ 5,  6,  7,  8,  9],\n      [20, 21, 22, 23, 24],\n      [25, 26, 27, 28, 29]])",
+    "dom_ids": [
+      "readar-node-0084",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0100"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: When there is at least one slice ( : ), ellipsis ( ... ) or newaxis in the index (or the array has more dimensions than there are advanced indices), then the behaviour can be more complicated. It is like concatenating the indexing result for each advanced index element.",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0101"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: In the simplest case, there is only a single advanced index combined with a slice. For example:",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0102"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining advanced and basic indexing: >>> y = np.arange(35).reshape(5,7)\n>>> y[np.array([0, 2, 4]), 1:3]\narray([[ 1,  2],\n       [15, 16],\n       [29, 30]])",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0103"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: In effect, the slice and index array operation are independent. The slice operation extracts columns with index 1 and 2, (i.e. the 2nd and 3rd columns), followed by the index array operation which extracts rows with index 0, 2 and 4 (i.e the first, third and fifth rows). This is equivalent to:",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0104"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining advanced and basic indexing: >>> y[:, 1:3][np.array([0, 2, 4]), :]\narray([[ 1,  2],\n       [15, 16],\n       [29, 30]])",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0105"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: A single advanced index can, for example, replace a slice and the result array will be the same. However, it is a copy and may have a different memory layout. A slice is preferable when it is possible. For example:",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0106"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining advanced and basic indexing: >>> x = np.array([[ 0,  1,  2],\n...               [ 3,  4,  5],\n...               [ 6,  7,  8],\n...               [ 9, 10, 11]])\n>>> x[1:2, 1:3]\narray([[4, 5]])\n>>> x[1:2, [1, 2]]\narray([[4, 5]])",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0107"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: The easiest way to understand a combination of multiple advanced indices may be to think in terms of the resulting shape. There are two parts to the indexing operation, the subspace defined by the basic indexing (excluding integers) and the subspace from the advanced indexing part. Two cases of index combination need to be distinguished:",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0108"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Combining advanced and basic indexing: - The advanced indices are separated by a slice, Ellipsis or newaxis . For example x[arr1, :, arr2] . - The advanced indices are all next to each other. For example x[..., arr1, arr2, :] but not x[arr1, :, 1] since 1 is an advanced index in this regard.",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: In the first case, the dimensions resulting from the advanced indexing operation come first in the result array, and the subspace dimensions after that. In the second case, the dimensions from the advanced indexing operations are inserted into the result array at the same spot as they were in the initial array (the latter logic is what makes simple advanced indexing behave just like slicing).",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0110"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Example",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Suppose x.shape is (10, 20, 30) and ind is a (2, 5, 2)-shaped indexing intp array, then result = x[..., ind, :] has shape (10, 2, 5, 2, 30) because the (20,)-shaped subspace has been replaced with a (2, 5, 2)-shaped broadcasted indexing subspace. If we let i, j, k loop over the (2, 5, 2)-shaped subspace then result[..., i, j, k, :] = x[..., ind[i, j, k], :] . This example produces the same result as x.take(ind, axis=-2) .",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Example",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0113"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Let x.shape be (10, 20, 30, 40, 50) and suppose ind_1 and ind_2 can be broadcast to the shape (2, 3, 4). Then x[:, ind_1, ind_2] has shape (10, 2, 3, 4, 40, 50) because the (20, 30)-shaped subspace from X has been replaced with the (2, 3, 4) subspace from the indices. However, x[:, ind_1, :, ind_2] has shape (2, 3, 4, 10, 30, 50) because there is no unambiguous place to drop in the indexing subspace, thus it is tacked-on to the beginning. It is always possible to use .transpose() to move the subspace anywhere desired. Note that this example cannot be replicated using take .",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0114"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Example",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0115"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining advanced and basic indexing: Slicing can be combined with broadcasted boolean indices:",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0116"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining advanced and basic indexing: >>> x = np.arange(35).reshape(5, 7)\n>>> b = x > 20\n>>> b\narray([[False, False, False, False, False, False, False],\n      [False, False, False, False, False, False, False],\n      [False, False, False, False, False, False, False],\n      [ True,  True,  True,  True,  True,  True,  True],\n      [ True,  True,  True,  True,  True,  True,  True]])\n>>> x[b[:, 5], 1:3]\narray([[22, 23],\n      [29, 30]])",
+    "dom_ids": [
+      "readar-node-0109",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0117"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: See also",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0118"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: Structured arrays",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0119"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: If the ndarray object is a structured array the fields of the array can be accessed by indexing the array with strings, dictionary-like.",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0130"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: Indexing x['field-name'] returns a new view to the array, which is of the same shape as x (except when the field is a sub-array) but of data type x.dtype['field-name'] and contains only the part of the data in the specified field. Also, record array scalars can be “indexed” this way.",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0121"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: Indexing into a structured array can also be done with a list of field names, e.g. x[['field-name1', 'field-name2']] . As of NumPy 1.16, this returns a view containing only those fields. In older versions of NumPy, it returned a copy. See the user guide section on Structured arrays for more information on multifield indexing.",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0122"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Field access: If the accessed field is a sub-array, the dimensions of the sub-array are appended to the shape of the result. For example:",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0123"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Field access: >>> x = np.zeros((2, 2), dtype=[('a', np.int32), ('b', np.float64, (3, 3))])\n>>> x['a'].shape\n(2, 2)\n>>> x['a'].dtype\ndtype('int32')\n>>> x['b'].shape\n(2, 2, 3, 3)\n>>> x['b'].dtype\ndtype('float64')",
+    "dom_ids": [
+      "readar-node-0127",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Flat iterator indexing: x.flat returns an iterator that will iterate over the entire array (in C-contiguous style with the last index varying the fastest). This iterator object can also be indexed using basic slicing or advanced indexing as long as the selection object is not a tuple. This should be clear from the fact that x.flat is a 1-dimensional view. It can be used for integer indexing with 1-dimensional C-style-flat indices. The shape of any returned array is therefore the shape of the integer indexing object.",
+    "dom_ids": [
+      "readar-node-0135",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0125"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Assigning values to indexed arrays: As mentioned, one can select a subset of an array to assign to using a single index, slices, and index and mask arrays. The value being assigned to the indexed array must be shape consistent (the same shape or broadcastable to the shape the index produces). For example, it is permitted to assign a constant to a slice:",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0138"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0126"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Assigning values to indexed arrays: >>> x = np.arange(10)\n>>> x[2:7] = 1",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0127"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Assigning values to indexed arrays: or an array of the right size:",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0128"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Assigning values to indexed arrays: >>> x[2:7] = np.arange(5)",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0141"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0129"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Assigning values to indexed arrays: Note that assignments may result in changes if assigning higher types to lower types (like floats to ints) or even exceptions (assigning complex to floats or ints):",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0130"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Assigning values to indexed arrays: >>> x[1] = 1.2\n>>> x[1]\n1\n>>> x[1] = 1.2j\nTraceback (most recent call last):\n  ...\nTypeError: can't convert complex to int",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0131"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Assigning values to indexed arrays: Unlike some of the references (such as array and mask indices) assignments are always made to the original data in the array (indeed, nothing else would make sense!). Note though, that some actions may not work as one may naively expect. This particular example is often surprising to people:",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0132"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Assigning values to indexed arrays: >>> x = np.arange(0, 50, 10)\n>>> x\narray([ 0, 10, 20, 30, 40])\n>>> x[np.array([1, 1, 3, 1])] += 1\n>>> x\narray([ 0, 11, 20, 31, 40])",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0145"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0133"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Assigning values to indexed arrays: Where people expect that the 1st location will be incremented by 3. In fact, it will only be incremented by 1. The reason is that a new array is extracted from the original (as a temporary) containing the values at 1, 1, 3, 1, then the value 1 is added to the temporary, and then the temporary is assigned back to the original array. Thus the value of the array at x[1] + 1 is assigned to x[1] three times, rather than being incremented 3 times.",
+    "dom_ids": [
+      "readar-node-0137",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0134"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: The indexing syntax is very powerful but limiting when dealing with a variable number of indices. For example, if you want to write a function that can handle arguments with various numbers of dimensions without having to write special case code for each number of possible dimensions, how can that be done? If one supplies to the index a tuple, the tuple will be interpreted as a list of indices. For example:",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0148"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0135"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: >>> z = np.arange(81).reshape(3, 3, 3, 3)\n>>> indices = (1, 1, 1, 1)\n>>> z[indices]\n40",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0136"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: So one can use code to construct tuples of any number of indices and then use these within an index.",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0150"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0137"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: Slices can be specified within programs by using the slice() function in Python. For example:",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0151"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0138"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: >>> indices = (1, 1, 1, slice(0, 2))  # same as [1, 1, 1, 0:2]\n>>> z[indices]\narray([39, 40])",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0152"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0139"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: Likewise, ellipsis can be specified by code by using the Ellipsis object:",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0153"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0140"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: >>> indices = (1, Ellipsis, 1)  # same as [1, ..., 1]\n>>> z[indices]\narray([[28, 31, 34],\n       [37, 40, 43],\n       [46, 49, 52]])",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0154"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0141"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: For this reason, it is possible to use the output from the np.nonzero() function directly as an index since it always returns a tuple of index arrays.",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0155"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0142"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: Because of the special treatment of tuples, they are not automatically converted to an array as a list would be. As an example:",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0156"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0143"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dealing with variable numbers of indices within programs: >>> z[[1, 1, 1, 1]]  # produces a large array\narray([[[[27, 28, 29],\n         [30, 31, 32], ...\n>>> z[(1, 1, 1, 1)]  # returns a single value\n40",
+    "dom_ids": [
+      "readar-node-0147",
+      "readar-node-0157"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0144"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Detailed notes: These are some detailed notes, which are not of importance for day to day indexing (in no particular order):",
+    "dom_ids": [
+      "readar-node-0158",
+      "readar-node-0159"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0145"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Detailed notes: - The native NumPy indexing type is intp and may differ from the default integer array type. intp is the smallest data type sufficient to safely index any array; for advanced indexing it may be faster than other types. - For advanced assignments, there is in general no guarantee for the iteration order. This means that if an element is set more than once, it is not possible to predict the final result. - An empty (tuple) index is a full scalar index into a zero-dimensional array. x[()] returns a scalar if x is zero-dimensional and a view otherwise. On the other hand, x[...] always returns a view. - If a zero-dimensional array is present in the index and it is a full integer index the result will be a scalar and not a zero-dimensional array. (Advanced indexing is not triggered.) - When an ellipsis ( ... ) is present but has no size (i.e. replaces zero : ) the result will still always be an array. A view if no advanced index is present, otherwise a copy. - The nonzero equivalence for Boolean arrays does not hold for zero dimensional boolean arrays. - When the result of an advanced indexing operation has no elements but an individual index is out of bounds, whether or not an IndexError is raised is undefined (e.g. x[[], [123]] with 123 being out of bounds). - When a casting error occurs during assignment (for example updating a numerical array using a sequence of strings), the array being assigned to may end up in an unpredictable partially updated state. However, if any other error (such as an out of bounds index) occurs, the array will remain unchanged. - The memory layout of an advanced indexing result is optimized for each indexing operation and no particular memory order can be assumed. - When using a subclass (especially one which manipulates its shape), the default ndarray.__setitem__ behaviour will call __getitem__ for basic indexing but not for advanced indexing. For such a subclass it may be preferable to call ndarray.__setitem__ with a base class ndarray view on the data. This must be done if the subclasses __getitem__ does not return views.",
+    "dom_ids": [
+      "readar-node-0158",
+      "readar-node-0160"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basics.indexing",
+    "id": "basics.indexing__node_0146"
+  }
+]

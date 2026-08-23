@@ -1,0 +1,345 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: Now that you have Git on your system, you’ll want to do a few things to customize your Git environment. You should have to do these things only once on any given computer; they’ll stick around between upgrades. You can also change them at any time by running through the commands again.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: Git comes with a tool called git config that lets you get and set configuration variables that control all aspects of how Git looks and operates. These variables can be stored in three different places:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: - [path]/etc/gitconfig file: Contains values applied to every user on the system and all their repositories. If you pass the option --system to git config , it reads and writes from this file specifically. Because this is a system configuration file, you would need administrative or superuser privilege to make changes to it. - ~/.gitconfig or ~/.config/git/config file: Values specific personally to you, the user. You can make Git read and write to this file specifically by passing the --global option, and this affects all of the repositories you work with on your system. - config file in the Git directory (that is, .git/config ) of whatever repository you’re currently using: Specific to that single repository. You can force Git to read from and write to this file with the --local option, but that is in fact the default. Unsurprisingly, you need to be located somewhere in a Git repository for this option to work properly.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: Each level overrides values in the previous level, so values in .git/config trump those in [path]/etc/gitconfig .",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: On Windows systems, Git looks for the .gitconfig file in the $HOME directory ( C:\\Users\\$USER for most people). It also still looks for [path]/etc/gitconfig , although it’s relative to the MSys root, which is wherever you decide to install Git on your Windows system when you run the installer. If you are using version 2.x or later of Git for Windows, there is also a system-level config file at C:\\Documents and Settings\\All Users\\Application Data\\Git\\config on Windows XP, and in C:\\ProgramData\\Git\\config on Windows Vista and newer. This config file can only be changed by git config -f <file> as an admin.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: You can view all of your settings and where they are coming from using:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "1.6 Getting Started - First-Time Git Setup — First-Time Git Setup: $ git config --list --show-origin",
+    "dom_ids": [
+      "readar-node-0001",
+      "_first_time",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Identity: The first thing you should do when you install Git is to set your user name and email address. This is important because every Git commit uses this information, and it’s immutably baked into the commits you start creating:",
+    "dom_ids": [
+      "_your_identity",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Your Identity: $ git config --global user.name \"John Doe\"\n$ git config --global user.email johndoe@example.com",
+    "dom_ids": [
+      "_your_identity",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Identity: Again, you need to do this only once if you pass the --global option, because then Git will always use that information for your user on that system. If you want to override this with a different name or email address for specific projects, you can run the command without the --global option when you’re in that project.",
+    "dom_ids": [
+      "_your_identity",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Identity: Many of the GUI tools will help you do this when you first run them.",
+    "dom_ids": [
+      "_your_identity",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Editor: Now that your identity is set up, you can configure the default text editor that will be used when Git needs you to type in a message. If not configured, Git uses your system’s default editor.",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Editor: If you want to use a different text editor, such as Emacs, you can do the following:",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Your Editor: $ git config --global core.editor emacs",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Editor: On a Windows system, if you want to use a different text editor, you must specify the full path to its executable file. This can be different depending on how your editor is packaged.",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your Editor: In the case of Notepad++, a popular programming editor, you are likely to want to use the 32-bit version, since at the time of writing the 64-bit version doesn’t support all plug-ins. If you are on a 32-bit Windows system, or you have a 64-bit editor on a 64-bit system, you’ll type something like this:",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Your Editor: $ git config --global core.editor \"'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin\"",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0017"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Your Editor: Note | Vim, Emacs and Notepad++ are popular text editors often used by developers on Unix-based systems like Linux and macOS or a Windows system. If you are using another editor, or a 32-bit version, please find specific instructions for how to set up your favorite editor with Git in git config core.editor commands .",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0018"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Your Editor: Warning | You may find, if you don’t setup your editor like this, you get into a really confusing state when Git attempts to launch it. An example on a Windows system may include a prematurely terminated Git operation during a Git initiated edit.",
+    "dom_ids": [
+      "_editor",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your default branch name: By default Git will create a branch called master when you create a new repository with git init . From Git version 2.28 onwards, you can set a different name for the initial branch.",
+    "dom_ids": [
+      "_new_default_branch",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Your default branch name: To set main as the default branch name do:",
+    "dom_ids": [
+      "_new_default_branch",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Your default branch name: $ git config --global init.defaultBranch main",
+    "dom_ids": [
+      "_new_default_branch",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking Your Settings: If you want to check your configuration settings, you can use the git config --list command to list all the settings Git can find at that point:",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checking Your Settings: $ git config --list\nuser.name=John Doe\nuser.email=johndoe@example.com\ncolor.status=auto\ncolor.branch=auto\ncolor.interactive=auto\ncolor.diff=auto\n...",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking Your Settings: You may see keys more than once, because Git reads the same key from different files ( [path]/etc/gitconfig and ~/.gitconfig , for example). In this case, Git uses the last value for each unique key it sees.",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checking Your Settings: You can also check what Git thinks a specific key’s value is by typing git config <key> :",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checking Your Settings: $ git config user.name\nJohn Doe",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0027"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Checking Your Settings: Note | Since Git might read the same configuration variable value from more than one file, it’s possible that you have an unexpected value for one of these values and you don’t know why. In cases like that, you can query Git as to the origin for that value, and it will tell you which configuration file had the final say in setting that value: $ git config --show-origin rerere.autoUpdate file:/home/johndoe/.gitconfig false",
+    "dom_ids": [
+      "_checking_your_settings",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "first_time_setup",
+    "id": "first_time_setup__node_0028"
+  }
+]

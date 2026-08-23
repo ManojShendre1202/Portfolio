@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: Chapter 3. Advanced Features</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-advanced.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="Chapter 3. Advanced Features" property="og:title"/>
+<meta content="Chapter&amp;nbsp;3.&amp;nbsp;Advanced Features Table of Contents 3.1. Introduction 3.2. Views 3.3. Foreign Keys 3.4. Transactions 3.5. Window Functions 3.6. Inheritance 3.7. …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-advanced.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-advanced.html" title="PostgreSQL 18 - Chapter 3. Advanced Features">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-advanced.html" title="PostgreSQL 18 - Chapter 3. Advanced Features">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-advanced.html" title="PostgreSQL 17 - Chapter 3. Advanced Features">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-advanced.html" title="PostgreSQL 16 - Chapter 3. Advanced Features">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-advanced.html" title="PostgreSQL 15 - Chapter 3. Advanced Features">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-advanced.html" title="PostgreSQL 14 - Chapter 3. Advanced Features">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 19 - Chapter 3. Advanced Features">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-advanced.html" rel="nofollow" title="PostgreSQL devel - Chapter 3. Advanced Features">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 13 - Chapter 3. Advanced Features">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 12 - Chapter 3. Advanced Features">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 11 - Chapter 3. Advanced Features">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 10 - Chapter 3. Advanced Features">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.6 - Chapter 3. Advanced Features">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.5 - Chapter 3. Advanced Features">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.4 - Chapter 3. Advanced Features">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.3 - Chapter 3. Advanced Features">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.2 - Chapter 3. Advanced Features">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.1 - Chapter 3. Advanced Features">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 9.0 - Chapter 3. Advanced Features">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 8.4 - Chapter 3. Advanced Features">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 8.3 - Chapter 3. Advanced Features">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 8.2 - Chapter 3. Advanced Features">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 8.1 - Chapter 3. Advanced Features">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 8.0 - Chapter 3. Advanced Features">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 7.4 - Chapter 3. Advanced Features">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 7.3 - Chapter 3. Advanced Features">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-advanced.html" rel="nofollow" title="PostgreSQL 7.2 - Chapter 3. Advanced Features">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="chapter" id="TUTORIAL-ADVANCED">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001">Chapter 3. Advanced Features</h2>
+</div>
+</div>
+</div>
+
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

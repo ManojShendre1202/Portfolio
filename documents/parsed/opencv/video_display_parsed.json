@@ -1,0 +1,216 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Gui Features in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "video_display",
+    "id": "video_display__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Learn to read video, display video, and save video. - Learn to capture video from a camera and display it. - You will learn these functions : cv.VideoCapture() , cv.VideoWriter()",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: Often, we have to capture live stream with a camera. OpenCV provides a very simple interface to do this. Let's capture a video from the camera (I am using the built-in webcam on my laptop), convert it into grayscale video and display it. Just a simple task to get started.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: To capture a video, you need to create a VideoCapture object. Its argument can be either the device index or the name of a video file. A device index is just the number to specify which camera. Normally one camera will be connected (as in my case). So I simply pass 0 (or -1). You can select the second camera by passing 1 and so on. After that, you can capture frame-by-frame. But at the end, don't forget to release the capture.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Capture Video from Camera: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture(0)\nif not cap.isOpened():\n    print(\"Cannot open camera\")\n    exit()\nwhile True:\n # Capture frame-by-frame\n    ret, frame = cap.read()\n\n # if frame is read correctly ret is True\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n # Our operations on the frame come here\n    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)\n # Display the resulting frame\n cv.imshow('frame', gray)\n if cv.waitKey(1) == ord('q'):\n break\n\n# When everything done, release the capture\ncap.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: cap.read() returns a bool ( True / False ). If the frame is read correctly, it will be True . So you can check for the end of the video by checking this returned value.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: Sometimes, cap may not have initialized the capture. In that case, this code shows an error. You can check whether it is initialized or not by the method cap.isOpened() . If it is True , OK. Otherwise open it using cap.open() .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: You can also access some of the features of this video using cap.get(propId) method where propId is a number from 0 to 18. Each number denotes a property of the video (if it is applicable to that video). Full details can be seen here: cv::VideoCapture::get() . Some of these values can be modified using cap.set(propId, value) . Value is the new value you want.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: For example, I can check the frame width and height by cap.get( cv.CAP_PROP_FRAME_WIDTH ) and cap.get( cv.CAP_PROP_FRAME_HEIGHT ) . It gives me 640x480 by default. But I want to modify it to 320x240. Just use ret = cap.set( cv.CAP_PROP_FRAME_WIDTH ,320) and ret = cap.set( cv.CAP_PROP_FRAME_HEIGHT ,240) .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Playing Video from file: Playing video from file is the same as capturing it from camera, just change the camera index to a video file name. Also while displaying the frame, use appropriate time for cv.waitKey() . If it is too less, video will be very fast and if it is too high, video will be slow (Well, that is how you can display videos in slow motion). 25 milliseconds will be OK in normal cases.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Playing Video from file: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture('vtest.avi')\n\nwhile cap.isOpened():\n    ret, frame = cap.read()\n\n # if frame is read correctly ret is True\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)\n\n cv.imshow('frame', gray)\n if cv.waitKey(1) == ord('q'):\n break\n\ncap.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: So we capture a video and process it frame-by-frame, and we want to save that video. For images, it is very simple: just use cv.imwrite() . Here, a little more work is required.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: This time we create a VideoWriter object. We should specify the output file name (eg: output.avi). Then we should specify the FourCC code (details in next paragraph). Then number of frames per second (fps) and frame size should be passed. And the last one is the isColor flag. If it is True , the encoder expect color frame, otherwise it works with grayscale frame.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: FourCC is a 4-byte code used to specify the video codec. The list of available codes can be found in fourcc.org . It is platform dependent. The following codecs work fine for me.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Saving a Video: - In Fedora: DIVX, XVID, MJPG, X264, WMV1, WMV2. (XVID is more preferable. MJPG results in high size video. X264 gives very small size video) - In Windows: DIVX (More to be tested and added) - In OSX: MJPG (.mp4), DIVX (.avi), X264 (.mkv).",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: FourCC code is passed as ‘cv.VideoWriter_fourcc('M’,'J','P','G') or cv.VideoWriter_fourcc(*'MJPG')` for MJPG.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: The below code captures from a camera, flips every frame in the vertical direction, and saves the video.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving a Video: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture(0)\n\n# Define the codec and create VideoWriter object\nfourcc = cv.VideoWriter_fourcc(*'XVID')\nout = cv.VideoWriter('output.avi', fourcc, 20.0, (640,  480))\n\nwhile cap.isOpened():\n    ret, frame = cap.read()\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n    frame = cv.flip(frame, 0)\n\n # write the flipped frame\n    out.write(frame)\n\n cv.imshow('frame', frame)\n if cv.waitKey(1) == ord('q'):\n break\n\n# Release everything if job is finished\ncap.release()\nout.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0018"
+  }
+]

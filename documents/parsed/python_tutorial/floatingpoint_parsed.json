@@ -1,0 +1,902 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Floating-point numbers are represented in computer hardware as base 2 (binary) fractions. For example, the decimal fraction 0.625 has value 6/10 + 2/100 + 5/1000, and in the same way the binary fraction 0.101 has value 1/2 + 0/4 + 1/8. These two fractions have identical values, the only real difference being that the first is written in base 10 fractional notation, and the second in base 2.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Unfortunately, most decimal fractions cannot be represented exactly as binary fractions. A consequence is that, in general, the decimal floating-point numbers you enter are only approximated by the binary floating-point numbers actually stored in the machine.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: The problem is easier to understand at first in base 10. Consider the fraction 1/3. You can approximate that as a base 10 fraction:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: 0.3",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: or, better,",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: 0.33",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: or, better,",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: 0.333",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: and so on. No matter how many digits you’re willing to write down, the result will never be exactly 1/3, but will be an increasingly better approximation of 1/3.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: In the same way, no matter how many base 2 digits you’re willing to use, the decimal value 0.1 cannot be represented exactly as a base 2 fraction. In base 2, 1/10 is the infinitely repeating fraction",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: 0.0001100110011001100110011001100110011001100110011...",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Stop at any finite number of bits, and you get an approximation. On most machines today, floats are approximated using a binary fraction with the numerator using the first 53 bits starting with the most significant bit and with the denominator as a power of two. In the case of 1/10, the binary fraction is 3602879701896397 / 2 ** 55 which is close to but not exactly equal to the true value of 1/10.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Many users are not aware of the approximation because of the way values are displayed. Python only prints a decimal approximation to the true decimal value of the binary approximation stored by the machine. On most machines, if Python were to print the true decimal value of the binary approximation stored for 0.1, it would have to display:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> 0.1\n0.1000000000000000055511151231257827021181583404541015625",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: That is more digits than most people find useful, so Python keeps the number of digits manageable by displaying a rounded value instead:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> 1 / 10\n0.1",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Just remember, even though the printed result looks like the exact value of 1/10, the actual stored value is the nearest representable binary fraction.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Interestingly, there are many different decimal numbers that share the same nearest approximate binary fraction. For example, the numbers 0.1 and 0.10000000000000001 and 0.1000000000000000055511151231257827021181583404541015625 are all approximated by 3602879701896397 / 2 ** 55 . Since all of these decimal values share the same approximation, any one of them could be displayed while still preserving the invariant eval(repr(x)) == x .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Historically, the Python prompt and built-in repr() function would choose the one with 17 significant digits, 0.10000000000000001 . Starting with Python 3.1, Python (on most systems) is now able to choose the shortest of these and simply display 0.1 .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Note that this is in the very nature of binary floating point: this is not a bug in Python, and it is not a bug in your code either. You’ll see the same kind of thing in all languages that support your hardware’s floating-point arithmetic (although some languages may not display the difference by default, or in all output modes).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: For more pleasant output, you may wish to use string formatting to produce a limited number of significant digits:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> format(math.pi, '.12g')  # give 12 significant digits\n'3.14159265359'\n\n>>> format(math.pi, '.2f')   # give 2 digits after the point\n'3.14'\n\n>>> repr(math.pi)\n'3.141592653589793'",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: It’s important to realize that this is, in a real sense, an illusion: you’re simply rounding the display of the true machine value.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: One illusion may beget another. For example, since 0.1 is not exactly 1/10, summing three values of 0.1 may not yield exactly 0.3, either:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> 0.1 + 0.1 + 0.1 == 0.3\nFalse",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Also, since the 0.1 cannot get any closer to the exact value of 1/10 and 0.3 cannot get any closer to the exact value of 3/10, then pre-rounding with round() function cannot help:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> round(0.1, 1) + round(0.1, 1) + round(0.1, 1) == round(0.3, 1)\nFalse",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Though the numbers cannot be made closer to their intended exact values, the math.isclose() function can be useful for comparing inexact values:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> math.isclose(0.1 + 0.1 + 0.1, 0.3)\nTrue",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Alternatively, the round() function can be used to compare rough approximations:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> round(math.pi, ndigits=2) == round(22 / 7, ndigits=2)\nTrue",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Binary floating-point arithmetic holds many surprises like this. The problem with “0.1” is explained in precise detail below, in the “Representation Error” section. See Examples of Floating Point Problems for a pleasant summary of how binary floating point works and the kinds of problems commonly encountered in practice. Also see The Perils of Floating Point for a more complete account of other common surprises.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: As that says near the end, “there are no easy answers.” Still, don’t be unduly wary of floating point! The errors in Python float operations are inherited from the floating-point hardware, and on most machines are on the order of no more than 1 part in 2**53 per operation. That’s more than adequate for most tasks, but you do need to keep in mind that it’s not decimal arithmetic and that every float operation can suffer a new rounding error.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: While pathological cases do exist, for most casual use of floating-point arithmetic you’ll see the result you expect in the end if you simply round the display of your final results to the number of decimal digits you expect. str() usually suffices, and for finer control see the str.format() method’s format specifiers in Format string syntax .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: For use cases which require exact decimal representation, try using the decimal module which implements decimal arithmetic suitable for accounting applications and high-precision applications.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Another form of exact arithmetic is supported by the fractions module which implements arithmetic based on rational numbers (so the numbers like 1/3 can be represented exactly).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: If you are a heavy user of floating-point operations you should take a look at the NumPy package and many other packages for mathematical and statistical operations supplied by the SciPy project. See < https://scipy.org >.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Python provides tools that may help on those rare occasions when you really do want to know the exact value of a float. The float.as_integer_ratio() method expresses the value of a float as a fraction:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> x = 3.14159\n>>> x.as_integer_ratio()\n(3537115888337719, 1125899906842624)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Since the ratio is exact, it can be used to losslessly recreate the original value:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> x == 3537115888337719 / 1125899906842624\nTrue",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: The float.hex() method expresses a float in hexadecimal (base 16), again giving the exact value stored by your computer:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> x.hex()\n'0x1.921f9f01b866ep+1'",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: This precise hexadecimal representation can be used to reconstruct the float value exactly:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> x == float.fromhex('0x1.921f9f01b866ep+1')\nTrue",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Since the representation is exact, it is useful for reliably porting values across different versions of Python (platform independence) and exchanging data with other languages that support the same format (such as Java and C99).",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: Another helpful tool is the sum() function which helps mitigate loss-of-precision during summation. It uses extended precision for intermediate rounding steps as values are added onto a running total. That can make a difference in overall accuracy so that the errors do not accumulate to the point where they affect the final total:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 + 0.1 == 1.0\nFalse\n>>> sum([0.1] * 10) == 1.0\nTrue",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: The math.fsum() goes further and tracks all of the “lost digits” as values are added onto a running total so that the result has only a single rounding. This is slower than sum() but will be more accurate in uncommon cases where large magnitude inputs mostly cancel each other out leaving a final sum near zero:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15. Floating-Point Arithmetic: Issues and Limitations: >>> arr = [-0.10430216751806065, -266310978.67179024, 143401161448607.16,\n...        -143401161400469.7, 266262841.31058735, -0.003244936839808227]\n>>> float(sum(map(Fraction, arr)))   # Exact summation with single rounding\n8.042173697819788e-13\n>>> math.fsum(arr)                   # Single rounding\n8.042173697819788e-13\n>>> sum(arr)                         # Multiple roundings in extended precision\n8.042178034628478e-13\n>>> total = 0.0\n>>> for x in arr:\n...     total += x                   # Multiple roundings in standard precision\n...\n>>> total                            # Straight addition has no correct digits!\n-0.0051575902860057365",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: This section explains the “0.1” example in detail, and shows how you can perform an exact analysis of cases like this yourself. Basic familiarity with binary floating-point representation is assumed.",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Representation error refers to the fact that some (most, actually) decimal fractions cannot be represented exactly as binary (base 2) fractions. This is the chief reason why Python (or Perl, C, C++, Java, Fortran, and many others) often won’t display the exact decimal number you expect.",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Why is that? 1/10 is not exactly representable as a binary fraction. Since at least 2000, almost all machines use IEEE 754 binary floating-point arithmetic, and almost all platforms map Python floats to IEEE 754 binary64 “double precision” values. IEEE 754 binary64 values contain 53 bits of precision, so on input the computer strives to convert 0.1 to the closest fraction it can of the form J /2** N where J is an integer containing exactly 53 bits. Rewriting",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: 1 / 10 ~= J / (2**N)",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: as",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: J ~= 2**N / 10",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: and recalling that J has exactly 53 bits (is >= 2**52 but < 2**53 ), the best value for N is 56:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> 2**52 <=  2**56 // 10  < 2**53\nTrue",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: That is, 56 is the only value for N that leaves J with exactly 53 bits. The best possible value for J is then that quotient rounded:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> q, r = divmod(2**56, 10)\n>>> r\n6",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Since the remainder is more than half of 10, the best approximation is obtained by rounding up:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0061"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> q+1\n7205759403792794",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Therefore the best possible approximation to 1/10 in IEEE 754 double precision is:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: 7205759403792794 / 2 ** 56",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Dividing both the numerator and denominator by two reduces the fraction to:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: 3602879701896397 / 2 ** 55",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: Note that since we rounded up, this is actually a little bit larger than 1/10; if we had not rounded up, the quotient would have been a little bit smaller than 1/10. But in no case can it be exactly 1/10!",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: So the computer never “sees” 1/10: what it sees is the exact fraction given above, the best IEEE 754 double approximation it can get:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> 0.1 * 2 ** 55\n3602879701896397.0",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: If we multiply that fraction by 10**55, we can see the value out to 55 decimal digits:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> 3602879701896397 * 10 ** 55 // 2 ** 55\n1000000000000000055511151231257827021181583404541015625",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: meaning that the exact number stored in the computer is equal to the decimal value 0.1000000000000000055511151231257827021181583404541015625. Instead of displaying the full decimal value, many languages (including older versions of Python), round the result to 17 significant digits:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0072"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> format(0.1, '.17f')\n'0.10000000000000001'",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "15.1. Representation Error: The fractions and decimal modules make these calculations easy:",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0074"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "15.1. Representation Error: >>> from decimal import Decimal\n>>> from fractions import Fraction\n\n>>> Fraction.from_float(0.1)\nFraction(3602879701896397, 36028797018963968)\n\n>>> (0.1).as_integer_ratio()\n(3602879701896397, 36028797018963968)\n\n>>> Decimal.from_float(0.1)\nDecimal('0.1000000000000000055511151231257827021181583404541015625')\n\n>>> format(Decimal.from_float(0.1), '.17')\n'0.10000000000000001'",
+    "dom_ids": [
+      "readar-node-0052",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "floatingpoint",
+    "id": "floatingpoint__node_0075"
+  }
+]

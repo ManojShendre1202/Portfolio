@@ -1,0 +1,50 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.8. Updates: You can update existing rows using the UPDATE command. Suppose you discover the temperature readings are all off by 2 degrees after November 28. You can correct the data as follows:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-update",
+    "id": "tutorial-update__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.8. Updates: UPDATE weather\n    SET temp_hi = temp_hi - 2,  temp_lo = temp_lo - 2\n    WHERE date > '1994-11-28';",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-update",
+    "id": "tutorial-update__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.8. Updates: Look at the new state of the data:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-update",
+    "id": "tutorial-update__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.8. Updates: SELECT * FROM weather;\n\n     city      | temp_lo | temp_hi | prcp |    date\n---------------+---------+---------+------+------------\n San Francisco |      46 |      50 | 0.25 | 1994-11-27\n San Francisco |      41 |      55 |    0 | 1994-11-29\n Hayward       |      35 |      52 |      | 1994-11-29\n(3 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-update",
+    "id": "tutorial-update__node_0004"
+  }
+]

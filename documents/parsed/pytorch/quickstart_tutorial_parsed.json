@@ -1,0 +1,434 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Quickstart: Created On: Feb 09, 2021 | Last Updated: May 06, 2026 | Last Verified: Not Verified",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Quickstart: This section runs through the API for common tasks in machine learning. Refer to the links in each section to dive deeper.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Working with data: PyTorch has two primitives to work with data : torch.utils.data.DataLoader and torch.utils.data.Dataset . Dataset stores the samples and their corresponding labels, and DataLoader wraps an iterable around the Dataset .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Working with data: import torch\nfrom torch import nn\nfrom torch.utils.data import DataLoader\nfrom torchvision import datasets\nfrom torchvision.transforms import v2",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Working with data: PyTorch offers domain-specific libraries such as TorchText , TorchVision , and TorchAudio , all of which include datasets. For this tutorial, we will be using a TorchVision dataset.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Working with data: The torchvision.datasets module contains Dataset objects for many real-world vision data like CIFAR, COCO ( full list here ). In this tutorial, we use the FashionMNIST dataset. Every TorchVision Dataset includes two arguments: transform and target_transform to modify the samples and labels respectively.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Working with data: # Download training data from open datasets.\ntraining_data = datasets.FashionMNIST(\n    root=\"data\",\n    train=True,\n    download=True,\n    transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)]),\n)\n\n# Download test data from open datasets.\ntest_data = datasets.FashionMNIST(\n    root=\"data\",\n    train=False,\n    download=True,\n    transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)]),\n)",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Working with data:   0%|          | 0.00/26.4M [00:00<?, ?B/s]\n  0%|          | 65.5k/26.4M [00:00<01:09, 377kB/s]\n  1%|          | 197k/26.4M [00:00<00:43, 597kB/s]\n  3%|▎         | 852k/26.4M [00:00<00:12, 2.04MB/s]\n 13%|█▎        | 3.38M/26.4M [00:00<00:03, 6.93MB/s]\n 35%|███▌      | 9.27M/26.4M [00:00<00:01, 16.6MB/s]\n 55%|█████▍    | 14.5M/26.4M [00:00<00:00, 23.8MB/s]\n 69%|██████▊   | 18.2M/26.4M [00:01<00:00, 24.2MB/s]\n 89%|████████▉ | 23.5M/26.4M [00:01<00:00, 30.0MB/s]\n100%|██████████| 26.4M/26.4M [00:01<00:00, 20.0MB/s]\n\n  0%|          | 0.00/29.5k [00:00<?, ?B/s]\n100%|██████████| 29.5k/29.5k [00:00<00:00, 338kB/s]\n\n  0%|          | 0.00/4.42M [00:00<?, ?B/s]\n  1%|▏         | 65.5k/4.42M [00:00<00:11, 375kB/s]\n  5%|▌         | 229k/4.42M [00:00<00:05, 705kB/s]\n 21%|██        | 918k/4.42M [00:00<00:01, 2.18MB/s]\n 83%|████████▎ | 3.67M/4.42M [00:00<00:00, 7.52MB/s]\n100%|██████████| 4.42M/4.42M [00:00<00:00, 6.30MB/s]\n\n  0%|          | 0.00/5.15k [00:00<?, ?B/s]\n100%|██████████| 5.15k/5.15k [00:00<00:00, 59.0MB/s]",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Working with data: We pass the Dataset as an argument to DataLoader . This wraps an iterable over our dataset, and supports automatic batching, sampling, shuffling and multiprocess data loading. Here we define a batch size of 64, i.e. each element in the dataloader iterable will return a batch of 64 features and labels.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Working with data: batch_size = 64\n\n# Create data loaders.\ntrain_dataloader = DataLoader(training_data, batch_size=batch_size)\ntest_dataloader = DataLoader(test_data, batch_size=batch_size)\n\nfor X, y in test_dataloader:\n    print(f\"Shape of X [N, C, H, W]: {X.shape}\")\n    print(f\"Shape of y: {y.shape} {y.dtype}\")\n    break",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Working with data: Shape of X [N, C, H, W]: torch.Size([64, 1, 28, 28])\nShape of y: torch.Size([64]) torch.int64",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Working with data: Read more about loading data in PyTorch .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Models: To define a neural network in PyTorch, we create a class that inherits from nn.Module . We define the layers of the network in the __init__ function and specify how data will pass through the network in the forward function. To accelerate operations in the neural network, we move it to the accelerator such as CUDA, MPS, MTIA, or XPU. If the current accelerator is available, we will use it. Otherwise, we use the CPU.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Models: device = torch.accelerator.current_accelerator().type if torch.accelerator.is_available() else \"cpu\"\nprint(f\"Using {device} device\")\n\n# Define model\nclass NeuralNetwork(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.flatten = nn.Flatten()\n        self.linear_relu_stack = nn.Sequential(\n            nn.Linear(28*28, 512),\n            nn.ReLU(),\n            nn.Linear(512, 512),\n            nn.ReLU(),\n            nn.Linear(512, 10)\n        )\n\n    def forward(self, x):\n        x = self.flatten(x)\n        logits = self.linear_relu_stack(x)\n        return logits\n\nmodel = NeuralNetwork().to(device)\nprint(model)",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating Models: Using cuda device\nNeuralNetwork(\n  (flatten): Flatten(start_dim=1, end_dim=-1)\n  (linear_relu_stack): Sequential(\n    (0): Linear(in_features=784, out_features=512, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=512, out_features=512, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=512, out_features=10, bias=True)\n  )\n)",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating Models: Read more about building neural networks in PyTorch .",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Optimizing the Model Parameters: To train a model, we need a loss function and an optimizer .",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Optimizing the Model Parameters: loss_fn = nn.CrossEntropyLoss()\noptimizer = torch.optim.SGD(model.parameters(), lr=1e-3)",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Optimizing the Model Parameters: In a single training loop, the model makes predictions on the training dataset (fed to it in batches), and backpropagates the prediction error to adjust the model’s parameters.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Optimizing the Model Parameters: def train(dataloader, model, loss_fn, optimizer):\n    size = len(dataloader.dataset)\n    model.train()\n    for batch, (X, y) in enumerate(dataloader):\n        X, y = X.to(device), y.to(device)\n\n        # Compute prediction error\n        pred = model(X)\n        loss = loss_fn(pred, y)\n\n        # Backpropagation\n        loss.backward()\n        optimizer.step()\n        optimizer.zero_grad()\n\n        if batch % 100 == 0:\n            loss, current = loss.item(), (batch + 1) * len(X)\n            print(f\"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]\")",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Optimizing the Model Parameters: We also check the model’s performance against the test dataset to ensure it is learning.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Optimizing the Model Parameters: def test(dataloader, model, loss_fn):\n    size = len(dataloader.dataset)\n    num_batches = len(dataloader)\n    model.eval()\n    test_loss, correct = 0, 0\n    with torch.no_grad():\n        for X, y in dataloader:\n            X, y = X.to(device), y.to(device)\n            pred = model(X)\n            test_loss += loss_fn(pred, y).item()\n            correct += (pred.argmax(1) == y).type(torch.float).sum().item()\n    test_loss /= num_batches\n    correct /= size\n    print(f\"Test Error: \\n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \\n\")",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Optimizing the Model Parameters: The training process is conducted over several iterations ( epochs ). During each epoch, the model learns parameters to make better predictions. We print the model’s accuracy and loss at each epoch; we’d like to see the accuracy increase and the loss decrease with every epoch.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Optimizing the Model Parameters: epochs = 5\nfor t in range(epochs):\n    print(f\"Epoch {t+1}\\n-------------------------------\")\n    train(train_dataloader, model, loss_fn, optimizer)\n    test(test_dataloader, model, loss_fn)\nprint(\"Done!\")",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Optimizing the Model Parameters: Epoch 1\n-------------------------------\nloss: 2.301667  [   64/60000]\nloss: 2.291476  [ 6464/60000]\nloss: 2.268434  [12864/60000]\nloss: 2.268666  [19264/60000]\nloss: 2.236170  [25664/60000]\nloss: 2.210235  [32064/60000]\nloss: 2.218556  [38464/60000]\nloss: 2.183942  [44864/60000]\nloss: 2.179368  [51264/60000]\nloss: 2.151574  [57664/60000]\nTest Error:\n Accuracy: 38.7%, Avg loss: 2.144549\n\nEpoch 2\n-------------------------------\nloss: 2.154054  [   64/60000]\nloss: 2.149628  [ 6464/60000]\nloss: 2.084711  [12864/60000]\nloss: 2.110632  [19264/60000]\nloss: 2.045169  [25664/60000]\nloss: 1.985626  [32064/60000]\nloss: 2.013499  [38464/60000]\nloss: 1.934615  [44864/60000]\nloss: 1.940466  [51264/60000]\nloss: 1.867447  [57664/60000]\nTest Error:\n Accuracy: 53.9%, Avg loss: 1.869787\n\nEpoch 3\n-------------------------------\nloss: 1.903142  [   64/60000]\nloss: 1.879979  [ 6464/60000]\nloss: 1.752442  [12864/60000]\nloss: 1.802085  [19264/60000]\nloss: 1.688287  [25664/60000]\nloss: 1.639852  [32064/60000]\nloss: 1.655649  [38464/60000]\nloss: 1.564074  [44864/60000]\nloss: 1.590354  [51264/60000]\nloss: 1.484128  [57664/60000]\nTest Error:\n Accuracy: 59.1%, Avg loss: 1.510130\n\nEpoch 4\n-------------------------------\nloss: 1.576771  [   64/60000]\nloss: 1.548890  [ 6464/60000]\nloss: 1.389871  [12864/60000]\nloss: 1.468627  [19264/60000]\nloss: 1.352000  [25664/60000]\nloss: 1.344693  [32064/60000]\nloss: 1.351403  [38464/60000]\nloss: 1.286094  [44864/60000]\nloss: 1.319831  [51264/60000]\nloss: 1.222877  [57664/60000]\nTest Error:\n Accuracy: 62.6%, Avg loss: 1.254302\n\nEpoch 5\n-------------------------------\nloss: 1.329929  [   64/60000]\nloss: 1.316352  [ 6464/60000]\nloss: 1.141987  [12864/60000]\nloss: 1.255322  [19264/60000]\nloss: 1.128432  [25664/60000]\nloss: 1.151269  [32064/60000]\nloss: 1.166157  [38464/60000]\nloss: 1.113720  [44864/60000]\nloss: 1.150284  [51264/60000]\nloss: 1.069504  [57664/60000]\nTest Error:\n Accuracy: 64.3%, Avg loss: 1.094424\n\nDone!",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Optimizing the Model Parameters: Read more about Training your model .",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving Models: A common way to save a model is to serialize the internal state dictionary (containing the model parameters).",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving Models: torch.save(model.state_dict(), \"model.pth\")\nprint(\"Saved PyTorch Model State to model.pth\")",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving Models: Saved PyTorch Model State to model.pth",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Loading Models: The process for loading a model includes re-creating the model structure and loading the state dictionary into it.",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading Models: model = NeuralNetwork().to(device)\nmodel.load_state_dict(torch.load(\"model.pth\", weights_only=True))",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading Models: <All keys matched successfully>",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Loading Models: This model can now be used to make predictions.",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading Models: classes = [\n    \"T-shirt/top\",\n    \"Trouser\",\n    \"Pullover\",\n    \"Dress\",\n    \"Coat\",\n    \"Sandal\",\n    \"Shirt\",\n    \"Sneaker\",\n    \"Bag\",\n    \"Ankle boot\",\n]\n\nmodel.eval()\nx, y = test_data[0][0], test_data[0][1]\nwith torch.no_grad():\n    x = x.to(device)\n    pred = model(x)\n    predicted, actual = classes[pred[0].argmax(0)], classes[y]\n    print(f'Predicted: \"{predicted}\", Actual: \"{actual}\"')",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading Models: Predicted: \"Ankle boot\", Actual: \"Ankle boot\"",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Loading Models: Read more about Saving & Loading your model .",
+    "dom_ids": [
+      "readar-node-0035",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "quickstart_tutorial",
+    "id": "quickstart_tutorial__node_0036"
+  }
+]

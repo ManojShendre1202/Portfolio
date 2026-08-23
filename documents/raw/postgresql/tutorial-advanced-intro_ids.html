@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 3.1. Introduction</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-advanced-intro.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="3.1. Introduction" property="og:title"/>
+<meta content="3.1.&amp;nbsp;Introduction # In the previous chapter we have covered the basics of using SQL to store and access your data …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-advanced-intro.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-advanced-intro.html" title="PostgreSQL 18 - 3.1. Introduction">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-advanced-intro.html" title="PostgreSQL 18 - 3.1. Introduction">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-advanced-intro.html" title="PostgreSQL 17 - 3.1. Introduction">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-advanced-intro.html" title="PostgreSQL 16 - 3.1. Introduction">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-advanced-intro.html" title="PostgreSQL 15 - 3.1. Introduction">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-advanced-intro.html" title="PostgreSQL 14 - 3.1. Introduction">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 19 - 3.1. Introduction">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL devel - 3.1. Introduction">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 13 - 3.1. Introduction">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 12 - 3.1. Introduction">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 11 - 3.1. Introduction">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 10 - 3.1. Introduction">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.6 - 3.1. Introduction">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.5 - 3.1. Introduction">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.4 - 3.1. Introduction">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.3 - 3.1. Introduction">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.2 - 3.1. Introduction">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.1 - 3.1. Introduction">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 9.0 - 3.1. Introduction">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 8.4 - 3.1. Introduction">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 8.3 - 3.1. Introduction">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-advanced-intro.html" rel="nofollow" title="PostgreSQL 8.2 - 3.1. Introduction">8.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-ADVANCED-INTRO">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">3.1. Introduction </h2>
+</div>
+</div>
+</div>
+<p id="readar-node-0002">In the previous chapter we have covered the basics of using <acronym class="acronym">SQL</acronym> to store and access your data in <span class="productname">PostgreSQL</span>. We will now discuss some more advanced features of <acronym class="acronym">SQL</acronym> that simplify management and prevent loss or corruption of your data. Finally, we will look at some <span class="productname">PostgreSQL</span> extensions.</p>
+<p id="readar-node-0003">This chapter will on occasion refer to examples found in <a class="xref" href="tutorial-sql.html" title="Chapter 2. The SQL Language">Chapter 2</a> to change or improve them, so it will be useful to have read that chapter. Some examples from this chapter can also be found in <code class="filename">advanced.sql</code> in the tutorial directory. This file also contains some sample data to load, which is not repeated here. (Refer to <a class="xref" href="tutorial-sql-intro.html" title="2.1. Introduction">Section 2.1</a> for how to use the file.)</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

@@ -7,6 +7,11 @@ PyMuPDF==1.27.2.2
 numpy==2.4.2
 psycopg2-binary==2.9.12
 sentence-transformers==5.6.0
+rank-bm25==0.2.2
+spacy==3.8.14
 einops==0.8.2
 psutil==7.0.0
 whitenoise==6.11.0
+
+# spaCy language model — not a normal pip package, install separately:
+#   python -m spacy download en_core_web_sm

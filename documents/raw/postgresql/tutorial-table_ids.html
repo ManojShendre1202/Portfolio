@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 2.3. Creating a New Table</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-table.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="2.3. Creating a New Table" property="og:title"/>
+<meta content="2.3.&amp;nbsp;Creating a New Table # You can create a new table by specifying the table name, along with all column …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-table.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-table.html" title="PostgreSQL 18 - 2.3. Creating a New Table">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-table.html" title="PostgreSQL 18 - 2.3. Creating a New Table">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-table.html" title="PostgreSQL 17 - 2.3. Creating a New Table">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-table.html" title="PostgreSQL 16 - 2.3. Creating a New Table">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-table.html" title="PostgreSQL 15 - 2.3. Creating a New Table">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-table.html" title="PostgreSQL 14 - 2.3. Creating a New Table">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-table.html" rel="nofollow" title="PostgreSQL 19 - 2.3. Creating a New Table">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-table.html" rel="nofollow" title="PostgreSQL devel - 2.3. Creating a New Table">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-table.html" rel="nofollow" title="PostgreSQL 13 - 2.3. Creating a New Table">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-table.html" rel="nofollow" title="PostgreSQL 12 - 2.3. Creating a New Table">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-table.html" rel="nofollow" title="PostgreSQL 11 - 2.3. Creating a New Table">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-table.html" rel="nofollow" title="PostgreSQL 10 - 2.3. Creating a New Table">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.6 - 2.3. Creating a New Table">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.5 - 2.3. Creating a New Table">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.4 - 2.3. Creating a New Table">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.3 - 2.3. Creating a New Table">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.2 - 2.3. Creating a New Table">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.1 - 2.3. Creating a New Table">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-table.html" rel="nofollow" title="PostgreSQL 9.0 - 2.3. Creating a New Table">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-table.html" rel="nofollow" title="PostgreSQL 8.4 - 2.3. Creating a New Table">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-table.html" rel="nofollow" title="PostgreSQL 8.3 - 2.3. Creating a New Table">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-table.html" rel="nofollow" title="PostgreSQL 8.2 - 2.3. Creating a New Table">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-table.html" rel="nofollow" title="PostgreSQL 8.1 - 2.3. Creating a New Table">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-table.html" rel="nofollow" title="PostgreSQL 8.0 - 2.3. Creating a New Table">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-table.html" rel="nofollow" title="PostgreSQL 7.4 - 2.3. Creating a New Table">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-table.html" rel="nofollow" title="PostgreSQL 7.3 - 2.3. Creating a New Table">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-table.html" rel="nofollow" title="PostgreSQL 7.2 - 2.3. Creating a New Table">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-TABLE">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">2.3. Creating a New Table </h2>
+</div>
+</div>
+</div><a class="indexterm" id="id-1.4.4.4.2" name="id-1.4.4.4.2"></a>
+<p id="readar-node-0002">You can create a new table by specifying the table name, along with all column names and their types:</p>
+<pre class="programlisting" id="readar-node-0003">
+CREATE TABLE weather (
+    city            varchar(80),
+    temp_lo         int,           -- low temperature
+    temp_hi         int,           -- high temperature
+    prcp            real,          -- precipitation
+    date            date
+);
+</pre>
+<p id="readar-node-0004">You can enter this into <code class="command">psql</code> with the line breaks. <code class="command">psql</code> will recognize that the command is not terminated until the semicolon.</p>
+<p id="readar-node-0005">White space (i.e., spaces, tabs, and newlines) can be used freely in SQL commands. That means you can type the command aligned differently than above, or even all on one line. Two dashes (<span class="quote">“<span class="quote"><code class="literal">--</code></span>”</span>) introduce comments. Whatever follows them is ignored up to the end of the line. SQL is case-insensitive about key words and identifiers, except when identifiers are double-quoted to preserve the case (not done above).</p>
+<p id="readar-node-0006"><code class="type">varchar(80)</code> specifies a data type that can store arbitrary character strings up to 80 characters in length. <code class="type">int</code> is the normal integer type. <code class="type">real</code> is a type for storing single precision floating-point numbers. <code class="type">date</code> should be self-explanatory. (Yes, the column of type <code class="type">date</code> is also named <code class="structfield">date</code>. This might be convenient or confusing — you choose.)</p>
+<p id="readar-node-0007"><span class="productname">PostgreSQL</span> supports the standard <acronym class="acronym">SQL</acronym> types <code class="type">int</code>, <code class="type">smallint</code>, <code class="type">real</code>, <code class="type">double precision</code>, <code class="type">char(<em class="replaceable"><code>N</code></em>)</code>, <code class="type">varchar(<em class="replaceable"><code>N</code></em>)</code>, <code class="type">date</code>, <code class="type">time</code>, <code class="type">timestamp</code>, and <code class="type">interval</code>, as well as other types of general utility and a rich set of geometric types. <span class="productname">PostgreSQL</span> can be customized with an arbitrary number of user-defined data types. Consequently, type names are not key words in the syntax, except where required to support special cases in the <acronym class="acronym">SQL</acronym> standard.</p>
+<p id="readar-node-0008">The second example will store cities and their associated geographical location:</p>
+<pre class="programlisting" id="readar-node-0009">
+CREATE TABLE cities (
+    name            varchar(80),
+    location        point
+);
+</pre>
+<p id="readar-node-0010">The <code class="type">point</code> type is an example of a <span class="productname">PostgreSQL</span>-specific data type.</p>
+<p id="readar-node-0011"><a class="indexterm" id="id-1.4.4.4.8.1" name="id-1.4.4.4.8.1"></a> Finally, it should be mentioned that if you don't need a table any longer or want to recreate it differently you can remove it using the following command:</p>
+<pre class="synopsis" id="readar-node-0012">
+DROP TABLE <em class="replaceable"><code>tablename</code></em>;
+</pre>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

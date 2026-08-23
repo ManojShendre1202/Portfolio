@@ -1,0 +1,260 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "A LangGraph application consists of one or more graphs, a configuration file ( langgraph.json ), a file that specifies dependencies, and an optional .env file that specifies environment variables.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "application-structure",
+    "id": "application-structure__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This guide shows a typical structure of an application and shows you how to provide the required configuration to deploy an application with LangSmith Deployment .",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "application-structure",
+    "id": "application-structure__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LangSmith Deployment is a managed hosting platform for deploying and scaling LangGraph agents. It handles the infrastructure, scaling, and operational concerns so you can deploy your stateful, long-running agents directly from your repository. Learn more in the Deployment documentation .",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "application-structure",
+    "id": "application-structure__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Key concepts: To deploy using LangSmith, the following information should be provided:",
+    "dom_ids": [
+      "key-concepts",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Key concepts: - A LangGraph configuration file ( langgraph.json ) that specifies the dependencies, graphs, and environment variables to use for the application. - The graphs that implement the logic of the application. - A file that specifies dependencies required to run the application. - Environment variables that are required for the application to run.",
+    "dom_ids": [
+      "key-concepts",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "File structure: Below are examples of directory structures for applications:",
+    "dom_ids": [
+      "file-structure",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0006"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "File structure: - Python (requirements.txt) - Python (pyproject.toml)",
+    "dom_ids": [
+      "file-structure",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "File structure: my-app/\n├── my_agent # all project code lies within here\n│   ├── utils # utilities for your graph\n│   │   ├── __init__.py\n│   │   ├── tools.py # tools for your graph\n│   │   ├── nodes.py # node functions for your graph\n│   │   └── state.py # state definition of your graph\n│   ├── __init__.py\n│   └── agent.py # code for constructing your graph\n├── .env # environment variables\n├── requirements.txt # package dependencies\n└── langgraph.json # configuration file for LangGraph",
+    "dom_ids": [
+      "file-structure",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "File structure: my-app/\n├── my_agent # all project code lies within here\n│   ├── utils # utilities for your graph\n│   │   ├── __init__.py\n│   │   ├── tools.py # tools for your graph\n│   │   ├── nodes.py # node functions for your graph\n│   │   └── state.py # state definition of your graph\n│   ├── __init__.py\n│   └── agent.py # code for constructing your graph\n├── .env # environment variables\n├── langgraph.json  # configuration file for LangGraph\n└── pyproject.toml # dependencies for your project",
+    "dom_ids": [
+      "file-structure",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "File structure: The directory structure of a LangGraph application can vary depending on the programming language and the package manager used.",
+    "dom_ids": [
+      "file-structure",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configuration file: The langgraph.json file is a JSON file that specifies the dependencies, graphs, environment variables, and other settings required to deploy a LangGraph application.",
+    "dom_ids": [
+      "configuration-file",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configuration file: See the LangGraph configuration file reference for details on all supported keys in the JSON file.",
+    "dom_ids": [
+      "configuration-file",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configuration file: The LangGraph CLI defaults to using the configuration file langgraph.json in the current directory.",
+    "dom_ids": [
+      "configuration-file",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0013"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Examples: - The dependencies involve a custom local package and the langchain_openai package. - A single graph will be loaded from the file ./your_package/your_file.py with the variable variable . - The environment variables are loaded from the .env file.",
+    "dom_ids": [
+      "examples",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Examples: {\n  \"dependencies\": [\"langchain_openai\", \"./your_package\"],\n  \"graphs\": {\n    \"my_agent\": \"./your_package/your_file.py:agent\"\n  },\n  \"env\": \"./.env\"\n}",
+    "dom_ids": [
+      "examples",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dependencies: A LangGraph application may depend on other Python packages.",
+    "dom_ids": [
+      "dependencies",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dependencies: You will generally need to specify the following information for dependencies to be set up correctly:",
+    "dom_ids": [
+      "dependencies",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0017"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Dependencies: - A file in the directory that specifies the dependencies (e.g. requirements.txt , pyproject.toml , or package.json ). - A dependencies key in the LangGraph configuration file that specifies the dependencies required to run the LangGraph application. - Any additional binaries or system libraries can be specified using dockerfile_lines key in the LangGraph configuration file .",
+    "dom_ids": [
+      "dependencies",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Graphs: Use the graphs key in the LangGraph configuration file to specify which graphs will be available in the deployed LangGraph application.",
+    "dom_ids": [
+      "graphs",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Graphs: You can specify one or more graphs in the configuration file. Each graph is identified by a name (which should be unique) and a path for either: (1) the compiled graph or (2) a function that makes a graph is defined.",
+    "dom_ids": [
+      "graphs",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Environment variables: If you’re working with a deployed LangGraph application locally, you can configure environment variables in the env key of the LangGraph configuration file .",
+    "dom_ids": [
+      "environment-variables",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Environment variables: For a production deployment, you will typically want to configure the environment variables in the deployment environment.",
+    "dom_ids": [
+      "environment-variables",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "application-structure",
+    "id": "application-structure__node_0022"
+  }
+]

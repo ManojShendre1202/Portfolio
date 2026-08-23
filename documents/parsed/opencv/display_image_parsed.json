@@ -1,0 +1,380 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV Tutorials - Introduction to OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "display_image",
+    "id": "display_image__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: In this tutorial you will learn how to:",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Read an image from file (using cv::imread ) - Display an image in an OpenCV window (using cv::imshow ) - Write an image to a file (using cv::imwrite )",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Source Code: - Code at glance:",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Source Code: #include <opencv2/core.hpp>\n#include <opencv2/imgcodecs.hpp>\n#include <opencv2/highgui.hpp>\n\n#include <iostream>\n\nusing namespace cv;\n\nint main()\n{\n    std::string image_path = samples::findFile(\"starry_night.jpg\");\n Mat img = imread(image_path, IMREAD_COLOR);\n\n if(img.empty())\n    {\n        std::cout << \"Could not read the image: \" << image_path << std::endl;\n return 1;\n    }\n\n    imshow(\"Display window\", img);\n int k = waitKey(0); // Wait for a keystroke in the window\n\n if(k == 's')\n    {\n        imwrite(\"starry_night.png\", img);\n    }\n\n return 0;\n}",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0005"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Source Code: - Code at glance:",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Source Code: import cv2 as cv\nimport sys\n\nimg = cv.imread(cv.samples.findFile(\"starry_night.jpg\"))\n\nif img is None:\n    sys.exit(\"Could not read the image.\")\n\ncv.imshow(\"Display window\", img)\nk = cv.waitKey(0)\n\nif k == ord(\"s\"):\n cv.imwrite(\"starry_night.png\", img)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: In OpenCV 3 we have multiple modules. Each one takes care of a different area or approach towards image processing. You could already observe this in the structure of the user guide of these tutorials itself. Before you use any of them you first need to include the header files where the content of each individual module is declared.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: You'll almost always end up using the:",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Explanation: - core section, as here are defined the basic building blocks of the library - imgcodecs module, which provides functions for reading and writing - highgui module, as this contains the functions to show an image in a window",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: We also include the iostream to facilitate console line output and input.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: By declaring using namespace cv; , in the following, the library functions can be accessed without explicitly stating the namespace.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: #include <opencv2/core.hpp>\n#include <opencv2/imgcodecs.hpp>\n#include <opencv2/highgui.hpp>\n\n#include <iostream>\n\nusing namespace cv;",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: As a first step, the OpenCV python library is imported. The proper way to do this is to additionally assign it the name cv , which is used in the following to reference the library.",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: import cv2 as cv\nimport sys",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Now, let's analyze the main code. As a first step, we read the image \"starry_night.jpg\" from the OpenCV samples. In order to do so, a call to the cv::imread function loads the image using the file path specified by the first argument. The second argument is optional and specifies the format in which we want the image. This may be:",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0016"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Explanation: - IMREAD_COLOR loads the image in the BGR 8-bit format. This is the default that is used here. - IMREAD_UNCHANGED loads the image as is (including the alpha channel if present) - IMREAD_GRAYSCALE loads the image as an intensity one",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: After reading in the image data will be stored in a cv::Mat object.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:     std::string image_path = samples::findFile(\"starry_night.jpg\");\n Mat img = imread(image_path, IMREAD_COLOR);",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: img = cv.imread(cv.samples.findFile(\"starry_night.jpg\"))",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Afterwards, a check is executed, if the image was loaded correctly.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  if(img.empty())\n    {\n        std::cout << \"Could not read the image: \" << image_path << std::endl;\n return 1;\n    }",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: if img is None:\n    sys.exit(\"Could not read the image.\")",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Then, the image is shown using a call to the cv::imshow function. The first argument is the title of the window and the second argument is the cv::Mat object that will be shown.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Because we want our window to be displayed until the user presses a key (otherwise the program would end far too quickly), we use the cv::waitKey function whose only parameter is just how long should it wait for a user input (measured in milliseconds). Zero means to wait forever. The return value is the key that was pressed.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  imshow(\"Display window\", img);\n int k = waitKey(0); // Wait for a keystroke in the window",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: cv.imshow(\"Display window\", img)\nk = cv.waitKey(0)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: In the end, the image is written to a file if the pressed key was the \"s\"-key. For this the cv::imwrite function is called that has the file path and the cv::Mat object as an argument.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  if(k == 's')\n    {\n imwrite(\"starry_night.png\", img);\n    }",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: if k == ord(\"s\"):\n cv.imwrite(\"starry_night.png\", img)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0030"
+  }
+]

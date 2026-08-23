@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html data-content_root="../" data-theme="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Data types — NumPy v2.5 Manual</title>
+
+<!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+<noscript>
+
+</noscript>
+<!-- Loaded before other Sphinx assets -->
+<link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet"/>
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet"/>
+<link href="../_static/pygments.css?v=8f2a1f02" rel="stylesheet" type="text/css"/>
+<link href="../_static/graphviz.css?v=eafc0fe6" rel="stylesheet" type="text/css"/>
+<link href="../_static/plot_directive.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Vibur" rel="stylesheet" type="text/css"/>
+<link href="../_static/jupyterlite_sphinx.css?v=8ee2c72c" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="../_static/numpy.css?v=7e165a8b" rel="stylesheet" type="text/css"/>
+<!-- So that users can add custom icons -->
+
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" rel="preload"/>
+<link as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" rel="preload"/>
+
+
+
+
+
+
+
+
+
+
+
+<link href="../_static/favicon.ico" rel="icon"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="basics.broadcasting.html" rel="next" title="Broadcasting"/>
+<link href="basics.io.genfromtxt.html" rel="prev" title="Importing data with genfromtxt"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="2.5" name="docsearch:version"/>
+<meta content="Jun 28, 2026" name="docbuild:last-update"/>
+
+
+
+</head>
+<body data-default-mode="light">
+<div class="skip-link d-print-none" id="pst-skip-link"><a href="#main-content">Skip to main content</a></div>
+<div id="pst-scroll-pixel-helper"></div>
+
+<dialog id="pst-search-dialog">
+
+</dialog>
+<div class="pst-async-banner-revealer d-none">
+
+</div>
+
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+<dialog id="pst-primary-sidebar-modal"></dialog>
+
+<main class="bd-main" id="main-content" role="main">
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item">
+
+</div>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article">
+<section id="data-types">
+<span id="basics-types"></span><h1 id="readar-node-0001">Data types</h1>
+<div class="admonition seealso">
+<p class="admonition-title" id="readar-node-0002">See also</p>
+<p id="readar-node-0003"><a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes"><span class="std std-ref">Data type objects</span></a></p>
+</div>
+<section id="array-types-and-conversions-between-types">
+<h2 id="readar-node-0004">Array types and conversions between types</h2>
+<p id="readar-node-0005">NumPy supports a much greater variety of numerical types than Python does.
+This section shows which are available, and how to modify an array’s data-type.</p>
+<p id="readar-node-0006">NumPy numerical types are instances of <a class="reference internal" href="../reference/generated/numpy.dtype.html#numpy.dtype" title="numpy.dtype"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a> (data-type) objects, each
+having unique characteristics.  Once you have imported NumPy using <code class="docutils literal notranslate"><span class="pre">import</span>
+<span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span></code> you can create arrays with a specified dtype using the scalar
+types in the numpy top-level API, e.g. <a class="reference internal" href="../reference/arrays.scalars.html#numpy.bool" title="numpy.bool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bool</span></code></a>, <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float32" title="numpy.float32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float32</span></code></a>, etc.</p>
+<p id="readar-node-0007">These scalar types as arguments to the dtype keyword that many numpy functions
+or methods accept. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0008"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z</span>
+<span class="go">array([0, 1, 2], dtype=uint8)</span>
+</pre></div>
+</div>
+<p id="readar-node-0009">Array types can also be referred to by character codes, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0010"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'f'</span><span class="p">)</span>
+<span class="go">array([1.,  2.,  3.], dtype=float32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'d'</span><span class="p">)</span>
+<span class="go">array([1.,  2.,  3.], dtype=float64)</span>
+</pre></div>
+</div>
+<p id="readar-node-0011">See <a class="reference internal" href="../reference/arrays.dtypes.html#arrays-dtypes-constructing"><span class="std std-ref">Specifying and constructing data types</span></a> for more information about specifying and
+constructing data type objects, including how to specify parameters like the
+byte order.</p>
+<p id="readar-node-0012">To determine the type of an array, look at the dtype attribute:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0013"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">dtype</span>
+<span class="go">dtype('uint8')</span>
+</pre></div>
+</div>
+<p id="readar-node-0014">dtype objects also contain information about the type, such as its bit-width
+and its byte-order.  The data type can also be used indirectly to query
+properties of the type, such as whether it is an integer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0015"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">dtype('int64')</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">)</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p id="readar-node-0016">To convert the type of an array, use the .astype() method. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0017"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>                 
+<span class="go">array([0.,  1.,  2.])</span>
+</pre></div>
+</div>
+<p id="readar-node-0018">Note that, above, we could have used the <em>Python</em> float object as a dtype
+instead of <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a>.  NumPy knows that
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> refers to <a class="reference internal" href="../reference/arrays.scalars.html#numpy.int_" title="numpy.int_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int_</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> means
+<a class="reference internal" href="../reference/arrays.scalars.html#numpy.bool" title="numpy.bool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bool</span></code></a>, that <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> is <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> and
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code></a> is <a class="reference internal" href="../reference/arrays.scalars.html#numpy.complex128" title="numpy.complex128"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.complex128</span></code></a>.  The other data-types do not have
+Python equivalents.</p>
+<p id="readar-node-0019">Sometimes the conversion can overflow, for instance when converting a <a class="reference internal" href="../reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> value
+300 to <a class="reference internal" href="../reference/arrays.scalars.html#numpy.int8" title="numpy.int8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int8</span></code></a>. NumPy follows C casting rules, so that value would overflow and
+become 44 <code class="docutils literal notranslate"><span class="pre">(300</span> <span class="pre">-</span> <span class="pre">256)</span></code>. If you wish to avoid such overflows, you can specify that the
+overflow action fail by using <code class="docutils literal notranslate"><span class="pre">same_value</span></code> for the <code class="docutils literal notranslate"><span class="pre">casting</span></code> argument (see also
+<a class="reference internal" href="#overflow-errors"><span class="std std-ref">Overflow errors</span></a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0020"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s2">"same_value"</span><span class="p">)</span>   
+<span class="go">array([0.,  1.,  2.])</span>
+</pre></div>
+</div>
+<section id="numerical-data-types">
+<h3 id="readar-node-0021">Numerical Data Types</h3>
+<p id="readar-node-0022">There are 5 basic numerical types representing booleans (<code class="docutils literal notranslate"><span class="pre">bool</span></code>), integers
+(<code class="docutils literal notranslate"><span class="pre">int</span></code>), unsigned integers (<code class="docutils literal notranslate"><span class="pre">uint</span></code>) floating point (<code class="docutils literal notranslate"><span class="pre">float</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">complex</span></code>. A basic numerical type name combined with a numeric bitsize defines
+a concrete type.  The bitsize is the number of bits that are needed to represent
+a single value in memory. For example, <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a> is a 64 bit
+floating point data type. Some types, such as <a class="reference internal" href="../reference/arrays.scalars.html#numpy.int_" title="numpy.int_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int_</span></code></a> and
+<a class="reference internal" href="../reference/arrays.scalars.html#numpy.intp" title="numpy.intp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.intp</span></code></a>, have differing bitsizes, dependent on the platforms
+(e.g. 32-bit vs. 64-bit CPU architectures).  This should be taken into account
+when interfacing with low-level code (such as C or Fortran) where the raw memory
+is addressed.</p>
+</section>
+<section id="data-types-for-strings-and-bytes">
+<h3 id="readar-node-0023">Data Types for Strings and Bytes</h3>
+<p id="readar-node-0024">In addition to numerical types, NumPy also supports storing unicode strings, via
+the <a class="reference internal" href="../reference/arrays.scalars.html#numpy.str_" title="numpy.str_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.str_</span></code></a> dtype (<code class="docutils literal notranslate"><span class="pre">U</span></code> character code), null-terminated byte sequences via
+<a class="reference internal" href="../reference/arrays.scalars.html#numpy.bytes_" title="numpy.bytes_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bytes_</span></code></a> (<code class="docutils literal notranslate"><span class="pre">S</span></code> character code), and arbitrary byte sequences, via
+<a class="reference internal" href="../reference/arrays.scalars.html#numpy.void" title="numpy.void"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.void</span></code></a> (<code class="docutils literal notranslate"><span class="pre">V</span></code> character code).</p>
+<p id="readar-node-0025">All of the above are <em>fixed-width</em> data types. They are parameterized by a
+width, in either bytes or unicode points, that a single data element in the
+array must fit inside. This means that storing an array of byte sequences or
+strings using this dtype requires knowing or calculating the sizes of the
+longest text or byte sequence in advance.</p>
+<p id="readar-node-0026">As an example, we can create an array storing the words <code class="docutils literal notranslate"><span class="pre">"hello"</span></code> and
+<code class="docutils literal notranslate"><span class="pre">"world!"</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0027"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world!"</span><span class="p">])</span>
+<span class="go">array(['hello', 'world!'], dtype='&lt;U6')</span>
+</pre></div>
+</div>
+<p id="readar-node-0028">Here the data type is detected as a unicode string that is a maximum of 6 code
+points long, enough to store both entries without truncation. If we specify a
+shorter or longer data type, the string is either truncated or zero-padded to
+fit in the specified width:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0029"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world!"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"U5"</span><span class="p">)</span>
+<span class="go">array(['hello', 'world'], dtype='&lt;U5')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world!"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"U7"</span><span class="p">)</span>
+<span class="go">array(['hello', 'world!'], dtype='&lt;U7')</span>
+</pre></div>
+</div>
+<p id="readar-node-0030">We can see the zero-padding a little more clearly if we use the bytes data
+type and ask NumPy to print out the bytes in the array buffer:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0031"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"world"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S7"</span><span class="p">)</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+<span class="go">b'hello\x00\x00world\x00\x00'</span>
+</pre></div>
+</div>
+<p id="readar-node-0032">Each entry is padded with two extra null bytes. Note however that NumPy cannot
+tell the difference between intentionally stored trailing nulls and padding
+nulls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0033"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">"hello</span><span class="se">\0\0</span><span class="s2">"</span><span class="p">,</span> <span class="sa">b</span><span class="s2">"world"</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S7"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">b"hello"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p id="readar-node-0034">If you need to store and round-trip any trailing null bytes, you will need to
+use an unstructured void data type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0035"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"V7"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
+<span class="go">array([b'\x68\x65\x6C\x6C\x6F\x00\x00', b'\x77\x6F\x72\x6C\x64\x00\x00'],</span>
+<span class="go">      dtype='|V7')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0036">Advanced types, not listed above, are explored in section
+<a class="reference internal" href="basics.rec.html#structured-arrays"><span class="std std-ref">Structured arrays</span></a>.</p>
+</section>
+</section>
+<section id="relationship-between-numpy-data-types-and-c-data-types">
+<span id="canonical-python-and-c-types"></span><h2 id="readar-node-0037">Relationship Between NumPy Data Types and C Data Types</h2>
+<p id="readar-node-0038">NumPy provides both bit sized type names and names based on the names of C types.
+Since the definition of C types are platform dependent, this means the explicitly
+bit sized should be preferred to avoid platform-dependent behavior in programs
+using NumPy.</p>
+<p id="readar-node-0039">To ease integration with C code, where it is more natural to refer to
+platform-dependent C types, NumPy also provides type aliases that correspond
+to the C types for the platform. Some dtypes have trailing underscore to avoid
+confusion with builtin python type names, such as <a class="reference internal" href="../reference/arrays.scalars.html#numpy.bool_" title="numpy.bool_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bool_</span></code></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd" id="readar-node-0040"><th class="head"><p>Canonical Python API name</p></th>
+<th class="head"><p>Python API “C-like” name</p></th>
+<th class="head"><p>Actual C type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even" id="readar-node-0041"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.bool" title="numpy.bool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bool</span></code></a> or <a class="reference internal" href="../reference/arrays.scalars.html#numpy.bool_" title="numpy.bool_"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.bool_</span></code></a></p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code> (defined in <code class="docutils literal notranslate"><span class="pre">stdbool.h</span></code>)</p></td>
+<td><p>Boolean (True or False) stored as a byte.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0042"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.int8" title="numpy.int8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int8</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.byte" title="numpy.byte"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.byte</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">signed</span> <span class="pre">char</span></code></p></td>
+<td><p>Platform-defined integer type with 8 bits.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0043"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uint8" title="numpy.uint8"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uint8</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.ubyte" title="numpy.ubyte"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ubyte</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">char</span></code></p></td>
+<td><p>Platform-defined integer type with 8 bits without sign.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0044"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.int16" title="numpy.int16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int16</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.short" title="numpy.short"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.short</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+<td><p>Platform-defined integer type with 16 bits.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0045"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uint16" title="numpy.uint16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.ushort" title="numpy.ushort"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ushort</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">short</span></code></p></td>
+<td><p>Platform-defined integer type with 16 bits without sign.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0046"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.int32" title="numpy.int32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int32</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.intc" title="numpy.intc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.intc</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>Platform-defined integer type with 32 bits.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0047"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uintc" title="numpy.uintc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uintc</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">int</span></code></p></td>
+<td><p>Platform-defined integer type with 32 bits without sign.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0048"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.intp" title="numpy.intp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.intp</span></code></a></p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ssize_t</span></code>/<code class="docutils literal notranslate"><span class="pre">Py_ssize_t</span></code></p></td>
+<td><p>Platform-defined integer of size <code class="docutils literal notranslate"><span class="pre">size_t</span></code>; used e.g. for sizes.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0049"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uintp" title="numpy.uintp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uintp</span></code></a></p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">size_t</span></code></p></td>
+<td><p>Platform-defined integer type capable of storing the maximum
+allocation size.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0050"><td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'p'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">intptr_t</span></code></p></td>
+<td><p>Guaranteed to hold pointers. Character code only (Python and C).</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0051"><td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'P'</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">uintptr_t</span></code></p></td>
+<td><p>Guaranteed to hold pointers without sign. Character code only (Python and C).</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0052"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.int32" title="numpy.int32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int32</span></code></a> or <a class="reference internal" href="../reference/arrays.scalars.html#numpy.int64" title="numpy.int64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.int64</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.long" title="numpy.long"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.long</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span></code></p></td>
+<td><p>Platform-defined integer type with at least 32 bits.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0053"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.uint32" title="numpy.uint32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uint32</span></code></a> or <a class="reference internal" href="../reference/arrays.scalars.html#numpy.uint64" title="numpy.uint64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.uint64</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.ulong" title="numpy.ulong"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ulong</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">long</span></code></p></td>
+<td><p>Platform-defined integer type with at least 32 bits without sign.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0054"><td><p>N/A</p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.longlong" title="numpy.longlong"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.longlong</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">long</span></code></p></td>
+<td><p>Platform-defined integer type with at least 64 bits.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0055"><td><p>N/A</p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.ulonglong" title="numpy.ulonglong"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ulonglong</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></code></p></td>
+<td><p>Platform-defined integer type with at least 64 bits without sign.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0056"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.float16" title="numpy.float16"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float16</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.half" title="numpy.half"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.half</span></code></a></p></td>
+<td><p>N/A</p></td>
+<td><p>Half precision float:
+sign bit, 5 bits exponent, 10 bits mantissa.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0057"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.float32" title="numpy.float32"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float32</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.single" title="numpy.single"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.single</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>Platform-defined single precision float:
+typically sign bit, 8 bits exponent, 23 bits mantissa.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0058"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.double" title="numpy.double"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.double</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double</span></code></p></td>
+<td><p>Platform-defined double precision float:
+typically sign bit, 11 bits exponent, 52 bits mantissa.</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0059"><td><p><code class="docutils literal notranslate"><span class="pre">numpy.float96</span></code> or <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float128" title="numpy.float128"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float128</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.longdouble" title="numpy.longdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.longdouble</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code></p></td>
+<td><p>Platform-defined extended-precision float.</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0060"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.complex64" title="numpy.complex64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.complex64</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.csingle" title="numpy.csingle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.csingle</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span> <span class="pre">complex</span></code></p></td>
+<td><p>Complex number, represented by two single-precision floats (real and imaginary components).</p></td>
+</tr>
+<tr class="row-even" id="readar-node-0061"><td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.complex128" title="numpy.complex128"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.complex128</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.cdouble" title="numpy.cdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.cdouble</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">complex</span></code></p></td>
+<td><p>Complex number, represented by two double-precision floats (real and imaginary components).</p></td>
+</tr>
+<tr class="row-odd" id="readar-node-0062"><td><p><code class="docutils literal notranslate"><span class="pre">numpy.complex192</span></code> or <a class="reference internal" href="../reference/arrays.scalars.html#numpy.complex256" title="numpy.complex256"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.complex256</span></code></a></p></td>
+<td><p><a class="reference internal" href="../reference/arrays.scalars.html#numpy.clongdouble" title="numpy.clongdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.clongdouble</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span> <span class="pre">complex</span></code></p></td>
+<td><p>Complex number, represented by two extended-precision floats (real and imaginary components).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p id="readar-node-0063">Since many of these have platform-dependent definitions, a set of fixed-size
+aliases are provided (See <a class="reference internal" href="../reference/arrays.scalars.html#sized-aliases"><span class="std std-ref">Sized aliases</span></a>).</p>
+</section>
+<section id="array-scalars">
+<h2 id="readar-node-0064">Array scalars</h2>
+<p id="readar-node-0065">NumPy generally returns elements of arrays as array scalars (a scalar
+with an associated dtype).  Array scalars differ from Python scalars, but
+for the most part they can be used interchangeably (the primary
+exception is for versions of Python older than v2.x, where integer array
+scalars cannot act as indices for lists and tuples).  There are some
+exceptions, such as when code requires very specific attributes of a scalar
+or when it checks specifically whether a value is a Python scalar. Generally,
+problems are easily fixed by explicitly converting array scalars
+to Python scalars, using the corresponding Python type function
+(e.g., <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#complex" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">complex</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>).</p>
+<p id="readar-node-0066">The primary advantage of using array scalars is that
+they preserve the array type (Python may not have a matching scalar type
+available, e.g. <code class="docutils literal notranslate"><span class="pre">int16</span></code>).  Therefore, the use of array scalars ensures
+identical behaviour between arrays and scalars, irrespective of whether the
+value is inside an array or not.  NumPy scalars also have many of the same
+methods arrays do.</p>
+</section>
+<section id="overflow-errors">
+<span id="id1"></span><h2 id="readar-node-0067">Overflow errors</h2>
+<p id="readar-node-0068">The fixed size of NumPy numeric types may cause overflow errors when a value
+requires more memory than available in the data type. For example,
+<a class="reference internal" href="../reference/generated/numpy.power.html#numpy.power" title="numpy.power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.power</span></code></a> evaluates <code class="docutils literal notranslate"><span class="pre">100</span> <span class="pre">**</span> <span class="pre">9</span></code> correctly for 64-bit integers,
+but gives -1486618624 (incorrect) for a 32-bit integer.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre id="readar-node-0069"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+<span class="go">1000000000000000000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="go">np.int32(-1486618624)</span>
+</pre></div>
+</div>
+<p id="readar-node-0070">The behaviour of NumPy and Python integer types differs significantly for
+integer overflows and may confuse users expecting NumPy integers to behave
+similar to Python’s <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>. Unlike NumPy, the size of Python’s
+<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> is flexible. This means Python integers may expand to accommodate
+any integer and will not overflow.</p>
+<p id="readar-node-0071">NumPy provides <a class="reference internal" href="../reference/generated/numpy.iinfo.html#numpy.iinfo" title="numpy.iinfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.iinfo</span></code></a> and <a class="reference internal" href="../reference/generated/numpy.finfo.html#numpy.finfo" title="numpy.finfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.finfo</span></code></a> to verify the
+minimum or maximum values of NumPy integer and floating point values
+respectively</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre id="readar-node-0072"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="c1"># Bounds of the default integer on this system.</span>
+<span class="go">iinfo(min=-9223372036854775808, max=9223372036854775807, dtype=int64)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="c1"># Bounds of a 32-bit integer</span>
+<span class="go">iinfo(min=-2147483648, max=2147483647, dtype=int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="c1"># Bounds of a 64-bit integer</span>
+<span class="go">iinfo(min=-9223372036854775808, max=9223372036854775807, dtype=int64)</span>
+</pre></div>
+</div>
+<p id="readar-node-0073">If 64-bit integers are still too small the result may be cast to a
+floating point number. Floating point numbers offer a larger, but inexact,
+range of possible values.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre id="readar-node-0074"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="c1"># Incorrect even with 64-bit int</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="go">1e+200</span>
+</pre></div>
+</div>
+</section>
+<section id="floating-point-precision">
+<h2 id="readar-node-0075">Floating point precision</h2>
+<p id="readar-node-0076">Many functions in NumPy, especially those in <a class="reference internal" href="../reference/routines.linalg.html#module-numpy.linalg" title="numpy.linalg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.linalg</span></code></a>, involve floating-point
+arithmetic, which can introduce small inaccuracies due to the way computers
+represent decimal numbers. For instance, when performing basic arithmetic operations
+involving floating-point numbers:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre id="readar-node-0077"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">-</span> <span class="mf">0.1</span>  <span class="c1"># This does not equal 0 due to floating-point precision</span>
+<span class="go">-2.7755575615628914e-17</span>
+</pre></div>
+</div>
+<p id="readar-node-0078">To handle such cases, it’s advisable to use functions like <em class="xref py py-obj">np.isclose</em> to compare
+values, rather than checking for exact equality:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre id="readar-node-0079"><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="mf">0.3</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">)</span>  <span class="c1"># Check for closeness to 0</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p id="readar-node-0080">In this example, <em class="xref py py-obj">np.isclose</em> accounts for the minor inaccuracies that occur in
+floating-point calculations by applying a relative tolerance, ensuring that results
+within a small threshold are considered close.</p>
+<p id="readar-node-0081">For information about precision in calculations, see <a class="reference external" href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">Floating-Point Arithmetic</a>.</p>
+</section>
+<section id="extended-precision">
+<h2 id="readar-node-0082">Extended precision</h2>
+<p id="readar-node-0083">Python’s floating-point numbers are usually 64-bit floating-point numbers,
+nearly equivalent to <a class="reference internal" href="../reference/arrays.scalars.html#numpy.float64" title="numpy.float64"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.float64</span></code></a>. In some unusual situations it may be
+useful to use floating-point numbers with more precision. Whether this
+is possible in numpy depends on the hardware and on the development
+environment: specifically, x86 machines provide hardware floating-point
+with 80-bit precision, and while most C compilers provide this as their
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code> type, MSVC (standard for Windows builds) makes
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code> identical to <code class="docutils literal notranslate"><span class="pre">double</span></code> (64 bits). NumPy makes the
+compiler’s <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code> available as <a class="reference internal" href="../reference/arrays.scalars.html#numpy.longdouble" title="numpy.longdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.longdouble</span></code></a> (and
+<code class="docutils literal notranslate"><span class="pre">np.clongdouble</span></code> for the complex numbers). You can find out what your
+numpy provides with <code class="docutils literal notranslate"><span class="pre">np.finfo(np.longdouble)</span></code>.</p>
+<p id="readar-node-0084">NumPy does not provide a dtype with more precision than C’s
+<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code>; in particular, the 128-bit IEEE quad precision
+data type (FORTRAN’s <code class="docutils literal notranslate"><span class="pre">REAL*16</span></code>) is not available.</p>
+<p id="readar-node-0085">For efficient memory alignment, <a class="reference internal" href="../reference/arrays.scalars.html#numpy.longdouble" title="numpy.longdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.longdouble</span></code></a> is usually stored
+padded with zero bits, either to 96 or 128 bits. Which is more efficient
+depends on hardware and development environment; typically on 32-bit
+systems they are padded to 96 bits, while on 64-bit systems they are
+typically padded to 128 bits. <code class="docutils literal notranslate"><span class="pre">np.longdouble</span></code> is padded to the system
+default; <code class="docutils literal notranslate"><span class="pre">np.float96</span></code> and <code class="docutils literal notranslate"><span class="pre">np.float128</span></code> are provided for users who
+want specific padding. In spite of the names, <code class="docutils literal notranslate"><span class="pre">np.float96</span></code> and
+<code class="docutils literal notranslate"><span class="pre">np.float128</span></code> provide only as much precision as <code class="docutils literal notranslate"><span class="pre">np.longdouble</span></code>,
+that is, 80 bits on most x86 machines and 64 bits in standard
+Windows builds.</p>
+<p id="readar-node-0086">Be warned that even if <a class="reference internal" href="../reference/arrays.scalars.html#numpy.longdouble" title="numpy.longdouble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.longdouble</span></code></a> offers more precision than
+python <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, it is easy to lose that extra precision, since
+python often forces values to pass through <code class="docutils literal notranslate"><span class="pre">float</span></code>. For example,
+the <code class="docutils literal notranslate"><span class="pre">%</span></code> formatting operator requires its arguments to be converted
+to standard python types, and it is therefore impossible to preserve
+extended precision even if many decimal places are requested. It can
+be useful to test your code with the value
+<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">np.finfo(np.longdouble).eps</span></code>.</p>
+</section>
+</section>
+</article>
+
+</div>
+<dialog id="pst-secondary-sidebar-modal"></dialog>
+
+</div>
+
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+
+
+
+</body>
+</html>

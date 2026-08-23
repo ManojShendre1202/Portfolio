@@ -1,0 +1,194 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: Inheritance is a concept from object-oriented databases. It opens up interesting new possibilities of database design.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: Let's create two tables: A table cities and a table capitals . Naturally, capitals are also cities, so you want some way to show the capitals implicitly when you list all cities. If you're really clever you might invent some scheme like this:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance: CREATE TABLE capitals (\n  name       text,\n  population real,\n  elevation  int,    -- (in ft)\n  state      char(2)\n);\n\nCREATE TABLE non_capitals (\n  name       text,\n  population real,\n  elevation  int     -- (in ft)\n);\n\nCREATE VIEW cities AS\n  SELECT name, population, elevation FROM capitals\n    UNION\n  SELECT name, population, elevation FROM non_capitals;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: This works OK as far as querying goes, but it gets ugly when you need to update several rows, for one thing.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: A better solution is this:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance: CREATE TABLE cities (\n  name       text,\n  population real,\n  elevation  int     -- (in ft)\n);\n\nCREATE TABLE capitals (\n  state      char(2) UNIQUE NOT NULL\n) INHERITS (cities);",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: In this case, a row of capitals inherits all columns ( name , population , and elevation ) from its parent , cities . The type of the column name is text , a native PostgreSQL type for variable length character strings. The capitals table has an additional column, state , which shows its state abbreviation. In PostgreSQL , a table can inherit from zero or more other tables.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: For example, the following query finds the names of all cities, including state capitals, that are located at an elevation over 500 feet:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance: SELECT name, elevation\n  FROM cities\n  WHERE elevation > 500;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: which returns:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance:    name    | elevation\n-----------+-----------\n Las Vegas |      2174\n Mariposa  |      1953\n Madison   |       845\n(3 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: On the other hand, the following query finds all the cities that are not state capitals and are situated at an elevation over 500 feet:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance: SELECT name, elevation\n    FROM ONLY cities\n    WHERE elevation > 500;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.6. Inheritance:    name    | elevation\n-----------+-----------\n Las Vegas |      2174\n Mariposa  |      1953\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.6. Inheritance: Here the ONLY before cities indicates that the query should be run over only the cities table, and not tables below cities in the inheritance hierarchy. Many of the commands that we have already discussed — SELECT , UPDATE , and DELETE — support this ONLY notation.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Note: Although inheritance is frequently useful, it has not been integrated with unique constraints or foreign keys, which limits its usefulness. See Section 5.11 for more detail.",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-inheritance",
+    "id": "tutorial-inheritance__node_0016"
+  }
+]

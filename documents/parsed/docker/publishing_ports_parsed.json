@@ -1,0 +1,424 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing and exposing ports — Explanation: If you've been following the guides so far, you understand that containers provide isolated processes for each component of your application. Each component - a React frontend, a Python API, and a Postgres database - runs in its own sandbox environment, completely isolated from everything else on your host machine. This isolation is great for security and managing dependencies, but it also means you can’t access them directly. For example, you can’t access the web app in your browser.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing and exposing ports — Explanation: That’s where port publishing comes in.",
+    "dom_ids": [
+      "readar-node-0001",
+      "explanation",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing ports: Publishing a port provides the ability to break through a little bit of networking isolation by setting up a forwarding rule. As an example, you can indicate that requests on your host’s port 8080 should be forwarded to the container’s port 80 . Publishing ports happens during container creation using the -p (or --publish ) flag with docker run . The syntax is:",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing ports: $ docker run -d -p HOST_PORT:CONTAINER_PORT nginx",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Publishing ports: - HOST_PORT : The port number on your host machine where you want to receive traffic - CONTAINER_PORT : The port number within the container that's listening for connections",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing ports: For example, to publish the container's port 80 to host port 8080 :",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing ports: $ docker run -d -p 8080:80 nginx",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing ports: Now, any traffic sent to port 8080 on your host machine will be forwarded to port 80 within the container.",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing ports: When a port is published, it's published to all network interfaces by default. This means any traffic that reaches your machine can access the published application. Be mindful of publishing databases or any sensitive information. Learn more about published ports here .",
+    "dom_ids": [
+      "publishing-ports",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing on a specific host IP: By default, published ports listen on all host interfaces ( 0.0.0.0 / :: ). You can bind to a single address by putting the IP first in the publish string:",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing on a specific host IP: $ docker run -d -p 127.0.0.1:8080:80 nginx",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing on a specific host IP: The full form is HOST_IP:HOST_PORT:CONTAINER_PORT .",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0012"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Publishing on a specific host IP: - HOST_IP : Optional. The host address to bind. Use 127.0.0.1 to keep the port local to the machine, or a specific interface IP so only that NIC accepts traffic. - HOST_PORT / CONTAINER_PORT : Same meaning as in HOST_PORT:CONTAINER_PORT .",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing on a specific host IP: In Compose, the same extended form works under ports :",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing on a specific host IP: services:\n  app:\n    image: docker/welcome-to-docker\n    ports:\n      - \"127.0.0.1:8080:80\"",
+    "dom_ids": [
+      "publishing-on-a-specific-host-ip",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing to ephemeral ports: At times, you may want to simply publish the port but don’t care which host port is used. In these cases, you can let Docker pick the port for you. To do so, simply omit the HOST_PORT configuration.",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing to ephemeral ports: For example, the following command will publish the container’s port 80 onto an ephemeral port on the host:",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing to ephemeral ports: $ docker run -p 80 nginx",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing to ephemeral ports: Once the container is running, using docker ps will show you the port that was chosen:",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing to ephemeral ports: docker ps\nCONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS          PORTS                    NAMES\na527355c9c53   nginx         \"/docker-entrypoint.…\"   4 seconds ago    Up 3 seconds    0.0.0.0:54772->80/tcp    romantic_williamson",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing to ephemeral ports: In this example, the app is exposed on the host at port 54772 .",
+    "dom_ids": [
+      "publishing-to-ephemeral-ports",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing all ports: When creating a container image, the EXPOSE instruction is used to indicate the packaged application will use the specified port. These ports aren't published by default.",
+    "dom_ids": [
+      "publishing-all-ports",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing all ports: With the -P or --publish-all flag, you can automatically publish all exposed ports to ephemeral ports. This is quite useful when you’re trying to avoid port conflicts in development or testing environments.",
+    "dom_ids": [
+      "publishing-all-ports",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Publishing all ports: For example, the following command will publish all of the exposed ports configured by the image:",
+    "dom_ids": [
+      "publishing-all-ports",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Publishing all ports: $ docker run -P nginx",
+    "dom_ids": [
+      "publishing-all-ports",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out: In this hands-on guide, you'll learn how to publish container ports using both the CLI and Docker Compose for deploying a web application.",
+    "dom_ids": [
+      "try-it-out",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use the Docker CLI: In this step, you will run a container and publish its port using the Docker CLI.",
+    "dom_ids": [
+      "use-the-docker-cli",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0027"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use the Docker CLI: - Download and install Docker Desktop. - In a terminal, run the following command to start a new container: The first 8080 refers to the host port. This is the port on your local machine that will be used to access the application running inside the container. The second 80 refers to the container port. This is the port that the application inside the container listens on for incoming connections. Hence, the command binds to port 8080 of the host to port 80 on the container system. - Verify the published port by going to the Containers view of the Docker Desktop Dashboard. - Open the website by either selecting the link in the Port(s) column of your container or visiting http://localhost:8080 in your browser.",
+    "dom_ids": [
+      "use-the-docker-cli",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use the Docker CLI: $ docker run -d -p 8080:80 docker/welcome-to-docker",
+    "dom_ids": [
+      "use-the-docker-cli",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use Docker Compose: This example will launch the same application using Docker Compose:",
+    "dom_ids": [
+      "use-docker-compose",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use Docker Compose: - Create a new directory and inside that directory, create a compose.yaml file with the following contents: The ports configuration accepts a few different forms of syntax for the port definition. In this case, you’re using the same HOST_PORT:CONTAINER_PORT used in the docker run command. - Open a terminal and navigate to the directory you created in the previous step. - Use the docker compose up command to start the application. - Open your browser to http://localhost:8080 .",
+    "dom_ids": [
+      "use-docker-compose",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use Docker Compose: services:\n  app:\n    image: docker/welcome-to-docker\n    ports:\n      - 8080:80",
+    "dom_ids": [
+      "use-docker-compose",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Additional resources: If you’d like to dive in deeper on this topic, be sure to check out the following resources:",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional resources: - docker container port CLI reference - Published ports",
+    "dom_ids": [
+      "additional-resources",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Now that you understand how to publish and expose ports, you're ready to learn how to override the container defaults using the docker run command.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "publishing_ports",
+    "id": "publishing_ports__node_0035"
+  }
+]

@@ -1,0 +1,2442 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Messages are the fundamental unit of context for models in LangChain. They represent the input and output of models, carrying both the content and metadata needed to represent the state of a conversation when interacting with an LLM.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "messages",
+    "id": "messages__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Messages are objects that contain:",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "messages",
+    "id": "messages__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Role - Identifies the message type (e.g. system , user ) - Content - Represents the actual content of the message (like text, images, audio, documents, etc.) - Metadata - Optional fields such as response information, message IDs, and token usage",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "messages",
+    "id": "messages__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LangChain provides a standard message type that works across all model providers, ensuring consistent behavior regardless of the model being called.",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "messages",
+    "id": "messages__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic usage: The simplest way to use messages is to create message objects and pass them to a model when invoking .",
+    "dom_ids": [
+      "basic-usage",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Basic usage: from langchain.chat_models import init_chat_model\nfrom langchain.messages import HumanMessage, AIMessage, SystemMessage\n\nmodel = init_chat_model(\"gpt-5-nano\")\n\nsystem_msg = SystemMessage(\"You are a helpful assistant.\")\nhuman_msg = HumanMessage(\"Hello, how are you?\")\n\n# Use with chat models\nmessages = [system_msg, human_msg]\nresponse = model.invoke(messages)  # Returns AIMessage",
+    "dom_ids": [
+      "basic-usage",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic usage: Multi-turn agents accumulate long message histories. LangSmith records each turn, tool result, and model response so you can inspect the full conversation. Follow the tracing quickstart to enable tracing.",
+    "dom_ids": [
+      "basic-usage",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Basic usage: We recommend you also set up LangSmith Engine which monitors your traces, detects issues, and proposes fixes.",
+    "dom_ids": [
+      "basic-usage",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Text prompts: Text prompts are strings - ideal for straightforward generation tasks where you don’t need to retain conversation history.",
+    "dom_ids": [
+      "text-prompts",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Text prompts: response = model.invoke(\"Write a haiku about spring\")",
+    "dom_ids": [
+      "text-prompts",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Text prompts: Use text prompts when:",
+    "dom_ids": [
+      "text-prompts",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0011"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Text prompts: - You have a single, standalone request - You don’t need conversation history - You want minimal code complexity",
+    "dom_ids": [
+      "text-prompts",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message prompts: Alternatively, you can pass in a list of messages to the model by providing a list of message objects.",
+    "dom_ids": [
+      "message-prompts",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Message prompts: from langchain.messages import SystemMessage, HumanMessage, AIMessage\n\nmessages = [\n    SystemMessage(\"You are a poetry expert\"),\n    HumanMessage(\"Write a haiku about spring\"),\n    AIMessage(\"Cherry blossoms bloom...\")\n]\nresponse = model.invoke(messages)",
+    "dom_ids": [
+      "message-prompts",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message prompts: Use message prompts when:",
+    "dom_ids": [
+      "message-prompts",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Message prompts: - Managing multi-turn conversations - Working with multimodal content (images, audio, files) - Including system instructions",
+    "dom_ids": [
+      "message-prompts",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Dictionary format: You can also specify messages directly in OpenAI chat completions format.",
+    "dom_ids": [
+      "dictionary-format",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Dictionary format: messages = [\n    {\"role\": \"system\", \"content\": \"You are a poetry expert\"},\n    {\"role\": \"user\", \"content\": \"Write a haiku about spring\"},\n    {\"role\": \"assistant\", \"content\": \"Cherry blossoms bloom...\"}\n]\nresponse = model.invoke(messages)",
+    "dom_ids": [
+      "dictionary-format",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0018"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Message types: - System message - Tells the model how to behave and provide context for interactions - Human message - Represents user input and interactions with the model - AI message - Responses generated by the model, including text content, tool calls, and metadata - Tool message - Represents the outputs of tool calls",
+    "dom_ids": [
+      "message-types",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "System message: A SystemMessage represent an initial set of instructions that primes the model’s behavior. You can use a system message to set the tone, define the model’s role, and establish guidelines for responses.",
+    "dom_ids": [
+      "system-message",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System message: system_msg = SystemMessage(\"You are a helpful coding assistant.\")\n\nmessages = [\n    system_msg,\n    HumanMessage(\"How do I create a REST API?\")\n]\nresponse = model.invoke(messages)",
+    "dom_ids": [
+      "system-message",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "System message: from langchain.messages import SystemMessage, HumanMessage\n\nsystem_msg = SystemMessage(\"\"\"\nYou are a senior Python developer with expertise in web frameworks.\nAlways provide code examples and explain your reasoning.\nBe concise but thorough in your explanations.\n\"\"\")\n\nmessages = [\n    system_msg,\n    HumanMessage(\"How do I create a REST API?\")\n]\nresponse = model.invoke(messages)",
+    "dom_ids": [
+      "system-message",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Human message: A HumanMessage represents user input and interactions. They can contain text, images, audio, files, and any other amount of multimodal content .",
+    "dom_ids": [
+      "human-message",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Text content: response = model.invoke([\n  HumanMessage(\"What is machine learning?\")\n])",
+    "dom_ids": [
+      "text-content",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Text content: # Using a string is a shortcut for a single HumanMessage\nresponse = model.invoke(\"What is machine learning?\")",
+    "dom_ids": [
+      "text-content",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Message metadata: human_msg = HumanMessage(\n    content=\"Hello!\",\n    name=\"alice\",  # Optional: identify different users\n    id=\"msg_123\",  # Optional: unique identifier for tracing\n)",
+    "dom_ids": [
+      "message-metadata",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message metadata: The name field behavior varies by provider—some use it for user identification, others ignore it. To check, refer to the model provider’s reference .",
+    "dom_ids": [
+      "message-metadata",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: An AIMessage represents the output of a model invocation. They can include multimodal data, tool calls, and provider-specific metadata that you can later access.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "AI message: response = model.invoke(\"Explain AI\")\nprint(type(response))  # <class 'langchain.messages.AIMessage'>",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: AIMessage objects are returned by the model when calling it, which contains all of the associated metadata in the response.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: Providers weigh/contextualize types of messages differently, which means it is sometimes helpful to manually create a new AIMessage object and insert it into the message history as if it came from the model.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "AI message: from langchain.messages import AIMessage, SystemMessage, HumanMessage\n\n# Create an AI message manually (e.g., for conversation history)\nai_msg = AIMessage(\"I'd be happy to help you with that question!\")\n\n# Add to conversation history\nmessages = [\n    SystemMessage(\"You are a helpful assistant\"),\n    HumanMessage(\"Can you help me?\"),\n    ai_msg,  # Insert as if it came from the model\n    HumanMessage(\"Great! What's 2+2?\")\n]\n\nresponse = model.invoke(messages)",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: Attributes",
+    "dom_ids": [
+      "ai-message",
+      "attributes-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The text content of the message.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The raw content of the message.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The standardized content blocks of the message.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The tool calls made by the model.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: Empty if no tools are called.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: A unique identifier for the message (either automatically generated by LangChain or returned in the provider response)",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The usage metadata of the message, which can contain token counts when available.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI message: The response metadata of the message.",
+    "dom_ids": [
+      "ai-message",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calls: When models make tool calls , they’re included in the AIMessage :",
+    "dom_ids": [
+      "tool-calls",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool calls: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"gpt-5-nano\")\n\ndef get_weather(location: str) -> str:\n    \"\"\"Get the weather at a location.\"\"\"\n    ...\n\nmodel_with_tools = model.bind_tools([get_weather])\nresponse = model_with_tools.invoke(\"What's the weather in Paris?\")\n\nfor tool_call in response.tool_calls:\n    print(f\"Tool: {tool_call['name']}\")\n    print(f\"Args: {tool_call['args']}\")\n    print(f\"ID: {tool_call['id']}\")",
+    "dom_ids": [
+      "tool-calls",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool calls: Other structured data, such as reasoning or citations, can also appear in message content .",
+    "dom_ids": [
+      "tool-calls",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Token usage: An AIMessage can hold token counts and other usage metadata in its usage_metadata field:",
+    "dom_ids": [
+      "token-usage",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Token usage: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"gpt-5-nano\")\n\nresponse = model.invoke(\"Hello!\")\nresponse.usage_metadata",
+    "dom_ids": [
+      "token-usage",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Token usage: {'input_tokens': 8,\n 'output_tokens': 304,\n 'total_tokens': 312,\n 'input_token_details': {'audio': 0, 'cache_read': 0},\n 'output_token_details': {'audio': 0, 'reasoning': 256}}",
+    "dom_ids": [
+      "token-usage",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Token usage: See UsageMetadata for details.",
+    "dom_ids": [
+      "token-usage",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Streaming and chunks: During streaming, you’ll receive AIMessageChunk objects that can be combined into a full message object:",
+    "dom_ids": [
+      "streaming-and-chunks",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Streaming and chunks: chunks = []\nfull_message = None\nfor chunk in model.stream(\"Hi\"):\n    chunks.append(chunk)\n    print(chunk.text)\n    full_message = chunk if full_message is None else full_message + chunk",
+    "dom_ids": [
+      "streaming-and-chunks",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Streaming and chunks: Learn more:",
+    "dom_ids": [
+      "streaming-and-chunks",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0051"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Streaming and chunks: - Streaming tokens from chat models - Streaming tokens and/or steps from agents",
+    "dom_ids": [
+      "streaming-and-chunks",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: For models that support tool calling , AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: Tools can generate ToolMessage objects directly. Below, we show a simple example. Read more in the tools guide .",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool message: from langchain.messages import AIMessage\nfrom langchain.messages import ToolMessage\n\n# After a model makes a tool call\n# (Here, we demonstrate manually creating the messages for brevity)\nai_message = AIMessage(\n    content=[],\n    tool_calls=[{\n        \"name\": \"get_weather\",\n        \"args\": {\"location\": \"San Francisco\"},\n        \"id\": \"call_123\"\n    }]\n)\n\n# Execute tool and create result message\nweather_result = \"Sunny, 72°F\"\ntool_message = ToolMessage(\n    content=weather_result,\n    tool_call_id=\"call_123\"  # Must match the call ID\n)\n\n# Continue conversation\nmessages = [\n    HumanMessage(\"What's the weather in San Francisco?\"),\n    ai_message,  # Model's tool call\n    tool_message,  # Tool execution result\n]\nresponse = model.invoke(messages)  # Model processes the result",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: Attributes",
+    "dom_ids": [
+      "tool-message",
+      "attributes-1-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: The stringified output of the tool call.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage .",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: The name of the tool that was called.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: Additional data not sent to the model but can be accessed programmatically.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: The artifact field stores supplementary data that won’t be sent to the model but can be accessed programmatically. This is useful for storing raw results, debugging information, or data for downstream processing without cluttering the model’s context.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: Example: Using artifact for retrieval metadata",
+    "dom_ids": [
+      "tool-message",
+      "example-using-artifact-for-retrieval-metadata-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: For example, a retrieval tool could retrieve a passage from a document for reference by a model. Where message content contains text that the model will reference, an artifact can contain document identifiers or other metadata that an application can use (e.g., to render a page). See example below:",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tool message: from langchain.messages import ToolMessage\n\n# Sent to model\nmessage_content = \"It was the best of times, it was the worst of times.\"\n\n# Artifact available downstream\nartifact = {\"document_id\": \"doc_123\", \"page\": 0}\n\ntool_message = ToolMessage(\n    content=message_content,\n    tool_call_id=\"call_123\",\n    name=\"search_books\",\n    artifact=artifact,\n)",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tool message: See the RAG tutorial for an end-to-end example of building retrieval agents with LangChain.",
+    "dom_ids": [
+      "tool-message",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: You can think of a message’s content as the payload of data that gets sent to the model. Messages have a content attribute that is loosely-typed, supporting strings and lists of untyped objects (e.g., dictionaries). This allows support for provider-native structures directly in LangChain chat models, such as multimodal content and other data.",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0066"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: Separately, LangChain provides dedicated content types for text, reasoning, citations, multi-modal data, server-side tool calls, and other message content. See content blocks below.",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: LangChain chat models accept message content in the content attribute.",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: This may contain either:",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0069"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Message content: - A string - A list of content blocks in a provider-native format - A list of LangChain’s standard content blocks",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: See below for an example using multimodal inputs:",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Message content: from langchain.messages import HumanMessage\n\n# String content\nhuman_message = HumanMessage(\"Hello, how are you?\")\n\n# Provider-native format (e.g., OpenAI)\nhuman_message = HumanMessage(content=[\n    {\"type\": \"text\", \"text\": \"Hello, how are you?\"},\n    {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://example.com/image.jpg\"}}\n])\n\n# List of standard content blocks\nhuman_message = HumanMessage(content_blocks=[\n    {\"type\": \"text\", \"text\": \"Hello, how are you?\"},\n    {\"type\": \"image\", \"url\": \"https://example.com/image.jpg\"},\n])",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Message content: Specifying content_blocks when initializing a message will still populate message content , but provides a type-safe interface for doing so.",
+    "dom_ids": [
+      "message-content",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: LangChain provides a standard representation for message content that works across providers.",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: Message objects implement a content_blocks property that will lazily parse the content attribute into a standard, type-safe representation. For example, messages generated from ChatAnthropic or ChatOpenAI will include thinking or reasoning blocks in the format of the respective provider, but can be lazily parsed into a consistent ReasoningContentBlock representation:",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0075"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Standard content blocks: - Anthropic - OpenAI",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Standard content blocks: from langchain.messages import AIMessage\n\nmessage = AIMessage(\n    content=[\n        {\"type\": \"thinking\", \"thinking\": \"...\", \"signature\": \"WaUjzkyp...\"},\n        {\"type\": \"text\", \"text\": \"...\"},\n    ],\n    response_metadata={\"model_provider\": \"anthropic\"}\n)\nmessage.content_blocks",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0077"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Standard content blocks: [{'type': 'reasoning',\n  'reasoning': '...',\n  'extras': {'signature': 'WaUjzkyp...'}},\n {'type': 'text', 'text': '...'}]",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0078"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Standard content blocks: from langchain.messages import AIMessage\n\nmessage = AIMessage(\n    content=[\n        {\n            \"type\": \"reasoning\",\n            \"id\": \"rs_abc123\",\n            \"summary\": [\n                {\"type\": \"summary_text\", \"text\": \"summary 1\"},\n                {\"type\": \"summary_text\", \"text\": \"summary 2\"},\n            ],\n        },\n        {\"type\": \"text\", \"text\": \"...\", \"id\": \"msg_abc123\"},\n    ],\n    response_metadata={\"model_provider\": \"openai\"}\n)\nmessage.content_blocks",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0079"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Standard content blocks: [{'type': 'reasoning', 'id': 'rs_abc123', 'reasoning': 'summary 1'},\n {'type': 'reasoning', 'id': 'rs_abc123', 'reasoning': 'summary 2'},\n {'type': 'text', 'text': '...', 'id': 'msg_abc123'}]",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0080"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: See the integrations guides to get started with the inference provider of your choice.",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: Serializing standard content",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: If an application outside of LangChain needs access to the standard content block representation, you can opt-in to storing content blocks in message content.",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Standard content blocks: To do this, you can set the LC_OUTPUT_VERSION environment variable to v1 . Or, initialize any chat model with output_version=\"v1\" :",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0084"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Standard content blocks: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\"gpt-5-nano\", output_version=\"v1\")",
+    "dom_ids": [
+      "standard-content-blocks",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multimodal: Multimodality refers to the ability to work with data that comes in different forms, such as text, audio, images, and video. LangChain includes standard types for these data that can be used across providers.",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multimodal: Chat models can accept multimodal data as input and generate it as output. Below we show short examples of input messages featuring multimodal data.",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multimodal: Extra keys can be included top-level in the content block or nested in \"extras\": {\"key\": value} .",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0088"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multimodal: OpenAI , for example, requires a filename for PDFs. See the provider page for your chosen model for specifics.",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0089"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multimodal: # From URL\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this image.\"},\n        {\"type\": \"image\", \"url\": \"https://example.com/path/to/image.jpg\"},\n    ]\n}\n\n# From base64 data\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this image.\"},\n        {\n            \"type\": \"image\",\n            \"base64\": \"AAAAIGZ0eXBtcDQyAAAAAGlzb21tcDQyAAACAGlzb2...\",\n            \"mime_type\": \"image/jpeg\",\n        },\n    ]\n}\n\n# From provider-managed File ID\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this image.\"},\n        {\"type\": \"image\", \"file_id\": \"file-abc123\"},\n    ]\n}",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0090"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multimodal: # From URL\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this document.\"},\n        {\"type\": \"file\", \"url\": \"https://example.com/path/to/document.pdf\"},\n    ]\n}\n\n# From base64 data\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this document.\"},\n        {\n            \"type\": \"file\",\n            \"base64\": \"AAAAIGZ0eXBtcDQyAAAAAGlzb21tcDQyAAACAGlzb2...\",\n            \"mime_type\": \"application/pdf\",\n        },\n    ]\n}\n\n# From provider-managed File ID\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this document.\"},\n        {\"type\": \"file\", \"file_id\": \"file-abc123\"},\n    ]\n}",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0091"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multimodal: # From base64 data\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this audio.\"},\n        {\n            \"type\": \"audio\",\n            \"base64\": \"AAAAIGZ0eXBtcDQyAAAAAGlzb21tcDQyAAACAGlzb2...\",\n            \"mime_type\": \"audio/wav\",\n        },\n    ]\n}\n\n# From provider-managed File ID\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this audio.\"},\n        {\"type\": \"audio\", \"file_id\": \"file-abc123\"},\n    ]\n}",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0092"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multimodal: # From base64 data\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this video.\"},\n        {\n            \"type\": \"video\",\n            \"base64\": \"AAAAIGZ0eXBtcDQyAAAAAGlzb21tcDQyAAACAGlzb2...\",\n            \"mime_type\": \"video/mp4\",\n        },\n    ]\n}\n\n# From provider-managed File ID\nmessage = {\n    \"role\": \"user\",\n    \"content\": [\n        {\"type\": \"text\", \"text\": \"Describe the content of this video.\"},\n        {\"type\": \"video\", \"file_id\": \"file-abc123\"},\n    ]\n}",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0093"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multimodal: Not all models support all file types. Check the model provider’s reference for supported formats and size limits.",
+    "dom_ids": [
+      "multimodal",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0094"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Content blocks are represented (either when creating a message or accessing the content_blocks property) as a list of typed dictionaries. Each item in the list must adhere to one of the following block types:",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0095"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Core",
+    "dom_ids": [
+      "content-block-reference",
+      "core-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0096"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: TextContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "textcontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0097"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Standard text output",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0098"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"text\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0099"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: The text content",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0100"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: List of annotations for the text",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0101"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Additional provider-specific data",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0102"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Example:",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0103"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Content block reference: {\n    \"type\": \"text\",\n    \"text\": \"Hello world\",\n    \"annotations\": []\n}",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0104"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ReasoningContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "reasoningcontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0105"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Model reasoning steps",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0106"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"reasoning\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0107"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: The reasoning content",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0108"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Additional provider-specific data",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Example:",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0110"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Content block reference: {\n    \"type\": \"reasoning\",\n    \"reasoning\": \"The user is asking about...\",\n    \"extras\": {\"signature\": \"abc123\"},\n}",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Multimodal",
+    "dom_ids": [
+      "content-block-reference",
+      "multimodal-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ImageContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "imagecontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0113"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Image data",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0114"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"image\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0115"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: URL pointing to the image location.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0116"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Base64-encoded image data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0135"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0117"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Unique identifier for this content block (either generated by the provider or by LangChain).",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0118"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Image MIME type (e.g., image/jpeg , image/png ). Required for base64 data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0119"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: AudioContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "audiocontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Audio data",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0121"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"audio\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0122"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: URL pointing to the audio location.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0141"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0123"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Base64-encoded audio data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Unique identifier for this content block (either generated by the provider or by LangChain).",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0125"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Audio MIME type (e.g., audio/mpeg , audio/wav ). Required for base64 data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0126"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: VideoContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "videocontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0127"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Video data",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0128"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"video\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0147"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0129"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: URL pointing to the video location.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0148"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0130"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Base64-encoded video data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0131"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Unique identifier for this content block (either generated by the provider or by LangChain).",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0150"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0132"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Video MIME type (e.g., video/mp4 , video/webm ). Required for base64 data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0151"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0133"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: FileContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "filecontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0134"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Generic files (PDF, etc)",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0153"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0135"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"file\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0154"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0136"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: URL pointing to the file location.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0155"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0137"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Base64-encoded file data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0156"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0138"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Unique identifier for this content block (either generated by the provider or by LangChain).",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0157"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0139"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: File MIME type (e.g., application/pdf ). Required for base64 data.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0158"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0140"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: PlainTextContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "plaintextcontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0141"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Document text ( .txt , .md )",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0160"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0142"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"text-plain\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0161"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0143"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: The text content",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0162"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0144"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: MIME type of the text (e.g., text/plain , text/markdown )",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0163"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0145"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Tool Calling",
+    "dom_ids": [
+      "content-block-reference",
+      "tool-calling-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0146"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ToolCall",
+    "dom_ids": [
+      "content-block-reference",
+      "toolcall-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0147"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Function calls",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0166"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0148"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"tool_call\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0167"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0149"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Name of the tool to call",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0168"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0150"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Arguments to pass to the tool",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0169"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0151"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Unique identifier for this tool call",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0170"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0152"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Example:",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0171"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0153"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Content block reference: {\n    \"type\": \"tool_call\",\n    \"name\": \"search\",\n    \"args\": {\"query\": \"weather\"},\n    \"id\": \"call_123\"\n}",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0172"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0154"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ToolCallChunk",
+    "dom_ids": [
+      "content-block-reference",
+      "toolcallchunk-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0155"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Streaming tool call fragments",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0174"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0156"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"tool_call_chunk\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0175"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0157"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Name of the tool being called",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0176"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0158"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Partial tool arguments (may be incomplete JSON)",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0177"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0159"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Tool call identifier",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0178"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0160"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Position of this chunk in the stream",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0179"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0161"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: InvalidToolCall",
+    "dom_ids": [
+      "content-block-reference",
+      "invalidtoolcall-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0162"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Malformed calls, intended to catch JSON parsing errors.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0181"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0163"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"invalid_tool_call\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0182"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0164"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Name of the tool that failed to be called",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0183"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0165"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Arguments to pass to the tool",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0184"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0166"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Description of what went wrong",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0185"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0167"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Server-Side Tool Execution",
+    "dom_ids": [
+      "content-block-reference",
+      "server-side-tool-execution-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0168"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ServerToolCall",
+    "dom_ids": [
+      "content-block-reference",
+      "servertoolcall-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0169"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Tool call that is executed server-side.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0188"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0170"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"server_tool_call\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0189"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0171"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: An identifier associated with the tool call.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0190"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0172"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: The name of the tool to be called.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0191"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0173"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Partial tool arguments (may be incomplete JSON)",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0192"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0174"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ServerToolCallChunk",
+    "dom_ids": [
+      "content-block-reference",
+      "servertoolcallchunk-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0175"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Streaming server-side tool call fragments",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0194"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0176"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"server_tool_call_chunk\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0195"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0177"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: An identifier associated with the tool call.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0196"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0178"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Name of the tool being called",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0197"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0179"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Partial tool arguments (may be incomplete JSON)",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0198"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0180"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Position of this chunk in the stream",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0199"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0181"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: ServerToolResult",
+    "dom_ids": [
+      "content-block-reference",
+      "servertoolresult-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0182"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Search results",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0201"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0183"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"server_tool_result\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0202"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0184"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Identifier of the corresponding server tool call.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0203"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0185"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Identifier associated with the server tool result.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0204"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0186"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Execution status of the server-side tool. \"success\" or \"error\" .",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0205"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0187"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Output of the executed tool.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0206"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0188"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Provider-Specific Blocks",
+    "dom_ids": [
+      "content-block-reference",
+      "provider-specific-blocks-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0189"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: NonStandardContentBlock",
+    "dom_ids": [
+      "content-block-reference",
+      "nonstandardcontentblock-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0190"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Purpose: Provider-specific escape hatch",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0209"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0191"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Always \"non_standard\"",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0210"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0192"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Provider-specific data structure",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0211"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0193"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Usage: For experimental or provider-unique features",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0212"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0194"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Additional provider-specific content types may be found within the reference documentation of each model provider.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0213"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0195"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: View the canonical type definitions in the API reference .",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0214"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0196"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Content blocks were introduced as a new property on messages in LangChain v1 to standardize content formats across providers while maintaining backward compatibility with existing code.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0215"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0197"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Content block reference: Content blocks are not a replacement for the content property, but rather a new property that can be used to access the content of a message in a standardized format.",
+    "dom_ids": [
+      "content-block-reference",
+      "readar-node-0216"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0198"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Serialization: You can serialize messages to plain objects for storage and deserialize back to message instances. This is useful for persisting conversation history and resuming sessions.",
+    "dom_ids": [
+      "serialization",
+      "readar-node-0218"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0199"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Serialization: from langchain.messages import HumanMessage\nfrom langchain_core.load import dumpd, load\n\nmessage = HumanMessage(\"What is the capital of France?\")\n\n# Serialize to a plain dict\nserialized = dumpd(message)\n\n# Deserialize back to a message object\nrestored = load(serialized)",
+    "dom_ids": [
+      "serialization",
+      "readar-node-0219"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0200"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Serialization: load() instantiates Python objects and can trigger side effects during deserialization. Never call load() on data from an untrusted or unauthenticated source.",
+    "dom_ids": [
+      "serialization",
+      "readar-node-0220"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0201"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use with chat models: Chat models accept a sequence of message objects as input and return an AIMessage as output. Interactions are often stateless, so that a simple conversational loop involves invoking a model with a growing list of messages.",
+    "dom_ids": [
+      "use-with-chat-models",
+      "readar-node-0222"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0202"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use with chat models: Refer to the below guides to learn more:",
+    "dom_ids": [
+      "use-with-chat-models",
+      "readar-node-0223"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0203"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use with chat models: - Built-in features for persisting and managing conversation histories - Strategies for managing context windows, including trimming and summarizing messages",
+    "dom_ids": [
+      "use-with-chat-models",
+      "readar-node-0224"
+    ],
+    "merge": "heading_fold",
+    "chapter": "messages",
+    "id": "messages__node_0204"
+  }
+]

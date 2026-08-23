@@ -104,7 +104,7 @@ async def _handle(websocket) -> None:
 
 
 async def _serve() -> None:
-    # asyncio.to_thread() calls inside readar_chat_engine.py (embed, rerank, sync
+    # asyncio.to_thread() calls inside readar_chat_engine.py (embed, retrieve, sync
     # Django ORM writes) run on this loop's default executor. Sized generously
     # above cpu_count since this workload is I/O-bound (waiting on Gemini's
     # network round-trip dominates total latency) rather than CPU-bound, so

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 2.7. Aggregate Functions</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-agg.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="2.7. Aggregate Functions" property="og:title"/>
+<meta content="2.7.&amp;nbsp;Aggregate Functions # Like most other relational database products, PostgreSQL supports aggregate functions. An aggregate function computes a single result …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-agg.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-agg.html" title="PostgreSQL 18 - 2.7. Aggregate Functions">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-agg.html" title="PostgreSQL 18 - 2.7. Aggregate Functions">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-agg.html" title="PostgreSQL 17 - 2.7. Aggregate Functions">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-agg.html" title="PostgreSQL 16 - 2.7. Aggregate Functions">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-agg.html" title="PostgreSQL 15 - 2.7. Aggregate Functions">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-agg.html" title="PostgreSQL 14 - 2.7. Aggregate Functions">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-agg.html" rel="nofollow" title="PostgreSQL 19 - 2.7. Aggregate Functions">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-agg.html" rel="nofollow" title="PostgreSQL devel - 2.7. Aggregate Functions">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-agg.html" rel="nofollow" title="PostgreSQL 13 - 2.7. Aggregate Functions">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-agg.html" rel="nofollow" title="PostgreSQL 12 - 2.7. Aggregate Functions">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-agg.html" rel="nofollow" title="PostgreSQL 11 - 2.7. Aggregate Functions">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-agg.html" rel="nofollow" title="PostgreSQL 10 - 2.7. Aggregate Functions">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.6 - 2.7. Aggregate Functions">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.5 - 2.7. Aggregate Functions">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.4 - 2.7. Aggregate Functions">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.3 - 2.7. Aggregate Functions">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.2 - 2.7. Aggregate Functions">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.1 - 2.7. Aggregate Functions">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-agg.html" rel="nofollow" title="PostgreSQL 9.0 - 2.7. Aggregate Functions">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-agg.html" rel="nofollow" title="PostgreSQL 8.4 - 2.7. Aggregate Functions">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-agg.html" rel="nofollow" title="PostgreSQL 8.3 - 2.7. Aggregate Functions">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-agg.html" rel="nofollow" title="PostgreSQL 8.2 - 2.7. Aggregate Functions">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-agg.html" rel="nofollow" title="PostgreSQL 8.1 - 2.7. Aggregate Functions">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-agg.html" rel="nofollow" title="PostgreSQL 8.0 - 2.7. Aggregate Functions">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-agg.html" rel="nofollow" title="PostgreSQL 7.4 - 2.7. Aggregate Functions">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-agg.html" rel="nofollow" title="PostgreSQL 7.3 - 2.7. Aggregate Functions">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-agg.html" rel="nofollow" title="PostgreSQL 7.2 - 2.7. Aggregate Functions">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-AGG">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">2.7. Aggregate Functions </h2>
+</div>
+</div>
+</div><a class="indexterm" id="id-1.4.4.8.2" name="id-1.4.4.8.2"></a>
+<p id="readar-node-0002">Like most other relational database products, <span class="productname">PostgreSQL</span> supports <em class="firstterm">aggregate functions</em>. An aggregate function computes a single result from multiple input rows. For example, there are aggregates to compute the <code class="function">count</code>, <code class="function">sum</code>, <code class="function">avg</code> (average), <code class="function">max</code> (maximum) and <code class="function">min</code> (minimum) over a set of rows.</p>
+<p id="readar-node-0003">As an example, we can find the highest low-temperature reading anywhere with:</p>
+<pre class="programlisting" id="readar-node-0004">
+SELECT max(temp_lo) FROM weather;
+</pre>
+<pre class="screen" id="readar-node-0005">
+ max
+-----
+  46
+(1 row)
+</pre>
+<p id="readar-node-0006"><a class="indexterm" id="id-1.4.4.8.5.1" name="id-1.4.4.8.5.1"></a> If we wanted to know what city (or cities) that reading occurred in, we might try:</p>
+<pre class="programlisting" id="readar-node-0007">
+SELECT city FROM weather WHERE temp_lo = max(temp_lo);     <em class="lineannotation"><span class="lineannotation">-- WRONG</span></em>
+</pre>
+<p id="readar-node-0008">but this will not work since the aggregate <code class="function">max</code> cannot be used in the <code class="literal">WHERE</code> clause. (This restriction exists because the <code class="literal">WHERE</code> clause determines which rows will be included in the aggregate calculation; so obviously it has to be evaluated before aggregate functions are computed.) However, as is often the case the query can be restated to accomplish the desired result, here by using a <em class="firstterm">subquery</em>:</p>
+<pre class="programlisting" id="readar-node-0009">
+SELECT city FROM weather
+    WHERE temp_lo = (SELECT max(temp_lo) FROM weather);
+</pre>
+<pre class="screen" id="readar-node-0010">
+     city
+---------------
+ San Francisco
+(1 row)
+</pre>
+<p id="readar-node-0011">This is OK because the subquery is an independent computation that computes its own aggregate separately from what is happening in the outer query.</p>
+<p id="readar-node-0012"><a class="indexterm" id="id-1.4.4.8.6.1" name="id-1.4.4.8.6.1"></a> <a class="indexterm" id="id-1.4.4.8.6.2" name="id-1.4.4.8.6.2"></a> Aggregates are also very useful in combination with <code class="literal">GROUP BY</code> clauses. For example, we can get the number of readings and the maximum low temperature observed in each city with:</p>
+<pre class="programlisting" id="readar-node-0013">
+SELECT city, count(*), max(temp_lo)
+    FROM weather
+    GROUP BY city;
+</pre>
+<pre class="screen" id="readar-node-0014">
+     city      | count | max
+---------------+-------+-----
+ Hayward       |     1 |  37
+ San Francisco |     2 |  46
+(2 rows)
+</pre>
+<p id="readar-node-0015">which gives us one output row per city. Each aggregate result is computed over the table rows matching that city. We can filter these grouped rows using <code class="literal">HAVING</code>:</p>
+<pre class="programlisting" id="readar-node-0016">
+SELECT city, count(*), max(temp_lo)
+    FROM weather
+    GROUP BY city
+    HAVING max(temp_lo) &lt; 40;
+</pre>
+<pre class="screen" id="readar-node-0017">
+  city   | count | max
+---------+-------+-----
+ Hayward |     1 |  37
+(1 row)
+</pre>
+<p id="readar-node-0018">which gives us the same results for only the cities that have all <code class="structfield">temp_lo</code> values below 40. Finally, if we only care about cities whose names begin with <span class="quote">“<span class="quote"><code class="literal">S</code></span>”</span>, we might do:</p>
+<pre class="programlisting" id="readar-node-0019">
+SELECT city, count(*), max(temp_lo)
+    FROM weather
+    WHERE city LIKE 'S%'            -- <span id="co.tutorial-agg-like"></span>(1)
+    GROUP BY city;
+</pre>
+<pre class="screen" id="readar-node-0020">
+     city      | count | max
+---------------+-------+-----
+ San Francisco |     2 |  46
+(1 row)
+</pre>
+<div class="calloutlist">
+<table border="0" summary="Callout list">
+<tr id="readar-node-0021">
+<td align="left" valign="top" width="5%">
+<p><a href="#co.tutorial-agg-like">(1)</a></p>
+</td>
+<td align="left" valign="top">
+<p>The <code class="literal">LIKE</code> operator does pattern matching and is explained in <a class="xref" href="functions-matching.html" title="9.7. Pattern Matching">Section 9.7</a>.</p>
+</td>
+</tr>
+</table>
+</div>
+<p id="readar-node-0022">It is important to understand the interaction between aggregates and <acronym class="acronym">SQL</acronym>'s <code class="literal">WHERE</code> and <code class="literal">HAVING</code> clauses. The fundamental difference between <code class="literal">WHERE</code> and <code class="literal">HAVING</code> is this: <code class="literal">WHERE</code> selects input rows before groups and aggregates are computed (thus, it controls which rows go into the aggregate computation), whereas <code class="literal">HAVING</code> selects group rows after groups and aggregates are computed. Thus, the <code class="literal">WHERE</code> clause must not contain aggregate functions; it makes no sense to try to use an aggregate to determine which rows will be inputs to the aggregates. On the other hand, the <code class="literal">HAVING</code> clause always contains aggregate functions. (Strictly speaking, you are allowed to write a <code class="literal">HAVING</code> clause that doesn't use aggregates, but it's seldom useful. The same condition could be used more efficiently at the <code class="literal">WHERE</code> stage.)</p>
+<p id="readar-node-0023">In the previous example, we can apply the city name restriction in <code class="literal">WHERE</code>, since it needs no aggregate. This is more efficient than adding the restriction to <code class="literal">HAVING</code>, because we avoid doing the grouping and aggregate calculations for all rows that fail the <code class="literal">WHERE</code> check.</p>
+<p id="readar-node-0024">Another way to select the rows that go into an aggregate computation is to use <code class="literal">FILTER</code>, which is a per-aggregate option:</p>
+<pre class="programlisting" id="readar-node-0025">
+SELECT city, count(*) FILTER (WHERE temp_lo &lt; 45), max(temp_lo)
+    FROM weather
+    GROUP BY city;
+</pre>
+<pre class="screen" id="readar-node-0026">
+     city      | count | max
+---------------+-------+-----
+ Hayward       |     1 |  37
+ San Francisco |     1 |  46
+(2 rows)
+</pre>
+<p id="readar-node-0027"><code class="literal">FILTER</code> is much like <code class="literal">WHERE</code>, except that it removes rows only from the input of the particular aggregate function that it is attached to. Here, the <code class="literal">count</code> aggregate counts only rows with <code class="literal">temp_lo</code> below 45; but the <code class="literal">max</code> aggregate is still applied to all rows, so it still finds the reading of 46.</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

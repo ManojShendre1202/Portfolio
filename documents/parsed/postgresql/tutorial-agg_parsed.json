@@ -1,0 +1,314 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: Like most other relational database products, PostgreSQL supports aggregate functions . An aggregate function computes a single result from multiple input rows. For example, there are aggregates to compute the count , sum , avg (average), max (maximum) and min (minimum) over a set of rows.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: As an example, we can find the highest low-temperature reading anywhere with:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT max(temp_lo) FROM weather;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:  max\n-----\n  46\n(1 row)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: If we wanted to know what city (or cities) that reading occurred in, we might try:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city FROM weather WHERE temp_lo = max(temp_lo);     -- WRONG",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: but this will not work since the aggregate max cannot be used in the WHERE clause. (This restriction exists because the WHERE clause determines which rows will be included in the aggregate calculation; so obviously it has to be evaluated before aggregate functions are computed.) However, as is often the case the query can be restated to accomplish the desired result, here by using a subquery :",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city FROM weather\n    WHERE temp_lo = (SELECT max(temp_lo) FROM weather);",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:      city\n---------------\n San Francisco\n(1 row)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: This is OK because the subquery is an independent computation that computes its own aggregate separately from what is happening in the outer query.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: Aggregates are also very useful in combination with GROUP BY clauses. For example, we can get the number of readings and the maximum low temperature observed in each city with:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city, count(*), max(temp_lo)\n    FROM weather\n    GROUP BY city;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:      city      | count | max\n---------------+-------+-----\n Hayward       |     1 |  37\n San Francisco |     2 |  46\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: which gives us one output row per city. Each aggregate result is computed over the table rows matching that city. We can filter these grouped rows using HAVING :",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city, count(*), max(temp_lo)\n    FROM weather\n    GROUP BY city\n    HAVING max(temp_lo) < 40;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:   city   | count | max\n---------+-------+-----\n Hayward |     1 |  37\n(1 row)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: which gives us the same results for only the cities that have all temp_lo values below 40. Finally, if we only care about cities whose names begin with “ S ” , we might do:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city, count(*), max(temp_lo)\n    FROM weather\n    WHERE city LIKE 'S%'            -- (1)\n    GROUP BY city;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:      city      | count | max\n---------------+-------+-----\n San Francisco |     2 |  46\n(1 row)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0019"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.7. Aggregate Functions: (1) | The LIKE operator does pattern matching and is explained in Section 9.7 .",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: It is important to understand the interaction between aggregates and SQL 's WHERE and HAVING clauses. The fundamental difference between WHERE and HAVING is this: WHERE selects input rows before groups and aggregates are computed (thus, it controls which rows go into the aggregate computation), whereas HAVING selects group rows after groups and aggregates are computed. Thus, the WHERE clause must not contain aggregate functions; it makes no sense to try to use an aggregate to determine which rows will be inputs to the aggregates. On the other hand, the HAVING clause always contains aggregate functions. (Strictly speaking, you are allowed to write a HAVING clause that doesn't use aggregates, but it's seldom useful. The same condition could be used more efficiently at the WHERE stage.)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: In the previous example, we can apply the city name restriction in WHERE , since it needs no aggregate. This is more efficient than adding the restriction to HAVING , because we avoid doing the grouping and aggregate calculations for all rows that fail the WHERE check.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: Another way to select the rows that go into an aggregate computation is to use FILTER , which is a per-aggregate option:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions: SELECT city, count(*) FILTER (WHERE temp_lo < 45), max(temp_lo)\n    FROM weather\n    GROUP BY city;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.7. Aggregate Functions:      city      | count | max\n---------------+-------+-----\n Hayward       |     1 |  37\n San Francisco |     1 |  46\n(2 rows)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.7. Aggregate Functions: FILTER is much like WHERE , except that it removes rows only from the input of the particular aggregate function that it is attached to. Here, the count aggregate counts only rows with temp_lo below 45; but the max aggregate is still applied to all rows, so it still finds the reading of 46.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-agg",
+    "id": "tutorial-agg__node_0026"
+  }
+]

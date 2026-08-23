@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 2.5. Querying a Table</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-select.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="2.5. Querying a Table" property="og:title"/>
+<meta content="2.5.&amp;nbsp;Querying a Table # To retrieve data from a table, the table is queried. An SQL SELECT statement is used …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-select.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-select.html" title="PostgreSQL 18 - 2.5. Querying a Table">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-select.html" title="PostgreSQL 18 - 2.5. Querying a Table">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-select.html" title="PostgreSQL 17 - 2.5. Querying a Table">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-select.html" title="PostgreSQL 16 - 2.5. Querying a Table">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-select.html" title="PostgreSQL 15 - 2.5. Querying a Table">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-select.html" title="PostgreSQL 14 - 2.5. Querying a Table">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-select.html" rel="nofollow" title="PostgreSQL 19 - 2.5. Querying a Table">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-select.html" rel="nofollow" title="PostgreSQL devel - 2.5. Querying a Table">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-select.html" rel="nofollow" title="PostgreSQL 13 - 2.5. Querying a Table">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-select.html" rel="nofollow" title="PostgreSQL 12 - 2.5. Querying a Table">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-select.html" rel="nofollow" title="PostgreSQL 11 - 2.5. Querying a Table">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-select.html" rel="nofollow" title="PostgreSQL 10 - 2.5. Querying a Table">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.6 - 2.5. Querying a Table">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.5 - 2.5. Querying a Table">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.4 - 2.5. Querying a Table">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.3 - 2.5. Querying a Table">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.2 - 2.5. Querying a Table">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.1 - 2.5. Querying a Table">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-select.html" rel="nofollow" title="PostgreSQL 9.0 - 2.5. Querying a Table">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-select.html" rel="nofollow" title="PostgreSQL 8.4 - 2.5. Querying a Table">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-select.html" rel="nofollow" title="PostgreSQL 8.3 - 2.5. Querying a Table">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-select.html" rel="nofollow" title="PostgreSQL 8.2 - 2.5. Querying a Table">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-select.html" rel="nofollow" title="PostgreSQL 8.1 - 2.5. Querying a Table">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-select.html" rel="nofollow" title="PostgreSQL 8.0 - 2.5. Querying a Table">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-select.html" rel="nofollow" title="PostgreSQL 7.4 - 2.5. Querying a Table">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-select.html" rel="nofollow" title="PostgreSQL 7.3 - 2.5. Querying a Table">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-select.html" rel="nofollow" title="PostgreSQL 7.2 - 2.5. Querying a Table">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-SELECT">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">2.5. Querying a Table </h2>
+</div>
+</div>
+</div>
+<p id="readar-node-0002"><a class="indexterm" id="id-1.4.4.6.2.1" name="id-1.4.4.6.2.1"></a> <a class="indexterm" id="id-1.4.4.6.2.2" name="id-1.4.4.6.2.2"></a> To retrieve data from a table, the table is <em class="firstterm">queried</em>. An <acronym class="acronym">SQL</acronym> <code class="command">SELECT</code> statement is used to do this. The statement is divided into a select list (the part that lists the columns to be returned), a table list (the part that lists the tables from which to retrieve the data), and an optional qualification (the part that specifies any restrictions). For example, to retrieve all the rows of table <code class="structname">weather</code>, type:</p>
+<pre class="programlisting" id="readar-node-0003">
+SELECT * FROM weather;
+</pre>
+<p id="readar-node-0004">Here <code class="literal">*</code> is a shorthand for <span class="quote">“<span class="quote">all columns</span>”</span>. <a class="footnote" href="#ftn.id-1.4.4.6.2.10"><sup class="footnote" id="id-1.4.4.6.2.10">[2]</sup></a> So the same result would be had with:</p>
+<pre class="programlisting" id="readar-node-0005">
+SELECT city, temp_lo, temp_hi, prcp, date FROM weather;
+</pre>
+<p id="readar-node-0006">The output should be:</p>
+<pre class="screen" id="readar-node-0007">
+     city      | temp_lo | temp_hi | prcp |    date
+---------------+---------+---------+------+------------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27
+ San Francisco |      43 |      57 |    0 | 1994-11-29
+ Hayward       |      37 |      54 |      | 1994-11-29
+(3 rows)
+</pre>
+<p id="readar-node-0008">You can write expressions, not just simple column references, in the select list. For example, you can do:</p>
+<pre class="programlisting" id="readar-node-0009">
+SELECT city, (temp_hi+temp_lo)/2 AS temp_avg, date FROM weather;
+</pre>
+<p id="readar-node-0010">This should give:</p>
+<pre class="screen" id="readar-node-0011">
+     city      | temp_avg |    date
+---------------+----------+------------
+ San Francisco |       48 | 1994-11-27
+ San Francisco |       50 | 1994-11-29
+ Hayward       |       45 | 1994-11-29
+(3 rows)
+</pre>
+<p id="readar-node-0012">Notice how the <code class="literal">AS</code> clause is used to relabel the output column. (The <code class="literal">AS</code> clause is optional.)</p>
+<p id="readar-node-0013">A query can be <span class="quote">“<span class="quote">qualified</span>”</span> by adding a <code class="literal">WHERE</code> clause that specifies which rows are wanted. The <code class="literal">WHERE</code> clause contains a Boolean (truth value) expression, and only rows for which the Boolean expression is true are returned. The usual Boolean operators (<code class="literal">AND</code>, <code class="literal">OR</code>, and <code class="literal">NOT</code>) are allowed in the qualification. For example, the following retrieves the weather of San Francisco on rainy days:</p>
+<pre class="programlisting" id="readar-node-0014">
+SELECT * FROM weather
+    WHERE city = 'San Francisco' AND prcp &gt; 0.0;
+</pre>
+<p id="readar-node-0015">Result:</p>
+<pre class="screen" id="readar-node-0016">
+     city      | temp_lo | temp_hi | prcp |    date
+---------------+---------+---------+------+------------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27
+(1 row)
+</pre>
+<p id="readar-node-0017"><a class="indexterm" id="id-1.4.4.6.5.1" name="id-1.4.4.6.5.1"></a> You can request that the results of a query be returned in sorted order:</p>
+<pre class="programlisting" id="readar-node-0018">
+SELECT * FROM weather
+    ORDER BY city;
+</pre>
+<pre class="screen" id="readar-node-0019">
+     city      | temp_lo | temp_hi | prcp |    date
+---------------+---------+---------+------+------------
+ Hayward       |      37 |      54 |      | 1994-11-29
+ San Francisco |      43 |      57 |    0 | 1994-11-29
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27
+</pre>
+<p id="readar-node-0020">In this example, the sort order isn't fully specified, and so you might get the San Francisco rows in either order. But you'd always get the results shown above if you do:</p>
+<pre class="programlisting" id="readar-node-0021">
+SELECT * FROM weather
+    ORDER BY city, temp_lo;
+</pre>
+<p id="readar-node-0022"><a class="indexterm" id="id-1.4.4.6.6.1" name="id-1.4.4.6.6.1"></a> <a class="indexterm" id="id-1.4.4.6.6.2" name="id-1.4.4.6.6.2"></a> You can request that duplicate rows be removed from the result of a query:</p>
+<pre class="programlisting" id="readar-node-0023">
+SELECT DISTINCT city
+    FROM weather;
+</pre>
+<pre class="screen" id="readar-node-0024">
+     city
+---------------
+ Hayward
+ San Francisco
+(2 rows)
+</pre>
+<p id="readar-node-0025">Here again, the result row ordering might vary. You can ensure consistent results by using <code class="literal">DISTINCT</code> and <code class="literal">ORDER BY</code> together: <a class="footnote" href="#ftn.id-1.4.4.6.6.7"><sup class="footnote" id="id-1.4.4.6.6.7">[3]</sup></a></p>
+<pre class="programlisting" id="readar-node-0026">
+SELECT DISTINCT city
+    FROM weather
+    ORDER BY city;
+</pre>
+<div class="footnotes">
+<br/>
+<hr style="width:100; text-align:left;margin-left: 0"/>
+<div class="footnote" id="ftn.id-1.4.4.6.2.10">
+<p id="readar-node-0027"><a class="para" href="#id-1.4.4.6.2.10"><sup class="para">[2]</sup></a> While <code class="literal">SELECT *</code> is useful for off-the-cuff queries, it is widely considered bad style in production code, since adding a column to the table would change the results.</p>
+</div>
+<div class="footnote" id="ftn.id-1.4.4.6.6.7">
+<p id="readar-node-0028"><a class="para" href="#id-1.4.4.6.6.7"><sup class="para">[3]</sup></a> In some database systems, including older versions of <span class="productname">PostgreSQL</span>, the implementation of <code class="literal">DISTINCT</code> automatically orders the rows and so <code class="literal">ORDER BY</code> is unnecessary. But this is not required by the SQL standard, and current <span class="productname">PostgreSQL</span> does not guarantee that <code class="literal">DISTINCT</code> causes the rows to be ordered.</p>
+</div>
+</div>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

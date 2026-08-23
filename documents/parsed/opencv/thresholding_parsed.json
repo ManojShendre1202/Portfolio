@@ -1,0 +1,408 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "thresholding",
+    "id": "thresholding__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - In this tutorial, you will learn simple thresholding, adaptive thresholding and Otsu's thresholding. - You will learn the functions cv.threshold and cv.adaptiveThreshold .",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: Here, the matter is straight-forward. For every pixel, the same threshold value is applied. If the pixel value is smaller than or equal to the threshold, it is set to 0, otherwise it is set to a maximum value. The function cv.threshold is used to apply the thresholding. The first argument is the source image, which should be a grayscale image . The second argument is the threshold value which is used to classify the pixel values. The third argument is the maximum value which is assigned to pixel values exceeding the threshold. OpenCV provides different types of thresholding which is given by the fourth parameter of the function. Basic thresholding as described above is done by using the type cv.THRESH_BINARY . All simple thresholding types are:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Simple Thresholding: - cv.THRESH_BINARY - cv.THRESH_BINARY_INV - cv.THRESH_TRUNC - cv.THRESH_TOZERO - cv.THRESH_TOZERO_INV",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: See the documentation of the types for the differences.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: The method returns two outputs. The first is the threshold that was used and the second output is the thresholded image .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: This code compares the different simple thresholding types:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Simple Thresholding: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('gradient.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nret,thresh1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\nret,thresh2 = cv.threshold(img,127,255,cv.THRESH_BINARY_INV)\nret,thresh3 = cv.threshold(img,127,255,cv.THRESH_TRUNC)\nret,thresh4 = cv.threshold(img,127,255,cv.THRESH_TOZERO)\nret,thresh5 = cv.threshold(img,127,255,cv.THRESH_TOZERO_INV)\n\ntitles = ['Original Image','BINARY','BINARY_INV','TRUNC','TOZERO','TOZERO_INV']\nimages = [img, thresh1, thresh2, thresh3, thresh4, thresh5]\n\nfor i in range(6):\n    plt.subplot(2,3,i+1),plt.imshow(images[i],'gray',vmin=0,vmax=255)\n    plt.title(titles[i])\n    plt.xticks([]),plt.yticks([])\n\nplt.show()",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: The code yields this result:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: In the previous section, we used one global value as a threshold. But this might not be good in all cases, e.g. if an image has different lighting conditions in different areas. In that case, adaptive thresholding can help. Here, the algorithm determines the threshold for a pixel based on a small region around it. So we get different thresholds for different regions of the same image which gives better results for images with varying illumination.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: In addition to the parameters described above, the method cv.adaptiveThreshold takes three input parameters:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The adaptiveMethod decides how the threshold value is calculated:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0012"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Adaptive Thresholding: - cv.ADAPTIVE_THRESH_MEAN_C : The threshold value is the mean of the neighbourhood area minus the constant C . - cv.ADAPTIVE_THRESH_GAUSSIAN_C : The threshold value is a gaussian-weighted sum of the neighbourhood values minus the constant C .",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The blockSize determines the size of the neighbourhood area and C is a constant that is subtracted from the mean or weighted sum of the neighbourhood pixels.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The code below compares global thresholding and adaptive thresholding for an image with varying illumination:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adaptive Thresholding: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('sudoku.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nimg = cv.medianBlur(img,5)\n\nret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\nth2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\\\n            cv.THRESH_BINARY,11,2)\nth3 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\\\n            cv.THRESH_BINARY,11,2)\n\ntitles = ['Original Image', 'Global Thresholding (v = 127)',\n 'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']\nimages = [img, th1, th2, th3]\n\nfor i in range(4):\n    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')\n    plt.title(titles[i])\n    plt.xticks([]),plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: Result:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: In global thresholding, we used an arbitrary chosen value as a threshold. In contrast, Otsu's method avoids having to choose a value and determines it automatically.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Consider an image with only two distinct image values ( bimodal image ), where the histogram would only consist of two peaks. A good threshold would be in the middle of those two values. Similarly, Otsu's method determines an optimal global threshold value from the image histogram.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: In order to do so, the cv.threshold() function is used, where cv.THRESH_OTSU is passed as an extra flag. The threshold value can be chosen arbitrary. The algorithm then finds the optimal threshold value which is returned as the first output.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Check out the example below. The input image is a noisy image. In the first case, global thresholding with a value of 127 is applied. In the second case, Otsu's thresholding is applied directly. In the third case, the image is first filtered with a 5x5 gaussian kernel to remove the noise, then Otsu thresholding is applied. See how noise filtering improves the result.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Otsu's Binarization: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('noisy2.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\n# global thresholding\nret1,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\n\n# Otsu's thresholding\nret2,th2 = cv.threshold(img,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\n\n# Otsu's thresholding after Gaussian filtering\nblur = cv.GaussianBlur(img,(5,5),0)\nret3,th3 = cv.threshold(blur,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\n\n# plot all the images and their histograms\nimages = [img, 0, th1,\n          img, 0, th2,\n          blur, 0, th3]\ntitles = ['Original Noisy Image','Histogram','Global Thresholding (v=127)',\n 'Original Noisy Image','Histogram',\"Otsu's Thresholding\",\n 'Gaussian filtered Image','Histogram',\"Otsu's Thresholding\"]\n\nfor i in range(3):\n    plt.subplot(3,3,i*3+1),plt.imshow(images[i*3],'gray')\n    plt.title(titles[i*3]), plt.xticks([]), plt.yticks([])\n    plt.subplot(3,3,i*3+2),plt.hist(images[i*3].ravel(),256)\n    plt.title(titles[i*3+1]), plt.xticks([]), plt.yticks([])\n    plt.subplot(3,3,i*3+3),plt.imshow(images[i*3+2],'gray')\n    plt.title(titles[i*3+2]), plt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Result:",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: This section demonstrates a Python implementation of Otsu's binarization to show how it actually works. If you are not interested, you can skip this.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: Since we are working with bimodal images, Otsu's algorithm tries to find a threshold value (t) which minimizes the weighted within-class variance given by the relation:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\sigma_w^2(t) = q_1(t)\\sigma_1^2(t)+q_2(t)\\sigma_2^2(t)\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: where",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[q_1(t) = \\sum_{i=1}^{t} P(i) \\quad \\& \\quad q_2(t) = \\sum_{i=t+1}^{I} P(i)\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\mu_1(t) = \\sum_{i=1}^{t} \\frac{iP(i)}{q_1(t)} \\quad \\& \\quad \\mu_2(t) = \\sum_{i=t+1}^{I} \\frac{iP(i)}{q_2(t)}\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\sigma_1^2(t) = \\sum_{i=1}^{t} [i-\\mu_1(t)]^2 \\frac{P(i)}{q_1(t)} \\quad \\& \\quad \\sigma_2^2(t) = \\sum_{i=t+1}^{I} [i-\\mu_2(t)]^2 \\frac{P(i)}{q_2(t)}\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: It actually finds a value of t which lies in between two peaks such that variances to both classes are minimal. It can be simply implemented in Python as follows:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: img = cv.imread('noisy2.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nblur = cv.GaussianBlur(img,(5,5),0)\n\n# find normalized_histogram, and its cumulative distribution function\nhist = cv.calcHist([blur],[0],None,[256],[0,256])\nhist_norm = hist.ravel()/hist.sum()\nQ = hist_norm.cumsum()\n\nbins = np.arange(256)\n\nfn_min = np.inf\nthresh = -1\n\nfor i in range(1,256):\n    p1,p2 = np.hsplit(hist_norm,[i]) # probabilities\n    q1,q2 = Q[i],Q[255]-Q[i] # cum sum of classes\n if q1 < 1.e-6 or q2 < 1.e-6:\n continue\n    b1,b2 = np.hsplit(bins,[i]) # weights\n\n # finding means and variances\n    m1,m2 = np.sum(p1*b1)/q1, np.sum(p2*b2)/q2\n    v1,v2 = np.sum(((b1-m1)**2)*p1)/q1,np.sum(((b2-m2)**2)*p2)/q2\n\n # calculates the minimization function\n    fn = v1*q1 + v2*q2\n if fn < fn_min:\n        fn_min = fn\n        thresh = i\n\n# find otsu's threshold value with OpenCV function\nret, otsu = cv.threshold(blur,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\nprint( \"{} {}\".format(thresh,ret) )",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0032"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - Digital Image Processing, Rafael C. Gonzalez",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - There are some optimizations available for Otsu's binarization. You can search and implement it.",
+    "dom_ids": [
+      "readar-node-0040",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0034"
+  }
+]

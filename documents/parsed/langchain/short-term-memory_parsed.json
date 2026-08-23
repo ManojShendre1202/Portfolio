@@ -1,0 +1,833 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Memory is a system that remembers information about previous interactions. For AI agents, memory is crucial because it lets them remember previous interactions, learn from feedback, and adapt to user preferences. As agents tackle more complex tasks with numerous user interactions, this capability becomes essential for both efficiency and user satisfaction.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Short term memory lets your application remember previous interactions within a single thread or conversation.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: A thread organizes multiple interactions in a session, similar to the way email groups messages in a single conversation.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Conversation history is the most common form of short-term memory. Long conversations pose a challenge to today’s LLMs; a full history may not fit inside an LLM’s context window, resulting in a context loss or errors.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Even if your model supports the full context length, most LLMs still perform poorly over long contexts. They get “distracted” by stale or off-topic content, all while suffering from slower response times and higher costs.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Chat models accept context using messages , which include instructions (a system message) and inputs (human messages). In chat applications, messages alternate between human inputs and model responses, resulting in a list of messages that grows longer over time. Because context windows are limited, many applications can benefit from using techniques to remove or “forget” stale information.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Overview: Need to remember information across conversations? Use long-term memory to store and recall user-specific or application-level data across different threads and sessions.",
+    "dom_ids": [
+      "overview",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Usage: To add short-term memory (thread-level persistence) to an agent, you need to specify a checkpointer when creating an agent.",
+    "dom_ids": [
+      "usage",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Usage: LangChain’s agent manages short-term memory as a part of your agent’s state.",
+    "dom_ids": [
+      "usage",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Usage: By storing these in the graph’s state, the agent can access the full context for a given conversation while maintaining separation between different threads.",
+    "dom_ids": [
+      "usage",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Usage: State is persisted to a database (or memory) using a checkpointer so the thread can be resumed at any time.",
+    "dom_ids": [
+      "usage",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Usage: Short-term memory updates when the agent is invoked or a step (like a tool call) is completed, and the state is read at the start of each step.",
+    "dom_ids": [
+      "usage",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"google_genai:gemini-3.6-flash\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"openai:gpt-5.5\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"anthropic:claude-sonnet-4-6\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"openrouter:z-ai/glm-5.2\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"fireworks:accounts/fireworks/models/glm-5p2\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"baseten:zai-org/GLM-5.2\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Usage: from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\n\nagent = create_agent(\n    model=\"ollama:north-mini-code-1.0\",\n    tools=[get_user_info],\n    checkpointer=InMemorySaver(),\n)\n\nthread_config = {\"configurable\": {\"thread_id\": \"1\"}}\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! My name is Bob.\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"Hi Bob! Nice to see you here. How are you doing?\"\n\nresponse = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What's my name?\"}]},\n    thread_config,\n)[\"messages\"][-1].content\n\nprint(response)  # \"You are Bob!\"",
+    "dom_ids": [
+      "usage",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In production: In production, use a checkpointer backed by a database:",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "In production: pip install -U langgraph-checkpoint-postgres \"psycopg[binary]\"",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "In production: uv add langgraph-checkpoint-postgres \"psycopg[binary]\"",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In production: By default, langgraph-checkpoint-postgres installs psycopg (Psycopg 3) without extras. The install above adds psycopg[binary] , which is recommended for most users. For other options, see the Psycopg installation docs .",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "In production: from langchain.agents import create_agent\nfrom langgraph.checkpoint.postgres import PostgresSaver\n\ndef get_user_info() -> str:\n    \"\"\"Look up information about the current user.\"\"\"\n    return \"No user profile on file.\"\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\nwith PostgresSaver.from_conn_string(DB_URI) as checkpointer:\n    checkpointer.setup() # auto create tables in PostgreSQL\n    agent = create_agent(\n        \"gpt-5.5\",\n        tools=[get_user_info],\n        checkpointer=checkpointer,\n    )",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In production: For more checkpointer options including SQLite, Postgres, and Azure Cosmos DB, see the list of checkpointer libraries in the Persistence documentation.",
+    "dom_ids": [
+      "in-production",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing agent memory: By default, agents use AgentState to manage short term memory, specifically the conversation history via a messages key.",
+    "dom_ids": [
+      "customizing-agent-memory",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing agent memory: You can extend AgentState to add additional fields. Custom state schemas are passed to create_agent using the state_schema parameter.",
+    "dom_ids": [
+      "customizing-agent-memory",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Customizing agent memory: from langchain.agents import create_agent, AgentState\nfrom langgraph.checkpoint.memory import InMemorySaver\n\n\nclass CustomAgentState(AgentState):\n    user_id: str\n    preferences: dict\n\nagent = create_agent(\n    \"gpt-5.5\",\n    tools=[get_user_info],\n    state_schema=CustomAgentState,\n    checkpointer=InMemorySaver(),\n)\n\n# Custom state can be passed in invoke\nresult = agent.invoke(\n    {\n        \"messages\": [{\"role\": \"user\", \"content\": \"Hello\"}],\n        \"user_id\": \"user_123\",\n        \"preferences\": {\"theme\": \"dark\"}\n    },\n    {\"configurable\": {\"thread_id\": \"1\"}})",
+    "dom_ids": [
+      "customizing-agent-memory",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Common patterns: With short-term memory enabled, long conversations can exceed the LLM’s context window. Common solutions are:",
+    "dom_ids": [
+      "common-patterns",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: Remove first or last N messages (before calling LLM)",
+    "dom_ids": [
+      "_R_164ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: Delete messages from LangGraph state permanently",
+    "dom_ids": [
+      "_R_264ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: Summarize earlier messages in the history and replace them with a summary",
+    "dom_ids": [
+      "_R_364ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom strategies: Custom strategies (e.g., message filtering, etc.)",
+    "dom_ids": [
+      "_R_464ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom strategies: This allows the agent to keep track of the conversation without exceeding the LLM’s context window.",
+    "dom_ids": [
+      "_R_464ljddbsnlhjiuasnpfiutb_",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: Most LLMs have a maximum supported context window (denominated in tokens).",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: One way to decide when to truncate messages is to count the tokens in the message history and truncate whenever it approaches that limit. If you’re using LangChain, you can use the trim messages utility and specify the number of tokens to keep from the list, as well as the strategy (e.g., keep the last max_tokens ) to use for handling the boundary.",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: To trim message history in an agent, use the @before_model middleware decorator:",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Trim messages: from langchain.messages import RemoveMessage\nfrom langgraph.graph.message import REMOVE_ALL_MESSAGES\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langchain.agents import create_agent, AgentState\nfrom langchain.agents.middleware import before_model\nfrom langgraph.runtime import Runtime\nfrom langchain_core.runnables import RunnableConfig\nfrom typing import Any\n\n\n@before_model\ndef trim_messages(state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n    \"\"\"Keep only the last few messages to fit context window.\"\"\"\n    messages = state[\"messages\"]\n\n    if len(messages) <= 3:\n        return None  # No changes needed\n\n    first_msg = messages[0]\n    recent_messages = messages[-3:] if len(messages) % 2 == 0 else messages[-4:]\n    new_messages = [first_msg] + recent_messages\n\n    return {\n        \"messages\": [\n            RemoveMessage(id=REMOVE_ALL_MESSAGES),\n            *new_messages\n        ]\n    }\n\nagent = create_agent(\n    \"gpt-5.5\",\n    tools=[...],\n    middleware=[trim_messages],\n    checkpointer=InMemorySaver(),\n)\n\nconfig: RunnableConfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nagent.invoke({\"messages\": \"hi, my name is bob\"}, config)\nagent.invoke({\"messages\": \"write a short poem about cats\"}, config)\nagent.invoke({\"messages\": \"now do the same but for dogs\"}, config)\nfinal_response = agent.invoke({\"messages\": \"what's my name?\"}, config)\n\nfinal_response[\"messages\"][-1].pretty_print()\n\"\"\"\n================================== Ai Message ==================================\n\nYour name is Bob. You told me that earlier.\nIf you'd like me to call you a nickname or use a different name, just say the word.\n\"\"\"",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: You can delete messages from the graph state to manage the message history.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: This is useful when you want to remove specific messages or clear the entire message history.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To delete messages from the graph state, you can use the RemoveMessage .",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: For RemoveMessage to work, you need to use a state key with add_messages reducer .",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: The default AgentState provides this.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To remove specific messages:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langchain.messages import RemoveMessage\n\ndef delete_messages(state):\n    messages = state[\"messages\"]\n    if len(messages) > 2:\n        # remove the earliest two messages\n        return {\"messages\": [RemoveMessage(id=m.id) for m in messages[:2]]}",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To remove all messages:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langgraph.graph.message import REMOVE_ALL_MESSAGES\n\ndef delete_messages(state):\n    return {\"messages\": [RemoveMessage(id=REMOVE_ALL_MESSAGES)]}",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: When deleting messages, make sure that the resulting message history is valid. Check the limitations of the LLM provider you’re using. For example:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0048"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Delete messages: - Some providers expect message history to start with a user message - Most providers require assistant messages with tool calls to be followed by corresponding tool result messages.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langchain.messages import RemoveMessage\nfrom langchain.agents import create_agent, AgentState\nfrom langchain.agents.middleware import after_model\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.runtime import Runtime\nfrom langchain_core.runnables import RunnableConfig\n\n\n@after_model\ndef delete_old_messages(state: AgentState, runtime: Runtime) -> dict | None:\n    \"\"\"Remove old messages to keep conversation manageable.\"\"\"\n    messages = state[\"messages\"]\n    if len(messages) > 2:\n        # remove the earliest two messages\n        return {\"messages\": [RemoveMessage(id=m.id) for m in messages[:2]]}\n    return None\n\n\nagent = create_agent(\n    \"gpt-5-nano\",\n    tools=[...],\n    system_prompt=\"Please be concise and to the point.\",\n    middleware=[delete_old_messages],\n    checkpointer=InMemorySaver(),\n)\n\nconfig: RunnableConfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nstream = agent.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n    config,\n    version=\"v3\",\n)\nfor snapshot in stream.values:\n    print([(message.type, message.content) for message in snapshot[\"messages\"]])\n\nstream = agent.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"write a short poem about cats\"}]},\n    config,\n    version=\"v3\",\n)\nfor snapshot in stream.values:\n    print([(message.type, message.content) for message in snapshot[\"messages\"]])\n\nstream = agent.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n    config,\n    version=\"v3\",\n)\nfor snapshot in stream.values:\n    print([(message.type, message.content) for message in snapshot[\"messages\"]])",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: [('human', \"hi! I'm bob\")]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! Nice to meet you. How can I help you today? I can answer questions, brainstorm ideas, draft text, explain things, or help with code.')]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! Nice to meet you. How can I help you today? I can answer questions, brainstorm ideas, draft text, explain things, or help with code.'), ('human', \"write a short poem about cats\")]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! Nice to meet you. How can I help you today? I can answer questions, brainstorm ideas, draft text, explain things, or help with code.'), ('human', \"write a short poem about cats\"), ('ai', 'There once was a cat on a wall, Who barely moved at all...')]\n[('human', 'write a short poem about cats'), ('ai', 'There once was a cat on a wall, Who barely moved at all...')]\n[('human', 'write a short poem about cats'), ('ai', 'There once was a cat on a wall, Who barely moved at all...'), ('human', \"what's my name?\")]\n[('human', 'write a short poem about cats'), ('ai', 'There once was a cat on a wall, Who barely moved at all...'), ('human', \"what's my name?\"), ('ai', \"I don't know your name - you haven't told me!\")]\n[('human', \"what's my name?\"), ('ai', \"I don't know your name - you haven't told me!\")]",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: The problem with trimming or removing messages, as shown above, is that you may lose information from culling of the message queue. Because of this, some applications benefit from a more sophisticated approach of summarizing the message history using a chat model.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: To summarize message history in an agent, use the built-in SummarizationMiddleware :",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Summarize messages: from langchain.agents import create_agent\nfrom langchain.agents.middleware import SummarizationMiddleware\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langchain_core.runnables import RunnableConfig\n\n\ncheckpointer = InMemorySaver()\n\nagent = create_agent(\n    model=\"gpt-5.5\",\n    tools=[...],\n    middleware=[\n        SummarizationMiddleware(\n            model=\"gpt-5.4-mini\",\n            trigger=(\"tokens\", 4000),\n            keep=(\"messages\", 20)\n        )\n    ],\n    checkpointer=checkpointer,\n)\n\nconfig: RunnableConfig = {\"configurable\": {\"thread_id\": \"1\"}}\nagent.invoke({\"messages\": \"hi, my name is bob\"}, config)\nagent.invoke({\"messages\": \"write a short poem about cats\"}, config)\nagent.invoke({\"messages\": \"now do the same but for dogs\"}, config)\nfinal_response = agent.invoke({\"messages\": \"what's my name?\"}, config)\n\nfinal_response[\"messages\"][-1].pretty_print()\n\"\"\"\n================================== Ai Message ==================================\n\nYour name is Bob!\n\"\"\"",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: See SummarizationMiddleware for more configuration options.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access memory: You can access and modify the short-term memory (state) of an agent in several ways:",
+    "dom_ids": [
+      "access-memory",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tools — Read short-term memory in a tool: Access short term memory (state) in a tool using the runtime parameter (typed as ToolRuntime ).",
+    "dom_ids": [
+      "tools",
+      "read-short-term-memory-in-a-tool",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tools — Read short-term memory in a tool: The runtime parameter is hidden from the tool signature (so the model doesn’t see it), but the tool can access the state through it.",
+    "dom_ids": [
+      "tools",
+      "read-short-term-memory-in-a-tool",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tools — Read short-term memory in a tool: from langchain.agents import create_agent, AgentState\nfrom langchain.tools import tool, ToolRuntime\n\n\nclass CustomState(AgentState):\n    user_id: str\n\n@tool\ndef get_user_info(\n    runtime: ToolRuntime\n) -> str:\n    \"\"\"Look up user info.\"\"\"\n    user_id = runtime.state[\"user_id\"]\n    return \"User is John Smith\" if user_id == \"user_123\" else \"Unknown user\"\n\nagent = create_agent(\n    model=\"gpt-5-nano\",\n    tools=[get_user_info],\n    state_schema=CustomState,\n)\n\nresult = agent.invoke({\n    \"messages\": \"look up user information\",\n    \"user_id\": \"user_123\"\n})\nprint(result[\"messages\"][-1].content)\n# > User is John Smith.",
+    "dom_ids": [
+      "tools",
+      "read-short-term-memory-in-a-tool",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Write short-term memory from tools: To modify the agent’s short-term memory (state) during execution, you can return state updates directly from the tools.",
+    "dom_ids": [
+      "write-short-term-memory-from-tools",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0060"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Write short-term memory from tools: This is useful for persisting intermediate results or making information accessible to subsequent tools or prompts.",
+    "dom_ids": [
+      "write-short-term-memory-from-tools",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0061"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Write short-term memory from tools: from langchain.tools import tool, ToolRuntime\nfrom langchain_core.runnables import RunnableConfig\nfrom langchain.messages import ToolMessage\nfrom langchain.agents import create_agent, AgentState\nfrom langgraph.types import Command\nfrom pydantic import BaseModel\n\n\nclass CustomState(AgentState):\n    user_name: str\n\nclass CustomContext(BaseModel):\n    user_id: str\n\n@tool\ndef update_user_info(\n    runtime: ToolRuntime[CustomContext, CustomState],\n) -> Command:\n    \"\"\"Look up and update user info.\"\"\"\n    user_id = runtime.context.user_id\n    name = \"John Smith\" if user_id == \"user_123\" else \"Unknown user\"\n    return Command(update={\n        \"user_name\": name,\n        # update the message history\n        \"messages\": [\n            ToolMessage(\n                \"Successfully looked up user information\",\n                tool_call_id=runtime.tool_call_id\n            )\n        ]\n    })\n\n@tool\ndef greet(\n    runtime: ToolRuntime[CustomContext, CustomState]\n) -> str | Command:\n    \"\"\"Use this to greet the user once you found their info.\"\"\"\n    user_name = runtime.state.get(\"user_name\", None)\n    if user_name is None:\n       return Command(update={\n            \"messages\": [\n                ToolMessage(\n                    \"Please call the 'update_user_info' tool it will get and update the user's name.\",\n                    tool_call_id=runtime.tool_call_id\n                )\n            ]\n        })\n    return f\"Hello {user_name}!\"\n\nagent = create_agent(\n    model=\"gpt-5-nano\",\n    tools=[update_user_info, greet],\n    state_schema=CustomState,\n    context_schema=CustomContext,\n)\n\nagent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"greet the user\"}]},\n    context=CustomContext(user_id=\"user_123\"),\n)",
+    "dom_ids": [
+      "write-short-term-memory-from-tools",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Prompt: Access short term memory (state) in middleware to create dynamic prompts based on conversation history or custom state fields.",
+    "dom_ids": [
+      "prompt",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0063"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Prompt: from langchain.agents import create_agent\nfrom typing import TypedDict\nfrom langchain.agents.middleware import dynamic_prompt, ModelRequest\n\n\nclass CustomContext(TypedDict):\n    user_name: str\n\n\ndef get_weather(city: str) -> str:\n    \"\"\"Get the weather in a city.\"\"\"\n    return f\"The weather in {city} is always sunny!\"\n\n\n@dynamic_prompt\ndef dynamic_system_prompt(request: ModelRequest) -> str:\n    user_name = request.runtime.context[\"user_name\"]\n    system_prompt = f\"You are a helpful assistant. Address the user as {user_name}.\"\n    return system_prompt\n\n\nagent = create_agent(\n    model=\"gpt-5-nano\",\n    tools=[get_weather],\n    middleware=[dynamic_system_prompt],\n    context_schema=CustomContext,\n)\n\nresult = agent.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"What is the weather in SF?\"}]},\n    context=CustomContext(user_name=\"John Smith\"),\n)\nfor msg in result[\"messages\"]:\n    msg.pretty_print()",
+    "dom_ids": [
+      "prompt",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Prompt: ================================ Human Message =================================\n\nWhat is the weather in SF?\n================================== Ai Message ==================================\nTool Calls:\n  get_weather (call_WFQlOGn4b2yoJrv7cih342FG)\n Call ID: call_WFQlOGn4b2yoJrv7cih342FG\n  Args:\n    city: San Francisco\n================================= Tool Message =================================\nName: get_weather\n\nThe weather in San Francisco is always sunny!\n================================== Ai Message ==================================\n\nHi John Smith, the weather in San Francisco is always sunny!",
+    "dom_ids": [
+      "prompt",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Before model: Access short term memory (state) in @before_model middleware to process messages before model calls.",
+    "dom_ids": [
+      "before-model",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Before model: from langchain.messages import RemoveMessage\nfrom langgraph.graph.message import REMOVE_ALL_MESSAGES\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langchain.agents import create_agent, AgentState\nfrom langchain.agents.middleware import before_model\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.runtime import Runtime\nfrom typing import Any\n\n\n@before_model\ndef trim_messages(state: AgentState, runtime: Runtime) -> dict[str, Any] | None:\n    \"\"\"Keep only the last few messages to fit context window.\"\"\"\n    messages = state[\"messages\"]\n\n    if len(messages) <= 3:\n        return None  # No changes needed\n\n    first_msg = messages[0]\n    recent_messages = messages[-3:] if len(messages) % 2 == 0 else messages[-4:]\n    new_messages = [first_msg] + recent_messages\n\n    return {\n        \"messages\": [\n            RemoveMessage(id=REMOVE_ALL_MESSAGES),\n            *new_messages\n        ]\n    }\n\n\nagent = create_agent(\n    \"gpt-5-nano\",\n    tools=[],\n    middleware=[trim_messages],\n    checkpointer=InMemorySaver()\n)\n\nconfig: RunnableConfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nagent.invoke({\"messages\": \"hi, my name is bob\"}, config)\nagent.invoke({\"messages\": \"write a short poem about cats\"}, config)\nagent.invoke({\"messages\": \"now do the same but for dogs\"}, config)\nfinal_response = agent.invoke({\"messages\": \"what's my name?\"}, config)\n\nfinal_response[\"messages\"][-1].pretty_print()\n\"\"\"\n================================== Ai Message ==================================\n\nYour name is Bob. You told me that earlier.\nIf you'd like me to call you a nickname or use a different name, just say the word.\n\"\"\"",
+    "dom_ids": [
+      "before-model",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "After model: Access short term memory (state) in @after_model middleware to process messages after model calls.",
+    "dom_ids": [
+      "after-model",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "After model: from langchain.messages import RemoveMessage\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langchain.agents import create_agent, AgentState\nfrom langchain.agents.middleware import after_model\nfrom langgraph.runtime import Runtime\n\n\n@after_model\ndef validate_response(state: AgentState, runtime: Runtime) -> dict | None:\n    \"\"\"Remove messages containing sensitive words.\"\"\"\n    STOP_WORDS = [\"password\", \"secret\"]\n    last_message = state[\"messages\"][-1]\n    if any(word in last_message.content for word in STOP_WORDS):\n        return {\"messages\": [RemoveMessage(id=last_message.id)]}\n    return None\n\nagent = create_agent(\n    model=\"gpt-5-nano\",\n    tools=[],\n    middleware=[validate_response],\n    checkpointer=InMemorySaver(),\n)",
+    "dom_ids": [
+      "after-model",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "short-term-memory",
+    "id": "short-term-memory__node_0069"
+  }
+]

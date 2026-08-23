@@ -1,0 +1,774 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "The where argument in get and query is used to filter records by their metadata. For example, in this query operation, Chroma will only query records that have the page metadata field with the value 10 :",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\"page\": 10}\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: { page: 10 },\n});",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"page\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Int(10),\n    ),\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "In order to filter on metadata, you must supply a where filter dictionary to the query. The dictionary must have the following structure:",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    \"metadata_field\": {\n        <Operator>: <Value>\n    }\n}",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    metadata_field: {\n        <Operator>: <Value>\n    }\n}",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"value\".to_string()),\n    ),\n});",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using the $eq operator is equivalent to using the metadata field directly in your where filter.",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    \"metadata_field\": \"search_string\"\n}\n\n# is equivalent to\n\n{\n    \"metadata_field\": {\n        \"$eq\": \"search_string\"\n    }\n}",
+    "dom_ids": [
+      "readar-node-0010"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "{\n    metadata_field: \"search_string\"\n}\n\n// is equivalent to\n\n{\n    metadata_field: {\n        \"$eq\":\"search_string\"\n    }\n}",
+    "dom_ids": [
+      "readar-node-0011"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let direct = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"search_string\".to_string()),\n    ),\n});",
+    "dom_ids": [
+      "readar-node-0012"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For example, here we query all records whose page metadata field is greater than 10:",
+    "dom_ids": [
+      "readar-node-0013"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\"page\": { \"$gt\": 10 }}\n)",
+    "dom_ids": [
+      "readar-node-0014"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: { page: { $gt: 10 } },\n});",
+    "dom_ids": [
+      "readar-node-0015"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "let where_clause = Where::Metadata(MetadataExpression {\n    key: \"page\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::GreaterThan,\n        MetadataValue::Int(10),\n    ),\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "readar-node-0016"
+    ],
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: You can also use the logical operators $and and $or to combine multiple filters.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: An $and operator will return results that match all the filters in the list.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$and\": [\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        },\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$and\": [\n        {\n            metadata_field: { <Operator>: <Value> }\n        },\n        {\n            metadata_field: { <Operator>: <Value> }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::GreaterThanOrEqual,\n                MetadataValue::Int(5),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::LessThanOrEqual,\n                MetadataValue::Int(10),\n            ),\n        }),\n    ],\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: For example, here we query all records whose page metadata field is between 5 and 10:",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: collection.query(\n    query_texts=[\"first query\", \"second query\"],\n    where={\n        \"$and\": [\n            {\"page\": {\"$gte\": 5 }},\n            {\"page\": {\"$lte\": 10 }},\n        ]\n    }\n)",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: await collection.query({\n  queryTexts: [\"first query\", \"second query\"],\n  where: {\n    $and: [{ page: { $gte: 5 } }, { page: { $lte: 10 } }],\n  },\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"page\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::GreaterThanOrEqual,\n                MetadataValue::Int(5),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"page\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::LessThanOrEqual,\n                MetadataValue::Int(10),\n            ),\n        }),\n    ],\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: An $or operator will return results that match any of the filters in the list.",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$or\": [\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        },\n        {\n            \"metadata_field\": {\n                <Operator>: <Value>\n            }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: {\n    \"$or\": [\n        {\n            metadata_field: { <Operator>: <Value> }\n        },\n        {\n            metadata_field: { <Operator>: <Value> }\n        }\n    ]\n}",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::Or,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"value1\".to_string()),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"value2\".to_string()),\n            ),\n        }),\n    ],\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Logical Operators: For example, here we get all records whose color metadata field is red or blue :",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: collection.get(\n    where={\n        \"$or\": [\n            {\"color\": \"red\"},\n            {\"color\": \"blue\"},\n        ]\n    }\n)",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: await collection.get({\n  where: {\n    \"$or\": [{ \"color\": \"red\" }, { \"color\": \"blue\" }],\n  },\n});",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Logical Operators: let where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::Or,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"color\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"red\".to_string()),\n            ),\n        }),\n        Where::Metadata(MetadataExpression {\n            key: \"color\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"blue\".to_string()),\n            ),\n        }),\n    ],\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "using-logical-operators",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: The following inclusion operators are supported:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0034"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Using Inclusion Operators: - $in - a value is in predefined list (string, int, float, bool) - $nin - a value is not in predefined list (string, int, float, bool)",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: An $in operator will return results where the metadata attribute is part of a provided list:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n  \"metadata_field\": {\n    \"$in\": [\"value1\", \"value2\", \"value3\"]\n  }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n    metadata_field: {\n        \"$in\": [\"value1\", \"value2\", \"value3\"]\n    }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::In,\n        MetadataSetValue::Str(vec![\n            \"value1\".to_string(),\n            \"value2\".to_string(),\n            \"value3\".to_string(),\n        ]),\n    ),\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: An $nin operator will return results where the metadata attribute is not part of a provided list (or the attribute’s key is not present):",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n  \"metadata_field\": {\n    \"$nin\": [\"value1\", \"value2\", \"value3\"]\n  }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: {\n    metadata_field: {\n        \"$nin\": [\"value1\", \"value2\", \"value3\"]\n    }\n}",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"metadata_field\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::NotIn,\n        MetadataSetValue::Str(vec![\n            \"value1\".to_string(),\n            \"value2\".to_string(),\n            \"value3\".to_string(),\n        ]),\n    ),\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Inclusion Operators: For example, here we get all records whose author metadata field is in a list of possible values:",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: collection.get(\n    where={\n       \"author\": {\"$in\": [\"Rowling\", \"Fitzgerald\", \"Herbert\"]}\n    }\n)",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: await collection.get({\n  where: {\n    author: { $in: [\"Rowling\", \"Fitzgerald\", \"Herbert\"] },\n  },\n});",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Using Inclusion Operators: let where_clause = Where::Metadata(MetadataExpression {\n    key: \"author\".to_string(),\n    comparison: MetadataComparison::Set(\n        SetOperator::In,\n        MetadataSetValue::Str(vec![\n            \"Rowling\".to_string(),\n            \"Fitzgerald\".to_string(),\n            \"Herbert\".to_string(),\n        ]),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "using-inclusion-operators",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Using Array Metadata: Chroma supports storing arrays of values in metadata fields. You can use the $contains and $not_contains operators to filter records based on whether an array field includes a specific value.",
+    "dom_ids": [
+      "using-array-metadata",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Array Metadata: Metadata arrays can contain strings, integers, floats, or booleans. All elements in an array must be the same type.",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: collection.add(\n    ids=[\"m1\", \"m2\", \"m3\"],\n    embeddings=[[1, 0, 0], [0, 1, 0], [0, 0, 1]],\n    metadatas=[\n        {\"genres\": [\"action\", \"comedy\"], \"year\": 2020},\n        {\"genres\": [\"drama\"], \"year\": 2021},\n        {\"genres\": [\"action\", \"thriller\"], \"year\": 2022},\n    ],\n)",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: await collection.add({\n    ids: [\"m1\", \"m2\", \"m3\"],\n    embeddings: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],\n    metadatas: [\n        { genres: [\"action\", \"comedy\"], year: 2020 },\n        { genres: [\"drama\"], year: 2021 },\n        { genres: [\"action\", \"thriller\"], year: 2022 },\n    ],\n});",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Array Metadata: use chroma::types::{Metadata, MetadataValue};\n\nlet mut m = Metadata::new();\nm.insert(\n    \"genres\".into(),\n    MetadataValue::StringArray(vec![\"action\".to_string(), \"comedy\".to_string()]),\n);\nm.insert(\"year\".into(), MetadataValue::Int(2020));\n\n// Also supports IntArray, FloatArray, and BoolArray\nlet mut m2 = Metadata::new();\nm2.insert(\"scores\".into(), MetadataValue::IntArray(vec![10, 20, 30]));\nm2.insert(\"ratings\".into(), MetadataValue::FloatArray(vec![4.5, 3.8]));\nm2.insert(\"flags\".into(), MetadataValue::BoolArray(vec![true, false]));",
+    "dom_ids": [
+      "adding-array-metadata",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: Use $contains to check if a metadata array includes a specific scalar value, and $not_contains to check that it does not.",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: # Get all records where genres contains \"action\"\ncollection.get(\n    where={\"genres\": {\"$contains\": \"action\"}}\n)\n\n# Get all records where genres does NOT contain \"action\"\ncollection.get(\n    where={\"genres\": {\"$not_contains\": \"action\"}}\n)\n\n# Works with integer arrays too\ncollection.get(\n    where={\"scores\": {\"$contains\": 20}}\n)\n\n# Combine with other filters\ncollection.get(\n    where={\n        \"$and\": [\n            {\"genres\": {\"$contains\": \"action\"}},\n            {\"year\": {\"$gte\": 2021}},\n        ]\n    }\n)",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: // Get all records where genres contains \"action\"\nawait collection.get({\n    where: { genres: { $contains: \"action\" } }\n});\n\n// Get all records where genres does NOT contain \"action\"\nawait collection.get({\n    where: { genres: { $not_contains: \"action\" } }\n});\n\n// Works with integer arrays too\nawait collection.get({\n    where: { scores: { $contains: 20 } }\n});\n\n// Combine with other filters\nawait collection.get({\n    where: {\n        $and: [\n            { genres: { $contains: \"action\" } },\n            { year: { $gte: 2021 } },\n        ]\n    }\n});",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filtering with $contains and $not_contains: use chroma::types::{\n    ContainsOperator, MetadataComparison, MetadataExpression, MetadataValue, Where,\n};\n\n// Get all records where genres contains \"action\"\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"genres\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::Contains,\n        MetadataValue::Str(\"action\".to_string()),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;\n\n// Get all records where genres does NOT contain \"action\"\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"genres\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::NotContains,\n        MetadataValue::Str(\"action\".to_string()),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;\n\n// Works with integer arrays too\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"scores\".to_string(),\n    comparison: MetadataComparison::ArrayContains(\n        ContainsOperator::Contains,\n        MetadataValue::Int(20),\n    ),\n});\n\nlet results = collection\n    .get(None, Some(where_clause), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "filtering-with-$contains-and-$not_contains",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Type | Python | TypeScript | Rust",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0057"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: String | [\"a\", \"b\"] | [\"a\", \"b\"] | MetadataValue::StringArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0058"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Integer | [1, 2, 3] | [1, 2, 3] | MetadataValue::IntArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0059"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Float | [1.5, 2.5] | [1.5, 2.5] | MetadataValue::FloatArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Supported Array Types: Boolean | [true, false] | [true, false] | MetadataValue::BoolArray(...)",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Supported Array Types: Constraints:",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0062"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Supported Array Types: - All elements in an array must be the same type. - Empty arrays are not allowed. - Nested arrays (arrays of arrays) are not supported. - The $contains value must be a scalar that matches the array’s element type.",
+    "dom_ids": [
+      "supported-array-types",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combining with Document Search: .get and .query can handle metadata filtering combined with document search :",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: collection.query(\n    query_texts=[\"doc10\", \"thus spake zarathustra\", ...],\n    n_results=10,\n    where={\"metadata_field\": \"is_equal_to_this\"},\n    where_document={\"$contains\":\"search_string\"}\n)",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: await collection.query({\n    queryTexts: [\"doc10\", \"thus spake zarathustra\", ...],\n    nResults: 10,\n    where: { metadata_field: \"is_equal_to_this\" },\n    whereDocument: { \"$contains\": \"search_string\" }\n})",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combining with Document Search: use chroma::types::{\n    BooleanOperator, CompositeExpression, DocumentExpression, DocumentOperator,\n    MetadataComparison, MetadataExpression, MetadataValue, PrimitiveOperator, Where,\n};\n\nlet where_clause = Where::Composite(CompositeExpression {\n    operator: BooleanOperator::And,\n    children: vec![\n        Where::Metadata(MetadataExpression {\n            key: \"metadata_field\".to_string(),\n            comparison: MetadataComparison::Primitive(\n                PrimitiveOperator::Equal,\n                MetadataValue::Str(\"is_equal_to_this\".to_string()),\n            ),\n        }),\n        Where::Document(DocumentExpression {\n            operator: DocumentOperator::Contains,\n            pattern: \"search_string\".to_string(),\n        }),\n    ],\n});\n\nlet results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(10), Some(where_clause), None, None)\n    .await?;",
+    "dom_ids": [
+      "combining-with-document-search",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "metadata_filtering",
+    "id": "metadata_filtering__node_0067"
+  }
+]

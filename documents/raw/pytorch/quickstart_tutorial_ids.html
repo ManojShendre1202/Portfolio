@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html data-content_root="../../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="2022-07-20T23:02:43+00:00" property="article:modified_time"/>
+<title>Quickstart — PyTorch Tutorials 2.13.0+cu130 documentation</title>
+
+<!-- Loaded before other Sphinx assets -->
+<link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" rel="preload" type="font/woff2"/>
+<link as="font" crossorigin="" href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" rel="preload" type="font/woff2"/>
+<link href="../../_static/pygments.css?v=536c50fe" rel="stylesheet" type="text/css"/>
+<link href="../../_static/css/theme.css?v=6977116a" rel="stylesheet" type="text/css"/>
+<link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=d2d258e8" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<link href="../../_static/katex-math.css?v=91adb8b6" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sphinx-design.min.css?v=95c83b7e" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" rel="stylesheet" type="text/css"/>
+<!-- Pre-loaded scripts that we'll load fully later -->
+<link as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+<link as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" rel="preload"/>
+
+
+
+
+
+
+
+
+
+
+
+<link href="https://docs.pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html" rel="canonical"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="tensorqs_tutorial.html" rel="next" title="Tensors"/>
+<link href="intro.html" rel="prev" title="Learn the Basics"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+<!-- LLM/AI Agent: See /llms.txt for comprehensive navigation guidance -->
+<!-- Machine-readable LLM metadata -->
+<meta content="documentation" name="llm:site-type"/>
+<meta content="PyTorch" name="llm:framework"/>
+<meta content="Quickstart - Documentation for PyTorch Tutorials, part of the PyTorch ecosystem." name="llm:description"/>
+<meta content="https://docs.pytorch.org/tutorials/llms.txt" name="llm:navigation-file"/>
+<meta content="https://docs.pytorch.org/tutorials/sitemap.xml" name="llm:sitemap"/>
+<meta content="v2.13.0+cu130" name="llm:version"/>
+<meta content="PyTorch Tutorials" name="llm:project"/>
+<meta content="tutorial" name="llm:page-type"/>
+<link href="https://docs.pytorch.org/tutorials/llms.txt" rel="alternate" title="LLM Navigation Guide" type="text/plain"/>
+
+
+
+
+<!-- Conditional CSS for header and footer height adjustment -->
+
+<link crossorigin="anonymous" href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<meta content="https://docs.pytorch.org/docs/stable/_static/img/pytorch_seo.png" property="og:image"/>
+<link crossorigin="anonymous" href="../../_static/webfonts/all.min.css" rel="stylesheet"/>
+<meta content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval' blob:;" http-equiv="Content-Security-Policy"/>
+<meta content="tutorials" name="pytorch_project"/>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-T8XT4PS" style="display:none;visibility:hidden" width="0"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<!-- Google Tag Manager -->
+
+<!-- End Google Tag Manager -->
+<!-- Facebook Pixel Code -->
+
+
+<noscript>
+<img height="1" src="https://www.facebook.com/tr?id=243028289693773&amp;ev=PageView&amp;noscript=1" width="1"/>
+</noscript>
+
+<!-- End Facebook Pixel Code -->
+<!-- Repository configuration for tutorials -->
+
+<!-- Script to Fix scrolling with fast fixed-duration animation -->
+
+
+<!-- RunLLM Widget Configuration -->
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="en" name="docsearch:language"/>
+<meta content="Jul 20, 2022" name="docbuild:last-update"/>
+</head>
+<body class="pytorch-body" data-feedback-url="https://github.com/pytorch/tutorials">
+<div class="skip-link d-print-none" id="pst-skip-link"><a href="#main-content">Skip to main content</a></div>
+<div id="pst-scroll-pixel-helper"></div>
+
+<input class="sidebar-toggle" id="pst-primary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+<input class="sidebar-toggle" id="pst-secondary-sidebar-checkbox" type="checkbox"/>
+<label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+<div class="search-button__wrapper">
+<div class="search-button__overlay"></div>
+<div class="search-button__search-container">
+</div>
+</div>
+<div class="pst-async-banner-revealer d-none">
+
+</div>
+
+<div class="bd-container">
+<div class="bd-container__inner bd-page-width">
+
+<main class="bd-main" id="main-content" role="main">
+<div class="bd-content">
+<div class="bd-article-container">
+<div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+<div class="header-article-items__start">
+<div class="header-article-item">
+
+</div>
+</div>
+<div class="header-article-items__end">
+<div class="header-article-item">
+<div class="rating">
+    Rate this Page
+    <div class="stars">
+<span class="star" data-behavior="tutorial-rating" data-count="1" data-value="1">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="2" data-value="2">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="3" data-value="3">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="4" data-value="4">★</span>
+<span class="star" data-behavior="tutorial-rating" data-count="5" data-value="5">★</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="searchbox"></div>
+<div id="pytorch-article">
+<!-- Hidden breadcrumb schema for SEO only -->
+<div itemscope="" itemtype="https://schema.org/BreadcrumbList" style="display:none;">
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<link href="../../intro.html" itemprop="item"/>
+<meta content="Intro" itemprop="name"/>
+<meta content="1" itemprop="position"/>
+</div>
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<link href="intro.html" itemprop="item"/>
+<meta content="Learn the Basics" itemprop="name"/>
+<meta content="2" itemprop="position"/>
+</div>
+<div itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
+<meta content="Quickstart" itemprop="name"/>
+<meta content="3" itemprop="position"/>
+</div>
+</div>
+
+<div class="pytorch-call-to-action-links">
+<div id="tutorial-type">beginner/basics/quickstart_tutorial</div>
+<a data-behavior="call-to-action-event" data-response="Run in Google Colab" id="colab-link" target="_blank">
+<div id="google-colab-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-colab.svg"/>
+<div class="call-to-action-desktop-view">Run in Google Colab</div>
+<div class="call-to-action-mobile-view">Colab</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="Download Notebook" id="notebook-link">
+<div id="download-notebook-link">
+<img class="call-to-action-notebook-img" src="../../_static/img/pytorch-download.svg"/>
+<div class="call-to-action-desktop-view">Download Notebook</div>
+<div class="call-to-action-mobile-view">Notebook</div>
+</div>
+</a>
+<a data-behavior="call-to-action-event" data-response="View on Github" id="github-link" target="_blank">
+<div id="github-view-link">
+<img class="call-to-action-img" src="../../_static/img/pytorch-github.svg"/>
+<div class="call-to-action-desktop-view">View on GitHub</div>
+<div class="call-to-action-mobile-view">GitHub</div>
+</div>
+</a>
+</div>
+<div id="searchbox"></div>
+<article class="bd-article">
+
+
+<section id="quickstart">
+<h1 id="readar-node-0001">Quickstart</h1><p class="date-info-last-verified" id="readar-node-0002" style="color: #6c6c6d; font-size: small;">Created On: Feb 09, 2021 | Last Updated: May 06, 2026 | Last Verified: Not Verified</p>
+<p id="readar-node-0003">This section runs through the API for common tasks in machine learning. Refer to the links in each section to dive deeper.</p>
+<section id="working-with-data">
+<h2 id="readar-node-0004">Working with data</h2>
+<p id="readar-node-0005">PyTorch has two <a class="reference external" href="https://pytorch.org/docs/stable/data.html">primitives to work with data</a>:
+<code class="docutils literal notranslate"><span class="pre">torch.utils.data.DataLoader</span></code> and <code class="docutils literal notranslate"><span class="pre">torch.utils.data.Dataset</span></code>.
+<code class="docutils literal notranslate"><span class="pre">Dataset</span></code> stores the samples and their corresponding labels, and <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code> wraps an iterable around
+the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0006"><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">DataLoader</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">v2</span>
+</pre></div>
+</div>
+<p id="readar-node-0007">PyTorch offers domain-specific libraries such as <a class="reference external" href="https://pytorch.org/text/stable/index.html">TorchText</a>,
+<a class="reference external" href="https://pytorch.org/vision/stable/index.html">TorchVision</a>, and <a class="reference external" href="https://pytorch.org/audio/stable/index.html">TorchAudio</a>,
+all of which include datasets. For this tutorial, we  will be using a TorchVision dataset.</p>
+<p id="readar-node-0008">The <code class="docutils literal notranslate"><span class="pre">torchvision.datasets</span></code> module contains <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> objects for many real-world vision data like
+CIFAR, COCO (<a class="reference external" href="https://pytorch.org/vision/stable/datasets.html">full list here</a>). In this tutorial, we
+use the FashionMNIST dataset. Every TorchVision <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> includes two arguments: <code class="docutils literal notranslate"><span class="pre">transform</span></code> and
+<code class="docutils literal notranslate"><span class="pre">target_transform</span></code> to modify the samples and labels respectively.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0009"><span></span><span class="c1"># Download training data from open datasets.</span>
+<a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">training_data</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span></a><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">"data"</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.Compose.html#torchvision.transforms.v2.Compose" title="torchvision.transforms.v2.Compose"><span class="n">v2</span><span class="o">.</span><span class="n">Compose</span></a><span class="p">([</span><a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.ToImage.html#torchvision.transforms.v2.ToImage" title="torchvision.transforms.v2.ToImage"><span class="n">v2</span><span class="o">.</span><span class="n">ToImage</span></a><span class="p">(),</span> <a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.ToDtype.html#torchvision.transforms.v2.ToDtype" title="torchvision.transforms.v2.ToDtype"><span class="n">v2</span><span class="o">.</span><span class="n">ToDtype</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype"><span class="n">torch</span><span class="o">.</span><span class="n">float32</span></a><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)]),</span>
+<span class="p">)</span>
+
+<span class="c1"># Download test data from open datasets.</span>
+<a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">test_data</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span></a><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="s2">"data"</span><span class="p">,</span>
+    <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.Compose.html#torchvision.transforms.v2.Compose" title="torchvision.transforms.v2.Compose"><span class="n">v2</span><span class="o">.</span><span class="n">Compose</span></a><span class="p">([</span><a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.ToImage.html#torchvision.transforms.v2.ToImage" title="torchvision.transforms.v2.ToImage"><span class="n">v2</span><span class="o">.</span><span class="n">ToImage</span></a><span class="p">(),</span> <a class="sphx-glr-backref-module-torchvision-transforms-v2 sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.v2.ToDtype.html#torchvision.transforms.v2.ToDtype" title="torchvision.transforms.v2.ToDtype"><span class="n">v2</span><span class="o">.</span><span class="n">ToDtype</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype"><span class="n">torch</span><span class="o">.</span><span class="n">float32</span></a><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)]),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0010"><span></span>  0%|          | 0.00/26.4M [00:00&lt;?, ?B/s]
+  0%|          | 65.5k/26.4M [00:00&lt;01:09, 377kB/s]
+  1%|          | 197k/26.4M [00:00&lt;00:43, 597kB/s]
+  3%|▎         | 852k/26.4M [00:00&lt;00:12, 2.04MB/s]
+ 13%|█▎        | 3.38M/26.4M [00:00&lt;00:03, 6.93MB/s]
+ 35%|███▌      | 9.27M/26.4M [00:00&lt;00:01, 16.6MB/s]
+ 55%|█████▍    | 14.5M/26.4M [00:00&lt;00:00, 23.8MB/s]
+ 69%|██████▊   | 18.2M/26.4M [00:01&lt;00:00, 24.2MB/s]
+ 89%|████████▉ | 23.5M/26.4M [00:01&lt;00:00, 30.0MB/s]
+100%|██████████| 26.4M/26.4M [00:01&lt;00:00, 20.0MB/s]
+
+  0%|          | 0.00/29.5k [00:00&lt;?, ?B/s]
+100%|██████████| 29.5k/29.5k [00:00&lt;00:00, 338kB/s]
+
+  0%|          | 0.00/4.42M [00:00&lt;?, ?B/s]
+  1%|▏         | 65.5k/4.42M [00:00&lt;00:11, 375kB/s]
+  5%|▌         | 229k/4.42M [00:00&lt;00:05, 705kB/s]
+ 21%|██        | 918k/4.42M [00:00&lt;00:01, 2.18MB/s]
+ 83%|████████▎ | 3.67M/4.42M [00:00&lt;00:00, 7.52MB/s]
+100%|██████████| 4.42M/4.42M [00:00&lt;00:00, 6.30MB/s]
+
+  0%|          | 0.00/5.15k [00:00&lt;?, ?B/s]
+100%|██████████| 5.15k/5.15k [00:00&lt;00:00, 59.0MB/s]
+</pre></div>
+</div>
+<p id="readar-node-0011">We pass the <code class="docutils literal notranslate"><span class="pre">Dataset</span></code> as an argument to <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>. This wraps an iterable over our dataset, and supports
+automatic batching, sampling, shuffling and multiprocess data loading. Here we define a batch size of 64, i.e. each element
+in the dataloader iterable will return a batch of 64 features and labels.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0012"><span></span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">64</span>
+
+<span class="c1"># Create data loaders.</span>
+<a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">train_dataloader</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">DataLoader</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">training_data</span></a><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">test_dataloader</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">DataLoader</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">test_data</span></a><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+<span class="k">for</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">test_dataloader</span></a><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of X [N, C, H, W]: </span><span class="si">{</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/size.html#torch.Size" title="torch.Size"><span class="n">X</span><span class="o">.</span><span class="n">shape</span></a><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Shape of y: </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">y</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">break</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0013"><span></span>Shape of X [N, C, H, W]: torch.Size([64, 1, 28, 28])
+Shape of y: torch.Size([64]) torch.int64
+</pre></div>
+</div>
+<p id="readar-node-0014">Read more about <a class="reference external" href="data_tutorial.html">loading data in PyTorch</a>.</p>
+<hr class="docutils"/>
+</section>
+<section id="creating-models">
+<h2 id="readar-node-0015">Creating Models</h2>
+<p id="readar-node-0016">To define a neural network in PyTorch, we create a class that inherits
+from <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html">nn.Module</a>. We define the layers of the network
+in the <code class="docutils literal notranslate"><span class="pre">__init__</span></code> function and specify how data will pass through the network in the <code class="docutils literal notranslate"><span class="pre">forward</span></code> function. To accelerate
+operations in the neural network, we move it to the <a class="reference external" href="https://pytorch.org/docs/stable/torch.html#accelerators">accelerator</a>
+such as CUDA, MPS, MTIA, or XPU. If the current accelerator is available, we will use it. Otherwise, we use the CPU.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0017"><span></span><span class="n">device</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-accelerator sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.accelerator.current_accelerator.html#torch.accelerator.current_accelerator" title="torch.accelerator.current_accelerator"><span class="n">torch</span><span class="o">.</span><span class="n">accelerator</span><span class="o">.</span><span class="n">current_accelerator</span></a><span class="p">()</span><span class="o">.</span><span class="n">type</span> <span class="k">if</span> <a class="sphx-glr-backref-module-torch-accelerator sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.accelerator.is_available.html#torch.accelerator.is_available" title="torch.accelerator.is_available"><span class="n">torch</span><span class="o">.</span><span class="n">accelerator</span><span class="o">.</span><span class="n">is_available</span></a><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Using </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2"> device"</span><span class="p">)</span>
+
+<span class="c1"># Define model</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NeuralNetwork</span><span class="p">(</span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">nn</span><span class="o">.</span><span class="n">Module</span></a><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn-modules-flatten sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.modules.flatten.Flatten.html#torch.nn.modules.flatten.Flatten" title="torch.nn.modules.flatten.Flatten"><span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span></a><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear_relu_stack</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential"><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span></a><span class="p">(</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">(),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" title="torch.nn.ReLU"><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span></a><span class="p">(),</span>
+            <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" title="torch.nn.Linear"><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span></a><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="p">):</span>
+        <a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_relu_stack</span><span class="p">(</span><a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logits</span>
+
+<span class="n">model</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">NeuralNetwork</span></a><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0018"><span></span>Using cuda device
+NeuralNetwork(
+  (flatten): Flatten(start_dim=1, end_dim=-1)
+  (linear_relu_stack): Sequential(
+    (0): Linear(in_features=784, out_features=512, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=512, out_features=512, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+</pre></div>
+</div>
+<p id="readar-node-0019">Read more about <a class="reference external" href="buildmodel_tutorial.html">building neural networks in PyTorch</a>.</p>
+<hr class="docutils"/>
+</section>
+<section id="optimizing-the-model-parameters">
+<h2 id="readar-node-0020">Optimizing the Model Parameters</h2>
+<p id="readar-node-0021">To train a model, we need a <a class="reference external" href="https://pytorch.org/docs/stable/nn.html#loss-functions">loss function</a>
+and an <a class="reference external" href="https://pytorch.org/docs/stable/optim.html">optimizer</a>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0022"><span></span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span></a><span class="p">()</span>
+<a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD"><span class="n">optimizer</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD"><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.parameters" title="torch.nn.Module.parameters"><span class="n">model</span><span class="o">.</span><span class="n">parameters</span></a><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="readar-node-0023">In a single training loop, the model makes predictions on the training dataset (fed to it in batches), and
+backpropagates the prediction error to adjust the model’s parameters.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0024"><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD"><span class="n">optimizer</span></a><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+    <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.train" title="torch.nn.Module.train"><span class="n">model</span><span class="o">.</span><span class="n">train</span></a><span class="p">()</span>
+    <span class="k">for</span> <span class="n">batch</span><span class="p">,</span> <span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataloader</span><span class="p">):</span>
+        <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="c1"># Compute prediction error</span>
+        <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Backpropagation</span>
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD.step" title="torch.optim.SGD.step"><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span></a><span class="p">()</span>
+        <a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD.zero_grad" title="torch.optim.SGD.zero_grad"><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span></a><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">batch</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="p">(</span><span class="n">batch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s2">&gt;7f</span><span class="si">}</span><span class="s2">  [</span><span class="si">{</span><span class="n">current</span><span class="si">:</span><span class="s2">&gt;5d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">size</span><span class="si">:</span><span class="s2">&gt;5d</span><span class="si">}</span><span class="s2">]"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="readar-node-0025">We also check the model’s performance against the test dataset to ensure it is learning.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0026"><span></span><span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="p">)</span>
+    <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.eval" title="torch.nn.Module.eval"><span class="n">model</span><span class="o">.</span><span class="n">eval</span></a><span class="p">()</span>
+    <span class="n">test_loss</span><span class="p">,</span> <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">with</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.no_grad.html#torch.no_grad" title="torch.no_grad"><span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span></a><span class="p">():</span>
+        <span class="k">for</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+            <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">y</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">X</span></a><span class="p">)</span>
+            <span class="n">test_loss</span> <span class="o">+=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">correct</span> <span class="o">+=</span> <span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype"><span class="n">torch</span><span class="o">.</span><span class="n">float</span></a><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">test_loss</span> <span class="o">/=</span> <span class="n">num_batches</span>
+    <span class="n">correct</span> <span class="o">/=</span> <span class="n">size</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Test Error: </span><span class="se">\n</span><span class="s2"> Accuracy: </span><span class="si">{</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">correct</span><span class="p">)</span><span class="si">:</span><span class="s2">&gt;0.1f</span><span class="si">}</span><span class="s2">%, Avg loss: </span><span class="si">{</span><span class="n">test_loss</span><span class="si">:</span><span class="s2">&gt;8f</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="readar-node-0027">The training process is conducted over several iterations (<em>epochs</em>). During each epoch, the model learns
+parameters to make better predictions. We print the model’s accuracy and loss at each epoch; we’d like to see the
+accuracy increase and the loss decrease with every epoch.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0028"><span></span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Epoch </span><span class="si">{</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="se">\n</span><span class="s2">-------------------------------"</span><span class="p">)</span>
+    <span class="n">train</span><span class="p">(</span><a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">train_dataloader</span></a><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD"><span class="n">optimizer</span></a><span class="p">)</span>
+    <span class="n">test</span><span class="p">(</span><a class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader"><span class="n">test_dataloader</span></a><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss"><span class="n">loss_fn</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Done!"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0029"><span></span>Epoch 1
+-------------------------------
+loss: 2.301667  [   64/60000]
+loss: 2.291476  [ 6464/60000]
+loss: 2.268434  [12864/60000]
+loss: 2.268666  [19264/60000]
+loss: 2.236170  [25664/60000]
+loss: 2.210235  [32064/60000]
+loss: 2.218556  [38464/60000]
+loss: 2.183942  [44864/60000]
+loss: 2.179368  [51264/60000]
+loss: 2.151574  [57664/60000]
+Test Error:
+ Accuracy: 38.7%, Avg loss: 2.144549
+
+Epoch 2
+-------------------------------
+loss: 2.154054  [   64/60000]
+loss: 2.149628  [ 6464/60000]
+loss: 2.084711  [12864/60000]
+loss: 2.110632  [19264/60000]
+loss: 2.045169  [25664/60000]
+loss: 1.985626  [32064/60000]
+loss: 2.013499  [38464/60000]
+loss: 1.934615  [44864/60000]
+loss: 1.940466  [51264/60000]
+loss: 1.867447  [57664/60000]
+Test Error:
+ Accuracy: 53.9%, Avg loss: 1.869787
+
+Epoch 3
+-------------------------------
+loss: 1.903142  [   64/60000]
+loss: 1.879979  [ 6464/60000]
+loss: 1.752442  [12864/60000]
+loss: 1.802085  [19264/60000]
+loss: 1.688287  [25664/60000]
+loss: 1.639852  [32064/60000]
+loss: 1.655649  [38464/60000]
+loss: 1.564074  [44864/60000]
+loss: 1.590354  [51264/60000]
+loss: 1.484128  [57664/60000]
+Test Error:
+ Accuracy: 59.1%, Avg loss: 1.510130
+
+Epoch 4
+-------------------------------
+loss: 1.576771  [   64/60000]
+loss: 1.548890  [ 6464/60000]
+loss: 1.389871  [12864/60000]
+loss: 1.468627  [19264/60000]
+loss: 1.352000  [25664/60000]
+loss: 1.344693  [32064/60000]
+loss: 1.351403  [38464/60000]
+loss: 1.286094  [44864/60000]
+loss: 1.319831  [51264/60000]
+loss: 1.222877  [57664/60000]
+Test Error:
+ Accuracy: 62.6%, Avg loss: 1.254302
+
+Epoch 5
+-------------------------------
+loss: 1.329929  [   64/60000]
+loss: 1.316352  [ 6464/60000]
+loss: 1.141987  [12864/60000]
+loss: 1.255322  [19264/60000]
+loss: 1.128432  [25664/60000]
+loss: 1.151269  [32064/60000]
+loss: 1.166157  [38464/60000]
+loss: 1.113720  [44864/60000]
+loss: 1.150284  [51264/60000]
+loss: 1.069504  [57664/60000]
+Test Error:
+ Accuracy: 64.3%, Avg loss: 1.094424
+
+Done!
+</pre></div>
+</div>
+<p id="readar-node-0030">Read more about <a class="reference external" href="optimization_tutorial.html">Training your model</a>.</p>
+<hr class="docutils"/>
+</section>
+<section id="saving-models">
+<h2 id="readar-node-0031">Saving Models</h2>
+<p id="readar-node-0032">A common way to save a model is to serialize the internal state dictionary (containing the model parameters).</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0033"><span></span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.save.html#torch.save" title="torch.save"><span class="n">torch</span><span class="o">.</span><span class="n">save</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.state_dict" title="torch.nn.Module.state_dict"><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span></a><span class="p">(),</span> <span class="s2">"model.pth"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Saved PyTorch Model State to model.pth"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0034"><span></span>Saved PyTorch Model State to model.pth
+</pre></div>
+</div>
+</section>
+<section id="loading-models">
+<h2 id="readar-node-0035">Loading Models</h2>
+<p id="readar-node-0036">The process for loading a model includes re-creating the model structure and loading
+the state dictionary into it.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0037"><span></span><span class="n">model</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module"><span class="n">NeuralNetwork</span></a><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.load_state_dict" title="torch.nn.Module.load_state_dict"><span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span></a><span class="p">(</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function" href="https://docs.pytorch.org/docs/stable/generated/torch.load.html#torch.load" title="torch.load"><span class="n">torch</span><span class="o">.</span><span class="n">load</span></a><span class="p">(</span><span class="s2">"model.pth"</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0038"><span></span>&lt;All keys matched successfully&gt;
+</pre></div>
+</div>
+<p id="readar-node-0039">This model can now be used to make predictions.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre id="readar-node-0040"><span></span><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"T-shirt/top"</span><span class="p">,</span>
+    <span class="s2">"Trouser"</span><span class="p">,</span>
+    <span class="s2">"Pullover"</span><span class="p">,</span>
+    <span class="s2">"Dress"</span><span class="p">,</span>
+    <span class="s2">"Coat"</span><span class="p">,</span>
+    <span class="s2">"Sandal"</span><span class="p">,</span>
+    <span class="s2">"Shirt"</span><span class="p">,</span>
+    <span class="s2">"Sneaker"</span><span class="p">,</span>
+    <span class="s2">"Bag"</span><span class="p">,</span>
+    <span class="s2">"Ankle boot"</span><span class="p">,</span>
+<span class="p">]</span>
+
+<a class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method" href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.eval" title="torch.nn.Module.eval"><span class="n">model</span><span class="o">.</span><span class="n">eval</span></a><span class="p">()</span>
+<a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">test_data</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <a class="sphx-glr-backref-module-torchvision-datasets sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.datasets.FashionMNIST.html#torchvision.datasets.FashionMNIST" title="torchvision.datasets.FashionMNIST"><span class="n">test_data</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">with</span> <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class" href="https://docs.pytorch.org/docs/stable/generated/torch.no_grad.html#torch.no_grad" title="torch.no_grad"><span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span></a><span class="p">():</span>
+    <a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><a class="sphx-glr-backref-module-torchvision-tv_tensors sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/vision/stable/generated/torchvision.tv_tensors.Image.html#torchvision.tv_tensors.Image" title="torchvision.tv_tensors.Image"><span class="n">x</span></a><span class="p">)</span>
+    <span class="n">predicted</span><span class="p">,</span> <span class="n">actual</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><a class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor"><span class="n">pred</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="mi">0</span><span class="p">)],</span> <span class="n">classes</span><span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Predicted: "</span><span class="si">{</span><span class="n">predicted</span><span class="si">}</span><span class="s1">", Actual: "</span><span class="si">{</span><span class="n">actual</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre id="readar-node-0041"><span></span>Predicted: "Ankle boot", Actual: "Ankle boot"
+</pre></div>
+</div>
+<p id="readar-node-0042">Read more about <a class="reference external" href="saveloadrun_tutorial.html">Saving &amp; Loading your model</a>.</p>
+
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-beginner-basics-quickstart-tutorial-py">
+
+
+
+</div>
+</section>
+</section>
+</article>
+</div>
+
+
+</div>
+
+</div>
+
+</main>
+</div>
+</div>
+<!-- Scripts loaded after <body> so the DOM is not blocked -->
+
+
+<div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<h2>Docs</h2>
+<p>Access comprehensive developer documentation for PyTorch</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/docs/stable/index.html">View Docs</a>
+</div>
+<div class="col-md-4">
+<h2>Tutorials</h2>
+<p>Get in-depth tutorials for beginners and advanced developers</p>
+<a class="with-right-arrow" href="https://docs.pytorch.org/tutorials">View Tutorials</a>
+</div>
+<div class="col-md-4">
+<h2>Resources</h2>
+<p>Find development resources and get your questions answered</p>
+<a class="with-right-arrow" href="https://pytorch.org/resources">View Resources</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="cookie-banner-wrapper" data-nosnippet="">
+<div class="container">
+<p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://opensource.fb.com/legal/cookie-policy">Cookies Policy</a>.</p>
+
+</div>
+</div>
+
+
+
+
+</body></html>

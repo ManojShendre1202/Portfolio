@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>Build, tag, and publish an image | Docker Docs</title><meta content="This concept page will teach you how to build, tag, and publish an image to Docker Hub or any other registry" name="description"/><meta content="concepts,build,images,container,docker,desktop" name="keywords"/><link href="https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/" rel="canonical"/><link href="/assets/images/favicon-32x32.png" rel="icon" sizes="32x32"/><link href="/assets/images/favicon-192x192.png" rel="icon" sizes="192x192"/><link href="/apple-touch-icon.png" rel="apple-touch-icon"/><link href="/favicon.ico" rel="shortcut icon"/><meta content="#2496ed" name="theme-color"/><meta content="Build, tag, and publish an image" itemprop="title name" name="twitter:title"/><meta content="This concept page will teach you how to build, tag, and publish an image to Docker Hub or any other registry" itemprop="description" name="twitter:description" property="og:description"/><meta content="summary_large_image" name="twitter:card"/><meta content="https://docs.docker.com/" name="twitter:domain"/><meta content="@docker_docs" name="twitter:site"/><meta content="https://twitter.com/docker_docs" name="twitter:url"/><meta content="https://docs.docker.com/images/thumbnail.webp" name="twitter:image:src"/><meta content="Docker Documentation" name="twitter:image:alt"/><meta content="Build, tag, and publish an image" property="og:title"/><meta content="This concept page will teach you how to build, tag, and publish an image to Docker Hub or any other registry" property="og:description"/><meta content="website" property="og:type"/><meta content="2026-02-22 10:59:03 +0100 +0100" itemprop="dateUpdated" property="og:updated_time"/><meta content="https://docs.docker.com/images/thumbnail.webp" itemprop="image primaryImageOfPage" property="og:image"/><meta content="en_US" property="og:locale"/><meta content="https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/" property="og:url"/><meta content="Docker Documentation" property="og:site_name"/><meta content="2026-02-22 10:59:03 +0100 +0100" itemprop="datePublished" property="article:published_time"/><link href="https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image.md" rel="alternate" type="text/markdown"/>
+<link crossorigin="anonymous" href="/css/style.513ac5245bf373beb42302e1dc4bc5e9fe221cf733b839e56c769114ff8ef16d.css" integrity="sha256-UTrFJFvzc760IwLh3EvF6f4iHPczuDnlbHaRFP+O8W0=" rel="stylesheet"/>
+<link href="/pagefind/pagefind-component-ui.css" rel="stylesheet"/><link as="font" crossorigin="" href="/assets/fonts/RobotoFlex.woff2" rel="preload" type="font/woff2"/></head><body class="dark:bg-navbar-bg-dark bg-navbar-bg flex flex-col items-center text-base text-black dark:text-white"><div x-cloak="" x-data="{
+    isLoading: false,
+    error: null,
+    messages: $persist([]).using(sessionStorage).as('gordon-messages'),
+    currentQuestion: '',
+    threadId: $persist(null).using(sessionStorage).as('gordon-threadId'),
+    includePageContext: $persist(true).using(sessionStorage).as('gordon-includePageContext'),
+    maxTurnsPerThread: 10,
+
+    init() {
+      // Clean up any streaming messages that might be persisted
+      this.messages = this.messages.filter(m =&gt; !m.isStreaming)
+
+      // Watch for store changes to focus input
+      this.$watch('$store.gordon.isOpen', (isOpen) =&gt; {
+        if (isOpen) {
+          this.$nextTick(() =&gt; {
+            this.$refs.input?.focus()
+          })
+        }
+      })
+
+      // Watch for query from store and populate input
+      this.$watch('$store.gordon.query', (query) =&gt; {
+        if (query) {
+          this.currentQuestion = query
+          const shouldAutoSubmit = this.$store.gordon.autoSubmit
+          this.$nextTick(() =&gt; {
+            if (shouldAutoSubmit) {
+              this.askQuestion()
+            } else {
+              this.$refs.input?.focus()
+              this.$refs.input?.select()
+            }
+          })
+          // Clear the store query and autoSubmit flag after using them
+          this.$store.gordon.query = ''
+          this.$store.gordon.autoSubmit = false
+        }
+      })
+    },
+
+    getTurnCount() {
+      return this.messages.filter(m =&gt; m.role === 'user').length
+    },
+
+    getRemainingTurns() {
+      return this.maxTurnsPerThread - this.getTurnCount()
+    },
+
+    isThreadLimitReached() {
+      return this.getTurnCount() &gt;= this.maxTurnsPerThread
+    },
+
+    shouldShowCountdown() {
+      const remaining = this.getRemainingTurns()
+      return remaining &gt; 0 &amp;&amp; remaining &lt;= 3
+    },
+
+    async askQuestion() {
+      const question = this.currentQuestion.trim()
+      if (!question || this.isLoading || this.isThreadLimitReached()) {
+        return
+      }
+
+      // Add user message to UI
+      this.messages.push({
+        role: 'user',
+        content: question
+      })
+
+      this.currentQuestion = ''
+      // Reset textarea height
+      this.$nextTick(() =&gt; {
+        if (this.$refs.input) {
+          this.$refs.input.style.height = 'auto'
+        }
+      })
+      this.isLoading = true
+      this.error = null
+
+      // Add placeholder for assistant response
+      const responseIndex = this.messages.length
+      this.messages.push({
+        role: 'assistant',
+        content: '',
+        isStreaming: true,
+        questionAnswerId: null,
+        feedback: null,
+        copied: false
+      })
+
+      this.$nextTick(() =&gt; {
+        this.$refs.messagesContainer?.scrollTo({
+          top: this.$refs.messagesContainer.scrollHeight,
+          behavior: 'smooth'
+        })
+      })
+
+      try {
+        await this.streamGordonResponse(responseIndex)
+      } catch (err) {
+        // Only set error if messages weren't cleared
+        if (this.messages.length &gt; 0) {
+          if (err.message === 'RATE_LIMIT_EXCEEDED') {
+            this.error = 'You\'ve exceeded your question quota for the day. Please come back tomorrow.'
+          } else {
+            this.error = 'Failed to get response. Please try again.'
+          }
+        }
+        console.error('Gordon API error:', err)
+        // Only try to remove message if it still exists
+        if (this.messages[responseIndex]) {
+          this.messages.splice(responseIndex, 1)
+        }
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    getSessionId() {
+      let sessionId = sessionStorage.getItem('gordon-session-id')
+      if (!sessionId) {
+        sessionId = `docs-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        sessionStorage.setItem('gordon-session-id', sessionId)
+      }
+      return sessionId
+    },
+
+    async streamGordonResponse(responseIndex) {
+
+      // Build API request from messages, excluding the streaming placeholder
+      // The placeholder is at responseIndex, so we take everything before it
+      const conversationMessages = this.messages.slice(0, responseIndex).map((msg, i) =&gt; {
+        const message = {
+          role: msg.role,
+          content: msg.content
+        }
+
+        // Add copilot_references to the last message (most recent user question)
+        if (i === responseIndex - 1) {
+          message.copilot_references = [
+            {
+              data: {
+                origin: 'docs-website',
+                email: 'docs@docker.com',
+                uuid: this.getSessionId(),
+                action: 'AskGordon',
+                ...(this.includePageContext &amp;&amp; {
+                  page_url: window.location.href,
+                  page_title: &quot;Build, tag, and publish an image&quot;
+                })
+              }
+            }
+          ]
+        }
+
+        return message
+      })
+
+      const isNewConversation = !this.threadId
+      const payload = {
+        messages: conversationMessages,
+        ...(this.threadId &amp;&amp; { thread_uuid: this.threadId })
+      }
+
+      const response = await fetch(window.GORDON_BASE_URL + '/public/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('RATE_LIMIT_EXCEEDED')
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value, { stream: true })
+        const lines = chunk.split('\n')
+
+        for (const line of lines) {
+          if (!line.trim() || !line.startsWith('data: ')) continue
+
+          const data = line.slice(6)
+          if (data === '[DONE]') continue
+
+          try {
+            const parsed = JSON.parse(data)
+
+            // Capture thread_id for new conversations
+            if (parsed.thread_id) {
+              if (isNewConversation) {
+                this.threadId = parsed.thread_id  // $persist auto-saves to sessionStorage
+              } else if (parsed.thread_id !== this.threadId) {
+                console.warn('Backend returned unexpected thread_id:', parsed.thread_id)
+              }
+              continue
+            }
+
+            // Capture question_answer_id for feedback
+            if (parsed.question_answer_id) {
+              this.messages[responseIndex].questionAnswerId = parsed.question_answer_id
+              continue
+            }
+
+            if (parsed.choices &amp;&amp; parsed.choices[0]?.delta?.content) {
+              const content = parsed.choices[0].delta.content
+              this.messages[responseIndex].content += content
+
+              this.$nextTick(() =&gt; {
+                const container = this.$refs.messagesContainer
+                if (container) {
+                  const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight &lt; 100
+                  if (isNearBottom) {
+                    container.scrollTop = container.scrollHeight
+                  }
+                }
+              })
+            }
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e)
+          }
+        }
+      }
+
+      this.messages[responseIndex].isStreaming = false
+    },
+
+    clearChat() {
+      if (confirm('Clear all messages?')) {
+        this.messages = []      // $persist auto-saves empty array
+        this.threadId = null    // $persist auto-removes from sessionStorage
+        this.error = null
+      }
+    },
+
+    formatMessageContent(content) {
+      return this.$markdown(content)
+    },
+
+    async submitFeedback(messageIndex, feedbackType) {
+      const message = this.messages[messageIndex]
+
+      if (message.feedback === feedbackType) {
+        return
+      }
+
+      // Clear any previous error
+      message.feedbackError = null
+
+      if (!message.questionAnswerId) {
+        message.feedbackError = 'Unable to submit feedback'
+        console.error('No question_answer_id available for feedback')
+        return
+      }
+
+      try {
+        const response = await fetch(window.GORDON_BASE_URL + '/feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: message.questionAnswerId,
+            feedback: feedbackType
+          })
+        })
+
+        if (response.ok) {
+          message.feedback = feedbackType  // $persist auto-saves
+        } else {
+          message.feedbackError = 'Unable to submit feedback'
+          console.error('Failed to submit feedback:', response.status, response.statusText)
+        }
+      } catch (err) {
+        message.feedbackError = 'Unable to submit feedback'
+        console.error('Error submitting feedback:', err)
+      }
+    },
+
+    async copyAnswer(messageIndex) {
+      const message = this.messages[messageIndex]
+      if (!message.content) return
+
+      try {
+        await navigator.clipboard.writeText(message.content)
+        message.copied = true
+        this.$nextTick(() =&gt; {
+          setTimeout(() =&gt; {
+            message.copied = false
+          }, 2000)
+        })
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
+  }"><div class="fixed inset-0 z-40 bg-black/50" x-show="$store.gordon.isOpen" x-transition.opacity.duration.300ms=""></div><div class="fixed top-0 right-0 z-50 flex h-screen w-full flex-col overflow-hidden overscroll-contain rounded-none bg-white shadow-2xl transition-all duration-200 md:w-[min(80ch,90vw)] dark:bg-gray-950" id="gordon-chat" x-show="$store.gordon.isOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-end="translate-x-0" x-transition:enter-start="translate-x-full" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="translate-x-full" x-transition:leave-start="translate-x-0"><div class="z-10 flex items-center justify-between bg-blue-500 px-6 py-3 shadow-lg/30 dark:shadow-lg/60"><div class="flex items-center gap-3"><svg height="20" viewbox="0 0 92 20" width="92"><path d="M20.474 6.892 20.813 7.12S20.608 7.547 20.587 7.576C19.699 9.293 17.884 9.181 17.196 9.17c-2.089 5.243-5.524 7.412-9.532 7.408C5.036 16.576 3.279 15.721 2.116 14.556 1.928 14.367 1.755 14.171 1.597 13.969.166 12.136-.022 9.885.002 8.715H7.997c5.179.0 6.348.167 7.617-.57C15.276 7.735 15.101 7.169 15.049 6.665 14.983 5.848 15.17 4.948 15.614 4.274L15.84 3.932 16.179 4.16c.916.714 1.417 1.533 1.469 2.505C18.623 6.402 19.964 6.549 20.474 6.892zM5.22 5.684v2.25H2.972V5.684H5.22zm2.905.0v2.25H5.876V5.684H8.125zm2.905.0v2.25H8.781V5.684H11.03zm2.904.0v2.25H11.686V5.684h2.248zm-11.619.0v2.25H.067V5.684H2.315zM5.22 2.842v2.25H2.972V2.842H5.22zm2.905.0v2.25H5.876V2.842H8.125zm2.905.0v2.25H8.781V2.842H11.03zM11.03.0V2.25H8.781V0H11.03zM34.107 13.496C33.741 14.148 33.264 14.674 32.676 15.074 32.002 15.52 31.226 15.742 30.348 15.742 29.394 15.742 28.548 15.52 27.811 15.074 27.086 14.616 26.513 13.992 26.094 13.203 25.674 12.401 25.464 11.485 25.464 10.454 25.464 9.41 25.687 8.493 26.132 7.704 26.59 6.902 27.213 6.279 28.002 5.833c.788-.458 1.697-.687 2.728-.687 1.017.0 1.92.229 2.709.687C34.227 6.279 34.844 6.902 35.289 7.704 35.747 8.493 35.976 9.41 35.976 10.454v4.124C35.976 15.583 35.754 16.493 35.308 17.308 34.863 18.135 34.24 18.791 33.439 19.274 32.65 19.758 31.734 20 30.692 20 29.789 20 28.943 19.822 28.154 19.465 27.366 19.109 26.698 18.587 26.151 17.9 25.986 17.683 25.922 17.461 25.96 17.232 26.011 17.002 26.138 16.818 26.342 16.678 26.571 16.525 26.806 16.474 27.048 16.525 27.302 16.576 27.505 16.703 27.658 16.907c.343999999999998.433.776.77 1.297 1.012C29.477 18.161 30.068 18.282 30.73 18.282 31.34 18.282 31.9 18.135 32.409 17.842 32.93 17.55 33.343 17.117 33.649 16.544 33.954 15.971 34.107 15.271 34.107 14.444v-.948zM30.73 14.024C31.391 14.024 31.976 13.871 32.485 13.566 32.994 13.26 33.388 12.84 33.668 12.306 33.96 11.771 34.107 11.154 34.107 10.454 34.107 9.753 33.96 9.136 33.668 8.602 33.388 8.054 32.994 7.628 32.485 7.322c-.509-.305-1.094-.458-1.755-.458C30.068 6.864 29.483 7.017 28.974 7.322 28.466 7.628 28.065 8.054 27.773 8.602 27.48 9.136 27.334 9.753 27.334 10.454 27.334 11.154 27.48 11.771 27.773 12.306 28.065 12.84 28.466 13.26 28.974 13.566 29.483 13.871 30.068 14.024 30.73 14.024zM51.92 9.136v5.575C51.92 15.017 51.837 15.252 51.672 15.418 51.519 15.583 51.284 15.666 50.966 15.666 50.661 15.666 50.425 15.59 50.26 15.437 50.095 15.271 50.012 15.029 50.012 14.711V6.177C50.012 5.871 50.095 5.636 50.26 5.47 50.425 5.305 50.661 5.222 50.966 5.222 51.284 5.222 51.519 5.305 51.672 5.47 51.837 5.623 51.92 5.858 51.92 6.177v.352C52.232 6.177 52.6 5.881 53.026 5.642 53.662 5.286 54.362 5.108 55.125 5.108S56.454 5.235 56.823 5.489c.381.242.527999999999999.535.439.879C57.223 6.546 57.147 6.686 57.033 6.788 56.931 6.877 56.81 6.934 56.67 6.96 56.53 6.985 56.378 6.979 56.212 6.94 55.398 6.775 54.667 6.762 54.018 6.902 53.37 7.042 52.855 7.303 52.473 7.685 52.104 8.067 51.92 8.551 51.92 9.136zM84.159 9.327v5.384C84.159 14.991 84.07 15.227 83.892 15.418 83.714 15.596 83.479 15.685 83.186 15.685 82.906 15.685 82.671 15.596 82.48 15.418 82.302 15.227 82.213 14.991 82.213 14.711V6.196C82.213 5.903 82.302 5.668 82.48 5.489 82.671 5.311 82.906 5.222 83.186 5.222 83.479 5.222 83.714 5.311 83.892 5.489 84.07 5.668 84.159 5.903 84.159 6.196v.203C84.442 6.12 84.767 5.88 85.132 5.68 85.806 5.311 86.563 5.127 87.402 5.127c.878.0 1.66.191 2.34699999999999.572C90.449 6.069 90.996 6.616 91.389 7.341 91.797 8.067 92 8.958 92 10.014v4.697C92 14.991 91.905 15.227 91.714 15.418 91.536 15.596 91.307 15.685 91.027 15.685 90.748 15.685 90.512 15.596 90.321 15.418 90.143 15.227 90.054 14.991 90.054 14.711V10.014C90.054 9.289 89.92 8.697 89.653 8.239 89.386 7.781 89.024 7.443 88.566 7.227 88.121 6.998 87.606 6.883 87.021 6.883 86.487 6.883 86.003 6.991 85.571 7.208 85.138 7.424 84.795 7.717 84.541 8.086 84.286 8.442 84.159 8.856 84.159 9.327zM42.737 15.742C41.706 15.742 40.797 15.52 40.008 15.074 39.22 14.616 38.597 13.992 38.139 13.203 37.694 12.401 37.471 11.485 37.471 10.454 37.471 9.41 37.694 8.493 38.139 7.704 38.597 6.902 39.22 6.279 40.008 5.833 40.797 5.375 41.706 5.146 42.737 5.146 43.754 5.146 44.657 5.375 45.446 5.833 46.234 6.279 46.851 6.902 47.296 7.704 47.754 8.493 47.983 9.41 47.983 10.454 47.983 11.485 47.76 12.401 47.315 13.203 46.87 13.992 46.253 14.616 45.465 15.074 44.676 15.52 43.767 15.742 42.737 15.742zm0-1.718C43.398 14.024 43.983 13.871 44.492 13.566 45 13.26 45.395 12.84 45.675 12.306 45.967 11.771 46.113 11.154 46.113 10.454 46.113 9.753 45.967 9.136 45.675 8.602 45.395 8.054 45 7.628 44.492 7.322 43.983 7.017 43.398 6.864 42.737 6.864 42.075 6.864 41.49 7.017 40.981 7.322 40.473 7.628 40.072 8.054 39.779 8.602 39.487 9.136 39.341 9.753 39.341 10.454 39.341 11.154 39.487 11.771 39.779 12.306 40.072 12.84 40.473 13.26 40.981 13.566 41.49 13.871 42.075 14.024 42.737 14.024zm19.654 1.718C61.398 15.742 60.502 15.513 59.701 15.055 58.912 14.584 58.282 13.948 57.812 13.146 57.354 12.344 57.125 11.44 57.125 10.434 57.125 9.429 57.335 8.532 57.755 7.742 58.187 6.94 58.772 6.31 59.51 5.852 60.247 5.381 61.08 5.146 62.009 5.146c.75.0 1.444.159 2.08.477C64.724 5.929 65.259 6.349 65.691 6.883V1.728C65.691 1.435 65.78 1.2 65.958 1.022 66.149.843 66.384.754 66.664.754 66.957.754 67.192.843 67.37 1.022 67.548 1.2 67.637 1.435 67.637 1.728v8.706C67.637 11.44 67.402 12.344 66.931 13.146 66.473 13.948 65.85 14.584 65.061 15.055 64.273 15.513 63.383 15.742 62.391 15.742zm0-1.718C63.039 14.024 63.618 13.871 64.127 13.566 64.635 13.248 65.036 12.815 65.329 12.267 65.621 11.72 65.767 11.109 65.767 10.434 65.767 9.747 65.621 9.136 65.329 8.602 65.036 8.067 64.635 7.647 64.127 7.341 63.618 7.023 63.039 6.864 62.391 6.864 61.755 6.864 61.176 7.023 60.654 7.341 60.146 7.647 59.739 8.067 59.433 8.602 59.141 9.136 58.995 9.747 58.995 10.434 58.995 11.109 59.141 11.72 59.433 12.267 59.739 12.815 60.146 13.248 60.654 13.566 61.176 13.871 61.755 14.024 62.391 14.024zm12.547 1.718C73.907 15.742 72.998 15.52 72.209 15.074 71.421 14.616 70.798 13.992 70.34 13.203 69.895 12.401 69.672 11.485 69.672 10.454 69.672 9.41 69.895 8.493 70.34 7.704 70.798 6.902 71.421 6.279 72.209 5.833 72.998 5.375 73.907 5.146 74.938 5.146c1.017.0 1.92.229 2.709.687C78.435 6.279 79.052 6.902 79.497 7.704 79.955 8.493 80.184 9.41 80.184 10.454 80.184 11.485 79.962 12.401 79.516 13.203 79.071 13.992 78.454 14.616 77.666 15.074 76.877 15.52 75.968 15.742 74.938 15.742zm0-1.718C75.599 14.024 76.184 13.871 76.693 13.566 77.202 13.26 77.596 12.84 77.876 12.306 78.168 11.771 78.314 11.154 78.314 10.454 78.314 9.753 78.168 9.136 77.876 8.602 77.596 8.054 77.202 7.628 76.693 7.322 76.184 7.017 75.599 6.864 74.938 6.864 74.276 6.864 73.691 7.017 73.182 7.322 72.674 7.628 72.273 8.054 71.981 8.602 71.688 9.136 71.542 9.753 71.542 10.454 71.542 11.154 71.688 11.771 71.981 12.306 72.273 12.84 72.674 13.26 73.182 13.566 73.691 13.871 74.276 14.024 74.938 14.024z" fill="#fff"></path></svg></div><div class="flex items-center gap-2"><div class="relative" data-tooltip-wrapper=""><div class="absolute top-0 left-0 hidden rounded-sm bg-gray-900 p-2 text-sm whitespace-nowrap text-white" data-tooltip-body="" id="gordon-tooltip" role="tooltip" x-show="messages.length &gt; 0">Start a new chat<div class="absolute h-2 w-2 rotate-45 bg-gray-900" data-tooltip-arrow=""></div></div></div></div></div><div class="flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto overscroll-contain p-6" style="scrollbar-width:none;&amp;::-webkit-scrollbar:{ display:none; }" x-ref="messagesContainer"><div class="relative flex flex-col gap-4" x-show="messages.length &gt; 0"></div></div><div class="bg-blue-50 px-4 py-3 text-xs text-gray-600 dark:bg-gray-800 dark:text-gray-400">Answers are generated based on the documentation.</div></div></div><main class="relative flex w-full max-w-[1920px]"><div class="dark:bg-background-dark w-full min-w-0 bg-white p-8" data-pagefind-body=""><meta data-pagefind-meta="description:This concept page will teach you how to build, tag, and publish an image to Docker Hub or any other registry"/><meta data-pagefind-meta="keywords:concepts, build, images, container, docker, desktop"/><meta data-pagefind-meta="breadcrumbs:Get started / Docker concepts / Building images"/><div class="flex w-full gap-8"><div class="min-w-0 flex-[2_2_0%]"><article class="prose dark:prose-invert max-w-4xl"><h1 data-pagefind-weight="10" id="readar-node-0001">Build, tag, and publish an image</h1><div class="hidden lg:block"><div class="not-prose mt-4"><div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+
+</div><hr class="mt-4 mb-6 border-t border-gray-200 dark:border-gray-700"/></div></div><div class="block lg:hidden"><div class="not-prose" data-pagefind-ignore=""><div class="pb-0 text-lg lg:pb-2">Table of contents</div></div><hr/></div><div class="youtube-video aspect-video h-fit w-full py-2" data-video-id="chiiGLlYRlY" id="youtube-player-chiiGLlYRlY"></div><h2 class="scroll-mt-20 flex items-center gap-2" id="explanation"><a class="text-black dark:text-white no-underline hover:underline" href="#explanation">Explanation</a></h2><p id="readar-node-0003">In this guide, you will learn the following:</p><ul id="readar-node-0004"><li>Building images - the process of building an image based on a <code>Dockerfile</code></li><li>Tagging images - the process of giving an image a name, which also determines where the image can be distributed</li><li>Publishing images - the process to distribute or share the newly created image using a container registry</li></ul><h3 class="scroll-mt-20 flex items-center gap-2" id="building-images"><a class="text-black dark:text-white no-underline hover:underline" href="#building-images">Building images</a></h3><p id="readar-node-0006">Most often, images are built using a Dockerfile. The most basic <code>docker build</code> command might look like the following:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0007" tabindex="0"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker build .</span></span></code></pre></div></div></div></div><p id="readar-node-0008">The final <code>.</code> in the command provides the path or URL to the <a class="link" href="https://docs.docker.com/build/concepts/context/#what-is-a-build-context" rel="noopener">build context</a>. At this location, the builder will find the <code>Dockerfile</code> and other referenced files.</p><p id="readar-node-0009">When you run a build, the builder pulls the base image, if needed, and then runs the instructions specified in the Dockerfile.</p><p id="readar-node-0010">With the previous command, the image will have no name, but the output will provide the ID of the image. As an example, the previous command might produce the following output:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0011" tabindex="0"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker build .
+</span></span><span class="line"><span class="cl"><span class="go">[+] Building 3.5s (11/11) FINISHED                                              docker:desktop-linux
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [internal] load build definition from Dockerfile                                            0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; =&gt; transferring dockerfile: 308B                                                            0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [internal] load metadata for docker.io/library/python:3.12                                  0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [internal] load .dockerignore                                                               0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; =&gt; transferring context: 2B                                                                 0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [1/6] FROM docker.io/library/python:3.12                                                    0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [internal] load build context                                                               0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; =&gt; transferring context: 123B                                                               0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [2/6] WORKDIR /usr/local/app                                                                0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [3/6] RUN useradd app                                                                       0.1s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [4/6] COPY ./requirements.txt ./requirements.txt                                            0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [5/6] RUN pip install --no-cache-dir --upgrade -r requirements.txt                          3.2s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; [6/6] COPY ./app ./app                                                                      0.0s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; exporting to image                                                                          0.1s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; =&gt; exporting layers                                                                         0.1s
+</span></span></span><span class="line"><span class="cl"><span class="go"> =&gt; =&gt; writing image sha256:9924dfd9350407b3df01d1a0e1033b1e543523ce7d5d5e2c83a724480ebe8f00    0.0s
+</span></span></span></code></pre></div></div></div></div><p id="readar-node-0012">With the previous output, you could start a container by using the referenced image:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0013" tabindex="0"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">docker run sha256:9924dfd9350407b3df01d1a0e1033b1e543523ce7d5d5e2c83a724480ebe8f00
+</span></span></span></code></pre></div></div></div></div><p id="readar-node-0014">That name certainly isn't memorable, which is where tagging becomes useful.</p><h3 class="scroll-mt-20 flex items-center gap-2" id="tagging-images"><a class="text-black dark:text-white no-underline hover:underline" href="#tagging-images">Tagging images</a></h3><p id="readar-node-0016">Tagging images is the method to provide an image with a memorable name. However, there is a structure to the name of an image. A full image name has the following structure:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0017" tabindex="0"><code class="language-text" data-lang="text"><span class="line"><span class="cl">[HOST[:PORT_NUMBER]/]PATH[:TAG]</span></span></code></pre></div></div></div></div><ul id="readar-node-0018"><li><code>HOST</code>: The optional registry hostname where the image is located. If no host is specified, Docker's public registry at <code>docker.io</code> is used by default.</li><li><code>PORT_NUMBER</code>: The registry port number if a hostname is provided</li><li><code>PATH</code>: The path of the image, consisting of slash-separated components. For Docker Hub, the format follows <code>[NAMESPACE/]REPOSITORY</code>, where namespace is either a user's or organization's name. If no namespace is specified, <code>library</code> is used, which is the namespace for Docker Official Images.</li><li><code>TAG</code>: A custom, human-readable identifier that's typically used to identify different versions or variants of an image. If no tag is specified, <code>latest</code> is used by default.</li></ul><p id="readar-node-0019">Some examples of image names include:</p><ul id="readar-node-0020"><li><code>nginx</code>, equivalent to <code>docker.io/library/nginx:latest</code>: this pulls an image from the <code>docker.io</code> registry, the <code>library</code> namespace, the <code>nginx</code> image repository, and the <code>latest</code> tag.</li><li><code>docker/welcome-to-docker</code>, equivalent to <code>docker.io/docker/welcome-to-docker:latest</code>: this pulls an image from the <code>docker.io</code> registry, the <code>docker</code> namespace, the <code>welcome-to-docker</code> image repository, and the <code>latest</code> tag</li><li><code>ghcr.io/dockersamples/example-voting-app-vote:pr-311</code>: this pulls an image from the GitHub Container Registry, the <code>dockersamples</code> namespace, the <code>example-voting-app-vote</code> image repository, and the <code>pr-311</code> tag</li></ul><p id="readar-node-0021">To tag an image during a build, add the <code>-t</code> or <code>--tag</code> flag:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0022" tabindex="0"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">docker build -t my-username/my-image .
+</span></span></span></code></pre></div></div></div></div><p id="readar-node-0023">If you've already built an image, you can add another tag to the image by using the <a class="link" href="https://docs.docker.com/engine/reference/commandline/image_tag/" rel="noopener"><code>docker image tag</code></a> command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0024" tabindex="0"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">docker image tag my-username/my-image another-username/another-image:v1
+</span></span></span></code></pre></div></div></div></div><h3 class="scroll-mt-20 flex items-center gap-2" id="publishing-images"><a class="text-black dark:text-white no-underline hover:underline" href="#publishing-images">Publishing images</a></h3><p id="readar-node-0026">Once you have an image built and tagged, you're ready to push it to a registry. To do so, use the <a class="link" href="https://docs.docker.com/engine/reference/commandline/image_push/" rel="noopener"><code>docker push</code></a> command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"><pre class="chroma" id="readar-node-0027" tabindex="0"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">docker push my-username/my-image
+</span></span></span></code></pre></div></div></div></div><p id="readar-node-0028">Within a few seconds, all of the layers for your image will be pushed to the registry.</p><blockquote class="admonition not-prose"><p id="readar-node-0029"><strong>Requiring authentication</strong></p><p id="readar-node-0030">Before you're able to push an image to a repository, you will need to be authenticated.
+To do so, simply use the <a class="link" href="https://docs.docker.com/engine/reference/commandline/login/" rel="noopener">docker login</a> command.</p></blockquote><h2 class="scroll-mt-20 flex items-center gap-2" id="try-it-out"><a class="text-black dark:text-white no-underline hover:underline" href="#try-it-out">Try it out</a></h2><p id="readar-node-0032">In this hands-on guide, you will build a simple image using a provided Dockerfile and push it to Docker Hub.</p><h3 class="scroll-mt-20 flex items-center gap-2" id="set-up"><a class="text-black dark:text-white no-underline hover:underline" href="#set-up">Set up</a></h3><ol id="readar-node-0034"><li><p>Get the sample application.</p><p>If you have Git, you can clone the repository for the sample application. Otherwise, you can download the sample application. Choose one of the following options.</p><div aria-role="tabpanel" class="tabs" x-data="{ selected: 'Clone-with-git' }"><div aria-role="tablist" class="tablist">
+</div><div><div :class="selected !== 'Clone-with-git' &amp;&amp; 'hidden'" aria-role="tab"><p>Use the following command in a terminal to clone the sample application repository.</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></div><div :class="selected !== 'Download' &amp;&amp; 'hidden'" aria-role="tab"><p>Download the source and extract it.</p><p><a class="button not-prose" href="https://github.com/docker/getting-started-todo-app/raw/cd61f824da7a614a8298db503eed6630eeee33a3/app.zip">Download the source</a></p></div></div></div></li><li><p><a class="link" href="https://www.docker.com/products/docker-desktop/" rel="noopener">Download and install</a> Docker Desktop.</p></li><li><p>If you don't have a Docker account yet, <a class="link" href="https://hub.docker.com/" rel="noopener">create one now</a>. Once you've done that, sign in to Docker Desktop using that account.</p></li></ol><h3 class="scroll-mt-20 flex items-center gap-2" id="build-an-image"><a class="text-black dark:text-white no-underline hover:underline" href="#build-an-image">Build an image</a></h3><p id="readar-node-0037">Now that you have a repository on Docker Hub, it's time for you to build an image and push it to the repository.</p><ol id="readar-node-0038"><li><p>Using a terminal in the root of the sample app repository, run the following command. Replace <code>YOUR_DOCKER_USERNAME</code> with your Docker Hub username:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>As an example, if your username is <code>mobywhale</code>, you would run the command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>Once the build has completed, you can view the image by using the following command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>The command will produce output similar to the following:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div></li><li><p>You can actually view the history (or how the image was created) by using the
+<a class="link" href="/reference/cli/docker/image/history/">docker image history</a> command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>You'll then see output similar to the following:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>This output shows the layers of the image, highlighting the layers you added and those that were inherited from your base image.</p></li></ol><h3 class="scroll-mt-20 flex items-center gap-2" id="push-the-image"><a class="text-black dark:text-white no-underline hover:underline" href="#push-the-image">Push the image</a></h3><p id="readar-node-0046">Now that you have an image built, it's time to push the image to a registry.</p><ol id="readar-node-0047"><li><p>Push the image using the
+<a class="link" href="/reference/cli/docker/image/push/">docker push</a> command:</p><div class="group mt-2 mb-4 flex w-full scroll-mt-2 flex-col items-start gap-4 rounded bg-gray-50 p-2 outline outline-1 outline-offset-[-1px] outline-gray-200 dark:bg-gray-900 dark:outline-gray-800" data-pagefind-ignore="" x-data="" x-ref="root"><div class="relative w-full"><div class="syntax-light dark:syntax-dark not-prose w-full"><div class="highlight"></div></div></div></div><p>If you receive a <code>requested access to the resource is denied</code>, make sure you are both logged in and that your Docker username is correct in the image tag.</p><p>After a moment, your image should be pushed to Docker Hub.</p></li></ol><h2 class="scroll-mt-20 flex items-center gap-2" id="additional-resources"><a class="text-black dark:text-white no-underline hover:underline" href="#additional-resources">Additional resources</a></h2><p id="readar-node-0050">To learn more about building, tagging, and publishing images, visit the following resources:</p><ul id="readar-node-0051"><li><a class="link" href="/build/concepts/context/#what-is-a-build-context">What is a build context?</a></li><li><a class="link" href="/reference/cli/docker/buildx/build/">docker build reference</a></li><li><a class="link" href="/reference/cli/docker/image/tag/">docker image tag reference</a></li><li><a class="link" href="/reference/cli/docker/image/push/">docker push reference</a></li><li><a class="link" href="/get-started/docker-concepts/the-basics/what-is-a-registry/">What is a registry?</a></li></ul><h2 class="scroll-mt-20 flex items-center gap-2" id="next-steps"><a class="text-black dark:text-white no-underline hover:underline" href="#next-steps">Next steps</a></h2><p id="readar-node-0053">Now that you have learned about building and publishing images, it's time to learn how to speed up the build process using the Docker build cache.</p><a class="button not-prose" href="https://docs.docker.com/get-started/docker-concepts/building-images/using-the-build-cache/">Using the build cache</a></article></div><div class="-mt-8 hidden min-w-48 flex-1 lg:block"></div></div></div></main></body></html>

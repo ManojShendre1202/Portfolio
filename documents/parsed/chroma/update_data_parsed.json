@@ -1,0 +1,122 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Any property of records in a collection can be updated with .update :",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.update(\n    ids=[\"id1\", \"id2\", \"id3\", ...],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents=[\"doc1\", \"doc2\", \"doc3\", ...],\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.update({\n    ids: [\"id1\", \"id2\", \"id3\", ...],\n    embeddings: [[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas: [{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents: [\"doc1\", \"doc2\", \"doc3\", ...]\n})",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.update(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    Some(vec![\n        Some(vec![1.1, 2.3, 3.2]),\n        Some(vec![4.5, 6.9, 4.4]),\n        Some(vec![1.1, 2.3, 3.2]),\n    ]),\n    Some(vec![\n        Some(\"doc1\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If an id is not found in the collection, an error will be logged and the update will be ignored. If documents are supplied without corresponding embeddings , the embeddings will be recomputed with the collection’s embedding function.",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Metadata values can include arrays — see Adding Data for supported metadata types.",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If the supplied embeddings are not the same dimension as the collection, an exception will be raised.",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma also supports an upsert operation, which updates existing items, or adds them if they don’t yet exist.",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.upsert(\n    ids=[\"id1\", \"id2\", \"id3\", ...],\n    embeddings=[[1.1, 2.3, 3.2], [4.5, 6.9, 4.4], [1.1, 2.3, 3.2], ...],\n    metadatas=[{\"chapter\": 3, \"verse\": 16}, {\"chapter\": 3, \"verse\": 5}, {\"chapter\": 29, \"verse\": 11}, ...],\n    documents=[\"doc1\", \"doc2\", \"doc3\", ...],\n)",
+    "dom_ids": [
+      "readar-node-0009"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.upsert({\n  ids: [\"id1\", \"id2\", \"id3\"],\n  embeddings: [\n    [1.1, 2.3, 3.2],\n    [4.5, 6.9, 4.4],\n    [1.1, 2.3, 3.2],\n  ],\n  metadatas: [\n    { chapter: \"3\", verse: \"16\" },\n    { chapter: \"3\", verse: \"5\" },\n    { chapter: \"29\", verse: \"11\" },\n  ],\n  documents: [\"doc1\", \"doc2\", \"doc3\"],\n});",
+    "dom_ids": [
+      "readar-node-0010"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.upsert(\n    vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()],\n    vec![\n        vec![1.1, 2.3, 3.2],\n        vec![4.5, 6.9, 4.4],\n        vec![1.1, 2.3, 3.2],\n    ],\n    Some(vec![\n        Some(\"doc1\".to_string()),\n        Some(\"doc2\".to_string()),\n        Some(\"doc3\".to_string()),\n    ]),\n    None,\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0011"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "If an id is not present in the collection, the corresponding items will be created as per add . Items with existing id s will be updated as per update .",
+    "dom_ids": [
+      "readar-node-0012"
+    ],
+    "chapter": "update_data",
+    "id": "update_data__node_0012"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.2. Views: Refer back to the queries in Section 2.6 . Suppose the combined listing of weather records and city location is of particular interest to your application, but you do not want to type the query each time you need it. You can create a view over the query, which gives a name to the query that you can refer to like an ordinary table:",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-views",
+    "id": "tutorial-views__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3.2. Views: CREATE VIEW myview AS\n    SELECT name, temp_lo, temp_hi, prcp, date, location\n        FROM weather, cities\n        WHERE city = name;\n\nSELECT * FROM myview;",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-views",
+    "id": "tutorial-views__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.2. Views: Making liberal use of views is a key aspect of good SQL database design. Views allow you to encapsulate the details of the structure of your tables, which might change as your application evolves, behind consistent interfaces.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-views",
+    "id": "tutorial-views__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.2. Views: Views can be used in almost any place a real table can be used. Building views upon other views is not uncommon.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-views",
+    "id": "tutorial-views__node_0004"
+  }
+]

@@ -54,6 +54,8 @@ export async function deleteSession(chatId, docId) {
   return res.json()
 }
 
-export function docPageUrl(docId, chapter) {
-  return `${BASE}/doc/${docId}/page/${chapter}/`
+export async function fetchDocPage(docId, chapter) {
+  const res = await fetch(`${BASE}/doc/${docId}/page/${chapter}/`)
+  if (!res.ok) throw new Error(`Doc page fetch failed: ${res.status}`)
+  return res.json()  // { html, base_href }
 }

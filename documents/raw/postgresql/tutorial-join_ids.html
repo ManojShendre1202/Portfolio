@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 2.6. Joins Between Tables</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-join.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="2.6. Joins Between Tables" property="og:title"/>
+<meta content="2.6.&amp;nbsp;Joins Between Tables # Thus far, our queries have only accessed one table at a time. Queries can access multiple …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-join.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-join.html" title="PostgreSQL 18 - 2.6. Joins Between Tables">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-join.html" title="PostgreSQL 18 - 2.6. Joins Between Tables">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-join.html" title="PostgreSQL 17 - 2.6. Joins Between Tables">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-join.html" title="PostgreSQL 16 - 2.6. Joins Between Tables">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-join.html" title="PostgreSQL 15 - 2.6. Joins Between Tables">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-join.html" title="PostgreSQL 14 - 2.6. Joins Between Tables">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-join.html" rel="nofollow" title="PostgreSQL 19 - 2.6. Joins Between Tables">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-join.html" rel="nofollow" title="PostgreSQL devel - 2.6. Joins Between Tables">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-join.html" rel="nofollow" title="PostgreSQL 13 - 2.6. Joins Between Tables">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-join.html" rel="nofollow" title="PostgreSQL 12 - 2.6. Joins Between Tables">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-join.html" rel="nofollow" title="PostgreSQL 11 - 2.6. Joins Between Tables">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-join.html" rel="nofollow" title="PostgreSQL 10 - 2.6. Joins Between Tables">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.6 - 2.6. Joins Between Tables">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.5 - 2.6. Joins Between Tables">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.4 - 2.6. Joins Between Tables">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.3 - 2.6. Joins Between Tables">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.2 - 2.6. Joins Between Tables">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.1 - 2.6. Joins Between Tables">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-join.html" rel="nofollow" title="PostgreSQL 9.0 - 2.6. Joins Between Tables">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-join.html" rel="nofollow" title="PostgreSQL 8.4 - 2.6. Joins Between Tables">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-join.html" rel="nofollow" title="PostgreSQL 8.3 - 2.6. Joins Between Tables">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-join.html" rel="nofollow" title="PostgreSQL 8.2 - 2.6. Joins Between Tables">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-join.html" rel="nofollow" title="PostgreSQL 8.1 - 2.6. Joins Between Tables">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-join.html" rel="nofollow" title="PostgreSQL 8.0 - 2.6. Joins Between Tables">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-join.html" rel="nofollow" title="PostgreSQL 7.4 - 2.6. Joins Between Tables">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-join.html" rel="nofollow" title="PostgreSQL 7.3 - 2.6. Joins Between Tables">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-join.html" rel="nofollow" title="PostgreSQL 7.2 - 2.6. Joins Between Tables">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-JOIN">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">2.6. Joins Between Tables </h2>
+</div>
+</div>
+</div><a class="indexterm" id="id-1.4.4.7.2" name="id-1.4.4.7.2"></a>
+<p id="readar-node-0002">Thus far, our queries have only accessed one table at a time. Queries can access multiple tables at once, or access the same table in such a way that multiple rows of the table are being processed at the same time. Queries that access multiple tables (or multiple instances of the same table) at one time are called <em class="firstterm">join</em> queries. They combine rows from one table with rows from a second table, with an expression specifying which rows are to be paired. For example, to return all the weather records together with the location of the associated city, the database needs to compare the <code class="structfield">city</code> column of each row of the <code class="structname">weather</code> table with the <code class="structfield">name</code> column of all rows in the <code class="structname">cities</code> table, and select the pairs of rows where these values match.<a class="footnote" href="#ftn.id-1.4.4.7.3.6"><sup class="footnote" id="id-1.4.4.7.3.6">[4]</sup></a> This would be accomplished by the following query:</p>
+<pre class="programlisting" id="readar-node-0003">
+SELECT * FROM weather JOIN cities ON city = name;
+</pre>
+<pre class="screen" id="readar-node-0004">
+     city      | temp_lo | temp_hi | prcp |    date    |     name      | location
+---------------+---------+---------+------+------------+---------------+-----------
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)
+ San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)
+(2 rows)
+</pre>
+<p id="readar-node-0005">Observe two things about the result set:</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" id="readar-node-0006" style="list-style-type: disc;">
+<li class="listitem">
+<p>There is no result row for the city of Hayward. This is because there is no matching entry in the <code class="structname">cities</code> table for Hayward, so the join ignores the unmatched rows in the <code class="structname">weather</code> table. We will see shortly how this can be fixed.</p>
+</li>
+<li class="listitem">
+<p>There are two columns containing the city name. This is correct because the lists of columns from the <code class="structname">weather</code> and <code class="structname">cities</code> tables are concatenated. In practice this is undesirable, though, so you will probably want to list the output columns explicitly rather than using <code class="literal">*</code>:</p>
+
+</li>
+</ul>
+</div>
+<p id="readar-node-0008">Since the columns all had different names, the parser automatically found which table they belong to. If there were duplicate column names in the two tables you'd need to <em class="firstterm">qualify</em> the column names to show which one you meant, as in:</p>
+<pre class="programlisting" id="readar-node-0009">
+SELECT weather.city, weather.temp_lo, weather.temp_hi,
+       weather.prcp, weather.date, cities.location
+    FROM weather JOIN cities ON weather.city = cities.name;
+</pre>
+<p id="readar-node-0010">It is widely considered good style to qualify all column names in a join query, so that the query won't fail if a duplicate column name is later added to one of the tables.</p>
+<p id="readar-node-0011">Join queries of the kind seen thus far can also be written in this form:</p>
+<pre class="programlisting" id="readar-node-0012">
+SELECT *
+    FROM weather, cities
+    WHERE city = name;
+</pre>
+<p id="readar-node-0013">This syntax pre-dates the <code class="literal">JOIN</code>/<code class="literal">ON</code> syntax, which was introduced in SQL-92. The tables are simply listed in the <code class="literal">FROM</code> clause, and the comparison expression is added to the <code class="literal">WHERE</code> clause. The results from this older implicit syntax and the newer explicit <code class="literal">JOIN</code>/<code class="literal">ON</code> syntax are identical. But for a reader of the query, the explicit syntax makes its meaning easier to understand: The join condition is introduced by its own key word whereas previously the condition was mixed into the <code class="literal">WHERE</code> clause together with other conditions.</p><a class="indexterm" id="id-1.4.4.7.7" name="id-1.4.4.7.7"></a>
+<p id="readar-node-0014">Now we will figure out how we can get the Hayward records back in. What we want the query to do is to scan the <code class="structname">weather</code> table and for each row to find the matching <code class="structname">cities</code> row(s). If no matching row is found we want some <span class="quote">“<span class="quote">empty values</span>”</span> to be substituted for the <code class="structname">cities</code> table's columns. This kind of query is called an <em class="firstterm">outer join</em>. (The joins we have seen so far are <em class="firstterm">inner joins</em>.) The command looks like this:</p>
+<pre class="programlisting" id="readar-node-0015">
+SELECT *
+    FROM weather LEFT OUTER JOIN cities ON weather.city = cities.name;
+</pre>
+<pre class="screen" id="readar-node-0016">
+     city      | temp_lo | temp_hi | prcp |    date    |     name      | location
+---------------+---------+---------+------+------------+---------------+-----------
+ Hayward       |      37 |      54 |      | 1994-11-29 |               |
+ San Francisco |      46 |      50 | 0.25 | 1994-11-27 | San Francisco | (-194,53)
+ San Francisco |      43 |      57 |    0 | 1994-11-29 | San Francisco | (-194,53)
+(3 rows)
+</pre>
+<p id="readar-node-0017">This query is called a <em class="firstterm">left outer join</em> because the table mentioned on the left of the join operator will have each of its rows in the output at least once, whereas the table on the right will only have those rows output that match some row of the left table. When outputting a left-table row for which there is no right-table match, empty (null) values are substituted for the right-table columns.</p>
+<p id="readar-node-0018"><strong>Exercise: </strong> There are also right outer joins and full outer joins. Try to find out what those do.</p><a class="indexterm" id="id-1.4.4.7.10" name="id-1.4.4.7.10"></a><a class="indexterm" id="id-1.4.4.7.11" name="id-1.4.4.7.11"></a>
+<p id="readar-node-0019">We can also join a table against itself. This is called a <em class="firstterm">self join</em>. As an example, suppose we wish to find all the weather records that are in the temperature range of other weather records. So we need to compare the <code class="structfield">temp_lo</code> and <code class="structfield">temp_hi</code> columns of each <code class="structname">weather</code> row to the <code class="structfield">temp_lo</code> and <code class="structfield">temp_hi</code> columns of all other <code class="structname">weather</code> rows. We can do this with the following query:</p>
+<pre class="programlisting" id="readar-node-0020">
+SELECT w1.city, w1.temp_lo AS low, w1.temp_hi AS high,
+       w2.city, w2.temp_lo AS low, w2.temp_hi AS high
+    FROM weather w1 JOIN weather w2
+        ON w1.temp_lo &lt; w2.temp_lo AND w1.temp_hi &gt; w2.temp_hi;
+</pre>
+<pre class="screen" id="readar-node-0021">
+     city      | low | high |     city      | low | high
+---------------+-----+------+---------------+-----+------
+ San Francisco |  43 |   57 | San Francisco |  46 |   50
+ Hayward       |  37 |   54 | San Francisco |  46 |   50
+(2 rows)
+</pre>
+<p id="readar-node-0022">Here we have relabeled the weather table as <code class="literal">w1</code> and <code class="literal">w2</code> to be able to distinguish the left and right side of the join. You can also use these kinds of aliases in other queries to save some typing, e.g.:</p>
+<pre class="programlisting" id="readar-node-0023">
+SELECT *
+    FROM weather w JOIN cities c ON w.city = c.name;
+</pre>
+<p id="readar-node-0024">You will encounter this style of abbreviating quite frequently.</p>
+<div class="footnotes">
+<br/>
+<hr style="width:100; text-align:left;margin-left: 0"/>
+<div class="footnote" id="ftn.id-1.4.4.7.3.6">
+<p id="readar-node-0025"><a class="para" href="#id-1.4.4.7.3.6"><sup class="para">[4]</sup></a> This is only a conceptual model. The join is usually performed in a more efficient manner than actually comparing each possible pair of rows, but this is invisible to the user.</p>
+</div>
+</div>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

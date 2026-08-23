@@ -1,0 +1,26 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.1. Introduction: In the previous chapter we have covered the basics of using SQL to store and access your data in PostgreSQL . We will now discuss some more advanced features of SQL that simplify management and prevent loss or corruption of your data. Finally, we will look at some PostgreSQL extensions.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-advanced-intro",
+    "id": "tutorial-advanced-intro__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.1. Introduction: This chapter will on occasion refer to examples found in Chapter 2 to change or improve them, so it will be useful to have read that chapter. Some examples from this chapter can also be found in advanced.sql in the tutorial directory. This file also contains some sample data to load, which is not repeated here. (Refer to Section 2.1 for how to use the file.)",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-advanced-intro",
+    "id": "tutorial-advanced-intro__node_0002"
+  }
+]

@@ -1,0 +1,749 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Python - TypeScript - Rust",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "getting_started",
+    "id": "getting_started__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For production, Chroma offers Chroma Cloud - a fast, scalable, and serverless database-as-a-service. Get started in 30 seconds - $5 in free credits included.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "getting_started",
+    "id": "getting_started__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Install with AI: Give the following prompt to Claude Code, Cursor, Codex, or your favorite AI agent. It will quickly set you up with Chroma.",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Python project with Chroma set up.\nUse a virtual environment.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nFirst, install `chromadb`.\n\nThe project should be set up with Chroma Cloud. When you install `chromadb`,\nyou get access to the Chroma CLI. You can run `chroma login` to authenticate.\nThis will open a browser for authentication and save a connection profile\nlocally.\n\nYou can also use `chroma profile show` to see if the user already has an\nactive profile saved locally. If so, you can skip the login step.\n\nThen create a DB using the CLI with `chroma db create chroma-getting-started`.\nThis will create a DB with this name.\n\nThen use the CLI command `chroma db connect chroma-getting-started --env-file`.\nThis will create a .env file in the current directory with the connection\nvariables for this DB and account, so the CloudClient can be instantiated\nwith chromadb.CloudClient(api_key=os.getenv(\"CHROMA_API_KEY\"), ...).",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Python project with Chroma set up.\nUse a virtual environment.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nUse Chroma's in-memory client: `chromadb.Client()`",
+    "dom_ids": [
+      "install-with-ai",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: pip install chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: poetry add chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: uv pip install chromadb",
+    "dom_ids": [
+      "install-manually",
+      "readar-node-0008",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: import chromadb\nchroma_client = chromadb.Client()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a collection: Collections are where you’ll store your embeddings, documents, and any additional metadata. Collections index your embeddings and documents, and enable efficient retrieval and filtering. You can create a collection with a name:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: collection = chroma_client.create_collection(name=\"my_collection\")",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: Chroma will store your text and handle embedding and indexing automatically. You can also customize the embedding model. You must provide unique string IDs for your documents.",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: collection.add(\n    ids=[\"id1\", \"id2\"],\n    documents=[\n        \"This is a document about pineapple\",\n        \"This is a document about oranges\"\n    ]\n)",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: You can query the collection with a list of query texts, and Chroma will return the n most similar results. It’s that easy!",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: results = collection.query(\n    query_texts=[\"This is a query document about hawaii\"], # Chroma will embed this for you\n    n_results=2 # how many results to return\n)\nprint(results)",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: If n_results is not provided, Chroma will return 10 results by default. Here we only added 2 documents, so we set n_results=2.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspect Results: From the above - you can see that our query about hawaii is semantically most similar to the document about pineapple.",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspect Results: {\n  'documents': [[\n      'This is a document about pineapple',\n      'This is a document about oranges'\n  ]],\n  'ids': [['id1', 'id2']],\n  'distances': [[1.0404009819030762, 1.243080496788025]],\n  'uris': None,\n  'data': None,\n  'metadatas': [[None, None]],\n  'embeddings': None,\n}",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out yourself: What if we tried querying with “This is a document about florida”? Here is a full example.",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out yourself: import chromadb\nchroma_client = chromadb.Client()\n\n# switch \\`create_collection\\` to \\`get_or_create_collection\\` to avoid creating a new collection every time\ncollection = chroma_client.get_or_create_collection(name=\"my_collection\")\n\n# switch \\`add\\` to \\`upsert\\` to avoid adding the same documents every time\ncollection.upsert(\n    documents=[\n        \"This is a document about pineapple\",\n        \"This is a document about oranges\"\n    ],\n    ids=[\"id1\", \"id2\"]\n)\n\nresults = collection.query(\n    query_texts=[\"This is a query document about florida\"], # Chroma will embed this for you\n    n_results=2 # how many results to return\n)\n\nprint(results)",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: In this guide we used Chroma’s in-memory client for simplicity. It starts a Chroma server in-memory, so any data you ingest will be lost when your program terminates. You can use the persistent client or run Chroma in client-server mode if you need data persistence.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0021"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help - Follow Chroma on X (@trychroma) for updates",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: For production, Chroma offers Chroma Cloud - a fast, scalable, and serverless database-as-a-service. Get started in 30 seconds - $5 in free credits included.",
+    "dom_ids": [
+      "next-steps",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Install with AI: Give the following prompt to Claude Code, Cursor, Codex, or your favorite AI agent. It will quickly set you up with Chroma.",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0024"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Typescript project with Chroma set up.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nFirst, install `chromadb`.\n\nThe project should be set up with Chroma Cloud. When you install `chromadb`,\nyou get access to the Chroma CLI. You can run `chroma login` to authenticate.\nThis will open a browser for authentication and save a connection profile\nlocally.\n\nYou can also use `chroma profile show` to see if the user already has an\nactive profile saved locally. If so, you can skip the login step.\n\nThen create a DB using the CLI with `chroma db create chroma-getting-started`.\nThis will create a DB with this name.\n\nThen use the CLI command `chroma db connect chroma-getting-started --env-file`.\nThis will create a .env file in the current directory with the connection\nvariables for this DB and account, so the CloudClient can be instantiated\nwith: new CloudClient().",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install with AI: In this directory create a new Typescript project with Chroma set up.\n\nWrite a small example that adds some data to a collection and queries it.\nDo not delete the data from the collection when it's complete.\nRun the script when you are done setting up the environment and writing the\nscript. The output should show what data was ingested, what was the query,\nand the results.\nYour own summary should include this output so the user can see it.\n\nYou will have to run a local Chroma server to make this work. When you install\n`chromadb` you get access to the Chroma CLI, which can start a local server\nfor you with `chroma run`.\n\nMake sure to instruct the user on how to start a local Chroma server in your\nsummary.",
+    "dom_ids": [
+      "install-with-ai-2",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: npm install chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: pnpm add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: bun add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually — Install: yarn add chromadb @chroma-core/default-embed",
+    "dom_ids": [
+      "install-manually-2",
+      "readar-node-0039",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Run the Chroma backend:",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: npx chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: pnpm exec chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: bunx chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: yarn chroma run --path ./getting-started",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: docker pull chromadb/chroma\ndocker run -p 8000:8000 chromadb/chroma",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Then create a client which connects to it:",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: import { ChromaClient } from \"chromadb\";\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: const { ChromaClient } = require(\"chromadb\");\nconst client = new ChromaClient();",
+    "dom_ids": [
+      "readar-node-0044",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a collection: Collections are where you’ll store your embeddings, documents, and any additional metadata. Collections index your embeddings and documents, and enable efficient retrieval and filtering. You can create a collection with a name:",
+    "dom_ids": [
+      "readar-node-0054",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: const collection = await client.createCollection({\n  name: \"my_collection\",\n});",
+    "dom_ids": [
+      "readar-node-0054",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: Chroma will store your text and handle embedding and indexing automatically. You can also customize the embedding model. You must provide unique string IDs for your documents.",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: await collection.add({\n  ids: [\"id1\", \"id2\"],\n  documents: [\n    \"This is a document about pineapple\",\n    \"This is a document about oranges\",\n  ],\n});",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: You can query the collection with a list of query texts, and Chroma will return the n most similar results. It’s that easy!",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: const results = await collection.query({\n  queryTexts: [\"This is a query document about hawaii\"], // Chroma will embed this for you\n  nResults: 2, // how many results to return\n});\n\nconsole.log(results);",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Query the collection: If n_results is not provided, Chroma will return 10 results by default. Here we only added 2 documents, so we set n_results=2.",
+    "dom_ids": [
+      "readar-node-0060",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Inspect Results: From the above - you can see that our query about hawaii is semantically most similar to the document about pineapple.",
+    "dom_ids": [
+      "readar-node-0064",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Inspect Results: {\n    documents: [\n        [\n            'This is a document about pineapple',\n            'This is a document about oranges'\n        ]\n    ],\n    ids: [\n        ['id1', 'id2']\n    ],\n    distances: [[1.0404009819030762, 1.243080496788025]],\n    uris: null,\n    data: null,\n    metadatas: [[null, null]],\n    embeddings: null\n}",
+    "dom_ids": [
+      "readar-node-0064",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Try it out yourself: What if we tried querying with “This is a document about florida”? Here is a full example.",
+    "dom_ids": [
+      "readar-node-0067",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Try it out yourself: import { ChromaClient } from \"chromadb\";\nconst client = new ChromaClient();\n\n// switch `createCollection` to `getOrCreateCollection` to avoid creating a new collection every time\nconst collection = await client.getOrCreateCollection({\n  name: \"my_collection\",\n});\n\n// switch `addRecords` to `upsertRecords` to avoid adding the same documents every time\nawait collection.upsert({\n  documents: [\n    \"This is a document about pineapple\",\n    \"This is a document about oranges\",\n  ],\n  ids: [\"id1\", \"id2\"],\n});\n\nconst results = await collection.query({\n  queryTexts: [\"This is a query document about florida\"], // Chroma will embed this for you\n  nResults: 2, // how many results to return\n});\n\nconsole.log(results);",
+    "dom_ids": [
+      "readar-node-0067",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0050"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - We offer first class support for various embedding providers via our embedding function interface. Each embedding function ships in its own npm package. - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help - Follow Chroma on X (@trychroma) for updates",
+    "dom_ids": [
+      "next-steps-2",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Next steps: Our Rust docs are hosted on docs.rs !",
+    "dom_ids": [
+      "next-steps-2",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Install Manually: cargo add chroma",
+    "dom_ids": [
+      "install-manually-3",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Run the Chroma backend:",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: chroma run --path ./getting-started",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a Chroma Client: Then create a client which connects to it:",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a Chroma Client: use chroma::ChromaHttpClient;\n\nlet client = ChromaHttpClient::new(Default::default());",
+    "dom_ids": [
+      "create-a-chroma-client",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0057"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a collection: let collection = client\n    .create_collection(\"my_collection\", None, None)\n    .await?;",
+    "dom_ids": [
+      "create-a-collection",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add some text documents to the collection: The Rust client expects embeddings to be provided directly. Generate embeddings with your provider SDK, then pass them along with documents.",
+    "dom_ids": [
+      "add-some-text-documents-to-the-collection",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add some text documents to the collection: let embeddings = vec![vec![0.1, 0.2, 0.3], vec![0.4, 0.5, 0.6]];\n\ncollection\n    .add(\n        vec![\"id1\".to_string(), \"id2\".to_string()],\n        embeddings,\n        Some(vec![\n            Some(\"This is a document about pineapple\".to_string()),\n            Some(\"This is a document about oranges\".to_string()),\n        ]),\n        None,\n        None,\n    )\n    .await?;",
+    "dom_ids": [
+      "add-some-text-documents-to-the-collection",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0060"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Query the collection: let results = collection\n    .query(vec![vec![0.1, 0.2, 0.3]], Some(2), None, None, None)\n    .await?;",
+    "dom_ids": [
+      "query-the-collection",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0061"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Next steps: - Read the Rust API docs on docs.rs - Learn how to Deploy Chroma to a server - Join Chroma’s Discord Community to ask questions and get help",
+    "dom_ids": [
+      "next-steps-3",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "getting_started",
+    "id": "getting_started__node_0062"
+  }
+]

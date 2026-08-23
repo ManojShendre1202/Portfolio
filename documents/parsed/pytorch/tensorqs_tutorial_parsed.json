@@ -1,0 +1,650 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tensors: Created On: Feb 10, 2021 | Last Updated: Apr 30, 2026 | Last Verified: Nov 05, 2024",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tensors: Tensors are a specialized data structure that are very similar to arrays and matrices. In PyTorch, we use tensors to encode the inputs and outputs of a model, as well as the model’s parameters.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tensors: Tensors are similar to NumPy’s ndarrays, except that tensors can run on GPUs or other hardware accelerators. In fact, tensors and NumPy arrays can often share the same underlying memory, eliminating the need to copy data (see Bridge with NumPy ). Tensors are also optimized for automatic differentiation (we’ll see more about that later in the Autograd section). If you’re familiar with ndarrays, you’ll be right at home with the Tensor API. If not, follow along!",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tensors: import torch\nimport numpy as np",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: Tensors can be initialized in various ways. Take a look at the following examples:",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: Directly from data",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: Tensors can be created directly from data. The data type is automatically inferred.",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: data = [[1, 2],[3, 4]]\nx_data = torch.tensor(data)",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: From a NumPy array",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: Tensors can be created from NumPy arrays (and vice versa - see Bridge with NumPy ).",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: np_array = np.array(data)\nx_np = torch.from_numpy(np_array)",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: From another tensor:",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: The new tensor retains the properties (shape, datatype) of the argument tensor, unless explicitly overridden.",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: x_ones = torch.ones_like(x_data) # retains the properties of x_data\nprint(f\"Ones Tensor: \\n {x_ones} \\n\")\n\nx_rand = torch.rand_like(x_data, dtype=torch.float) # overrides the datatype of x_data\nprint(f\"Random Tensor: \\n {x_rand} \\n\")",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: Ones Tensor:\n tensor([[1, 1],\n        [1, 1]])\n\nRandom Tensor:\n tensor([[0.6390, 0.2438],\n        [0.9767, 0.0096]])",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: With random or constant values:",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Initializing a Tensor: shape is a tuple of tensor dimensions. In the functions below, it determines the dimensionality of the output tensor.",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: shape = (2,3)\nrand_tensor = torch.rand(shape)\nones_tensor = torch.ones(shape)\nzeros_tensor = torch.zeros(shape)\n\nprint(f\"Random Tensor: \\n {rand_tensor} \\n\")\nprint(f\"Ones Tensor: \\n {ones_tensor} \\n\")\nprint(f\"Zeros Tensor: \\n {zeros_tensor}\")",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Initializing a Tensor: Random Tensor:\n tensor([[0.4363, 0.5371, 0.6948],\n        [0.5858, 0.7610, 0.6152]])\n\nOnes Tensor:\n tensor([[1., 1., 1.],\n        [1., 1., 1.]])\n\nZeros Tensor:\n tensor([[0., 0., 0.],\n        [0., 0., 0.]])",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Attributes of a Tensor: Tensor attributes describe their shape, datatype, and the device on which they are stored.",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Attributes of a Tensor: tensor = torch.rand(3,4)\n\nprint(f\"Shape of tensor: {tensor.shape}\")\nprint(f\"Datatype of tensor: {tensor.dtype}\")\nprint(f\"Device tensor is stored on: {tensor.device}\")",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Attributes of a Tensor: Shape of tensor: torch.Size([3, 4])\nDatatype of tensor: torch.float32\nDevice tensor is stored on: cpu",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Over 1200 tensor operations, including arithmetic, linear algebra, matrix manipulation (transposing, indexing, slicing), sampling and more are comprehensively described here .",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Each of these operations can be run on the CPU and Accelerator such as CUDA, MPS, MTIA, or XPU. If you’re using Colab, allocate an accelerator by going to Runtime > Change runtime type > GPU.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: By default, tensors are created on the CPU. We need to explicitly move tensors to the accelerator using .to method (after checking for accelerator availability). Keep in mind that copying large tensors across devices can be expensive in terms of time and memory!",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: # We move our tensor to the current accelerator if available\nif torch.accelerator.is_available():\n    tensor = tensor.to(torch.accelerator.current_accelerator())",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Try out some of the operations from the list. If you’re familiar with the NumPy API, you’ll find the Tensor API a breeze to use.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Standard numpy-like indexing and slicing:",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: tensor = torch.ones(4, 4)\nprint(f\"First row: {tensor[0]}\")\nprint(f\"First column: {tensor[:, 0]}\")\nprint(f\"Last column: {tensor[..., -1]}\")\ntensor[:,1] = 0\nprint(tensor)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: First row: tensor([1., 1., 1., 1.])\nFirst column: tensor([1., 1., 1., 1.])\nLast column: tensor([1., 1., 1., 1.])\ntensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Joining tensors You can use torch.cat to concatenate a sequence of tensors along a given dimension. See also torch.stack , another tensor joining operator that is subtly different from torch.cat .",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: t1 = torch.cat([tensor, tensor, tensor], dim=1)\nprint(t1)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: tensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Arithmetic operations",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: # This computes the matrix multiplication between two tensors. y1, y2, y3 will have the same value\n# ``tensor.T`` returns the transpose of a tensor\ny1 = tensor @ tensor.T\ny2 = tensor.matmul(tensor.T)\n\ny3 = torch.rand_like(y1)\ntorch.matmul(tensor, tensor.T, out=y3)\n\n\n# This computes the element-wise product. z1, z2, z3 will have the same value\nz1 = tensor * tensor\nz2 = tensor.mul(tensor)\n\nz3 = torch.rand_like(tensor)\ntorch.mul(tensor, tensor, out=z3)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: tensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Single-element tensors If you have a one-element tensor, for example by aggregating all values of a tensor into one value, you can convert it to a Python numerical value using item() :",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0037"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: agg = tensor.sum()\nagg_item = agg.item()\nprint(agg_item, type(agg_item))",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: 12.0 <class 'float'>",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: In-place operations Operations that store the result into the operand are called in-place. They are denoted by a _ suffix. For example: x.copy_(y) , x.t_() , will change x .",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: print(f\"{tensor} \\n\")\ntensor.add_(5)\nprint(tensor)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Operations on Tensors: tensor([[1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.],\n        [1., 0., 1., 1.]])\n\ntensor([[6., 5., 6., 6.],\n        [6., 5., 6., 6.],\n        [6., 5., 6., 6.],\n        [6., 5., 6., 6.]])",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0042"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: Note",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Operations on Tensors: In-place operations save some memory, but can be problematic when computing derivatives because of an immediate loss of history. Hence, their use is discouraged.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0044"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bridge with NumPy: Tensors on the CPU and NumPy arrays can share their underlying memory locations, and changing one will change the other.",
+    "dom_ids": [
+      "readar-node-0049",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tensor to NumPy array: t = torch.ones(5)\nprint(f\"t: {t}\")\nn = t.numpy()\nprint(f\"n: {n}\")",
+    "dom_ids": [
+      "readar-node-0051",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tensor to NumPy array: t: tensor([1., 1., 1., 1., 1.])\nn: [1. 1. 1. 1. 1.]",
+    "dom_ids": [
+      "readar-node-0051",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tensor to NumPy array: A change in the tensor reflects in the NumPy array.",
+    "dom_ids": [
+      "readar-node-0051",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tensor to NumPy array: t.add_(1)\nprint(f\"t: {t}\")\nprint(f\"n: {n}\")",
+    "dom_ids": [
+      "readar-node-0051",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tensor to NumPy array: t: tensor([2., 2., 2., 2., 2.])\nn: [2. 2. 2. 2. 2.]",
+    "dom_ids": [
+      "readar-node-0051",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "NumPy array to Tensor: n = np.ones(5)\nt = torch.from_numpy(n)",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "NumPy array to Tensor: Changes in the NumPy array reflects in the tensor.",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "NumPy array to Tensor: np.add(n, 1, out=n)\nprint(f\"t: {t}\")\nprint(f\"n: {n}\")",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "NumPy array to Tensor: t: tensor([2., 2., 2., 2., 2.], dtype=torch.float64)\nn: [2. 2. 2. 2. 2.]",
+    "dom_ids": [
+      "readar-node-0057",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tensorqs_tutorial",
+    "id": "tensorqs_tutorial__node_0054"
+  }
+]

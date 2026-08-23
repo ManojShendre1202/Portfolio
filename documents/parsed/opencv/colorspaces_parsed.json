@@ -1,0 +1,180 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - In this tutorial, you will learn how to convert images from one color-space to another, like BGR \\(\\leftrightarrow\\) Gray, BGR \\(\\leftrightarrow\\) HSV, etc. - In addition to that, we will create an application to extract a colored object in a video - You will learn the following functions: cv.cvtColor() , cv.inRange() , etc.",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: There are more than 150 color-space conversion methods available in OpenCV. But we will look into only two, which are most widely used ones: BGR \\(\\leftrightarrow\\) Gray and BGR \\(\\leftrightarrow\\) HSV.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: For color conversion, we use the function cv.cvtColor(input_image, flag) where flag determines the type of conversion.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: For BGR \\(\\rightarrow\\) Gray conversion, we use the flag cv.COLOR_BGR2GRAY . Similarly for BGR \\(\\rightarrow\\) HSV, we use the flag cv.COLOR_BGR2HSV . To get other flags, just run following commands in your Python terminal:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Changing Color-space: >>> import cv2 as cv\n>>> flags = [i for i in dir(cv) if i.startswith('COLOR_')]\n>>> print( flags )",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Now that we know how to convert a BGR image to HSV, we can use this to extract a colored object. In HSV, it is easier to represent a color than in BGR color-space. In our application, we will try to extract a blue colored object. So here is the method:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Object Tracking: - Take each frame of the video - Convert from BGR to HSV color-space - We threshold the HSV image for a range of blue color - Now extract the blue object alone, we can do whatever we want on that image.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Below is the code which is commented in detail:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Object Tracking: import cv2 as cv\nimport numpy as np\n\ncap = cv.VideoCapture(0)\n\nwhile(1):\n\n # Take each frame\n    _, frame = cap.read()\n\n # Convert BGR to HSV\n    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)\n\n # define range of blue color in HSV\n    lower_blue = np.array([110,50,50])\n    upper_blue = np.array([130,255,255])\n\n # Threshold the HSV image to get only blue colors\n    mask = cv.inRange(hsv, lower_blue, upper_blue)\n\n # Bitwise-AND mask and original image\n    res = cv.bitwise_and(frame,frame, mask= mask)\n\n cv.imshow('frame',frame)\n cv.imshow('mask',mask)\n cv.imshow('res',res)\n    k = cv.waitKey(5) & 0xFF\n if k == 27:\n break\n\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Below image shows tracking of the blue object:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to find HSV values to track?: This is a common question found in stackoverflow.com . It is very simple and you can use the same function, cv.cvtColor() . Instead of passing an image, you just pass the BGR values you want. For example, to find the HSV value of Green, try the following commands in a Python terminal:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "How to find HSV values to track?: >>> green = np.uint8([[[0,255,0 ]]])\n>>> hsv_green = cv.cvtColor(green,cv.COLOR_BGR2HSV)\n>>> print( hsv_green )\n[[[ 60 255 255]]]",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to find HSV values to track?: Now you take [H-10, 100,100] and [H+10, 255, 255] as the lower bound and upper bound respectively. Apart from this method, you can use any image editing tools like GIMP or any online converters to find these values, but don't forget to adjust the HSV ranges.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - Try to find a way to extract more than one colored object, for example, extract red, blue, and green objects simultaneously.",
+    "dom_ids": [
+      "readar-node-0019",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0015"
+  }
+]

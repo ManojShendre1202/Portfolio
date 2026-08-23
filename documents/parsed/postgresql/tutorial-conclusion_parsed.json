@@ -1,0 +1,26 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.7. Conclusion: PostgreSQL has many features not touched upon in this tutorial introduction, which has been oriented toward newer users of SQL . These features are discussed in more detail in the remainder of this book.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-conclusion",
+    "id": "tutorial-conclusion__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3.7. Conclusion: If you feel you need more introductory material, please visit the PostgreSQL web site for links to more resources.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "tutorial-conclusion",
+    "id": "tutorial-conclusion__node_0002"
+  }
+]

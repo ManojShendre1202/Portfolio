@@ -1,0 +1,1476 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "For new applications, we recommend event streaming —the typed-projection API introduced in LangGraph v1.2. Event streaming gives you separate iterators per projection (messages, values, subgraphs, output) so you can consume them independently instead of branching on stream_mode chunks.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "streaming",
+    "id": "streaming__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This page covers LangGraph’s stream-mode API. It exposes graph execution through stream modes such as updates , values , messages , custom , checkpoints , tasks , and debug . Use it when you need direct access to graph-runtime events or specific stream-mode output.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "streaming",
+    "id": "streaming__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get started — Basic usage: LangGraph graphs expose the stream (sync) and astream (async) methods to yield streamed outputs as iterators. Pass one or more stream modes to control what data you receive.",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get started — Basic usage: for chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=[\"updates\", \"custom\"],\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"updates\":\n        for node_name, state in chunk[\"data\"].items():\n            print(f\"Node {node_name} updated: {state}\")\n    elif chunk[\"type\"] == \"custom\":\n        print(f\"Status: {chunk['data']['status']}\")",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get started — Basic usage: Status: thinking of a joke...\nNode generate_joke updated: {'joke': 'Why did the ice cream go to school? To get a sundae education!'}",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get started — Basic usage: Full example",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "full-example-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get started — Basic usage: from typing import TypedDict\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.config import get_stream_writer\n\n\nclass State(TypedDict):\n    topic: str\n    joke: str\n\n\ndef generate_joke(state: State):\n    writer = get_stream_writer()\n    writer({\"status\": \"thinking of a joke...\"})\n    return {\"joke\": f\"Why did the {state['topic']} go to school? To get a sundae education!\"}\n\ngraph = (\n    StateGraph(State)\n    .add_node(generate_joke)\n    .add_edge(START, \"generate_joke\")\n    .add_edge(\"generate_joke\", END)\n    .compile()\n)\n\nfor chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=[\"updates\", \"custom\"],\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"updates\":\n        for node_name, state in chunk[\"data\"].items():\n            print(f\"Node {node_name} updated: {state}\")\n    elif chunk[\"type\"] == \"custom\":\n        print(f\"Status: {chunk['data']['status']}\")",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Get started — Basic usage: Status: thinking of a joke...\nNode generate_joke updated: {'joke': 'Why did the ice cream go to school? To get a sundae education!'}",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Get started — Basic usage: Debug streaming events, inspect token-by-token LLM output, and monitor latency with LangSmith . Follow the tracing quickstart to get set up.",
+    "dom_ids": [
+      "get-started",
+      "basic-usage",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream output format (v2): Requires LangGraph >= 1.1. All examples on this page use version=\"v2\" .",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream output format (v2): Pass version=\"v2\" to stream() or astream() to get a unified output format. Every chunk is a StreamPart dict with a consistent shape — regardless of stream mode, number of modes, or subgraph settings:",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stream output format (v2): {\n    \"type\": \"values\" | \"updates\" | \"messages\" | \"custom\" | \"checkpoints\" | \"tasks\" | \"debug\",\n    \"ns\": (),           # namespace tuple, populated for subgraph events\n    \"data\": ...,        # the actual payload (type varies by stream mode)\n}",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream output format (v2): Each stream mode has a corresponding TypedDict containing ValuesStreamPart , UpdatesStreamPart , MessagesStreamPart , CustomStreamPart , CheckpointStreamPart , TasksStreamPart , DebugStreamPart . You can import these types from langgraph.types . The union type StreamPart is a disjoing union on part[\"type\"] , enabling full type narrowing in editors and type checkers.",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream output format (v2): With v1 (default), the output format changes based on your streaming options (single mode returns raw data, multiple modes return (mode, data) tuples, subgraphs return (namespace, data) tuples). With v2, the format is always the same:",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stream output format (v2): for chunk in graph.stream(inputs, stream_mode=\"updates\", version=\"v2\"):\n    print(chunk[\"type\"])  # \"updates\"\n    print(chunk[\"ns\"])    # ()\n    print(chunk[\"data\"])  # {\"node_name\": {\"key\": \"value\"}}",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stream output format (v2): for chunk in graph.stream(inputs, stream_mode=\"updates\"):\n    print(chunk)  # {\"node_name\": {\"key\": \"value\"}}",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream output format (v2): The v2 format also enables type narrowing, which means you can filter chunks by chunk[\"type\"] and get the correct payload type. Each branch narrows part[\"data\"] to the specific type for that mode:",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Stream output format (v2): for part in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=[\"values\", \"updates\", \"messages\", \"custom\"],\n    version=\"v2\",\n):\n    if part[\"type\"] == \"values\":\n        # ValuesStreamPart — full state snapshot after each step\n        print(f\"State: topic={part['data']['topic']}\")\n    elif part[\"type\"] == \"updates\":\n        # UpdatesStreamPart — only the changed keys from each node\n        for node_name, state in part[\"data\"].items():\n            print(f\"Node `{node_name}` updated: {state}\")\n    elif part[\"type\"] == \"messages\":\n        # MessagesStreamPart — (message_chunk, metadata) from LLM calls\n        msg, metadata = part[\"data\"]\n        print(msg.content, end=\"\", flush=True)\n    elif part[\"type\"] == \"custom\":\n        # CustomStreamPart — arbitrary data from get_stream_writer()\n        print(f\"Progress: {part['data']['progress']}%\")",
+    "dom_ids": [
+      "stream-output-format-v2",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Stream modes: Pass one or more of the following stream modes as a list to the stream or astream methods:",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0019"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: Mode | Type | Description",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0020"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: values | ValuesStreamPart | Full state after each step.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0021"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: updates | UpdatesStreamPart | State updates after each step. Multiple updates in the same step are streamed separately.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0022"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: messages | MessagesStreamPart | 2-tuples of (LLM token, metadata) from LLM calls.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0023"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: custom | CustomStreamPart | Custom data emitted from nodes via get_stream_writer .",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0024"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: checkpoints | CheckpointStreamPart | Checkpoint events (same format as get_state() ). Requires a checkpointer.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0025"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: tasks | TasksStreamPart | Task start/finish events with results and errors. Requires a checkpointer.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0026"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Stream modes: debug | DebugStreamPart | All available info — combines checkpoints and tasks with extra metadata.",
+    "dom_ids": [
+      "stream-modes",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Graph state: Use the stream modes updates and values to stream the state of the graph as it executes.",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0028"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Graph state: - updates streams the updates to the state after each step of the graph. - values streams the full value of the state after each step of the graph.",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Graph state: from typing import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\n\nclass State(TypedDict):\n  topic: str\n  joke: str\n\n\ndef refine_topic(state: State):\n    return {\"topic\": state[\"topic\"] + \" and cats\"}\n\n\ndef generate_joke(state: State):\n    return {\"joke\": f\"This is a joke about {state['topic']}\"}\n\ngraph = (\n  StateGraph(State)\n  .add_node(refine_topic)\n  .add_node(generate_joke)\n  .add_edge(START, \"refine_topic\")\n  .add_edge(\"refine_topic\", \"generate_joke\")\n  .add_edge(\"generate_joke\", END)\n  .compile()\n)",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Graph state: - updates - values",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Graph state: Use this to stream only the state updates returned by the nodes after each step. The streamed outputs include the name of the node as well as the update.",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Graph state: for chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=\"updates\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"updates\":\n        for node_name, state in chunk[\"data\"].items():\n            print(f\"Node `{node_name}` updated: {state}\")",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0033"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Graph state: Node `refine_topic` updated: {'topic': 'ice cream and cats'}\nNode `generate_joke` updated: {'joke': 'This is a joke about ice cream and cats'}",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Graph state: Use this to stream the full state of the graph after each step.",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Graph state: for chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=\"values\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"values\":\n        print(f\"topic: {chunk['data']['topic']}, joke: {chunk['data']['joke']}\")",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Graph state: topic: ice cream, joke:\ntopic: ice cream and cats, joke:\ntopic: ice cream and cats, joke: This is a joke about ice cream and cats",
+    "dom_ids": [
+      "graph-state",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LLM tokens: Use the messages streaming mode to stream Large Language Model (LLM) outputs token by token from any part of your graph, including nodes, tools, subgraphs, or tasks.",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0038"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LLM tokens: The streamed output from messages mode is a tuple (message_chunk, metadata) where:",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0039"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "LLM tokens: - message_chunk : the token or message segment from the LLM. - metadata : a dictionary containing details about the graph node and LLM invocation.",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0040"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LLM tokens: If your LLM is not available as a LangChain integration, you can stream its outputs using custom mode instead. See use with any LLM for details.",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "LLM tokens: Manual config required for async in Python < 3.11 When using Python < 3.11 with async code, you must explicitly pass RunnableConfig to ainvoke() to enable proper streaming. See Async with Python < 3.11 for details or upgrade to Python 3.11+.",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "LLM tokens: from dataclasses import dataclass\n\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, START\n\n\n@dataclass\nclass MyState:\n    topic: str\n    joke: str = \"\"\n\n\nmodel = init_chat_model(model=\"gpt-5.4-mini\")\n\ndef call_model(state: MyState):\n    \"\"\"Call the LLM to generate a joke about a topic\"\"\"\n    # Note that message events are emitted even when the LLM is run using .invoke rather than .stream\n    model_response = model.invoke(\n        [\n            {\"role\": \"user\", \"content\": f\"Generate a joke about {state.topic}\"}\n        ]\n    )\n    return {\"joke\": model_response.content}\n\ngraph = (\n    StateGraph(MyState)\n    .add_node(call_model)\n    .add_edge(START, \"call_model\")\n    .compile()\n)\n\n# The \"messages\" stream mode streams LLM tokens with metadata\n# Use version=\"v2\" for a unified StreamPart format\nfor chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=\"messages\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        message_chunk, metadata = chunk[\"data\"]\n        if message_chunk.content:\n            print(message_chunk.content, end=\"|\", flush=True)",
+    "dom_ids": [
+      "llm-tokens",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filter by LLM invocation: You can associate tags with LLM invocations to filter the streamed tokens by LLM invocation.",
+    "dom_ids": [
+      "filter-by-llm-invocation",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filter by LLM invocation: from langchain.chat_models import init_chat_model\n\n# model_1 is tagged with \"joke\"\nmodel_1 = init_chat_model(model=\"gpt-5.4-mini\", tags=['joke'])\n# model_2 is tagged with \"poem\"\nmodel_2 = init_chat_model(model=\"gpt-5.4-mini\", tags=['poem'])\n\ngraph = ... # define a graph that uses these LLMs\n\n# The stream_mode is set to \"messages\" to stream LLM tokens\n# The metadata contains information about the LLM invocation, including the tags\nasync for chunk in graph.astream(\n    {\"topic\": \"cats\"},\n    stream_mode=\"messages\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        msg, metadata = chunk[\"data\"]\n        # Filter the streamed tokens by the tags field in the metadata to only include\n        # the tokens from the LLM invocation with the \"joke\" tag\n        if metadata[\"tags\"] == [\"joke\"]:\n            print(msg.content, end=\"|\", flush=True)",
+    "dom_ids": [
+      "filter-by-llm-invocation",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filter by LLM invocation: Extended example: filtering by tags",
+    "dom_ids": [
+      "filter-by-llm-invocation",
+      "extended-example-filtering-by-tags-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filter by LLM invocation: from typing import TypedDict\n\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import START, StateGraph\n\n# The joke_model is tagged with \"joke\"\njoke_model = init_chat_model(model=\"gpt-5.4-mini\", tags=[\"joke\"])\n# The poem_model is tagged with \"poem\"\npoem_model = init_chat_model(model=\"gpt-5.4-mini\", tags=[\"poem\"])\n\n\nclass State(TypedDict):\n      topic: str\n      joke: str\n      poem: str\n\n\nasync def call_model(state, config):\n      topic = state[\"topic\"]\n      print(\"Writing joke...\")\n      # Note: Passing the config through explicitly is required for python < 3.11\n      # Since context var support wasn't added before then: https://docs.python.org/3/library/asyncio-task.html#creating-tasks\n      # The config is passed through explicitly to ensure the context vars are propagated correctly\n      # This is required for Python < 3.11 when using async code. Please see the async section for more details\n      joke_response = await joke_model.ainvoke(\n            [{\"role\": \"user\", \"content\": f\"Write a joke about {topic}\"}],\n            config,\n      )\n      print(\"\\n\\nWriting poem...\")\n      poem_response = await poem_model.ainvoke(\n            [{\"role\": \"user\", \"content\": f\"Write a short poem about {topic}\"}],\n            config,\n      )\n      return {\"joke\": joke_response.content, \"poem\": poem_response.content}\n\n\ngraph = (\n      StateGraph(State)\n      .add_node(call_model)\n      .add_edge(START, \"call_model\")\n      .compile()\n)\n\n# The stream_mode is set to \"messages\" to stream LLM tokens\n# The metadata contains information about the LLM invocation, including the tags\nasync for chunk in graph.astream(\n      {\"topic\": \"cats\"},\n      stream_mode=\"messages\",\n      version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        msg, metadata = chunk[\"data\"]\n        if metadata[\"tags\"] == [\"joke\"]:\n            print(msg.content, end=\"|\", flush=True)",
+    "dom_ids": [
+      "filter-by-llm-invocation",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Omit messages from the stream: Use the nostream tag to exclude LLM output from the stream entirely. Invocations tagged with nostream still run and produce output; their tokens are simply not emitted in messages mode.",
+    "dom_ids": [
+      "omit-messages-from-the-stream",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Omit messages from the stream: This is useful when:",
+    "dom_ids": [
+      "omit-messages-from-the-stream",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0049"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Omit messages from the stream: - You need LLM output for internal processing (for example structured output) but do not want to stream it to the client - You stream the same content through a different channel (for example custom UI messages) and want to avoid duplicate output in the messages stream",
+    "dom_ids": [
+      "omit-messages-from-the-stream",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Omit messages from the stream: from typing import Any, TypedDict\n\nfrom langchain_anthropic import ChatAnthropic\nfrom langgraph.graph import START, StateGraph\n\nstream_model = ChatAnthropic(model_name=\"claude-haiku-4-5-20251001\")\ninternal_model = ChatAnthropic(model_name=\"claude-haiku-4-5-20251001\").with_config(\n    {\"tags\": [\"nostream\"]}\n)\n\n\nclass State(TypedDict):\n    topic: str\n    answer: str\n    notes: str\n\n\ndef answer(state: State) -> dict[str, Any]:\n    r = stream_model.invoke(\n        [{\"role\": \"user\", \"content\": f\"Reply briefly about {state['topic']}\"}]\n    )\n    return {\"answer\": r.content}\n\n\ndef internal_notes(state: State) -> dict[str, Any]:\n    # Tokens from this model are omitted from stream_mode=\"messages\" because of nostream\n    r = internal_model.invoke(\n        [{\"role\": \"user\", \"content\": f\"Private notes on {state['topic']}\"}]\n    )\n    return {\"notes\": r.content}\n\n\ngraph = (\n    StateGraph(State)\n    .add_node(\"write_answer\", answer)\n    .add_node(\"internal_notes\", internal_notes)\n    .add_edge(START, \"write_answer\")\n    .add_edge(\"write_answer\", \"internal_notes\")\n    .compile()\n)\n\ninitial_state: State = {\"topic\": \"AI\", \"answer\": \"\", \"notes\": \"\"}\nstream = graph.stream_events(initial_state, version=\"v3\")",
+    "dom_ids": [
+      "omit-messages-from-the-stream",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filter by node: To stream tokens only from specific nodes, use stream_mode=\"messages\" and filter the outputs by the langgraph_node field in the streamed metadata:",
+    "dom_ids": [
+      "filter-by-node",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filter by node: # The \"messages\" stream mode streams LLM tokens with metadata\n# Use version=\"v2\" for a unified StreamPart format\nfor chunk in graph.stream(\n    inputs,\n    stream_mode=\"messages\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        msg, metadata = chunk[\"data\"]\n        # Filter the streamed tokens by the langgraph_node field in the metadata\n        # to only include the tokens from the specified node\n        if msg.content and metadata[\"langgraph_node\"] == \"some_node_name\":\n            ...",
+    "dom_ids": [
+      "filter-by-node",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Filter by node: Extended example: streaming LLM tokens from specific nodes",
+    "dom_ids": [
+      "filter-by-node",
+      "extended-example-streaming-llm-tokens-from-specific-nodes-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0054"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Filter by node: from typing import TypedDict\nfrom langgraph.graph import START, StateGraph\nfrom langchain_openai import ChatOpenAI\n\nmodel = ChatOpenAI(model=\"gpt-5.4-mini\")\n\n\nclass State(TypedDict):\n      topic: str\n      joke: str\n      poem: str\n\n\ndef write_joke(state: State):\n      topic = state[\"topic\"]\n      joke_response = model.invoke(\n            [{\"role\": \"user\", \"content\": f\"Write a joke about {topic}\"}]\n      )\n      return {\"joke\": joke_response.content}\n\n\ndef write_poem(state: State):\n      topic = state[\"topic\"]\n      poem_response = model.invoke(\n            [{\"role\": \"user\", \"content\": f\"Write a short poem about {topic}\"}]\n      )\n      return {\"poem\": poem_response.content}\n\n\ngraph = (\n      StateGraph(State)\n      .add_node(write_joke)\n      .add_node(write_poem)\n      # write both the joke and the poem concurrently\n      .add_edge(START, \"write_joke\")\n      .add_edge(START, \"write_poem\")\n      .compile()\n)\n\n# The \"messages\" stream mode streams LLM tokens with metadata\n# Use version=\"v2\" for a unified StreamPart format\nfor chunk in graph.stream(\n    {\"topic\": \"cats\"},\n    stream_mode=\"messages\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        msg, metadata = chunk[\"data\"]\n        # Filter the streamed tokens by the langgraph_node field in the metadata\n        # to only include the tokens from the write_poem node\n        if msg.content and metadata[\"langgraph_node\"] == \"write_poem\":\n            print(msg.content, end=\"|\", flush=True)",
+    "dom_ids": [
+      "filter-by-node",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom data: To send custom user-defined data from inside a LangGraph node or tool, follow these steps:",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0056"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Custom data: - Use get_stream_writer to access the stream writer and emit custom data. - Set stream_mode=\"custom\" when calling .stream() or .astream() to get the custom data in the stream. You can combine multiple modes (e.g., [\"updates\", \"custom\"] ), but at least one must be \"custom\" .",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Custom data: No get_stream_writer in async for Python < 3.11 In async code running on Python < 3.11, get_stream_writer will not work. Instead, add a writer parameter to your node or tool and pass it manually. See Async with Python < 3.11 for usage examples.",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0058"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Custom data: - node - tool",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom data: from typing import TypedDict\nfrom langgraph.config import get_stream_writer\nfrom langgraph.graph import StateGraph, START\n\nclass State(TypedDict):\n    query: str\n    answer: str\n\ndef node(state: State):\n    # Get the stream writer to send custom data\n    writer = get_stream_writer()\n    # Emit a custom key-value pair (e.g., progress update)\n    writer({\"custom_key\": \"Generating custom data inside node\"})\n    return {\"answer\": \"some data\"}\n\ngraph = (\n    StateGraph(State)\n    .add_node(node)\n    .add_edge(START, \"node\")\n    .compile()\n)\n\ninputs = {\"query\": \"example\"}\n\n# Set stream_mode=\"custom\" to receive the custom data in the stream\nfor chunk in graph.stream(inputs, stream_mode=\"custom\", version=\"v2\"):\n    if chunk[\"type\"] == \"custom\":\n        print(f\"Custom event: {chunk['data']['custom_key']}\")",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0060"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Custom data: from langchain.tools import tool\nfrom langgraph.config import get_stream_writer\n\n@tool\ndef query_database(query: str) -> str:\n    \"\"\"Query the database.\"\"\"\n    # Access the stream writer to send custom data\n    writer = get_stream_writer()\n    # Emit a custom key-value pair (e.g., progress update)\n    writer({\"data\": \"Retrieved 0/100 records\", \"type\": \"progress\"})\n    # perform query\n    # Emit another custom key-value pair\n    writer({\"data\": \"Retrieved 100/100 records\", \"type\": \"progress\"})\n    return \"some-answer\"\n\n\ngraph = ... # define a graph that uses this tool\n\n# Set stream_mode=\"custom\" to receive the custom data in the stream\nfor chunk in graph.stream(inputs, stream_mode=\"custom\", version=\"v2\"):\n    if chunk[\"type\"] == \"custom\":\n        print(f\"{chunk['data']['type']}: {chunk['data']['data']}\")",
+    "dom_ids": [
+      "custom-data",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: To include outputs from subgraphs in the streamed outputs, you can set subgraphs=True in the .stream() method of the parent graph. This will stream outputs from both the parent graph and any subgraphs.",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: The outputs will be streamed as tuples (namespace, data) , where namespace is a tuple with the path to the node where a subgraph is invoked, e.g. (\"parent_node:<task_id>\", \"child_node:<task_id>\") .",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0063"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Subgraph outputs: - v2 (LangGraph >= 1.1) - v1 (default)",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: With version=\"v2\" , subgraph events use the same StreamPart format. The ns field identifies the source:",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0065"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Subgraph outputs: for chunk in graph.stream(\n    {\"foo\": \"foo\"},\n    subgraphs=True,\n    stream_mode=\"updates\",\n    version=\"v2\",\n):\n    print(chunk[\"type\"])  # \"updates\"\n    print(chunk[\"ns\"])    # () for root, (\"node_name:<task_id>\",) for subgraph\n    print(chunk[\"data\"])  # {\"node_name\": {\"key\": \"value\"}}",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0066"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Subgraph outputs: for chunk in graph.stream(\n    {\"foo\": \"foo\"},\n    # Set subgraphs=True to stream outputs from subgraphs\n    subgraphs=True,\n    stream_mode=\"updates\",\n):\n    print(chunk)",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: This applies to every stream_mode , including \"messages\" . Agent builders like create_agent return a compiled graph , so adding one as a node turns it into a subgraph. Without subgraphs=True , stream_mode=\"messages\" on the parent graph will not emit token chunks from the inner agent’s LLM calls. Invoking agent.stream(...) directly will, which is why this often shows up only after wrapping.",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0068"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Subgraph outputs: from langchain.agents import create_agent\nfrom langgraph.graph import END, START, StateGraph\n\ngraph = (\n    StateGraph(State)\n    .add_node(\"agent\", create_agent(model, tools, state_schema=State))\n    .add_edge(START, \"agent\")\n    .add_edge(\"agent\", END)\n    .compile()\n)\n\nfor chunk in graph.stream(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"...\"}]},\n    stream_mode=\"messages\",\n    subgraphs=True,\n    version=\"v2\",\n):\n    print(chunk[\"type\"])  # \"messages\"\n    print(chunk[\"ns\"])    # () for root, (\"agent:<task_id>\",) for subgraph\n    print(chunk[\"data\"])  # (token, metadata)",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: Extended example: streaming from subgraphs",
+    "dom_ids": [
+      "subgraph-outputs",
+      "extended-example-streaming-from-subgraphs-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Subgraph outputs: from langgraph.graph import START, StateGraph\nfrom typing import TypedDict\n\n# Define subgraph\nclass SubgraphState(TypedDict):\n    foo: str  # note that this key is shared with the parent graph state\n    bar: str\n\ndef subgraph_node_1(state: SubgraphState):\n    return {\"bar\": \"bar\"}\n\ndef subgraph_node_2(state: SubgraphState):\n    return {\"foo\": state[\"foo\"] + state[\"bar\"]}\n\nsubgraph_builder = StateGraph(SubgraphState)\nsubgraph_builder.add_node(subgraph_node_1)\nsubgraph_builder.add_node(subgraph_node_2)\nsubgraph_builder.add_edge(START, \"subgraph_node_1\")\nsubgraph_builder.add_edge(\"subgraph_node_1\", \"subgraph_node_2\")\nsubgraph = subgraph_builder.compile()\n\n# Define parent graph\nclass ParentState(TypedDict):\n    foo: str\n\ndef node_1(state: ParentState):\n    return {\"foo\": \"hi! \" + state[\"foo\"]}\n\nbuilder = StateGraph(ParentState)\nbuilder.add_node(\"node_1\", node_1)\nbuilder.add_node(\"node_2\", subgraph)\nbuilder.add_edge(START, \"node_1\")\nbuilder.add_edge(\"node_1\", \"node_2\")\ngraph = builder.compile()\n\nfor chunk in graph.stream(\n    {\"foo\": \"foo\"},\n    stream_mode=\"updates\",\n    # Set subgraphs=True to stream outputs from subgraphs\n    subgraphs=True,\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"updates\":\n        if chunk[\"ns\"]:\n            print(f\"Subgraph {chunk['ns']}: {chunk['data']}\")\n        else:\n            print(f\"Root: {chunk['data']}\")",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0071"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Subgraph outputs: Root: {'node_1': {'foo': 'hi! foo'}}\nSubgraph ('node_2:dfddc4ba-c3c5-6887-5012-a243b5b377c2',): {'subgraph_node_1': {'bar': 'bar'}}\nSubgraph ('node_2:dfddc4ba-c3c5-6887-5012-a243b5b377c2',): {'subgraph_node_2': {'foo': 'hi! foobar'}}\nRoot: {'node_2': {'foo': 'hi! foobar'}}",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Subgraph outputs: Note that we are receiving not just the node updates, but we also the namespaces which tell us what graph (or subgraph) we are streaming from.",
+    "dom_ids": [
+      "subgraph-outputs",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Checkpoints: Use the checkpoints streaming mode to receive checkpoint events as the graph executes. Each checkpoint event has the same format as the output of get_state() . Requires a checkpointer .",
+    "dom_ids": [
+      "checkpoints",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0074"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Checkpoints: from langgraph.checkpoint.memory import MemorySaver\n\ngraph = (\n    StateGraph(State)\n    .add_node(refine_topic)\n    .add_node(generate_joke)\n    .add_edge(START, \"refine_topic\")\n    .add_edge(\"refine_topic\", \"generate_joke\")\n    .add_edge(\"generate_joke\", END)\n    .compile(checkpointer=MemorySaver())\n)\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nfor chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    config=config,\n    stream_mode=\"checkpoints\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"checkpoints\":\n        print(chunk[\"data\"])",
+    "dom_ids": [
+      "checkpoints",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Tasks: Use the tasks streaming mode to receive task start and finish events as the graph executes. Task events include information about which node is running, its results, and any errors. Requires a checkpointer .",
+    "dom_ids": [
+      "tasks",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Tasks: from langgraph.checkpoint.memory import MemorySaver\n\ngraph = (\n    StateGraph(State)\n    .add_node(refine_topic)\n    .add_node(generate_joke)\n    .add_edge(START, \"refine_topic\")\n    .add_edge(\"refine_topic\", \"generate_joke\")\n    .add_edge(\"generate_joke\", END)\n    .compile(checkpointer=MemorySaver())\n)\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\n\nfor chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    config=config,\n    stream_mode=\"tasks\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"tasks\":\n        print(chunk[\"data\"])",
+    "dom_ids": [
+      "tasks",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Debug: Use the debug streaming mode to stream as much information as possible throughout the execution of the graph. The streamed outputs include the name of the node as well as the full state.",
+    "dom_ids": [
+      "debug",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0078"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Debug: for chunk in graph.stream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=\"debug\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"debug\":\n        print(chunk[\"data\"])",
+    "dom_ids": [
+      "debug",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0079"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Debug: The debug mode combines checkpoints and tasks events with additional metadata. Use checkpoints or tasks directly if you only need a subset of the debug information.",
+    "dom_ids": [
+      "debug",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0080"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multiple modes at once: You can pass a list as the stream_mode parameter to stream multiple modes at once.",
+    "dom_ids": [
+      "multiple-modes-at-once",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Multiple modes at once: With version=\"v2\" , every chunk is a StreamPart dict. Use chunk[\"type\"] to distinguish between modes:",
+    "dom_ids": [
+      "multiple-modes-at-once",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0082"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multiple modes at once: for chunk in graph.stream(inputs, stream_mode=[\"updates\", \"custom\"], version=\"v2\"):\n    if chunk[\"type\"] == \"updates\":\n        for node_name, state in chunk[\"data\"].items():\n            print(f\"Node `{node_name}` updated: {state}\")\n    elif chunk[\"type\"] == \"custom\":\n        print(f\"Custom event: {chunk['data']}\")",
+    "dom_ids": [
+      "multiple-modes-at-once",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0083"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Multiple modes at once: for mode, chunk in graph.stream(inputs, stream_mode=[\"updates\", \"custom\"]):\n    print(chunk)",
+    "dom_ids": [
+      "multiple-modes-at-once",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0084"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced — Use with any LLM: You can use stream_mode=\"custom\" to stream data from any LLM API —even if that API does not implement the LangChain chat model interface.",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced — Use with any LLM: This lets you integrate raw LLM clients or external services that provide their own streaming interfaces, making LangGraph highly flexible for custom setups.",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0086"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Advanced — Use with any LLM: from langgraph.config import get_stream_writer\n\ndef call_arbitrary_model(state):\n    \"\"\"Example node that calls an arbitrary model and streams the output\"\"\"\n    # Get the stream writer to send custom data\n    writer = get_stream_writer()\n    # Assume you have a streaming client that yields chunks\n    # Generate LLM tokens using your custom streaming client\n    for chunk in your_custom_streaming_client(state[\"topic\"]):\n        # Use the writer to send custom data to the stream\n        writer({\"custom_llm_chunk\": chunk})\n    return {\"result\": \"completed\"}\n\ngraph = (\n    StateGraph(State)\n    .add_node(call_arbitrary_model)\n    # Add other nodes and edges as needed\n    .compile()\n)\n# Set stream_mode=\"custom\" to receive the custom data in the stream\nfor chunk in graph.stream(\n    {\"topic\": \"cats\"},\n    stream_mode=\"custom\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"custom\":\n        # The chunk data will contain the custom data streamed from the llm\n        print(chunk[\"data\"])",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0087"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced — Use with any LLM: Extended example: streaming arbitrary chat model",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "extended-example-streaming-arbitrary-chat-model-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0088"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Advanced — Use with any LLM: import operator\nimport json\n\nfrom typing import TypedDict\nfrom typing_extensions import Annotated\nfrom langgraph.graph import StateGraph, START\n\nfrom openai import AsyncOpenAI\n\nopenai_client = AsyncOpenAI()\nmodel_name = \"gpt-5.4-mini\"\n\n\nasync def stream_tokens(model_name: str, messages: list[dict]):\n    response = await openai_client.chat.completions.create(\n        messages=messages, model=model_name, stream=True\n    )\n    role = None\n    async for chunk in response:\n        delta = chunk.choices[0].delta\n\n        if delta.role is not None:\n            role = delta.role\n\n        if delta.content:\n            yield {\"role\": role, \"content\": delta.content}\n\n\n# this is our tool\nasync def get_items(place: str) -> str:\n    \"\"\"Use this tool to list items one might find in a place you're asked about.\"\"\"\n    writer = get_stream_writer()\n    response = \"\"\n    async for msg_chunk in stream_tokens(\n        model_name,\n        [\n            {\n                \"role\": \"user\",\n                \"content\": (\n                    \"Can you tell me what kind of items \"\n                    f\"i might find in the following place: '{place}'. \"\n                    \"List at least 3 such items separating them by a comma. \"\n                    \"And include a brief description of each item.\"\n                ),\n            }\n        ],\n    ):\n        response += msg_chunk[\"content\"]\n        writer(msg_chunk)\n\n    return response\n\n\nclass State(TypedDict):\n    messages: Annotated[list[dict], operator.add]\n\n\n# this is the tool-calling graph node\nasync def call_tool(state: State):\n    ai_message = state[\"messages\"][-1]\n    tool_call = ai_message[\"tool_calls\"][-1]\n\n    function_name = tool_call[\"function\"][\"name\"]\n    if function_name != \"get_items\":\n        raise ValueError(f\"Tool {function_name} not supported\")\n\n    function_arguments = tool_call[\"function\"][\"arguments\"]\n    arguments = json.loads(function_arguments)\n\n    function_response = await get_items(**arguments)\n    tool_message = {\n        \"tool_call_id\": tool_call[\"id\"],\n        \"role\": \"tool\",\n        \"name\": function_name,\n        \"content\": function_response,\n    }\n    return {\"messages\": [tool_message]}\n\n\ngraph = (\n    StateGraph(State)\n    .add_node(call_tool)\n    .add_edge(START, \"call_tool\")\n    .compile()\n)",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Advanced — Use with any LLM: Let’s invoke the graph with an AIMessage that includes a tool call:",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0090"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Advanced — Use with any LLM: inputs = {\n    \"messages\": [\n        {\n            \"content\": None,\n            \"role\": \"assistant\",\n            \"tool_calls\": [\n                {\n                    \"id\": \"1\",\n                    \"function\": {\n                        \"arguments\": '{\"place\":\"bedroom\"}',\n                        \"name\": \"get_items\",\n                    },\n                    \"type\": \"function\",\n                }\n            ],\n        }\n    ]\n}\n\nasync for chunk in graph.astream(\n    inputs,\n    stream_mode=\"custom\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"custom\":\n        print(chunk[\"data\"][\"content\"], end=\"|\", flush=True)",
+    "dom_ids": [
+      "advanced",
+      "use-with-any-llm",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0091"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Disable streaming for specific chat models: If your application mixes models that support streaming with those that do not, you may need to explicitly disable streaming for models that do not support it.",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0092"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Disable streaming for specific chat models: Set streaming=False when initializing the model.",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0093"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Disable streaming for specific chat models: - init_chat_model - Chat model interface",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0094"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Disable streaming for specific chat models: from langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(\n    \"claude-sonnet-4-6\",\n    # Set streaming=False to disable streaming for the chat model\n    streaming=False\n)",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0095"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Disable streaming for specific chat models: from langchain_openai import ChatOpenAI\n\n# Set streaming=False to disable streaming for the chat model\nmodel = ChatOpenAI(model=\"gpt-5.5\", streaming=False)",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0096"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Disable streaming for specific chat models: Not all chat model integrations support the streaming parameter. If your model doesn’t support it, use disable_streaming=True instead. This parameter is available on all chat models via the base class.",
+    "dom_ids": [
+      "disable-streaming-for-specific-chat-models",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0097"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Migrate to v2: The v2 streaming format (used throughout this page) provides a unified output format. Here’s a summary of the key differences and how to migrate:",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0098"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Scenario | v1 (default) | v2 ( version=\"v2\" )",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0099"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Single stream mode | Raw data (dict) | StreamPart dict with type , ns , data",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0100"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Multiple stream modes | (mode, data) tuples | Same StreamPart dict, filter on chunk[\"type\"]",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0101"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Subgraph streaming | (namespace, data) tuples | Same StreamPart dict, check chunk[\"ns\"]",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0102"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Multiple modes + subgraphs | (namespace, mode, data) triples | Same StreamPart dict",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0103"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: invoke() return type | Plain dict (state) | GraphOutput with .value and .interrupts",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0104"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Interrupt location (stream) | __interrupt__ key in state dict | interrupts field on values stream parts",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0105"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Interrupt location (invoke) | __interrupt__ key in result dict | .interrupts attribute on GraphOutput",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0106"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Migrate to v2: Pydantic/dataclass output | Returns plain dict | Coerces to model/dataclass instance",
+    "dom_ids": [
+      "migrate-to-v2",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0107"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "v2 invoke format: When you pass version=\"v2\" to invoke() or ainvoke() , it returns a GraphOutput object with .value and .interrupts attributes:",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0108"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "v2 invoke format: from langgraph.types import GraphOutput\n\nresult = graph.invoke(inputs, version=\"v2\")\n\nassert isinstance(result, GraphOutput)\nresult.value       # your output — dict, Pydantic model, or dataclass\nresult.interrupts  # tuple[Interrupt, ...], empty if none occurred",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "v2 invoke format: With any stream mode other than the default \"values\" , invoke(..., stream_mode=\"updates\", version=\"v2\") returns list[StreamPart] instead of list[tuple] .",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0130"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0110"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "v2 invoke format: Dict-style access on GraphOutput ( result[\"key\"] , \"key\" in result , result[\"__interrupt__\"] ) still works for backwards compatibility but is deprecated and will be removed in a future version. Migrate to result.value and result.interrupts .",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "v2 invoke format: This separates state from interrupt metadata. With v1, interrupts are embedded in the returned dict under __interrupt__ :",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0112"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "v2 invoke format: config = {\"configurable\": {\"thread_id\": \"thread-1\"}}\nresult = graph.invoke(inputs, config=config, version=\"v2\")\n\nif result.interrupts:\n    print(result.interrupts[0].value)\n    graph.invoke(Command(resume=True), config=config, version=\"v2\")",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0113"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "v2 invoke format: config = {\"configurable\": {\"thread_id\": \"thread-1\"}}\nresult = graph.invoke(inputs, config=config)\n\nif \"__interrupt__\" in result:\n    print(result[\"__interrupt__\"][0].value)\n    graph.invoke(Command(resume=True), config=config)",
+    "dom_ids": [
+      "v2-invoke-format",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0114"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Pydantic and dataclass state coercion: When your graph state is a Pydantic model or dataclass, v2 values mode automatically coerces output to the correct type:",
+    "dom_ids": [
+      "pydantic-and-dataclass-state-coercion",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0115"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Pydantic and dataclass state coercion: from pydantic import BaseModel\nfrom typing import Annotated\nimport operator\n\nclass MyState(BaseModel):\n    value: str\n    items: Annotated[list[str], operator.add]\n\n# With version=\"v2\", chunk[\"data\"] is a MyState instance\nfor chunk in graph.stream(\n    {\"value\": \"x\", \"items\": []}, stream_mode=\"values\", version=\"v2\"\n):\n    print(type(chunk[\"data\"]))  # <class 'MyState'>",
+    "dom_ids": [
+      "pydantic-and-dataclass-state-coercion",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0116"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async with Python < 3.11: In Python versions < 3.11, asyncio tasks do not support the context parameter. This limits LangGraph ability to automatically propagate context, and affects LangGraph’s streaming mechanisms in two key ways:",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0117"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Async with Python < 3.11: - You must explicitly pass RunnableConfig into async LLM calls (e.g., ainvoke() ), as callbacks are not automatically propagated. - You cannot use get_stream_writer in async nodes or tools—you must pass a writer argument directly.",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0118"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async with Python < 3.11: Extended example: async LLM call with manual config",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "extended-example-async-llm-call-with-manual-config-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0119"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async with Python < 3.11: from typing import TypedDict\nfrom langgraph.graph import START, StateGraph\nfrom langchain.chat_models import init_chat_model\n\nmodel = init_chat_model(model=\"gpt-5.4-mini\")\n\nclass State(TypedDict):\n    topic: str\n    joke: str\n\n# Accept config as an argument in the async node function\nasync def call_model(state, config):\n    topic = state[\"topic\"]\n    print(\"Generating joke...\")\n    # Pass config to model.ainvoke() to ensure proper context propagation\n    joke_response = await model.ainvoke(\n        [{\"role\": \"user\", \"content\": f\"Write a joke about {topic}\"}],\n        config,\n    )\n    return {\"joke\": joke_response.content}\n\ngraph = (\n    StateGraph(State)\n    .add_node(call_model)\n    .add_edge(START, \"call_model\")\n    .compile()\n)\n\n# Set stream_mode=\"messages\" to stream LLM tokens\nasync for chunk in graph.astream(\n    {\"topic\": \"ice cream\"},\n    stream_mode=\"messages\",\n    version=\"v2\",\n):\n    if chunk[\"type\"] == \"messages\":\n        message_chunk, metadata = chunk[\"data\"]\n        if message_chunk.content:\n            print(message_chunk.content, end=\"|\", flush=True)",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async with Python < 3.11: Extended example: async custom streaming with stream writer",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "extended-example-async-custom-streaming-with-stream-writer-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0121"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async with Python < 3.11: from typing import TypedDict\nfrom langgraph.types import StreamWriter\n\nclass State(TypedDict):\n      topic: str\n      joke: str\n\n# Add writer as an argument in the function signature of the async node or tool\n# LangGraph will automatically pass the stream writer to the function\nasync def generate_joke(state: State, writer: StreamWriter):\n      writer({\"custom_key\": \"Streaming custom data while generating a joke\"})\n      return {\"joke\": f\"This is a joke about {state['topic']}\"}\n\ngraph = (\n      StateGraph(State)\n      .add_node(generate_joke)\n      .add_edge(START, \"generate_joke\")\n      .compile()\n)\n\n# Set stream_mode=\"custom\" to receive the custom data in the stream  #\nasync for chunk in graph.astream(\n      {\"topic\": \"ice cream\"},\n      stream_mode=\"custom\",\n      version=\"v2\",\n):\n      if chunk[\"type\"] == \"custom\":\n          print(chunk[\"data\"])",
+    "dom_ids": [
+      "async-with-python-<-3-11",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "streaming",
+    "id": "streaming__node_0122"
+  }
+]

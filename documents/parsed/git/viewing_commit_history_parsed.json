@@ -1,0 +1,915 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: After you have created several commits, or if you have cloned a repository with an existing commit history, you’ll probably want to look back to see what has happened. The most basic and powerful tool to do this is the git log command.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: These examples use a very simple project called “simplegit”. To get the project, run:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git clone https://github.com/schacon/simplegit-progit",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: When you run git log in this project, you should get output that looks something like this:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log\ncommit ca82a6dff817ec66f44342007202690a93763949\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Mon Mar 17 21:52:11 2008 -0700\n\n    Change version number\n\ncommit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Sat Mar 15 16:40:33 2008 -0700\n\n    Remove unnecessary test\n\ncommit a11bef06a3f659402fe7563abf99ad00de2209e6\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Sat Mar 15 10:31:28 2008 -0700\n\n    Initial commit",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: By default, with no arguments, git log lists the commits made in that repository in reverse chronological order; that is, the most recent commits show up first. As you can see, this command lists each commit with its SHA-1 checksum, the author’s name and email, the date written, and the commit message.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: A huge number and variety of options to the git log command are available to show you exactly what you’re looking for. Here, we’ll show you some of the most popular.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: One of the more helpful options is -p or --patch , which shows the difference (the patch output) introduced in each commit. You can also limit the number of log entries displayed, such as using -2 to show only the last two entries.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log -p -2\ncommit ca82a6dff817ec66f44342007202690a93763949\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Mon Mar 17 21:52:11 2008 -0700\n\n    Change version number\n\ndiff --git a/Rakefile b/Rakefile\nindex a874b73..8f94139 100644\n--- a/Rakefile\n+++ b/Rakefile\n@@ -5,7 +5,7 @@ require 'rake/gempackagetask'\n spec = Gem::Specification.new do |s|\n     s.platform  =   Gem::Platform::RUBY\n     s.name      =   \"simplegit\"\n-    s.version   =   \"0.1.0\"\n+    s.version   =   \"0.1.1\"\n     s.author    =   \"Scott Chacon\"\n     s.email     =   \"schacon@gee-mail.com\"\n     s.summary   =   \"A simple gem for using Git in Ruby code.\"\n\ncommit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Sat Mar 15 16:40:33 2008 -0700\n\n    Remove unnecessary test\n\ndiff --git a/lib/simplegit.rb b/lib/simplegit.rb\nindex a0a60ae..47c6340 100644\n--- a/lib/simplegit.rb\n+++ b/lib/simplegit.rb\n@@ -18,8 +18,3 @@ class SimpleGit\n     end\n\n end\n-\n-if $0 == __FILE__\n-  git = SimpleGit.new\n-  puts git.show\n-end",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: This option displays the same information but with a diff directly following each entry. This is very helpful for code review or to quickly browse what happened during a series of commits that a collaborator has added. You can also use a series of summarizing options with git log . For example, if you want to see some abbreviated stats for each commit, you can use the --stat option:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log --stat\ncommit ca82a6dff817ec66f44342007202690a93763949\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Mon Mar 17 21:52:11 2008 -0700\n\n    Change version number\n\n Rakefile | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n\ncommit 085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Sat Mar 15 16:40:33 2008 -0700\n\n    Remove unnecessary test\n\n lib/simplegit.rb | 5 -----\n 1 file changed, 5 deletions(-)\n\ncommit a11bef06a3f659402fe7563abf99ad00de2209e6\nAuthor: Scott Chacon <schacon@gee-mail.com>\nDate:   Sat Mar 15 10:31:28 2008 -0700\n\n    Initial commit\n\n README           |  6 ++++++\n Rakefile         | 23 +++++++++++++++++++++++\n lib/simplegit.rb | 25 +++++++++++++++++++++++++\n 3 files changed, 54 insertions(+)",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: As you can see, the --stat option prints below each commit entry a list of modified files, how many files were changed, and how many lines in those files were added and removed. It also puts a summary of the information at the end.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Another really useful option is --pretty . This option changes the log output to formats other than the default. A few prebuilt option values are available for you to use. The oneline value for this option prints each commit on a single line, which is useful if you’re looking at a lot of commits. In addition, the short , full , and fuller values show the output in roughly the same format but with less or more information, respectively:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log --pretty=oneline\nca82a6dff817ec66f44342007202690a93763949 Change version number\n085bb3bcb608e1e8451d4b2432f8ecbe6306e7e7 Remove unnecessary test\na11bef06a3f659402fe7563abf99ad00de2209e6 Initial commit",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: The most interesting option value is format , which allows you to specify your own log output format. This is especially useful when you’re generating output for machine parsing — because you specify the format explicitly, you know it won’t change with updates to Git:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log --pretty=format:\"%h - %an, %ar : %s\"\nca82a6d - Scott Chacon, 6 years ago : Change version number\n085bb3b - Scott Chacon, 6 years ago : Remove unnecessary test\na11bef0 - Scott Chacon, 6 years ago : Initial commit",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Useful specifiers for git log --pretty=format lists some of the more useful specifiers that format takes.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0017"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Specifier | Description of Output",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0018"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Commit hash",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0019"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %h | Abbreviated commit hash",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0020"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Tree hash",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0021"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %t | Abbreviated tree hash",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0022"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Parent hashes",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0023"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %p | Abbreviated parent hashes",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0024"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %an | Author name",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0025"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %ae | Author email",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0026"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %ad | Author date (format respects the --date=option )",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0027"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %ar | Author date, relative",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0028"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %cn | Committer name",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0029"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %ce | Committer email",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0030"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %cd | Committer date",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0031"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %cr | Committer date, relative",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0032"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: %s | Subject",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: You may be wondering what the difference is between author and committer . The author is the person who originally wrote the work, whereas the committer is the person who last applied the work. So, if you send in a patch to a project and one of the core members applies the patch, both of you get credit — you as the author, and the core member as the committer. We’ll cover this distinction a bit more in Distributed Git .",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: The oneline and format option values are particularly useful with another log option called --graph . This option adds a nice little ASCII graph showing your branch and merge history:",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: $ git log --pretty=format:\"%h %s\" --graph\n* 2d3acf9 Ignore errors from SIGCHLD on trap\n*  5e3ee11 Merge branch 'master' of https://github.com/dustin/grit.git\n|\\\n| * 420eac9 Add method for getting the current branch\n* | 30e367c Timeout code and tests\n* | 5a09431 Add timeout protection to grit\n* | e1193f8 Support for heads with slashes in them\n|/\n* d6016bc Require time for xmlschema\n*  11d191e Merge branch 'defunkt' into local",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: This type of output will become more interesting as we go through branching and merging in the next chapter.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Those are only some simple output-formatting options to git log — there are many more. Common options to git log lists the options we’ve covered so far, as well as some other common formatting options that may be useful, along with how they change the output of the log command.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0038"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: Option | Description",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0039"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: -p | Show the patch introduced with each commit.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0040"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --stat | Show statistics for files modified in each commit.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0041"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --shortstat | Display only the changed/insertions/deletions line from the --stat command.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0042"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --name-only | Show the list of files modified after the commit information.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0043"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --name-status | Show the list of files affected with added/modified/deleted information as well.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0044"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --abbrev-commit | Show only the first few characters of the SHA-1 checksum instead of all 40.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0045"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --relative-date | Display the date in a relative format (for example, “2 weeks ago”) instead of using the full date format.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0046"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --graph | Display an ASCII graph of the branch and merge history beside the log output.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0047"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --pretty | Show commits in an alternate format. Option values include oneline , short , full , fuller , and format (where you specify your own format).",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0048"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "2.3 Git Basics - Viewing the Commit History — Viewing the Commit History: --oneline | Shorthand for --pretty=oneline --abbrev-commit used together.",
+    "dom_ids": [
+      "readar-node-0001",
+      "_viewing_history",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: In addition to output-formatting options, git log takes a number of useful limiting options; that is, options that let you show only a subset of commits. You’ve seen one such option already — the -2 option, which displays only the last two commits. In fact, you can do -<n> , where n is any integer to show the last n commits. In reality, you’re unlikely to use that often, because Git by default pipes all output through a pager so you see only one page of log output at a time.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: However, the time-limiting options such as --since and --until are very useful. For example, this command gets the list of commits made in the last two weeks:",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0051"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Limiting Log Output: $ git log --since=2.weeks",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: This command works with lots of formats — you can specify a specific date like \"2008-01-15\" , or a relative date such as \"2 years 1 day 3 minutes ago\" .",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: You can also filter the list to commits that match some search criteria. The --author option allows you to filter on a specific author, and the --grep option lets you search for keywords in the commit messages.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0054"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: Note | You can specify more than one instance of both the --author and --grep search criteria, which will limit the commit output to commits that match any of the --author patterns and any of the --grep patterns; however, adding the --all-match option further limits the output to just those commits that match all --grep patterns.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0055"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: Another really helpful filter is the -S option (colloquially referred to as Git’s “pickaxe” option), which takes a string and shows only those commits that changed the number of occurrences of that string. For instance, if you wanted to find the last commit that added or removed a reference to a specific function, you could call:",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Limiting Log Output: $ git log -S function_name",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: The last really useful option to pass to git log as a filter is a path. If you specify a directory or file name, you can limit the log output to commits that introduced a change to those files. This is always the last option and is generally preceded by double dashes ( -- ) to separate the paths from the options:",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0058"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Limiting Log Output: $ git log -- path/to/file",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: In Options to limit the output of git log we’ll list these and a few other common options for your reference.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: Option | Description",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0061"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: -<n> | Show only the last n commits.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0062"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: --since , --after | Limit the commits to those made after the specified date.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0063"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: --until , --before | Limit the commits to those made before the specified date.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0064"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: --author | Only show commits in which the author entry matches the specified string.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0065"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: --committer | Only show commits in which the committer entry matches the specified string.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0066"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: --grep | Only show commits with a commit message containing the string.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0067"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: Only show commits adding or removing code matching the string.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: For example, if you want to see which commits modifying test files in the Git source code history were committed by Junio Hamano in the month of October 2008 and are not merge commits, you can run something like this:",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Limiting Log Output: $ git log --pretty=\"%h - %s\" --author='Junio C Hamano' --since=\"2008-10-01\" \\\n   --before=\"2008-11-01\" --no-merges -- t/\n5610e3b - Fix testcase failure when extended attributes are in use\nacd3b9e - Enhance hold_lock_file_for_{update,append}() API\nf563754 - demonstrate breakage of detached checkout with symbolic link HEAD\nd1a43f2 - reset --hard/read-tree --reset -u: remove unmerged new paths\n51a94af - Fix \"checkout --track -b newbranch\" on detached HEAD\nb0ad11e - pull: allow \"git pull origin $something:$current_branch\" into an unborn branch",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0070"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Limiting Log Output: Of the nearly 40,000 commits in the Git source code history, this command shows the 6 that match those criteria.",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0071"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Limiting Log Output: Tip | Preventing the display of merge commits Depending on the workflow used in your repository, it’s possible that a sizable percentage of the commits in your log history are just merge commits, which typically aren’t very informative. To prevent the display of merge commits cluttering up your log history, simply add the log option --no-merges .",
+    "dom_ids": [
+      "_limiting_log_output",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "viewing_commit_history",
+    "id": "viewing_commit_history__node_0072"
+  }
+]

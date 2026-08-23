@@ -1,0 +1,1647 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "NumPy for MATLAB users — Introduction: MATLAB® and NumPy have a lot in common, but NumPy was created to work with Python, not to be a MATLAB clone. This guide will help MATLAB users get started with NumPy.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0001"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Some key differences: In MATLAB, the basic type, even for scalars, is a multidimensional array. Array assignments in MATLAB are stored as 2D arrays of double precision floating point numbers, unless you specify the number of dimensions and type. Operations on the 2D instances of these arrays are modeled on matrix operations in linear algebra. | In NumPy, the basic type is a multidimensional array . Array assignments in NumPy are usually stored as n-dimensional arrays with the minimum type required to hold the objects in sequence, unless you specify the number of dimensions and type. NumPy performs operations element-by-element, so multiplying 2D arrays with * is not a matrix multiplication – it’s an element-by-element multiplication. (The @ operator, available since Python 3.5, can be used for conventional matrix multiplication.)",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0002"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Some key differences: MATLAB numbers indices from 1; a(1) is the first element. See note INDEXING | NumPy, like Python, numbers indices from 0; a[0] is the first element.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0003"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Some key differences: MATLAB’s scripting language was created for linear algebra so the syntax for some array manipulations is more compact than NumPy’s. On the other hand, the API for adding GUIs and creating full-fledged applications is more or less an afterthought. | NumPy is based on Python, a general-purpose language. The advantage to NumPy is access to Python libraries including: SciPy , Matplotlib , Pandas , OpenCV , and more. In addition, Python is often embedded as a scripting language in other software, allowing NumPy to be used there too.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0004"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Some key differences: MATLAB array slicing uses pass-by-value semantics, with a lazy copy-on-write scheme to prevent creating copies until they are needed. Slicing operations copy parts of the array. | NumPy array slicing uses pass-by-reference, that does not copy the arguments. Slicing operations are views into an array.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rough equivalents: The table below gives rough equivalents for some common MATLAB expressions. These are similar expressions, not equivalents. For details, see the documentation .",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rough equivalents: In the table below, it is assumed that you have executed the following commands in Python:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Rough equivalents: import numpy as np\nfrom scipy import io, integrate, linalg, signal\nfrom scipy.sparse.linalg import cg, eigs",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rough equivalents: Also assume below that if the Notes talk about “matrix” that the arguments are two-dimensional entities.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0009"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: NumPy | Notes",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0010"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: help func | info(func) or help(func) or func? (in IPython) | get help on the function func",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0011"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: which func | see note HELP | find out where func is defined",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0012"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: type func | np.source(func) or func?? (in IPython) | print source for func (if not a native function)",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0013"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: % comment | # comment | comment a line of code with the text comment",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0014"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: for i = 1 : 3 fprintf ( ' %i \\n ' , i ) end | for i in range ( 1 , 4 ): print ( i ) | use a for-loop to print the numbers 1, 2, and 3 using range",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0015"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: a && b | a and b | short-circuiting logical AND operator ( Python native operator ); scalar arguments only",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0016"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: a || b | a or b | short-circuiting logical OR operator ( Python native operator ); scalar arguments only",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0017"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: >> 4 == 4 ans = 1 >> 4 == 5 ans = 0 | >>> 4 == 4 True >>> 4 == 5 False | The boolean objects in Python are True and False , as opposed to MATLAB logical types of 1 and 0 .",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0018"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: a = 4 if a == 4 fprintf ( 'a = 4\\n' ) elseif a == 5 fprintf ( 'a = 5\\n' ) end | a = 4 if a == 4 : print ( 'a = 4' ) elif a == 5 : print ( 'a = 5' ) | create an if-else statement to check if a is 4 or 5 and print result",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0019"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: 1*i , 1*j , 1i , 1j | 1j | complex numbers",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0020"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: eps | np.finfo(float).eps or np.spacing(1) | distance from 1 to the next larger representable real number in double precision",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0021"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: load data.mat | io.loadmat('data.mat') | Load MATLAB variables saved to the file data.mat . (Note: When saving arrays to data.mat in MATLAB/Octave, use a recent binary format. scipy.io.loadmat will create a dictionary with the saved arrays and further information.)",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0022"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: ode45 | integrate.solve_ivp(f) | integrate an ODE with Runge-Kutta 4,5",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0023"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "General purpose equivalents: ode15s | integrate.solve_ivp(f, method='BDF') | integrate an ODE with BDF method",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0024"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: NumPy | Notes",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0025"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: ndims(a) | np.ndim(a) or a.ndim | number of dimensions of array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0026"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: numel(a) | np.size(a) or a.size | number of elements of array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0027"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: size(a) | np.shape(a) or a.shape | “size” of array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0028"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: size(a,n) | a.shape[n-1] | get the number of elements of the n-th dimension of array a . (Note that MATLAB uses 1 based indexing while Python uses 0 based indexing, See note INDEXING )",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0029"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [ 1 2 3; 4 5 6 ] | np.array([[1., 2., 3.], [4., 5., 6.]]) | define a 2x3 2D array",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0030"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [ a b; c d ] | np.block([[a, b], [c, d]]) | construct a matrix from blocks a , b , c , and d",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0031"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(end) | a[-1] | access last element in MATLAB vector (1xn or nx1) or 1D NumPy array a (length n)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0032"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(2,5) | a[1, 4] | access element in second row, fifth column in 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0033"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(2,:) | a[1] or a[1, :] | entire second row of 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0034"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(1:5,:) | a[0:5] or a[:5] or a[0:5, :] | first 5 rows of 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0035"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(end-4:end,:) | a[-5:] | last 5 rows of 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0036"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(1:3,5:9) | a[0:3, 4:9] | The first through third rows and fifth through ninth columns of a 2D array, a .",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0037"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a([2,4,5],[1,3]) | a[np.ix_([1, 3, 4], [0, 2])] | rows 2,4 and 5 and columns 1 and 3. This allows the matrix to be modified, and doesn’t require a regular slice.",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0038"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(3:2:21,:) | a[2:21:2,:] | every other row of a , starting with the third and going to the twenty-first",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0039"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(1:2:end,:) | a[::2, :] | every other row of a , starting with the first",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0040"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(end:-1:1,:) or flipud(a) | a[::-1,:] | a with rows in reverse order",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0041"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a([1:end 1],:) | a[np.r_[:len(a),0]] | a with copy of the first row appended to the end",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0042"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a.' | a.transpose() or a.T | transpose of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0043"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a' | a.conj().transpose() or a.conj().T | conjugate transpose of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0044"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a * b | a @ b | matrix multiply",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0045"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a .* b | a * b | element-wise multiply",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0046"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a./b | a/b | element-wise divide",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0047"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a.^3 | a**3 | element-wise exponentiation",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0048"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: (a > 0.5) | (a > 0.5) | matrix whose i,jth element is (a_ij > 0.5). The MATLAB result is an array of logical values 0 and 1. The NumPy result is an array of the boolean values False and True .",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0049"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: find(a > 0.5) | np.nonzero(a > 0.5) | find the indices where ( a > 0.5)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0050"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(:,find(v > 0.5)) | a[:,np.nonzero(v > 0.5)[0]] | extract the columns of a where vector v > 0.5",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0051"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(:,find(v>0.5)) | a[:, v.T > 0.5] | extract the columns of a where column vector v > 0.5",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0052"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(a<0.5)=0 | a[a < 0.5]=0 | a with elements less than 0.5 zeroed out",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0053"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a .* (a>0.5) | a * (a > 0.5) | a with elements less than 0.5 zeroed out",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0054"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a(:) = 3 | a[:] = 3 | set all values to the same scalar value",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0055"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: y=x | y = x.copy() | NumPy assigns by reference",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0056"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: y=x(2,:) | y = x[1, :].copy() | NumPy slices are by reference",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0057"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: y=x(:) | y = x.flatten() | turn array into vector (note that this forces a copy). To obtain the same data ordering as in MATLAB, use x.flatten('F') .",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0058"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: 1:10 | np.arange(1., 11.) or np.r_[1.:11.] or np.r_[1:10:10j] | create an increasing vector (see note RANGES )",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0059"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: 0:9 | np.arange(10.) or np.r_[:10.] or np.r_[:9:10j] | create an increasing vector (see note RANGES )",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0060"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [1:10]' | np.arange(1.,11.)[:, np.newaxis] | create a column vector",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0061"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: zeros(3,4) | np.zeros((3, 4)) | 3x4 two-dimensional array full of 64-bit floating point zeros",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0062"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: zeros(3,4,5) | np.zeros((3, 4, 5)) | 3x4x5 three-dimensional array full of 64-bit floating point zeros",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0063"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: ones(3,4) | np.ones((3, 4)) | 3x4 two-dimensional array full of 64-bit floating point ones",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0064"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: eye(3) | np.eye(3) | 3x3 identity matrix",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0065"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: diag(a) | np.diag(a) | returns a vector of the diagonal elements of 2D array, a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0066"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: diag(v,0) | np.diag(v, 0) | returns a square diagonal matrix whose nonzero values are the elements of vector, v",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0067"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: rng ( 42 , 'twister' ) rand ( 3 , 4 ) | from numpy.random import default_rng rng = default_rng ( 42 ) rng . random (( 3 , 4 )) or older version: random.rand((3, 4)) | generate a random 3x4 array with default random number generator and seed = 42",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0068"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: linspace(1,3,4) | np.linspace(1,3,4) | 4 equally spaced samples between 1 and 3, inclusive",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0069"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [x,y]=meshgrid(0:8,0:5) | np.mgrid[0:9.,0:6.] or np.meshgrid(r_[0:9.],r_[0:6.]) | two 2D arrays: one of x values, the other of y values",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0070"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: ogrid[0:9.,0:6.] or np.ix_(np.r_[0:9.],np.r_[0:6.] | the best way to eval functions on a grid",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0071"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [x,y]=meshgrid([1,2,4],[2,4,5]) | np.meshgrid([1,2,4],[2,4,5])",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0072"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: np.ix_([1,2,4],[2,4,5]) | the best way to eval functions on a grid",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0073"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: repmat(a, m, n) | np.tile(a, (m, n)) | create m by n copies of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0074"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [a b] | np.concatenate((a,b),1) or np.hstack((a,b)) or np.column_stack((a,b)) or np.c_[a,b] | concatenate columns of a and b",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0075"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [a; b] | np.concatenate((a,b)) or np.vstack((a,b)) or np.r_[a,b] | concatenate rows of a and b",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0076"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: max(max(a)) | a.max() or np.nanmax(a) | maximum element of a (with ndims(a)<=2 for MATLAB, if there are NaN’s, nanmax will ignore these and return largest value)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0077"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: max(a) | a.max(0) | maximum element of each column of array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0078"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: max(a,[],2) | a.max(1) | maximum element of each row of array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0079"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: max(a,b) | np.maximum(a, b) | compares a and b element-wise, and returns the maximum value from each pair",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0080"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: norm(v) | np.sqrt(v @ v) or np.linalg.norm(v) | L2 norm of vector v",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0081"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a & b | logical_and(a,b) | element-by-element AND operator (NumPy ufunc) See note LOGICOPS",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0082"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a | b | np.logical_or(a,b) | element-by-element OR operator (NumPy ufunc) See note LOGICOPS",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0083"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: bitand(a,b) | a & b | bitwise AND operator (Python native and NumPy ufunc)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0084"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: bitor(a,b) | a | b | bitwise OR operator (Python native and NumPy ufunc)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0085"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: inv(a) | linalg.inv(a) | inverse of square 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0086"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: pinv(a) | linalg.pinv(a) | pseudo-inverse of 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0087"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: rank(a) | np.linalg.matrix_rank(a) | matrix rank of a 2D array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0088"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: a\\b | linalg.solve(a, b) if a is square; linalg.lstsq(a, b) otherwise | solution of a x = b for x",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0089"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: b/a | Solve a.T x.T = b.T instead | solution of x a = b for x",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0090"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [U,S,V]=svd(a) | U, S, Vh = linalg.svd(a); V = Vh.T | singular value decomposition of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0091"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: chol(a) | linalg.cholesky(a) | Cholesky factorization of a 2D array",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0092"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [V,D]=eig(a) | D,V = linalg.eig(a) | eigenvalues \\(\\lambda\\) and eigenvectors \\(v\\) of a , where \\(\\mathbf{a} v = \\lambda v\\)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0093"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [V,D]=eig(a,b) | D,V = linalg.eig(a, b) | eigenvalues \\(\\lambda\\) and eigenvectors \\(v\\) of a , b where \\(\\mathbf{a} v = \\lambda \\mathbf{b} v\\)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0094"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [V,D]=eigs(a,3) | D,V = eigs(a, k=3) | find the k=3 largest eigenvalues and eigenvectors of 2D array, a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0095"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [Q,R]=qr(a,0) | Q,R = linalg.qr(a) | QR decomposition",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0096"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [L,U,P]=lu(a) where a==P'*L*U | P,L,U = linalg.lu(a) where a == P@L@U | LU decomposition with partial pivoting (note: P(MATLAB) == transpose(P(NumPy)))",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0097"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: conjgrad | cg | conjugate gradients solver",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0098"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: fft(a) | np.fft.fft(a) | Fourier transform of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0099"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: ifft(a) | np.fft.ifft(a) | inverse Fourier transform of a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0100"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: sort(a) | np.sort(a) or a.sort(axis=0) | sort each column of a 2D array, a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0101"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: sort(a, 2) | np.sort(a, axis=1) or a.sort(axis=1) | sort the each row of 2D array, a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0102"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: [b,I]=sortrows(a,1) | I = np.argsort(a[:, 0]); b = a[I,:] | save the array a as array b with rows sorted by the first column",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0103"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: x = Z\\y | x = linalg.lstsq(Z, y) | perform a linear regression of the form \\(\\mathbf{Zx}=\\mathbf{y}\\)",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0104"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: decimate(x, q) | signal.resample(x, np.ceil(len(x)/q)) | downsample with low-pass filtering",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0105"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: unique(a) | np.unique(a) | a vector of unique values in array a",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0106"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Linear algebra equivalents: squeeze(a) | a.squeeze() | remove singleton dimensions of array a . Note that MATLAB will always return arrays of 2D or higher while NumPy will return arrays of 0D or higher",
+    "dom_ids": [
+      "readar-node-0030",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0107"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: Submatrix : Assignment to a submatrix can be done with lists of indices using the ix_ command. E.g., for 2D array a , one might do: ind=[1, 3]; a[np.ix_(ind, ind)] += 100 .",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0108"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: HELP : There is no direct equivalent of MATLAB’s which command, but the commands help will usually list the filename where the function is located. Python also has an inspect module (do import inspect ) which provides a getfile that often works.",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: INDEXING : MATLAB uses one based indexing, so the initial element of a sequence has index 1. Python uses zero based indexing, so the initial element of a sequence has index 0. Confusion and flamewars arise because each has advantages and disadvantages. One based indexing is consistent with common human language usage, where the “first” element of a sequence has index 1. Zero based indexing simplifies indexing . See also a text by prof.dr. Edsger W. Dijkstra .",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0110"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: RANGES : In MATLAB, 0:5 can be used as both a range literal and a ‘slice’ index (inside parentheses); however, in Python, constructs like 0:5 can only be used as a slice index (inside square brackets). Thus the somewhat quirky r_ object was created to allow NumPy to have a similarly terse range construction mechanism. Note that r_ is not called like a function or a constructor, but rather indexed using square brackets, which allows the use of Python’s slice syntax in the arguments.",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: LOGICOPS : & or | in NumPy is bitwise AND/OR, while in MATLAB & and | are logical AND/OR. The two can appear to work the same, but there are important differences. If you would have used MATLAB’s & or | operators, you should use the NumPy ufuncs logical_and / logical_or . The notable differences between MATLAB’s and NumPy’s & and | operators are:",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0112"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Notes: - Non-logical {0,1} inputs: NumPy’s output is the bitwise AND of the inputs. MATLAB treats any non-zero value as 1 and returns the logical AND. For example (3 & 4) in NumPy is 0 , while in MATLAB both 3 and 4 are considered logical true and (3 & 4) returns 1 . - Precedence: NumPy’s & operator is higher precedence than logical operators like < and > ; MATLAB’s is the reverse.",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0113"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: If you know you have boolean arguments, you can get away with using NumPy’s bitwise operators, but be careful with parentheses, like this: z = (x > 1) & (x < 2) . The absence of NumPy operator forms of logical_and and logical_or is an unfortunate consequence of Python’s design.",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0114"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Notes: RESHAPE and LINEAR INDEXING : MATLAB always allows multi-dimensional arrays to be accessed using scalar or linear indices, NumPy does not. Linear indices are common in MATLAB programs, e.g. find() on a matrix returns them, whereas NumPy’s find behaves differently. When converting MATLAB code it might be necessary to first reshape a matrix to a linear sequence, perform some indexing operations and then reshape back. As reshape (usually) produces views onto the same storage, it should be possible to do this fairly efficiently. Note that the scan order used by reshape in NumPy defaults to the ‘C’ order, whereas MATLAB uses the Fortran order. If you are simply converting to a linear sequence and back this doesn’t matter. But if you are converting reshapes from MATLAB code which relies on the scan order, then this MATLAB code: z = reshape(x,3,4); should become z = x.reshape(3,4,order='F').copy() in NumPy.",
+    "dom_ids": [
+      "readar-node-0114",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0115"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "‘array’ or ‘matrix’? Which should I use?: Historically, NumPy has provided a special matrix type, np.matrix , which is a subclass of ndarray which makes binary operations linear algebra operations. You may see it used in some existing code instead of np.array . So, which one to use?",
+    "dom_ids": [
+      "readar-node-0123",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0116"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short answer: Use arrays .",
+    "dom_ids": [
+      "readar-node-0125",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0117"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Short answer: - They support multidimensional array algebra that is supported in MATLAB - They are the standard vector/matrix/tensor type of NumPy. Many NumPy functions return arrays, not matrices. - There is a clear distinction between element-wise operations and linear algebra operations. - You can have standard vectors or row/column vectors if you like.",
+    "dom_ids": [
+      "readar-node-0125",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0118"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short answer: Until Python 3.5 the only disadvantage of using the array type was that you had to use dot instead of * to multiply (reduce) two tensors (scalar product, matrix vector multiplication etc.). Since Python 3.5 you can use the matrix multiplication @ operator.",
+    "dom_ids": [
+      "readar-node-0125",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0119"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Short answer: Given the above, we intend to deprecate matrix eventually.",
+    "dom_ids": [
+      "readar-node-0125",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long answer: NumPy contains both an array class and a matrix class. The array class is intended to be a general-purpose n-dimensional array for many kinds of numerical computing, while matrix is intended to facilitate linear algebra computations specifically. In practice there are only a handful of key differences between the two.",
+    "dom_ids": [
+      "readar-node-0130",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0121"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Long answer: - Operators * and @ , functions dot() , and multiply() : For array , * means element-wise multiplication , while @ means matrix multiplication ; they have associated functions multiply() and dot() . For matrix , * means matrix multiplication , and for element-wise multiplication one has to use the multiply() function. - Handling of vectors (one-dimensional arrays) For array , the vector shapes 1xN, Nx1, and N are all different things . Operations like A[:,1] return a one-dimensional array of shape N, not a two-dimensional array of shape Nx1. Transpose on a one-dimensional array does nothing. For matrix , one-dimensional arrays are always upconverted to 1xN or Nx1 matrices (row or column vectors). A[:,1] returns a two-dimensional matrix of shape Nx1. - Handling of higher-dimensional arrays (ndim > 2) array objects can have number of dimensions > 2 ; matrix objects always have exactly two dimensions . - Convenience attributes array has a .T attribute , which returns the transpose of the data. matrix also has .H, .I, and .A attributes , which return the conjugate transpose, inverse, and asarray() of the matrix, respectively. - Convenience constructor The array constructor takes (nested) Python sequences as initializers . As in, array([[1,2,3],[4,5,6]]) . The matrix constructor additionally takes a convenient string initializer . As in matrix(\"[1 2 3; 4 5 6]\") .",
+    "dom_ids": [
+      "readar-node-0130",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0122"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long answer: There are pros and cons to using both:",
+    "dom_ids": [
+      "readar-node-0130",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0123"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Long answer: - array :) Element-wise multiplication is easy: A*B . :( You have to remember that matrix multiplication has its own operator, @ . :) You can treat one-dimensional arrays as either row or column vectors. A @ v treats v as a column vector, while v @ A treats v as a row vector. This can save you having to type a lot of transposes. :) array is the “default” NumPy type, so it gets the most testing, and is the type most likely to be returned by 3rd party code that uses NumPy. :) Is quite at home handling data of any number of dimensions. :) Closer in semantics to tensor algebra, if you are familiar with that. :) All operations ( * , / , + , - etc.) are element-wise. :( Sparse matrices from scipy.sparse do not interact as well with arrays. - matrix :\\\\ Behavior is more like that of MATLAB matrices. <:( Maximum of two-dimensional. To hold three-dimensional data you need array or perhaps a Python list of matrix . <:( Minimum of two-dimensional. You cannot have vectors. They must be cast as single-column or single-row matrices. <:( Since array is the default in NumPy, some functions may return an array even if you give them a matrix as an argument. This shouldn’t happen with NumPy functions (if it does it’s a bug), but 3rd party code based on NumPy may not honor type preservation like NumPy does. :) A*B is matrix multiplication, so it looks just like you write it in linear algebra (For Python >= 3.5 plain arrays have the same convenience with the @ operator). <:( Element-wise multiplication requires calling a function, multiply(A,B) . <:( The use of operator overloading is a bit illogical: * does not work element-wise but / does. Interaction with scipy.sparse is a bit cleaner.",
+    "dom_ids": [
+      "readar-node-0130",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Long answer: The array is thus much more advisable to use. Indeed, we intend to deprecate matrix eventually.",
+    "dom_ids": [
+      "readar-node-0130",
+      "readar-node-0135"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0125"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing your environment: In MATLAB the main tool available to you for customizing the environment is to modify the search path with the locations of your favorite functions. You can put such customizations into a startup script that MATLAB will run on startup.",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0126"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing your environment: NumPy, or rather Python, has similar facilities.",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0138"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0127"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Customizing your environment: - To modify your Python search path to include the locations of your own modules, define the PYTHONPATH environment variable. - To have a particular script file executed when the interactive Python interpreter is started, define the PYTHONSTARTUP environment variable to contain the name of your startup script.",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0128"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing your environment: Unlike MATLAB, where anything on your path can be called immediately, with Python you need to first do an ‘import’ statement to make functions in a particular file accessible.",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0129"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing your environment: For example you might make a startup script that looks like this (Note: this is just an example, not a statement of “best practices”):",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0141"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0130"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Customizing your environment: # Make all numpy available via shorter 'np' prefix\nimport numpy as np\n#\n# Make the SciPy linear algebra functions available as linalg.func()\n# e.g. linalg.lu, linalg.eig (for general l*B@u==A@u solution)\nfrom scipy import linalg\n#\n# Define a Hermitian function\ndef hermitian(A, **kwargs):\n    return np.conj(A,**kwargs).T\n# Make a shortcut for hermitian:\n#    hermitian(A) --> H(A)\nH = hermitian",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0131"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Customizing your environment: To use the deprecated matrix and other matlib functions:",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0132"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Customizing your environment: # Make all matlib functions accessible at the top level via M.func()\nimport numpy.matlib as M\n# Make some matlib functions accessible directly at the top level via, e.g. rand(3,3)\nfrom numpy.matlib import matrix,rand,zeros,ones,empty,eye",
+    "dom_ids": [
+      "readar-node-0136",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0133"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Links: Another somewhat outdated MATLAB/NumPy cross-reference can be found at https://mathesaurus.sf.net/",
+    "dom_ids": [
+      "readar-node-0145",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0134"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Links: An extensive list of tools for scientific work with Python can be found in the topical software page .",
+    "dom_ids": [
+      "readar-node-0145",
+      "readar-node-0147"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0135"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Links: See List of Python software: scripting for a list of software that use Python as a scripting language",
+    "dom_ids": [
+      "readar-node-0145",
+      "readar-node-0148"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0136"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Links: MATLAB® and SimuLink® are registered trademarks of The MathWorks, Inc.",
+    "dom_ids": [
+      "readar-node-0145",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "numpy-for-matlab-users",
+    "id": "numpy-for-matlab-users__node_0137"
+  }
+]

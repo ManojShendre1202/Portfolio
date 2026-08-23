@@ -1,0 +1,1354 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "AI applications need memory to share context across multiple interactions. In LangGraph, you can add two types of memory:",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "add-memory",
+    "id": "add-memory__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- Add short-term memory as a part of your agent’s state to enable multi-turn conversations. - Add long-term memory to store user-specific or application-level data across sessions.",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "add-memory",
+    "id": "add-memory__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add short-term memory: Short-term memory (thread-level persistence ) enables agents to track multi-turn conversations. To add short-term memory:",
+    "dom_ids": [
+      "add-short-term-memory",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add short-term memory: from langgraph.checkpoint.memory import InMemorySaver\nfrom langgraph.graph import StateGraph\n\ncheckpointer = InMemorySaver()\n\nbuilder = StateGraph(...)\ngraph = builder.compile(checkpointer=checkpointer)\n\ngraph.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"hi! i am Bob\"}]},\n    {\"configurable\": {\"thread_id\": \"1\"}},\n)",
+    "dom_ids": [
+      "add-short-term-memory",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: In production, use a checkpointer backed by a database:",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langgraph.checkpoint.postgres import PostgresSaver\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\nwith PostgresSaver.from_conn_string(DB_URI) as checkpointer:\n    builder = StateGraph(...)\n    graph = builder.compile(checkpointer=checkpointer)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Postgres checkpointer",
+    "dom_ids": [
+      "use-in-production",
+      "example-using-postgres-checkpointer-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U \"psycopg[binary,pool]\" langgraph langgraph-checkpoint-postgres",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call checkpointer.setup() the first time you’re using Postgres checkpointer",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Sync - Async",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.postgres import PostgresSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\nwith PostgresSaver.from_conn_string(DB_URI) as checkpointer:\n    # checkpointer.setup()\n\n    def call_model(state: MessagesState):\n        response = model.invoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.postgres.aio import AsyncPostgresSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\nasync with AsyncPostgresSaver.from_conn_string(DB_URI) as checkpointer:\n    # await checkpointer.setup()\n\n    async def call_model(state: MessagesState):\n        response = await model.ainvoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using MongoDB checkpointer",
+    "dom_ids": [
+      "use-in-production",
+      "example-using-mongodb-checkpointer-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U pymongo langgraph langgraph-checkpoint-mongodb",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Setup To use the MongoDB checkpointer , you will need a MongoDB cluster. Follow this guide to create a cluster if you don’t already have one.",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Sync - Async",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.mongodb import MongoDBSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nMONGODB_URI = \"localhost:27017\"\nwith MongoDBSaver.from_conn_string(MONGODB_URI) as checkpointer:\n\n    def call_model(state: MessagesState):\n        response = model.invoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.mongodb.aio import AsyncMongoDBSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nMONGODB_URI = \"localhost:27017\"\nasync with AsyncMongoDBSaver.from_conn_string(MONGODB_URI) as checkpointer:\n\n    async def call_model(state: MessagesState):\n        response = await model.ainvoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Redis checkpointer",
+    "dom_ids": [
+      "use-in-production",
+      "example-using-redis-checkpointer-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U langgraph langgraph-checkpoint-redis",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call checkpointer.setup() the first time you’re using Redis checkpointer.",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0021"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Sync - Async",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.redis import RedisSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"redis://localhost:6379\"\nwith RedisSaver.from_conn_string(DB_URI) as checkpointer:\n    # checkpointer.setup()\n\n    def call_model(state: MessagesState):\n        response = model.invoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.redis.aio import AsyncRedisSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"redis://localhost:6379\"\nasync with AsyncRedisSaver.from_conn_string(DB_URI) as checkpointer:\n    # await checkpointer.asetup()\n\n    async def call_model(state: MessagesState):\n        response = await model.ainvoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Oracle checkpointer",
+    "dom_ids": [
+      "use-in-production",
+      "example-using-oracle-checkpointer-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U langgraph langgraph-oracledb",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Setup To use the Oracle checkpointer , you will need an Oracle AI Database instance. A local container (for example gvenzl/oracle-free:23-slim ) or an Oracle Autonomous Database in OCI both work.",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call checkpointer.setup() the first time you’re using the Oracle checkpointer.",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0028"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Sync - Async",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph_oracledb.checkpoint.oracle import OracleSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"user/password@localhost:1521/FREEPDB1\"\nwith OracleSaver.from_conn_string(DB_URI) as checkpointer:\n    # checkpointer.setup()\n\n    def call_model(state: MessagesState):\n        response = model.invoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        print(snapshot)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0030"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph_oracledb.checkpoint.oracle import AsyncOracleSaver\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\nDB_URI = \"user/password@localhost:1521/FREEPDB1\"\nasync with AsyncOracleSaver.from_conn_string(DB_URI) as checkpointer:\n    # await checkpointer.setup()\n\n    async def call_model(state: MessagesState):\n        response = await model.ainvoke(state[\"messages\"])\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(checkpointer=checkpointer)\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\"\n        }\n    }\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-in-production",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in subgraphs: If your graph contains subgraphs , you only need to provide the checkpointer when compiling the parent graph. LangGraph will automatically propagate the checkpointer to the child subgraphs.",
+    "dom_ids": [
+      "use-in-subgraphs",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in subgraphs: from langgraph.graph import START, StateGraph\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom typing import TypedDict\n\nclass State(TypedDict):\n    foo: str\n\n# Subgraph\n\ndef subgraph_node_1(state: State):\n    return {\"foo\": state[\"foo\"] + \"bar\"}\n\nsubgraph_builder = StateGraph(State)\nsubgraph_builder.add_node(subgraph_node_1)\nsubgraph_builder.add_edge(START, \"subgraph_node_1\")\nsubgraph = subgraph_builder.compile()\n\n# Parent graph\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"node_1\", subgraph)\nbuilder.add_edge(START, \"node_1\")\n\ncheckpointer = InMemorySaver()\ngraph = builder.compile(checkpointer=checkpointer)",
+    "dom_ids": [
+      "use-in-subgraphs",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in subgraphs: You can configure subgraph-specific checkpointing behavior. See subgraph persistence for details on persistence levels including interrupt support and stateful continuations.",
+    "dom_ids": [
+      "use-in-subgraphs",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in subgraphs: subgraph_builder = StateGraph(...)\nsubgraph = subgraph_builder.compile(checkpointer=True)",
+    "dom_ids": [
+      "use-in-subgraphs",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0035"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add long-term memory: Use long-term memory to store user-specific or application-specific data across conversations.",
+    "dom_ids": [
+      "add-long-term-memory",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add long-term memory: from langgraph.store.memory import InMemoryStore\nfrom langgraph.graph import StateGraph\n\nstore = InMemoryStore()\n\nbuilder = StateGraph(...)\ngraph = builder.compile(store=store)",
+    "dom_ids": [
+      "add-long-term-memory",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access the store inside nodes: Once you compile a graph with a store, LangGraph automatically injects the store into your node functions. The recommended way to access the store is through the Runtime object.",
+    "dom_ids": [
+      "access-the-store-inside-nodes",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0038"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Access the store inside nodes: from dataclasses import dataclass\nfrom langgraph.runtime import Runtime\nfrom langgraph.graph import StateGraph, MessagesState, START\nimport uuid\n\n@dataclass\nclass Context:\n    user_id: str\n\nasync def call_model(state: MessagesState, runtime: Runtime[Context]):\n    user_id = runtime.context.user_id\n    namespace = (user_id, \"memories\")\n\n    # Search for relevant memories\n    memories = await runtime.store.asearch(\n        namespace, query=state[\"messages\"][-1].content, limit=3\n    )\n    info = \"\\n\".join([d.value[\"data\"] for d in memories])\n\n    # ... Use memories in model call\n\n    # Store a new memory\n    await runtime.store.aput(\n        namespace, str(uuid.uuid4()), {\"data\": \"User prefers dark mode\"}\n    )\n\nbuilder = StateGraph(MessagesState, context_schema=Context)\nbuilder.add_node(call_model)\nbuilder.add_edge(START, \"call_model\")\ngraph = builder.compile(store=store)\n\n# Pass context at invocation time\ngraph.invoke(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"hi\"}]},\n    {\"configurable\": {\"thread_id\": \"1\"}},\n    context=Context(user_id=\"1\"),\n)",
+    "dom_ids": [
+      "access-the-store-inside-nodes",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: In production, use a store backed by a database:",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from langgraph.store.postgres import PostgresStore\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\nwith PostgresStore.from_conn_string(DB_URI) as store:\n    builder = StateGraph(...)\n    graph = builder.compile(store=store)",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0041"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Postgres store",
+    "dom_ids": [
+      "use-in-production-2",
+      "example-using-postgres-store-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U \"psycopg[binary,pool]\" langgraph langgraph-checkpoint-postgres",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call store.setup() the first time you’re using Postgres store",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0044"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Async - Sync",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0045"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from dataclasses import dataclass\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.postgres.aio import AsyncPostgresSaver\nfrom langgraph.store.postgres.aio import AsyncPostgresStore\nfrom langgraph.runtime import Runtime\nimport uuid\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\n@dataclass\nclass Context:\n    user_id: str\n\nasync def call_model(\n    state: MessagesState,\n    runtime: Runtime[Context],\n):\n    user_id = runtime.context.user_id\n    namespace = (\"memories\", user_id)\n    memories = await runtime.store.asearch(namespace, query=str(state[\"messages\"][-1].content))\n    info = \"\\n\".join([d.value[\"data\"] for d in memories])\n    system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n    # Store new memories if the user asks the model to remember\n    last_message = state[\"messages\"][-1]\n    if \"remember\" in last_message.content.lower():\n        memory = \"User name is Bob\"\n        await runtime.store.aput(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n    response = await model.ainvoke(\n        [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n    )\n    return {\"messages\": response}\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\n\nasync with (\n    AsyncPostgresStore.from_conn_string(DB_URI) as store,\n    AsyncPostgresSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    # await store.setup()\n    # await checkpointer.setup()\n\n    builder = StateGraph(MessagesState, context_schema=Context)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\"configurable\": {\"thread_id\": \"1\"}}\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)\n\n    config = {\"configurable\": {\"thread_id\": \"2\"}}\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    async for message in stream.messages:\n        async for token in message.text:\n            print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0052"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0046"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from dataclasses import dataclass\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.postgres import PostgresSaver\nfrom langgraph.store.postgres import PostgresStore\nfrom langgraph.runtime import Runtime\nimport uuid\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\n@dataclass\nclass Context:\n    user_id: str\n\ndef call_model(\n    state: MessagesState,\n    runtime: Runtime[Context],\n):\n    user_id = runtime.context.user_id\n    namespace = (\"memories\", user_id)\n    memories = runtime.store.search(namespace, query=str(state[\"messages\"][-1].content))\n    info = \"\\n\".join([d.value[\"data\"] for d in memories])\n    system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n    # Store new memories if the user asks the model to remember\n    last_message = state[\"messages\"][-1]\n    if \"remember\" in last_message.content.lower():\n        memory = \"User name is Bob\"\n        runtime.store.put(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n    response = model.invoke(\n        [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n    )\n    return {\"messages\": response}\n\nDB_URI = \"postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable\"\n\nwith (\n    PostgresStore.from_conn_string(DB_URI) as store,\n    PostgresSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    # store.setup()\n    # checkpointer.setup()\n\n    builder = StateGraph(MessagesState, context_schema=Context)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\"configurable\": {\"thread_id\": \"1\"}}\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    for snapshot in stream.values:\n        print(snapshot)\n\n    config = {\"configurable\": {\"thread_id\": \"2\"}}\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    for snapshot in stream.values:\n        print(snapshot)",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0047"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using MongoDB store",
+    "dom_ids": [
+      "use-in-production-2",
+      "example-using-mongodb-store-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0048"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Redis store",
+    "dom_ids": [
+      "use-in-production-2",
+      "example-using-redis-store-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0049"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U langgraph langgraph-checkpoint-redis",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0050"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call store.setup() the first time you’re using Redis store .",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0051"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Async - Sync",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0052"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from dataclasses import dataclass\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.redis.aio import AsyncRedisSaver\nfrom langgraph.store.redis.aio import AsyncRedisStore\nfrom langgraph.runtime import Runtime\nimport uuid\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\n@dataclass\nclass Context:\n    user_id: str\n\nasync def call_model(\n    state: MessagesState,\n    runtime: Runtime[Context],\n):\n    user_id = runtime.context.user_id\n    namespace = (\"memories\", user_id)\n    memories = await runtime.store.asearch(namespace, query=str(state[\"messages\"][-1].content))\n    info = \"\\n\".join([d.value[\"data\"] for d in memories])\n    system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n    # Store new memories if the user asks the model to remember\n    last_message = state[\"messages\"][-1]\n    if \"remember\" in last_message.content.lower():\n        memory = \"User name is Bob\"\n        await runtime.store.aput(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n    response = await model.ainvoke(\n        [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n    )\n    return {\"messages\": response}\n\nDB_URI = \"redis://localhost:6379\"\n\nasync with (\n    AsyncRedisStore.from_conn_string(DB_URI) as store,\n    AsyncRedisSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    # await store.setup()\n    # await checkpointer.asetup()\n\n    builder = StateGraph(MessagesState, context_schema=Context)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\"configurable\": {\"thread_id\": \"1\"}}\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    async for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()\n\n    config = {\"configurable\": {\"thread_id\": \"2\"}}\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    async for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0053"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: from dataclasses import dataclass\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.checkpoint.redis import RedisSaver\nfrom langgraph.store.redis import RedisStore\nfrom langgraph.runtime import Runtime\nimport uuid\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\n\n@dataclass\nclass Context:\n    user_id: str\n\ndef call_model(\n    state: MessagesState,\n    runtime: Runtime[Context],\n):\n    user_id = runtime.context.user_id\n    namespace = (\"memories\", user_id)\n    memories = runtime.store.search(namespace, query=str(state[\"messages\"][-1].content))\n    info = \"\\n\".join([d.value[\"data\"] for d in memories])\n    system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n    # Store new memories if the user asks the model to remember\n    last_message = state[\"messages\"][-1]\n    if \"remember\" in last_message.content.lower():\n        memory = \"User name is Bob\"\n        runtime.store.put(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n    response = model.invoke(\n        [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n    )\n    return {\"messages\": response}\n\nDB_URI = \"redis://localhost:6379\"\n\nwith (\n    RedisStore.from_conn_string(DB_URI) as store,\n    RedisSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    store.setup()\n    checkpointer.setup()\n\n    builder = StateGraph(MessagesState, context_schema=Context)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\"configurable\": {\"thread_id\": \"1\"}}\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()\n\n    config = {\"configurable\": {\"thread_id\": \"2\"}}\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n        context=Context(user_id=\"1\"),\n    )\n    for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0060"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Example: using Oracle store",
+    "dom_ids": [
+      "use-in-production-2",
+      "example-using-oracle-store-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: pip install -U langgraph langgraph-oracledb langchain-openai",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0056"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: Setup To use the Oracle store , you will need an Oracle AI Database instance — the vector index used for semantic search requires Oracle AI Vector Search .",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use in production: You need to call store.setup() and checkpointer.setup() the first time you’re using the Oracle store and checkpointer.",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0058"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use in production: - Sync - Async",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0059"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: import uuid\n\nfrom langchain.chat_models import init_chat_model\nfrom langchain.embeddings import init_embeddings\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.store.base import BaseStore\nfrom langgraph_oracledb.checkpoint.oracle import OracleSaver\nfrom langgraph_oracledb.store.oracle import OracleStore\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\nembeddings = init_embeddings(\"openai:text-embedding-3-small\")\n\nDB_URI = \"user/password@localhost:1521/FREEPDB1\"\n\nwith (\n    OracleStore.from_conn_string(\n        DB_URI,\n        index={\"embed\": embeddings, \"dims\": 1536},\n    ) as store,\n    OracleSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    store.setup()\n    checkpointer.setup()\n\n    def call_model(\n        state: MessagesState,\n        config: RunnableConfig,\n        *,\n        store: BaseStore,\n    ):\n        user_id = config[\"configurable\"][\"user_id\"]\n        namespace = (\"memories\", user_id)\n        memories = store.search(namespace, query=str(state[\"messages\"][-1].content))\n        info = \"\\n\".join([d.value[\"data\"] for d in memories])\n        system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n        # Store new memories if the user asks the model to remember\n        last_message = state[\"messages\"][-1]\n        if \"remember\" in last_message.content.lower():\n            memory = \"User name is Bob\"\n            store.put(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n        response = model.invoke(\n            [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n        )\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\",\n            \"user_id\": \"1\",\n        }\n    }\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"2\",\n            \"user_id\": \"1\",\n        }\n    }\n\n    stream = graph.stream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0060"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use in production: import uuid\n\nfrom langchain.chat_models import init_chat_model\nfrom langchain.embeddings import init_embeddings\nfrom langchain_core.runnables import RunnableConfig\nfrom langgraph.graph import StateGraph, MessagesState, START\nfrom langgraph.store.base import BaseStore\nfrom langgraph_oracledb.checkpoint.oracle import AsyncOracleSaver\nfrom langgraph_oracledb.store.oracle import AsyncOracleStore\n\nmodel = init_chat_model(model=\"claude-haiku-4-5-20251001\")\nembeddings = init_embeddings(\"openai:text-embedding-3-small\")\n\nDB_URI = \"user/password@localhost:1521/FREEPDB1\"\n\nasync with (\n    AsyncOracleStore.from_conn_string(\n        DB_URI,\n        index={\"embed\": embeddings, \"dims\": 1536},\n    ) as store,\n    AsyncOracleSaver.from_conn_string(DB_URI) as checkpointer,\n):\n    await store.setup()\n    await checkpointer.setup()\n\n    async def call_model(\n        state: MessagesState,\n        config: RunnableConfig,\n        *,\n        store: BaseStore,\n    ):\n        user_id = config[\"configurable\"][\"user_id\"]\n        namespace = (\"memories\", user_id)\n        memories = await store.asearch(namespace, query=str(state[\"messages\"][-1].content))\n        info = \"\\n\".join([d.value[\"data\"] for d in memories])\n        system_msg = f\"You are a helpful assistant talking to the user. User info: {info}\"\n\n        # Store new memories if the user asks the model to remember\n        last_message = state[\"messages\"][-1]\n        if \"remember\" in last_message.content.lower():\n            memory = \"User name is Bob\"\n            await store.aput(namespace, str(uuid.uuid4()), {\"data\": memory})\n\n        response = await model.ainvoke(\n            [{\"role\": \"system\", \"content\": system_msg}] + state[\"messages\"]\n        )\n        return {\"messages\": response}\n\n    builder = StateGraph(MessagesState)\n    builder.add_node(call_model)\n    builder.add_edge(START, \"call_model\")\n\n    graph = builder.compile(\n        checkpointer=checkpointer,\n        store=store,\n    )\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"1\",\n            \"user_id\": \"1\",\n        }\n    }\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"Hi! Remember: my name is Bob\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()\n\n    config = {\n        \"configurable\": {\n            \"thread_id\": \"2\",\n            \"user_id\": \"1\",\n        }\n    }\n\n    stream = await graph.astream_events(\n        {\"messages\": [{\"role\": \"user\", \"content\": \"what is my name?\"}]},\n        config,\n        version=\"v3\",\n    )\n    async for snapshot in stream.values:\n        snapshot[\"messages\"][-1].pretty_print()",
+    "dom_ids": [
+      "use-in-production-2",
+      "readar-node-0067"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0061"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use semantic search: Enable semantic search in your graph’s memory store to let graph agents search for items in the store by semantic similarity.",
+    "dom_ids": [
+      "use-semantic-search",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0062"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use semantic search: from langchain.embeddings import init_embeddings\nfrom langgraph.store.memory import InMemoryStore\n\n# Create store with semantic search enabled\nembeddings = init_embeddings(\"openai:text-embedding-3-small\")\nstore = InMemoryStore(\n    index={\n        \"embed\": embeddings,\n        \"dims\": 1536,\n    }\n)\n\nstore.put((\"user_123\", \"memories\"), \"1\", {\"text\": \"I love pizza\"})\nstore.put((\"user_123\", \"memories\"), \"2\", {\"text\": \"I am a plumber\"})\n\nitems = store.search(\n    (\"user_123\", \"memories\"), query=\"I'm hungry\", limit=1\n)",
+    "dom_ids": [
+      "use-semantic-search",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use semantic search: Long-term memory with semantic search",
+    "dom_ids": [
+      "use-semantic-search",
+      "long-term-memory-with-semantic-search-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0064"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use semantic search: from langchain.embeddings import init_embeddings\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.store.memory import InMemoryStore\nfrom langgraph.graph import START, MessagesState, StateGraph\nfrom langgraph.runtime import Runtime\n\nmodel = init_chat_model(\"gpt-5.4-mini\")\n\n# Create store with semantic search enabled\nembeddings = init_embeddings(\"openai:text-embedding-3-small\")\nstore = InMemoryStore(\n    index={\n        \"embed\": embeddings,\n        \"dims\": 1536,\n    }\n)\n\nstore.put((\"user_123\", \"memories\"), \"1\", {\"text\": \"I love pizza\"})\nstore.put((\"user_123\", \"memories\"), \"2\", {\"text\": \"I am a plumber\"})\n\nasync def chat(state: MessagesState, runtime: Runtime):\n    # Search based on user's last message\n    items = await runtime.store.asearch(\n        (\"user_123\", \"memories\"), query=state[\"messages\"][-1].content, limit=2\n    )\n    memories = \"\\n\".join(item.value[\"text\"] for item in items)\n    memories = f\"## Memories of user\\n{memories}\" if memories else \"\"\n    response = await model.ainvoke(\n        [\n            {\"role\": \"system\", \"content\": f\"You are a helpful assistant.\\n{memories}\"},\n            *state[\"messages\"],\n        ]\n    )\n    return {\"messages\": [response]}\n\n\nbuilder = StateGraph(MessagesState)\nbuilder.add_node(chat)\nbuilder.add_edge(START, \"chat\")\ngraph = builder.compile(store=store)\n\nstream = await graph.astream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"I'm hungry\"}]},\n    version=\"v3\",\n)\nasync for message in stream.messages:\n    async for token in message.text:\n        print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "use-semantic-search",
+      "readar-node-0072"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Manage short-term memory: With short-term memory enabled, long conversations can exceed the LLM’s context window. Common solutions are:",
+    "dom_ids": [
+      "manage-short-term-memory",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0066"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Manage short-term memory: - Trim messages : Remove first or last N messages (before calling LLM) - Delete messages from LangGraph state permanently - Summarize messages : Summarize earlier messages in the history and replace them with a summary - Manage checkpoints to store and retrieve message history - Custom strategies (e.g., message filtering, etc.)",
+    "dom_ids": [
+      "manage-short-term-memory",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0067"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Manage short-term memory: This allows the agent to keep track of the conversation without exceeding the LLM’s context window.",
+    "dom_ids": [
+      "manage-short-term-memory",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: Most LLMs have a maximum supported context window (denominated in tokens). One way to decide when to truncate messages is to count the tokens in the message history and truncate whenever it approaches that limit. If you’re using LangChain, you can use the trim messages utility and specify the number of tokens to keep from the list, as well as the strategy (e.g., keep the last max_tokens ) to use for handling the boundary.",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0069"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: To trim message history, use the trim_messages function:",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Trim messages: from langchain_core.messages.utils import (\n    trim_messages,\n    count_tokens_approximately\n)\n\ndef call_model(state: MessagesState):\n    messages = trim_messages(\n        state[\"messages\"],\n        strategy=\"last\",\n        token_counter=count_tokens_approximately,\n        max_tokens=128,\n        start_on=\"human\",\n        end_on=(\"human\", \"tool\"),\n    )\n    response = model.invoke(messages)\n    return {\"messages\": [response]}\n\nbuilder = StateGraph(MessagesState)\nbuilder.add_node(call_model)\n...",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Trim messages: Full example: trim messages",
+    "dom_ids": [
+      "trim-messages",
+      "full-example-trim-messages-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0072"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Trim messages: from langchain_core.messages.utils import (\n    trim_messages,\n    count_tokens_approximately\n)\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import StateGraph, START, MessagesState\n\nmodel = init_chat_model(\"claude-sonnet-4-6\")\nsummarization_model = model.bind(max_tokens=128)\n\ndef call_model(state: MessagesState):\n    messages = trim_messages(\n        state[\"messages\"],\n        strategy=\"last\",\n        token_counter=count_tokens_approximately,\n        max_tokens=128,\n        start_on=\"human\",\n        end_on=(\"human\", \"tool\"),\n    )\n    response = model.invoke(messages)\n    return {\"messages\": [response]}\n\ncheckpointer = InMemorySaver()\nbuilder = StateGraph(MessagesState)\nbuilder.add_node(call_model)\nbuilder.add_edge(START, \"call_model\")\ngraph = builder.compile(checkpointer=checkpointer)\n\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\ngraph.invoke({\"messages\": \"hi, my name is bob\"}, config)\ngraph.invoke({\"messages\": \"write a short poem about cats\"}, config)\ngraph.invoke({\"messages\": \"now do the same but for dogs\"}, config)\nfinal_response = graph.invoke({\"messages\": \"what's my name?\"}, config)\n\nfinal_response[\"messages\"][-1].pretty_print()",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0073"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Trim messages: ================================== Ai Message ==================================\n\nYour name is Bob, as you mentioned when you first introduced yourself.",
+    "dom_ids": [
+      "trim-messages",
+      "readar-node-0083"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0074"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: You can delete messages from the graph state to manage the message history. This is useful when you want to remove specific messages or clear the entire message history.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To delete messages from the graph state, you can use the RemoveMessage . For RemoveMessage to work, you need to use a state key with add_messages reducer , like MessagesState .",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0076"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To remove specific messages:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0077"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langchain.messages import RemoveMessage\n\ndef delete_messages(state):\n    messages = state[\"messages\"]\n    if len(messages) > 2:\n        # remove the earliest two messages\n        return {\"messages\": [RemoveMessage(id=m.id) for m in messages[:2]]}",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0088"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: To remove all messages:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0079"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langgraph.graph.message import REMOVE_ALL_MESSAGES\n\ndef delete_messages(state):\n    return {\"messages\": [RemoveMessage(id=REMOVE_ALL_MESSAGES)]}",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0080"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: When deleting messages, make sure that the resulting message history is valid. Check the limitations of the LLM provider you’re using. For example:",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0091"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0081"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Delete messages: - Some providers expect message history to start with a user message - Most providers require assistant messages with tool calls to be followed by corresponding tool result messages.",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0082"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Delete messages: Full example: delete messages",
+    "dom_ids": [
+      "delete-messages",
+      "full-example-delete-messages-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0083"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: from langchain.messages import RemoveMessage\n\ndef delete_messages(state):\n    messages = state[\"messages\"]\n    if len(messages) > 2:\n        # remove the earliest two messages\n        return {\"messages\": [RemoveMessage(id=m.id) for m in messages[:2]]}\n\ndef call_model(state: MessagesState):\n    response = model.invoke(state[\"messages\"])\n    return {\"messages\": response}\n\nbuilder = StateGraph(MessagesState)\nbuilder.add_sequence([call_model, delete_messages])\nbuilder.add_edge(START, \"call_model\")\n\ncheckpointer = InMemorySaver()\napp = builder.compile(checkpointer=checkpointer)\n\nstream = app.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"hi! I'm bob\"}]},\n    config,\n    version=\"v3\"\n)\nfor snapshot in stream.values:\n    print([(message.type, message.content) for message in snapshot[\"messages\"]])\n\nstream = app.stream_events(\n    {\"messages\": [{\"role\": \"user\", \"content\": \"what's my name?\"}]},\n    config,\n    version=\"v3\"\n)\nfor snapshot in stream.values:\n    print([(message.type, message.content) for message in snapshot[\"messages\"]])",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0094"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0084"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete messages: [('human', \"hi! I'm bob\")]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! How are you doing today? Is there anything I can help you with?')]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! How are you doing today? Is there anything I can help you with?'), ('human', \"what's my name?\")]\n[('human', \"hi! I'm bob\"), ('ai', 'Hi Bob! How are you doing today? Is there anything I can help you with?'), ('human', \"what's my name?\"), ('ai', 'Your name is Bob.')]\n[('human', \"what's my name?\"), ('ai', 'Your name is Bob.')]",
+    "dom_ids": [
+      "delete-messages",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0085"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: The problem with trimming or removing messages, as shown above, is that you may lose information from culling of the message queue. Because of this, some applications benefit from a more sophisticated approach of summarizing the message history using a chat model.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: Prompting and orchestration logic can be used to summarize the message history. For example, in LangGraph you can extend the MessagesState to include a summary key:",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0087"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Summarize messages: from langgraph.graph import MessagesState\nclass State(MessagesState):\n    summary: str",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0088"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: Then, you can generate a summary of the chat history, using any existing summary as context for the next summary. This summarize_conversation node can be called after some number of messages have accumulated in the messages state key.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0089"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Summarize messages: def summarize_conversation(state: State):\n\n    # First, we get any existing summary\n    summary = state.get(\"summary\", \"\")\n\n    # Create our summarization prompt\n    if summary:\n\n        # A summary already exists\n        summary_message = (\n            f\"This is a summary of the conversation to date: {summary}\\n\\n\"\n            \"Extend the summary by taking into account the new messages above:\"\n        )\n\n    else:\n        summary_message = \"Create a summary of the conversation above:\"\n\n    # Add prompt to our history\n    messages = state[\"messages\"] + [HumanMessage(content=summary_message)]\n    response = model.invoke(messages)\n\n    # Delete all but the 2 most recent messages\n    delete_messages = [RemoveMessage(id=m.id) for m in state[\"messages\"][:-2]]\n    return {\"summary\": response.content, \"messages\": delete_messages}",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0101"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: Full example: summarize messages",
+    "dom_ids": [
+      "summarize-messages",
+      "full-example-summarize-messages-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0091"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Summarize messages: from typing import Any, TypedDict\n\nfrom langchain.chat_models import init_chat_model\nfrom langchain.messages import AnyMessage\nfrom langchain_core.messages.utils import count_tokens_approximately\nfrom langgraph.graph import StateGraph, START, MessagesState\nfrom langgraph.checkpoint.memory import InMemorySaver\nfrom langmem.short_term import SummarizationNode, RunningSummary\n\nmodel = init_chat_model(\"claude-sonnet-4-6\")\nsummarization_model = model.bind(max_tokens=128)\n\nclass State(MessagesState):\n    context: dict[str, RunningSummary]\n\nclass LLMInputState(TypedDict):\n    summarized_messages: list[AnyMessage]\n    context: dict[str, RunningSummary]\n\nsummarization_node = SummarizationNode(\n    token_counter=count_tokens_approximately,\n    model=summarization_model,\n    max_tokens=256,\n    max_tokens_before_summary=256,\n    max_summary_tokens=128,\n)\n\ndef call_model(state: LLMInputState):\n    response = model.invoke(state[\"summarized_messages\"])\n    return {\"messages\": [response]}\n\ncheckpointer = InMemorySaver()\nbuilder = StateGraph(State)\nbuilder.add_node(call_model)\nbuilder.add_node(\"summarize\", summarization_node)\nbuilder.add_edge(START, \"summarize\")\nbuilder.add_edge(\"summarize\", \"call_model\")\ngraph = builder.compile(checkpointer=checkpointer)\n\n# Invoke the graph\nconfig = {\"configurable\": {\"thread_id\": \"1\"}}\ngraph.invoke({\"messages\": \"hi, my name is bob\"}, config)\ngraph.invoke({\"messages\": \"write a short poem about cats\"}, config)\ngraph.invoke({\"messages\": \"now do the same but for dogs\"}, config)\nfinal_response = graph.invoke({\"messages\": \"what's my name?\"}, config)\n\nfinal_response[\"messages\"][-1].pretty_print()\nprint(\"\\nSummary:\", final_response[\"context\"][\"running_summary\"].summary)",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0092"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Summarize messages: - We will keep track of our running summary in the context field",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0093"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: (expected by the SummarizationNode ).",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0105"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0094"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Summarize messages: - Define private state that will be used only for filtering",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0095"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Summarize messages: the inputs to call_model node.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0096"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Summarize messages: - We’re passing a private input state here to isolate the messages returned by the summarization node",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0097"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Summarize messages: ================================== Ai Message ==================================\n\nFrom our conversation, I can see that you introduced yourself as Bob. That's the name you shared with me when we began talking.\n\nSummary: In this conversation, I was introduced to Bob, who then asked me to write a poem about cats. I composed a poem titled \"The Mystery of Cats\" that captured cats' graceful movements, independent nature, and their special relationship with humans. Bob then requested a similar poem about dogs, so I wrote \"The Joy of Dogs,\" which highlighted dogs' loyalty, enthusiasm, and loving companionship. Both poems were written in a similar style but emphasized the distinct characteristics that make each pet special.",
+    "dom_ids": [
+      "summarize-messages",
+      "readar-node-0109"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0098"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Manage checkpoints: You can view and delete the information stored by the checkpointer.",
+    "dom_ids": [
+      "manage-checkpoints",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0099"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "View thread state: - Graph/Functional API - Checkpointer API",
+    "dom_ids": [
+      "view-thread-state",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0100"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View thread state: config = {\n    \"configurable\": {\n        \"thread_id\": \"1\",\n        # optionally provide an ID for a specific checkpoint,\n        # otherwise the latest checkpoint is shown\n        # \"checkpoint_id\": \"1f029ca3-1f5b-6704-8004-820c16b69a5a\"  #\n\n    }\n}\ngraph.get_state(config)",
+    "dom_ids": [
+      "view-thread-state",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0101"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View thread state: StateSnapshot(\n    values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today?), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]}, next=(),\n    config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n    metadata={\n        'source': 'loop',\n        'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}},\n        'step': 4,\n        'parents': {},\n        'thread_id': '1'\n    },\n    created_at='2025-05-05T16:01:24.680462+00:00',\n    parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n    tasks=(),\n    interrupts=()\n)",
+    "dom_ids": [
+      "view-thread-state",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0102"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View thread state: config = {\n    \"configurable\": {\n        \"thread_id\": \"1\",\n        # optionally provide an ID for a specific checkpoint,\n        # otherwise the latest checkpoint is shown\n        # \"checkpoint_id\": \"1f029ca3-1f5b-6704-8004-820c16b69a5a\"  #\n\n    }\n}\ncheckpointer.get_tuple(config)",
+    "dom_ids": [
+      "view-thread-state",
+      "readar-node-0116"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0103"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View thread state: CheckpointTuple(\n    config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n    checkpoint={\n        'v': 3,\n        'ts': '2025-05-05T16:01:24.680462+00:00',\n        'id': '1f029ca3-1f5b-6704-8004-820c16b69a5a',\n        'channel_versions': {'__start__': '00000000000000000000000000000005.0.5290678567601859', 'messages': '00000000000000000000000000000006.0.3205149138784782', 'branch:to:call_model': '00000000000000000000000000000006.0.14611156755133758'}, 'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000004.0.5736472536395331'}, 'call_model': {'branch:to:call_model': '00000000000000000000000000000005.0.1410174088651449'}},\n        'channel_values': {'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today?), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]},\n    },\n    metadata={\n        'source': 'loop',\n        'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}},\n        'step': 4,\n        'parents': {},\n        'thread_id': '1'\n    },\n    parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n    pending_writes=[]\n)",
+    "dom_ids": [
+      "view-thread-state",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0104"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "View the history of the thread: - Graph/Functional API - Checkpointer API",
+    "dom_ids": [
+      "view-the-history-of-the-thread",
+      "readar-node-0119"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0105"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View the history of the thread: config = {\n    \"configurable\": {\n        \"thread_id\": \"1\"\n    }\n}\nlist(graph.get_state_history(config))",
+    "dom_ids": [
+      "view-the-history-of-the-thread",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0106"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View the history of the thread: [\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]},\n        next=(),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}}, 'step': 4, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:24.680462+00:00',\n        parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        tasks=(),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\")]},\n        next=('call_model',),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        metadata={'source': 'loop', 'writes': None, 'step': 3, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.863421+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='8ab4155e-6b15-b885-9ce5-bed69a2c305c', name='call_model', path=('__pregel_pull', 'call_model'), error=None, interrupts=(), state=None, result={'messages': AIMessage(content='Your name is Bob.')}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]},\n        next=('__start__',),\n        config={...},\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"what's my name?\"}]}}, 'step': 2, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.863173+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='24ba39d6-6db1-4c9b-f4c5-682aeaf38dcd', name='__start__', path=('__pregel_pull', '__start__'), error=None, interrupts=(), state=None, result={'messages': [{'role': 'user', 'content': \"what's my name?\"}]}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]},\n        next=(),\n        config={...},\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')}}, 'step': 1, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:23.862295+00:00',\n        parent_config={...}\n        tasks=(),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': [HumanMessage(content=\"hi! I'm bob\")]},\n        next=('call_model',),\n        config={...},\n        metadata={'source': 'loop', 'writes': None, 'step': 0, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:22.278960+00:00',\n        parent_config={...}\n        tasks=(PregelTask(id='8cbd75e0-3720-b056-04f7-71ac805140a0', name='call_model', path=('__pregel_pull', 'call_model'), error=None, interrupts=(), state=None, result={'messages': AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')}),),\n        interrupts=()\n    ),\n    StateSnapshot(\n        values={'messages': []},\n        next=('__start__',),\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-0870-6ce2-bfff-1f3f14c3e565'}},\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}}, 'step': -1, 'parents': {}, 'thread_id': '1'},\n        created_at='2025-05-05T16:01:22.277497+00:00',\n        parent_config=None,\n        tasks=(PregelTask(id='d458367b-8265-812c-18e2-33001d199ce6', name='__start__', path=('__pregel_pull', '__start__'), error=None, interrupts=(), state=None, result={'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}),),\n        interrupts=()\n    )\n]",
+    "dom_ids": [
+      "view-the-history-of-the-thread",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0107"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View the history of the thread: config = {\n    \"configurable\": {\n        \"thread_id\": \"1\"\n    }\n}\nlist(checkpointer.list(config))",
+    "dom_ids": [
+      "view-the-history-of-the-thread",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0108"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "View the history of the thread: [\n    CheckpointTuple(\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1f5b-6704-8004-820c16b69a5a'}},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:24.680462+00:00',\n            'id': '1f029ca3-1f5b-6704-8004-820c16b69a5a',\n            'channel_versions': {'__start__': '00000000000000000000000000000005.0.5290678567601859', 'messages': '00000000000000000000000000000006.0.3205149138784782', 'branch:to:call_model': '00000000000000000000000000000006.0.14611156755133758'},\n            'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000004.0.5736472536395331'}, 'call_model': {'branch:to:call_model': '00000000000000000000000000000005.0.1410174088651449'}},\n            'channel_values': {'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\"), AIMessage(content='Your name is Bob.')]},\n        },\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Your name is Bob.')}}, 'step': 4, 'parents': {}, 'thread_id': '1'},\n        parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        pending_writes=[]\n    ),\n    CheckpointTuple(\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-1790-6b0a-8003-baf965b6a38f'}},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:23.863421+00:00',\n            'id': '1f029ca3-1790-6b0a-8003-baf965b6a38f',\n            'channel_versions': {'__start__': '00000000000000000000000000000005.0.5290678567601859', 'messages': '00000000000000000000000000000006.0.3205149138784782', 'branch:to:call_model': '00000000000000000000000000000006.0.14611156755133758'},\n            'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000004.0.5736472536395331'}, 'call_model': {'branch:to:call_model': '00000000000000000000000000000005.0.1410174088651449'}},\n            'channel_values': {'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'), HumanMessage(content=\"what's my name?\")], 'branch:to:call_model': None}\n        },\n        metadata={'source': 'loop', 'writes': None, 'step': 3, 'parents': {}, 'thread_id': '1'},\n        parent_config={...},\n        pending_writes=[('8ab4155e-6b15-b885-9ce5-bed69a2c305c', 'messages', AIMessage(content='Your name is Bob.'))]\n    ),\n    CheckpointTuple(\n        config={...},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:23.863173+00:00',\n            'id': '1f029ca3-1790-616e-8002-9e021694a0cd',\n            'channel_versions': {'__start__': '00000000000000000000000000000004.0.5736472536395331', 'messages': '00000000000000000000000000000003.0.7056767754077798', 'branch:to:call_model': '00000000000000000000000000000003.0.22059023329132854'},\n            'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000001.0.7040775356287469'}, 'call_model': {'branch:to:call_model': '00000000000000000000000000000002.0.9300422176788571'}},\n            'channel_values': {'__start__': {'messages': [{'role': 'user', 'content': \"what's my name?\"}]}, 'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]}\n        },\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"what's my name?\"}]}}, 'step': 2, 'parents': {}, 'thread_id': '1'},\n        parent_config={...},\n        pending_writes=[('24ba39d6-6db1-4c9b-f4c5-682aeaf38dcd', 'messages', [{'role': 'user', 'content': \"what's my name?\"}]), ('24ba39d6-6db1-4c9b-f4c5-682aeaf38dcd', 'branch:to:call_model', None)]\n    ),\n    CheckpointTuple(\n        config={...},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:23.862295+00:00',\n            'id': '1f029ca3-178d-6f54-8001-d7b180db0c89',\n            'channel_versions': {'__start__': '00000000000000000000000000000002.0.18673090920108737', 'messages': '00000000000000000000000000000003.0.7056767754077798', 'branch:to:call_model': '00000000000000000000000000000003.0.22059023329132854'},\n            'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000001.0.7040775356287469'}, 'call_model': {'branch:to:call_model': '00000000000000000000000000000002.0.9300422176788571'}},\n            'channel_values': {'messages': [HumanMessage(content=\"hi! I'm bob\"), AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')]}\n        },\n        metadata={'source': 'loop', 'writes': {'call_model': {'messages': AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?')}}, 'step': 1, 'parents': {}, 'thread_id': '1'},\n        parent_config={...},\n        pending_writes=[]\n    ),\n    CheckpointTuple(\n        config={...},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:22.278960+00:00',\n            'id': '1f029ca3-0874-6612-8000-339f2abc83b1',\n            'channel_versions': {'__start__': '00000000000000000000000000000002.0.18673090920108737', 'messages': '00000000000000000000000000000002.0.30296526818059655', 'branch:to:call_model': '00000000000000000000000000000002.0.9300422176788571'},\n            'versions_seen': {'__input__': {}, '__start__': {'__start__': '00000000000000000000000000000001.0.7040775356287469'}},\n            'channel_values': {'messages': [HumanMessage(content=\"hi! I'm bob\")], 'branch:to:call_model': None}\n        },\n        metadata={'source': 'loop', 'writes': None, 'step': 0, 'parents': {}, 'thread_id': '1'},\n        parent_config={...},\n        pending_writes=[('8cbd75e0-3720-b056-04f7-71ac805140a0', 'messages', AIMessage(content='Hi Bob! How are you doing today? Is there anything I can help you with?'))]\n    ),\n    CheckpointTuple(\n        config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1f029ca3-0870-6ce2-bfff-1f3f14c3e565'}},\n        checkpoint={\n            'v': 3,\n            'ts': '2025-05-05T16:01:22.277497+00:00',\n            'id': '1f029ca3-0870-6ce2-bfff-1f3f14c3e565',\n            'channel_versions': {'__start__': '00000000000000000000000000000001.0.7040775356287469'},\n            'versions_seen': {'__input__': {}},\n            'channel_values': {'__start__': {'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}}\n        },\n        metadata={'source': 'input', 'writes': {'__start__': {'messages': [{'role': 'user', 'content': \"hi! I'm bob\"}]}}, 'step': -1, 'parents': {}, 'thread_id': '1'},\n        parent_config=None,\n        pending_writes=[('d458367b-8265-812c-18e2-33001d199ce6', 'messages', [{'role': 'user', 'content': \"hi! I'm bob\"}]), ('d458367b-8265-812c-18e2-33001d199ce6', 'branch:to:call_model', None)]\n    )\n]",
+    "dom_ids": [
+      "view-the-history-of-the-thread",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0109"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Delete all checkpoints for a thread: thread_id = \"1\"\ncheckpointer.delete_thread(thread_id)",
+    "dom_ids": [
+      "delete-all-checkpoints-for-a-thread",
+      "readar-node-0125"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0110"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Database management: If you are using any database-backed persistence implementation (such as Postgres, Redis, or Oracle) to store short and/or long-term memory, you will need to run migrations to set up the required schema before you can use it with your database.",
+    "dom_ids": [
+      "database-management",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Database management: By convention, most database-specific libraries define a setup() method on the checkpointer or store instance that runs the required migrations. However, you should check with your specific implementation of BaseCheckpointSaver or BaseStore to confirm the exact method name and usage.",
+    "dom_ids": [
+      "database-management",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Database management: We recommend running migrations as a dedicated deployment step, or you can ensure they’re run as part of server startup.",
+    "dom_ids": [
+      "database-management",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "add-memory",
+    "id": "add-memory__node_0113"
+  }
+]

@@ -1,0 +1,3014 @@
+[
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Core Operations",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: Learn to:",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Access pixel values and modify them - Access image properties - Set a Region of Interest (ROI) - Split and merge images",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: Almost all the operations in this section are mainly related to Numpy rather than OpenCV. A good knowledge of Numpy is required to write better optimized code with OpenCV.",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: ( Examples will be shown in a Python terminal, since most of them are just single lines of code )",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: Let's load a color image first:",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: >>> import numpy as np\n>>> import cv2 as cv\n\n>>> img = cv.imread('messi5.jpg')\n>>> assert img is not None, \"file could not be read, check with os.path.exists()\"",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: You can access a pixel value by its row and column coordinates. For BGR image, it returns an array of Blue, Green, Red values. For grayscale image, just corresponding intensity is returned.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: >>> px = img[100,100]\n>>> print( px )\n[157 166 200]\n\n# accessing only blue pixel\n>>> blue = img[100,100,0]\n>>> print( blue )\n157",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: You can modify the pixel values the same way.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: >>> img[100,100] = [255,255,255]\n>>> print( img[100,100] )\n[255 255 255]",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: Warning",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing and Modifying pixel values: Numpy is an optimized library for fast array calculations. So simply accessing each and every pixel value and modifying it will be very slow and it is discouraged.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing Image Properties: Image properties include number of rows, columns, and channels; type of image data; number of pixels; etc.",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing Image Properties: The shape of an image is accessed by img.shape. It returns a tuple of the number of rows, columns, and channels (if the image is color):",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing Image Properties: >>> print( img.shape )\n(342, 548, 3)",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing Image Properties: Total number of pixels is accessed by img.size :",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing Image Properties: >>> print( img.size )\n562248",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Accessing Image Properties: Image datatype is obtained by `img.dtype`:",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Accessing Image Properties: >>> print( img.dtype )\nuint8",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image ROI: Sometimes, you will have to play with certain regions of images. For eye detection in images, first face detection is done over the entire image. When a face is obtained, we select the face region alone and search for eyes inside it instead of searching the whole image. It improves accuracy (because eyes are always on faces :D ) and performance (because we search in a small area).",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image ROI: ROI is again obtained using Numpy indexing. Here I am selecting the ball and copying it to another region in the image:",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Image ROI: >>> ball = img[280:340, 330:390]\n>>> img[273:333, 100:160] = ball",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image ROI: Check the results below:",
+    "dom_ids": [
+      "readar-node-0024",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: Sometimes you will need to work separately on the B,G,R channels of an image. In this case, you need to split the BGR image into single channels. In other cases, you may need to join these individual channels to create a BGR image. You can do this simply by:",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: >>> b,g,r = cv.split(img)\n>>> img = cv.merge((b,g,r))",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: Or",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: >>> b = img[:,:,0]",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: Suppose you want to set all the red pixels to zero - you do not need to split the channels first. Numpy indexing is faster:",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: >>> img[:,:,2] = 0",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: Warning",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Splitting and Merging Image Channels: cv.split() is a costly operation (in terms of time). So use it only if necessary. Otherwise go for Numpy indexing.",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0032"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Making Borders for Images (Padding): If you want to create a border around an image, something like a photo frame, you can use cv.copyMakeBorder() . But it has more applications for convolution operation, zero padding etc. This function takes following arguments:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Making Borders for Images (Padding): - src - input image - top , bottom , left , right - border width in number of pixels in corresponding directions - borderType - Flag defining what kind of border to be added. It can be following types: cv.BORDER_CONSTANT - Adds a constant colored border. The value should be given as next argument. cv.BORDER_REFLECT - Border will be mirror reflection of the border elements, like this : fedcba|abcdefgh|hgfedcb cv.BORDER_REFLECT_101 or cv.BORDER_DEFAULT - Same as above, but with a slight change, like this : gfedcb|abcdefgh|gfedcba cv.BORDER_REPLICATE - Last element is replicated throughout, like this: aaaaaa|abcdefgh|hhhhhhh cv.BORDER_WRAP - Can't explain, it will look like this : cdefgh|abcdefgh|abcdefg - value - Color of border if border type is cv.BORDER_CONSTANT",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0034"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Making Borders for Images (Padding): Below is a sample code demonstrating all these border types for better understanding:",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Making Borders for Images (Padding): import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nBLUE = [255,0,0]\n\nimg1 = cv.imread('opencv-logo.png')\nassert img1 is not None, \"file could not be read, check with os.path.exists()\"\n\nreplicate = cv.copyMakeBorder(img1,10,10,10,10,cv.BORDER_REPLICATE)\nreflect = cv.copyMakeBorder(img1,10,10,10,10,cv.BORDER_REFLECT)\nreflect101 = cv.copyMakeBorder(img1,10,10,10,10,cv.BORDER_REFLECT_101)\nwrap = cv.copyMakeBorder(img1,10,10,10,10,cv.BORDER_WRAP)\nconstant= cv.copyMakeBorder(img1,10,10,10,10,cv.BORDER_CONSTANT,value=BLUE)\n\nplt.subplot(231),plt.imshow(img1,'gray'),plt.title('ORIGINAL')\nplt.subplot(232),plt.imshow(replicate,'gray'),plt.title('REPLICATE')\nplt.subplot(233),plt.imshow(reflect,'gray'),plt.title('REFLECT')\nplt.subplot(234),plt.imshow(reflect101,'gray'),plt.title('REFLECT_101')\nplt.subplot(235),plt.imshow(wrap,'gray'),plt.title('WRAP')\nplt.subplot(236),plt.imshow(constant,'gray'),plt.title('CONSTANT')\n\nplt.show()",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0036"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Making Borders for Images (Padding): See the result below. (Image is displayed with matplotlib. So RED and BLUE channels will be interchanged):",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0043"
+    ],
+    "merge": "heading_fold",
+    "chapter": "basic_ops",
+    "id": "basic_ops__node_0037"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "canny",
+    "id": "canny__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: In this chapter, we will learn about",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Concept of Canny edge detection - OpenCV functions for that : cv.Canny()",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: Canny Edge Detection is a popular edge detection algorithm. It was developed by John F. Canny in",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Theory: - It is a multi-stage algorithm and we will go through each stages. - Noise Reduction Since edge detection is susceptible to noise in the image, first step is to remove the noise in the image with a 5x5 Gaussian filter. We have already seen this in previous chapters. - Finding Intensity Gradient of the Image Smoothened image is then filtered with a Sobel kernel in both horizontal and vertical direction to get first derivative in horizontal direction ( \\(G_x\\)) and vertical direction ( \\(G_y\\)). From these two images, we can find edge gradient and direction for each pixel as follows: \\[ Edge\\_Gradient \\; (G) = \\sqrt{G_x^2 + G_y^2} \\\\ Angle \\; (\\theta) = \\tan^{-1} \\bigg(\\frac{G_y}{G_x}\\bigg) \\] Gradient direction is always perpendicular to edges. It is rounded to one of four angles representing vertical, horizontal and two diagonal directions. - Non-maximum Suppression After getting gradient magnitude and direction, a full scan of image is done to remove any unwanted pixels which may not constitute the edge. For this, at every pixel, pixel is checked if it is a local maximum in its neighborhood in the direction of gradient. Check the image below:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: Point A is on the edge ( in vertical direction). Gradient direction is normal to the edge. Point B and C are in gradient directions. So point A is checked with point B and C to see if it forms a local maximum. If so, it is considered for next stage, otherwise, it is suppressed ( put to zero).",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: In short, the result you get is a binary image with \"thin edges\".",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Theory: - Hysteresis Thresholding This stage decides which are all edges are really edges and which are not. For this, we need two threshold values, minVal and maxVal. Any edges with intensity gradient more than maxVal are sure to be edges and those below minVal are sure to be non-edges, so discarded. Those who lie between these two thresholds are classified edges or non-edges based on their connectivity. If they are connected to \"sure-edge\" pixels, they are considered to be part of edges. Otherwise, they are also discarded. See the image below:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: The edge A is above the maxVal, so considered as \"sure-edge\". Although edge C is below maxVal, it is connected to edge A, so that also considered as valid edge and we get that full curve. But edge B, although it is above minVal and is in same region as that of edge C, it is not connected to any \"sure-edge\", so that is discarded. So it is very important that we have to select minVal and maxVal accordingly to get the correct result.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: This stage also removes small pixels noises on the assumption that edges are long lines.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Theory: So what we finally get is strong edges in the image.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Canny Edge Detection in OpenCV: OpenCV puts all the above in single function, cv.Canny() . We will see how to use it. First argument is our input image. Second and third arguments are our minVal and maxVal respectively. Fourth argument is aperture_size. It is the size of Sobel kernel used for find image gradients. By default it is 3. Last argument is L2gradient which specifies the equation for finding gradient magnitude. If it is True, it uses the equation mentioned above which is more accurate, otherwise it uses this function: \\(Edge\\_Gradient \\; (G) = |G_x| + |G_y|\\). By default, it is False.",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Canny Edge Detection in OpenCV: import numpy as np\nimport cv2 as cv\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('messi5.jpg', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nedges = cv.Canny(img,100,200)\n\nplt.subplot(121),plt.imshow(img,cmap = 'gray')\nplt.title('Original Image'), plt.xticks([]), plt.yticks([])\nplt.subplot(122),plt.imshow(edges,cmap = 'gray')\nplt.title('Edge Image'), plt.xticks([]), plt.yticks([])\n\nplt.show()",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Canny Edge Detection in OpenCV: See the result below:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - Canny edge detector at Wikipedia - Canny Edge Detection Tutorial by Bill Green, 2002.",
+    "dom_ids": [
+      "readar-node-0018",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - Write a small application to find the Canny edge detection whose threshold values can be varied using two trackbars. This way, you can understand the effect of threshold values.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "canny",
+    "id": "canny__node_0016"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - In this tutorial, you will learn how to convert images from one color-space to another, like BGR \\(\\leftrightarrow\\) Gray, BGR \\(\\leftrightarrow\\) HSV, etc. - In addition to that, we will create an application to extract a colored object in a video - You will learn the following functions: cv.cvtColor() , cv.inRange() , etc.",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: There are more than 150 color-space conversion methods available in OpenCV. But we will look into only two, which are most widely used ones: BGR \\(\\leftrightarrow\\) Gray and BGR \\(\\leftrightarrow\\) HSV.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: For color conversion, we use the function cv.cvtColor(input_image, flag) where flag determines the type of conversion.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Changing Color-space: For BGR \\(\\rightarrow\\) Gray conversion, we use the flag cv.COLOR_BGR2GRAY . Similarly for BGR \\(\\rightarrow\\) HSV, we use the flag cv.COLOR_BGR2HSV . To get other flags, just run following commands in your Python terminal:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Changing Color-space: >>> import cv2 as cv\n>>> flags = [i for i in dir(cv) if i.startswith('COLOR_')]\n>>> print( flags )",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Now that we know how to convert a BGR image to HSV, we can use this to extract a colored object. In HSV, it is easier to represent a color than in BGR color-space. In our application, we will try to extract a blue colored object. So here is the method:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Object Tracking: - Take each frame of the video - Convert from BGR to HSV color-space - We threshold the HSV image for a range of blue color - Now extract the blue object alone, we can do whatever we want on that image.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Below is the code which is commented in detail:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Object Tracking: import cv2 as cv\nimport numpy as np\n\ncap = cv.VideoCapture(0)\n\nwhile(1):\n\n # Take each frame\n    _, frame = cap.read()\n\n # Convert BGR to HSV\n    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)\n\n # define range of blue color in HSV\n    lower_blue = np.array([110,50,50])\n    upper_blue = np.array([130,255,255])\n\n # Threshold the HSV image to get only blue colors\n    mask = cv.inRange(hsv, lower_blue, upper_blue)\n\n # Bitwise-AND mask and original image\n    res = cv.bitwise_and(frame,frame, mask= mask)\n\n cv.imshow('frame',frame)\n cv.imshow('mask',mask)\n cv.imshow('res',res)\n    k = cv.waitKey(5) & 0xFF\n if k == 27:\n break\n\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Object Tracking: Below image shows tracking of the blue object:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to find HSV values to track?: This is a common question found in stackoverflow.com . It is very simple and you can use the same function, cv.cvtColor() . Instead of passing an image, you just pass the BGR values you want. For example, to find the HSV value of Green, try the following commands in a Python terminal:",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "How to find HSV values to track?: >>> green = np.uint8([[[0,255,0 ]]])\n>>> hsv_green = cv.cvtColor(green,cv.COLOR_BGR2HSV)\n>>> print( hsv_green )\n[[[ 60 255 255]]]",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How to find HSV values to track?: Now you take [H-10, 100,100] and [H+10, 255, 255] as the lower bound and upper bound respectively. Apart from this method, you can use any image editing tools like GIMP or any online converters to find these values, but don't forget to adjust the HSV ranges.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - Try to find a way to extract more than one colored object, for example, extract red, blue, and green objects simultaneously.",
+    "dom_ids": [
+      "readar-node-0019",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "colorspaces",
+    "id": "colorspaces__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV Tutorials - Introduction to OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "display_image",
+    "id": "display_image__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goal: In this tutorial you will learn how to:",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Read an image from file (using cv::imread ) - Display an image in an OpenCV window (using cv::imshow ) - Write an image to a file (using cv::imwrite )",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Source Code: - Code at glance:",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Source Code: #include <opencv2/core.hpp>\n#include <opencv2/imgcodecs.hpp>\n#include <opencv2/highgui.hpp>\n\n#include <iostream>\n\nusing namespace cv;\n\nint main()\n{\n    std::string image_path = samples::findFile(\"starry_night.jpg\");\n Mat img = imread(image_path, IMREAD_COLOR);\n\n if(img.empty())\n    {\n        std::cout << \"Could not read the image: \" << image_path << std::endl;\n return 1;\n    }\n\n    imshow(\"Display window\", img);\n int k = waitKey(0); // Wait for a keystroke in the window\n\n if(k == 's')\n    {\n        imwrite(\"starry_night.png\", img);\n    }\n\n return 0;\n}",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0005"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Source Code: - Code at glance:",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Source Code: import cv2 as cv\nimport sys\n\nimg = cv.imread(cv.samples.findFile(\"starry_night.jpg\"))\n\nif img is None:\n    sys.exit(\"Could not read the image.\")\n\ncv.imshow(\"Display window\", img)\nk = cv.waitKey(0)\n\nif k == ord(\"s\"):\n cv.imwrite(\"starry_night.png\", img)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: In OpenCV 3 we have multiple modules. Each one takes care of a different area or approach towards image processing. You could already observe this in the structure of the user guide of these tutorials itself. Before you use any of them you first need to include the header files where the content of each individual module is declared.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: You'll almost always end up using the:",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0009"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Explanation: - core section, as here are defined the basic building blocks of the library - imgcodecs module, which provides functions for reading and writing - highgui module, as this contains the functions to show an image in a window",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: We also include the iostream to facilitate console line output and input.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: By declaring using namespace cv; , in the following, the library functions can be accessed without explicitly stating the namespace.",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: #include <opencv2/core.hpp>\n#include <opencv2/imgcodecs.hpp>\n#include <opencv2/highgui.hpp>\n\n#include <iostream>\n\nusing namespace cv;",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: As a first step, the OpenCV python library is imported. The proper way to do this is to additionally assign it the name cv , which is used in the following to reference the library.",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: import cv2 as cv\nimport sys",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Now, let's analyze the main code. As a first step, we read the image \"starry_night.jpg\" from the OpenCV samples. In order to do so, a call to the cv::imread function loads the image using the file path specified by the first argument. The second argument is optional and specifies the format in which we want the image. This may be:",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0016"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Explanation: - IMREAD_COLOR loads the image in the BGR 8-bit format. This is the default that is used here. - IMREAD_UNCHANGED loads the image as is (including the alpha channel if present) - IMREAD_GRAYSCALE loads the image as an intensity one",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: After reading in the image data will be stored in a cv::Mat object.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:     std::string image_path = samples::findFile(\"starry_night.jpg\");\n Mat img = imread(image_path, IMREAD_COLOR);",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: img = cv.imread(cv.samples.findFile(\"starry_night.jpg\"))",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Afterwards, a check is executed, if the image was loaded correctly.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  if(img.empty())\n    {\n        std::cout << \"Could not read the image: \" << image_path << std::endl;\n return 1;\n    }",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: if img is None:\n    sys.exit(\"Could not read the image.\")",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Then, the image is shown using a call to the cv::imshow function. The first argument is the title of the window and the second argument is the cv::Mat object that will be shown.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: Because we want our window to be displayed until the user presses a key (otherwise the program would end far too quickly), we use the cv::waitKey function whose only parameter is just how long should it wait for a user input (measured in milliseconds). Zero means to wait forever. The return value is the key that was pressed.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  imshow(\"Display window\", img);\n int k = waitKey(0); // Wait for a keystroke in the window",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: cv.imshow(\"Display window\", img)\nk = cv.waitKey(0)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Explanation: In the end, the image is written to a file if the pressed key was the \"s\"-key. For this the cv::imwrite function is called that has the file path and the cv::Mat object as an argument.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation:  if(k == 's')\n    {\n imwrite(\"starry_night.png\", img);\n    }",
+    "lang": "cpp",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0029"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Explanation: if k == ord(\"s\"):\n cv.imwrite(\"starry_night.png\", img)",
+    "lang": "python",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "display_image",
+    "id": "display_image__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Gui Features in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Learn to draw different geometric shapes with OpenCV - You will learn these functions : cv.line() , cv.circle() , cv.rectangle() , cv.ellipse() , cv.putText() etc.",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Code: In all the above functions, you will see some common arguments as given below:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Code: - img : The image where you want to draw the shapes - color : Color of the shape. for BGR, pass it as a tuple, eg: (255,0,0) for blue. For grayscale, just pass the scalar value. - thickness : Thickness of the line or circle etc. If -1 is passed for closed figures like circles, it will fill the shape. default thickness = 1 - lineType : Type of line, whether 8-connected, anti-aliased line etc. By default, it is 8-connected. cv.LINE_AA gives anti-aliased line which looks great for curves.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Drawing Line: To draw a line, you need to pass starting and ending coordinates of line. We will create a black image and draw a blue line on it from top-left to bottom-right corners.",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Drawing Line: import numpy as np\nimport cv2 as cv\n\n# Create a black image\nimg = np.zeros((512,512,3), np.uint8)\n\n# Draw a diagonal blue line with thickness of 5 px\ncv.line(img,(0,0),(511,511),(255,0,0),5)",
+    "dom_ids": [
+      "readar-node-0007",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Drawing Rectangle: To draw a rectangle, you need top-left corner and bottom-right corner of rectangle. This time we will draw a green rectangle at the top-right corner of image.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Drawing Rectangle: cv.rectangle(img,(384,0),(510,128),(0,255,0),3)",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Drawing Circle: To draw a circle, you need its center coordinates and radius. We will draw a circle inside the rectangle drawn above.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0009"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Drawing Circle: cv.circle(img,(447,63), 63, (0,0,255), -1)",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Drawing Ellipse: To draw the ellipse, we need to pass several arguments. One argument is the center location (x,y). Next argument is axes lengths (major axis length, minor axis length). angle is the angle of rotation of ellipse in anti-clockwise direction. startAngle and endAngle denotes the starting and ending of ellipse arc measured in clockwise direction from major axis. i.e. giving values 0 and 360 gives the full ellipse. For more details, check the documentation of cv.ellipse() . Below example draws a half ellipse at the center of the image.",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Drawing Ellipse: cv.ellipse(img,(256,256),(100,50),0,0,180,255,-1)",
+    "dom_ids": [
+      "readar-node-0016",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Drawing Polygon: To draw a polygon, first you need coordinates of vertices. Make those points into an array of shape ROWSx1x2 where ROWS are number of vertices and it should be of type int32. Here we draw a small polygon of with four vertices in yellow color.",
+    "dom_ids": [
+      "readar-node-0019",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Drawing Polygon: pts = np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)\npts = pts.reshape((-1,1,2))\ncv.polylines(img,[pts],True,(0,255,255))",
+    "dom_ids": [
+      "readar-node-0019",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Text to Images:: To put texts in images, you need specify following things.",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0015"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Adding Text to Images:: - Text data that you want to write - Position coordinates of where you want put it (i.e. bottom-left corner where data starts). - Font type (Check cv.putText() docs for supported fonts) - Font Scale (specifies the size of font) - regular things like color, thickness, lineType etc. For better look, lineType = cv.LINE_AA is recommended.",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adding Text to Images:: We will write OpenCV on our image in white color.",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adding Text to Images:: font = cv.FONT_HERSHEY_SIMPLEX\ncv.putText(img,'OpenCV',(10,500), font, 4,(255,255,255),2,cv.LINE_AA)",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Result: So it is time to see the final result of our drawing. As you studied in previous articles, display the image to see it.",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0019"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - The angles used in ellipse function is not our circular angles. For more details, visit this discussion .",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0020"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - Try to create the logo of OpenCV using drawing functions available in OpenCV.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "drawing_functions",
+    "id": "drawing_functions__node_0021"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "filtering",
+    "id": "filtering__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Goals: Learn to:",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0002"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goals: - Blur images with various low pass filters - Apply custom-made filters to images (2D convolution)",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): As in one-dimensional signals, images also can be filtered with various low-pass filters (LPF), high-pass filters (HPF), etc. LPF helps in removing noise, blurring images, etc. HPF filters help in finding edges in images.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): OpenCV provides a function cv.filter2D() to convolve a kernel with an image. As an example, we will try an averaging filter on an image. A 5x5 averaging filter kernel will look like the below:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): \\[K = \\frac{1}{25} \\begin{bmatrix} 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\\\ 1 & 1 & 1 & 1 & 1 \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): The operation works like this: keep this kernel above a pixel, add all the 25 pixels below this kernel, take the average, and replace the central pixel with the new average value. This operation is continued for all the pixels in the image. Try this code and check the result:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): import numpy as np\nimport cv2 as cv\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('opencv_logo.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\nkernel = np.ones((5,5),np.float32)/25\ndst = cv.filter2D(img,-1,kernel)\n\nplt.subplot(121),plt.imshow(img),plt.title('Original')\nplt.xticks([]), plt.yticks([])\nplt.subplot(122),plt.imshow(dst),plt.title('Averaging')\nplt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2D Convolution ( Image Filtering ): Result:",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blurring (Image Smoothing): Image blurring is achieved by convolving the image with a low-pass filter kernel. It is useful for removing noise. It actually removes high frequency content (eg: noise, edges) from the image. So edges are blurred a little bit in this operation (there are also blurring techniques which don't blur the edges). OpenCV provides four main types of blurring techniques.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: This is done by convolving an image with a normalized box filter. It simply takes the average of all the pixels under the kernel area and replaces the central element. This is done by the function cv.blur() or cv.boxFilter() . Check the docs for more details about the kernel. We should specify the width and height of the kernel. A 3x3 normalized box filter would look like the below:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: \\[K = \\frac{1}{9} \\begin{bmatrix} 1 & 1 & 1 \\\\ 1 & 1 & 1 \\\\ 1 & 1 & 1 \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: Check a sample demo below with a kernel of 5x5 size:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0013"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "1. Averaging: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('opencv-logo-white.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\nblur = cv.blur(img,(5,5))\n\nplt.subplot(121),plt.imshow(img),plt.title('Original')\nplt.xticks([]), plt.yticks([])\nplt.subplot(122),plt.imshow(blur),plt.title('Blurred')\nplt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "1. Averaging: Result:",
+    "dom_ids": [
+      "readar-node-0014",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: In this method, instead of a box filter, a Gaussian kernel is used. It is done with the function, cv.GaussianBlur() . We should specify the width and height of the kernel which should be positive and odd. We also should specify the standard deviation in the X and Y directions, sigmaX and sigmaY respectively. If only sigmaX is specified, sigmaY is taken as the same as sigmaX. If both are given as zeros, they are calculated from the kernel size. Gaussian blurring is highly effective in removing Gaussian noise from an image.",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: If you want, you can create a Gaussian kernel with the function, cv.getGaussianKernel() .",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: The above code can be modified for Gaussian blurring:",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "2. Gaussian Blurring: blur = cv.GaussianBlur(img,(5,5),0)",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "2. Gaussian Blurring: Result:",
+    "dom_ids": [
+      "readar-node-0020",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: Here, the function cv.medianBlur() takes the median of all the pixels under the kernel area and the central element is replaced with this median value. This is highly effective against salt-and-pepper noise in an image. Interestingly, in the above filters, the central element is a newly calculated value which may be a pixel value in the image or a new value. But in median blurring, the central element is always replaced by some pixel value in the image. It reduces the noise effectively. Its kernel size should be a positive odd integer.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: In this demo, I added a 50% noise to our original image and applied median blurring. Check the result:",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "3. Median Blurring: median = cv.medianBlur(img,5)",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "3. Median Blurring: Result:",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: cv.bilateralFilter() is highly effective in noise removal while keeping edges sharp. But the operation is slower compared to other filters. We already saw that a Gaussian filter takes the neighbourhood around the pixel and finds its Gaussian weighted average. This Gaussian filter is a function of space alone, that is, nearby pixels are considered while filtering. It doesn't consider whether pixels have almost the same intensity. It doesn't consider whether a pixel is an edge pixel or not. So it blurs the edges also, which we don't want to do.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: Bilateral filtering also takes a Gaussian filter in space, but one more Gaussian filter which is a function of pixel difference. The Gaussian function of space makes sure that only nearby pixels are considered for blurring, while the Gaussian function of intensity difference makes sure that only those pixels with similar intensities to the central pixel are considered for blurring. So it preserves the edges since pixels at edges will have large intensity variation.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: The below sample shows use of a bilateral filter (For details on arguments, visit docs).",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "4. Bilateral Filtering: blur = cv.bilateralFilter(img,9,75,75)",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: Result:",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "4. Bilateral Filtering: See, the texture on the surface is gone, but the edges are still preserved.",
+    "dom_ids": [
+      "readar-node-0031",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - Details about the bilateral filtering",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "filtering",
+    "id": "filtering__node_0031"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goals: - Learn to apply different geometric transformations to images, like translation, rotation, affine transformation etc. - You will see these functions: cv.getPerspectiveTransform",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Transformations: OpenCV provides two transformation functions, cv.warpAffine and cv.warpPerspective , with which you can perform all kinds of transformations. cv.warpAffine takes a 2x3 transformation matrix while cv.warpPerspective takes a 3x3 transformation matrix as input.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Scaling: Scaling is just resizing of the image. OpenCV comes with a function cv.resize() for this purpose. The size of the image can be specified manually, or you can specify the scaling factor. Different interpolation methods are used. Preferable interpolation methods are cv.INTER_AREA for shrinking and cv.INTER_CUBIC (slow) & cv.INTER_LINEAR for zooming. By default, the interpolation method cv.INTER_LINEAR is used for all resizing purposes. You can resize an input image with either of following methods:",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Scaling: import numpy as np\nimport cv2 as cv\n\nimg = cv.imread('messi5.jpg')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\nres = cv.resize(img,None,fx=2, fy=2, interpolation = cv.INTER_CUBIC)\n\n#OR\n\nheight, width = img.shape[:2]\nres = cv.resize(img,(2*width, 2*height), interpolation = cv.INTER_CUBIC)",
+    "dom_ids": [
+      "readar-node-0006",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: Translation is the shifting of an object's location. If you know the shift in the (x,y) direction and let it be \\((t_x,t_y)\\), you can create the transformation matrix \\(\\textbf{M}\\) as follows:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: \\[M = \\begin{bmatrix} 1 & 0 & t_x \\\\ 0 & 1 & t_y \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: You can take make it into a Numpy array of type np.float32 and pass it into the cv.warpAffine() function. See the below example for a shift of (100,50):",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Translation: import numpy as np\nimport cv2 as cv\n\nimg = cv.imread('messi5.jpg', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nrows,cols = img.shape\n\nM = np.float32([[1,0,100],[0,1,50]])\ndst = cv.warpAffine(img,M,(cols,rows))\n\ncv.imshow('img',dst)\ncv.waitKey(0)\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: warning",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: The third argument of the cv.warpAffine() function is the size of the output image, which should be in the form of (width, height) . Remember width = number of columns, and height = number of rows.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Translation: See the result below:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: Rotation of an image for an angle \\(\\theta\\) is achieved by the transformation matrix of the form",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: \\[M = \\begin{bmatrix} cos\\theta & -sin\\theta \\\\ sin\\theta & cos\\theta \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: But OpenCV provides scaled rotation with adjustable center of rotation so that you can rotate at any location you prefer. The modified transformation matrix is given by",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: \\[\\begin{bmatrix} \\alpha & \\beta & (1- \\alpha ) \\cdot center.x - \\beta \\cdot center.y \\\\ - \\beta & \\alpha & \\beta \\cdot center.x + (1- \\alpha ) \\cdot center.y \\end{bmatrix}\\]",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: where:",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: \\[\\begin{array}{l} \\alpha = scale \\cdot \\cos \\theta , \\\\ \\beta = scale \\cdot \\sin \\theta \\end{array}\\]",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: To find this transformation matrix, OpenCV provides a function, cv.getRotationMatrix2D . Check out the below example which rotates the image by 90 degree with respect to center without any scaling.",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0019"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Rotation: img = cv.imread('messi5.jpg', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nrows,cols = img.shape\n\n# cols-1 and rows-1 are the coordinate limits.\nM = cv.getRotationMatrix2D(((cols-1)/2.0,(rows-1)/2.0),90,1)\ndst = cv.warpAffine(img,M,(cols,rows))",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Rotation: See the result:",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Affine Transformation: In affine transformation, all parallel lines in the original image will still be parallel in the output image. To find the transformation matrix, we need three points from the input image and their corresponding locations in the output image. Then cv.getAffineTransform will create a 2x3 matrix which is to be passed to cv.warpAffine .",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Affine Transformation: Check the below example, and also look at the points I selected (which are marked in green color):",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Affine Transformation: img = cv.imread('drawing.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nrows,cols,ch = img.shape\n\npts1 = np.float32([[50,50],[200,50],[50,200]])\npts2 = np.float32([[10,100],[200,50],[100,250]])\n\nM = cv.getAffineTransform(pts1,pts2)\n\ndst = cv.warpAffine(img,M,(cols,rows))\n\nplt.subplot(121),plt.imshow(img),plt.title('Input')\nplt.subplot(122),plt.imshow(dst),plt.title('Output')\nplt.show()",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Affine Transformation: See the result:",
+    "dom_ids": [
+      "readar-node-0027",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Perspective Transformation: For perspective transformation, you need a 3x3 transformation matrix. Straight lines will remain straight even after the transformation. To find this transformation matrix, you need 4 points on the input image and corresponding points on the output image. Among these 4 points, 3 of them should not be collinear. Then the transformation matrix can be found by the function cv.getPerspectiveTransform . Then apply cv.warpPerspective with this 3x3 transformation matrix.",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Perspective Transformation: See the code below:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Perspective Transformation: img = cv.imread('sudoku.png')\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nrows,cols,ch = img.shape\n\npts1 = np.float32([[56,65],[368,52],[28,387],[389,390]])\npts2 = np.float32([[0,0],[300,0],[0,300],[300,300]])\n\nM = cv.getPerspectiveTransform(pts1,pts2)\n\ndst = cv.warpPerspective(img,M,(300,300))\n\nplt.subplot(121),plt.imshow(img),plt.title('Input')\nplt.subplot(122),plt.imshow(dst),plt.title('Output')\nplt.show()",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Perspective Transformation: Result:",
+    "dom_ids": [
+      "readar-node-0032",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0029"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - \"Computer Vision: Algorithms and Applications\", Richard Szeliski",
+    "dom_ids": [
+      "readar-node-0037",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "geometric_transformations",
+    "id": "geometric_transformations__node_0030"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Core Operations",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Learn several arithmetic operations on images, like addition, subtraction, bitwise operations, and etc. - Learn these functions: cv.add() , cv.addWeighted() , etc.",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Addition: You can add two images with the OpenCV function, cv.add() , or simply by the numpy operation res = img1 + img2. Both images should be of same depth and type, or the second image can just be a scalar value.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Addition: For example, consider the below sample:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Image Addition: >>> x = np.uint8([250])\n>>> y = np.uint8([10])\n\n>>> print( cv.add(x,y) ) # 250+10 = 260 => 255\n[[255]]\n\n>>> print( x+y )          # 250+10 = 260 % 256 = 4\n[4]",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Addition: This will be more visible when you add two images. Stick with OpenCV functions, because they will provide a better result.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: This is also image addition, but different weights are given to images in order to give a feeling of blending or transparency. Images are added as per the equation below:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: \\[g(x) = (1 - \\alpha)f_{0}(x) + \\alpha f_{1}(x)\\]",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: By varying \\(\\alpha\\) from \\(0 \\rightarrow 1\\), you can perform a cool transition between one image to another.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: Here I took two images to blend together. The first image is given a weight of 0.7 and the second image is given 0.3. cv.addWeighted() applies the following equation to the image:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: \\[dst = \\alpha \\cdot img1 + \\beta \\cdot img2 + \\gamma\\]",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: Here \\(\\gamma\\) is taken as zero.",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0012"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Image Blending: img1 = cv.imread('ml.png')\nimg2 = cv.imread('opencv-logo.png')\nassert img1 is not None, \"file could not be read, check with os.path.exists()\"\nassert img2 is not None, \"file could not be read, check with os.path.exists()\"\n\ndst = cv.addWeighted(img1,0.7,img2,0.3,0)\n\ncv.imshow('dst',dst)\ncv.waitKey(0)\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Image Blending: Check the result below:",
+    "dom_ids": [
+      "readar-node-0009",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bitwise Operations: This includes the bitwise AND, OR, NOT, and XOR operations. They will be highly useful while extracting any part of the image (as we will see in coming chapters), defining and working with non-rectangular ROI's, and etc. Below we will see an example of how to change a particular region of an image.",
+    "dom_ids": [
+      "readar-node-0018",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bitwise Operations: I want to put the OpenCV logo above an image. If I add two images, it will change the color. If I blend them, I get a transparent effect. But I want it to be opaque. If it was a rectangular region, I could use ROI as we did in the last chapter. But the OpenCV logo is a not a rectangular shape. So you can do it with bitwise operations as shown below:",
+    "dom_ids": [
+      "readar-node-0018",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0016"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Bitwise Operations: # Load two images\nimg1 = cv.imread('messi5.jpg')\nimg2 = cv.imread('opencv-logo-white.png')\nassert img1 is not None, \"file could not be read, check with os.path.exists()\"\nassert img2 is not None, \"file could not be read, check with os.path.exists()\"\n\n# I want to put logo on top-left corner, So I create a ROI\nrows,cols,channels = img2.shape\nroi = img1[0:rows, 0:cols]\n\n# Now create a mask of logo and create its inverse mask also\nimg2gray = cv.cvtColor(img2,cv.COLOR_BGR2GRAY)\nret, mask = cv.threshold(img2gray, 10, 255, cv.THRESH_BINARY)\nmask_inv = cv.bitwise_not(mask)\n\n# Now black-out the area of logo in ROI\nimg1_bg = cv.bitwise_and(roi,roi,mask = mask_inv)\n\n# Take only region of logo from logo image.\nimg2_fg = cv.bitwise_and(img2,img2,mask = mask)\n\n# Put logo in ROI and modify the main image\ndst = cv.add(img1_bg,img2_fg)\nimg1[0:rows, 0:cols ] = dst\n\ncv.imshow('res',img1)\ncv.waitKey(0)\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0018",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bitwise Operations: See the result below. Left image shows the mask we created. Right image shows the final result. For more understanding, display all the intermediate images in the above code, especially img1_bg and img2_fg.",
+    "dom_ids": [
+      "readar-node-0018",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0018"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - Create a slide show of images in a folder with smooth transition between images using cv.addWeighted function",
+    "dom_ids": [
+      "readar-node-0023",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "image_arithmetics",
+    "id": "image_arithmetics__node_0019"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Image Processing in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "thresholding",
+    "id": "thresholding__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - In this tutorial, you will learn simple thresholding, adaptive thresholding and Otsu's thresholding. - You will learn the functions cv.threshold and cv.adaptiveThreshold .",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: Here, the matter is straight-forward. For every pixel, the same threshold value is applied. If the pixel value is smaller than or equal to the threshold, it is set to 0, otherwise it is set to a maximum value. The function cv.threshold is used to apply the thresholding. The first argument is the source image, which should be a grayscale image . The second argument is the threshold value which is used to classify the pixel values. The third argument is the maximum value which is assigned to pixel values exceeding the threshold. OpenCV provides different types of thresholding which is given by the fourth parameter of the function. Basic thresholding as described above is done by using the type cv.THRESH_BINARY . All simple thresholding types are:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0003"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Simple Thresholding: - cv.THRESH_BINARY - cv.THRESH_BINARY_INV - cv.THRESH_TRUNC - cv.THRESH_TOZERO - cv.THRESH_TOZERO_INV",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: See the documentation of the types for the differences.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: The method returns two outputs. The first is the threshold that was used and the second output is the thresholded image .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: This code compares the different simple thresholding types:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Simple Thresholding: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('gradient.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nret,thresh1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\nret,thresh2 = cv.threshold(img,127,255,cv.THRESH_BINARY_INV)\nret,thresh3 = cv.threshold(img,127,255,cv.THRESH_TRUNC)\nret,thresh4 = cv.threshold(img,127,255,cv.THRESH_TOZERO)\nret,thresh5 = cv.threshold(img,127,255,cv.THRESH_TOZERO_INV)\n\ntitles = ['Original Image','BINARY','BINARY_INV','TRUNC','TOZERO','TOZERO_INV']\nimages = [img, thresh1, thresh2, thresh3, thresh4, thresh5]\n\nfor i in range(6):\n    plt.subplot(2,3,i+1),plt.imshow(images[i],'gray',vmin=0,vmax=255)\n    plt.title(titles[i])\n    plt.xticks([]),plt.yticks([])\n\nplt.show()",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Simple Thresholding: The code yields this result:",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: In the previous section, we used one global value as a threshold. But this might not be good in all cases, e.g. if an image has different lighting conditions in different areas. In that case, adaptive thresholding can help. Here, the algorithm determines the threshold for a pixel based on a small region around it. So we get different thresholds for different regions of the same image which gives better results for images with varying illumination.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: In addition to the parameters described above, the method cv.adaptiveThreshold takes three input parameters:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The adaptiveMethod decides how the threshold value is calculated:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0012"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Adaptive Thresholding: - cv.ADAPTIVE_THRESH_MEAN_C : The threshold value is the mean of the neighbourhood area minus the constant C . - cv.ADAPTIVE_THRESH_GAUSSIAN_C : The threshold value is a gaussian-weighted sum of the neighbourhood values minus the constant C .",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The blockSize determines the size of the neighbourhood area and C is a constant that is subtracted from the mean or weighted sum of the neighbourhood pixels.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0014"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: The code below compares global thresholding and adaptive thresholding for an image with varying illumination:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adaptive Thresholding: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('sudoku.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nimg = cv.medianBlur(img,5)\n\nret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\nth2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\\\n            cv.THRESH_BINARY,11,2)\nth3 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\\\n            cv.THRESH_BINARY,11,2)\n\ntitles = ['Original Image', 'Global Thresholding (v = 127)',\n 'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']\nimages = [img, th1, th2, th3]\n\nfor i in range(4):\n    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')\n    plt.title(titles[i])\n    plt.xticks([]),plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adaptive Thresholding: Result:",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: In global thresholding, we used an arbitrary chosen value as a threshold. In contrast, Otsu's method avoids having to choose a value and determines it automatically.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0018"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Consider an image with only two distinct image values ( bimodal image ), where the histogram would only consist of two peaks. A good threshold would be in the middle of those two values. Similarly, Otsu's method determines an optimal global threshold value from the image histogram.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: In order to do so, the cv.threshold() function is used, where cv.THRESH_OTSU is passed as an extra flag. The threshold value can be chosen arbitrary. The algorithm then finds the optimal threshold value which is returned as the first output.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0020"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Check out the example below. The input image is a noisy image. In the first case, global thresholding with a value of 127 is applied. In the second case, Otsu's thresholding is applied directly. In the third case, the image is first filtered with a 5x5 gaussian kernel to remove the noise, then Otsu thresholding is applied. See how noise filtering improves the result.",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0021"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Otsu's Binarization: import cv2 as cv\nimport numpy as np\nfrom matplotlib import pyplot as plt\n\nimg = cv.imread('noisy2.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\n\n# global thresholding\nret1,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)\n\n# Otsu's thresholding\nret2,th2 = cv.threshold(img,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\n\n# Otsu's thresholding after Gaussian filtering\nblur = cv.GaussianBlur(img,(5,5),0)\nret3,th3 = cv.threshold(blur,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\n\n# plot all the images and their histograms\nimages = [img, 0, th1,\n          img, 0, th2,\n          blur, 0, th3]\ntitles = ['Original Noisy Image','Histogram','Global Thresholding (v=127)',\n 'Original Noisy Image','Histogram',\"Otsu's Thresholding\",\n 'Gaussian filtered Image','Histogram',\"Otsu's Thresholding\"]\n\nfor i in range(3):\n    plt.subplot(3,3,i*3+1),plt.imshow(images[i*3],'gray')\n    plt.title(titles[i*3]), plt.xticks([]), plt.yticks([])\n    plt.subplot(3,3,i*3+2),plt.hist(images[i*3].ravel(),256)\n    plt.title(titles[i*3+1]), plt.xticks([]), plt.yticks([])\n    plt.subplot(3,3,i*3+3),plt.imshow(images[i*3+2],'gray')\n    plt.title(titles[i*3+2]), plt.xticks([]), plt.yticks([])\nplt.show()",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Otsu's Binarization: Result:",
+    "dom_ids": [
+      "readar-node-0021",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0023"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: This section demonstrates a Python implementation of Otsu's binarization to show how it actually works. If you are not interested, you can skip this.",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: Since we are working with bimodal images, Otsu's algorithm tries to find a threshold value (t) which minimizes the weighted within-class variance given by the relation:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0025"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\sigma_w^2(t) = q_1(t)\\sigma_1^2(t)+q_2(t)\\sigma_2^2(t)\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: where",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0027"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[q_1(t) = \\sum_{i=1}^{t} P(i) \\quad \\& \\quad q_2(t) = \\sum_{i=t+1}^{I} P(i)\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0028"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\mu_1(t) = \\sum_{i=1}^{t} \\frac{iP(i)}{q_1(t)} \\quad \\& \\quad \\mu_2(t) = \\sum_{i=t+1}^{I} \\frac{iP(i)}{q_2(t)}\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: \\[\\sigma_1^2(t) = \\sum_{i=1}^{t} [i-\\mu_1(t)]^2 \\frac{P(i)}{q_1(t)} \\quad \\& \\quad \\sigma_2^2(t) = \\sum_{i=t+1}^{I} [i-\\mu_2(t)]^2 \\frac{P(i)}{q_2(t)}\\]",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: It actually finds a value of t which lies in between two peaks such that variances to both classes are minimal. It can be simply implemented in Python as follows:",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0031"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "How does Otsu's Binarization work?: img = cv.imread('noisy2.png', cv.IMREAD_GRAYSCALE)\nassert img is not None, \"file could not be read, check with os.path.exists()\"\nblur = cv.GaussianBlur(img,(5,5),0)\n\n# find normalized_histogram, and its cumulative distribution function\nhist = cv.calcHist([blur],[0],None,[256],[0,256])\nhist_norm = hist.ravel()/hist.sum()\nQ = hist_norm.cumsum()\n\nbins = np.arange(256)\n\nfn_min = np.inf\nthresh = -1\n\nfor i in range(1,256):\n    p1,p2 = np.hsplit(hist_norm,[i]) # probabilities\n    q1,q2 = Q[i],Q[255]-Q[i] # cum sum of classes\n if q1 < 1.e-6 or q2 < 1.e-6:\n continue\n    b1,b2 = np.hsplit(bins,[i]) # weights\n\n # finding means and variances\n    m1,m2 = np.sum(p1*b1)/q1, np.sum(p2*b2)/q2\n    v1,v2 = np.sum(((b1-m1)**2)*p1)/q1,np.sum(((b2-m2)**2)*p2)/q2\n\n # calculates the minimization function\n    fn = v1*q1 + v2*q2\n if fn < fn_min:\n        fn_min = fn\n        thresh = i\n\n# find otsu's threshold value with OpenCV function\nret, otsu = cv.threshold(blur,0,255,cv.THRESH_BINARY+cv.THRESH_OTSU)\nprint( \"{} {}\".format(thresh,ret) )",
+    "dom_ids": [
+      "readar-node-0028",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0032"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Additional Resources: - Digital Image Processing, Rafael C. Gonzalez",
+    "dom_ids": [
+      "readar-node-0038",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0033"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Exercises: - There are some optimizations available for Otsu's binarization. You can search and implement it.",
+    "dom_ids": [
+      "readar-node-0040",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "thresholding",
+    "id": "thresholding__node_0034"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "- OpenCV-Python Tutorials - Gui Features in OpenCV",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "video_display",
+    "id": "video_display__node_0001"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Goal: - Learn to read video, display video, and save video. - Learn to capture video from a camera and display it. - You will learn these functions : cv.VideoCapture() , cv.VideoWriter()",
+    "dom_ids": [
+      "readar-node-0002",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: Often, we have to capture live stream with a camera. OpenCV provides a very simple interface to do this. Let's capture a video from the camera (I am using the built-in webcam on my laptop), convert it into grayscale video and display it. Just a simple task to get started.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: To capture a video, you need to create a VideoCapture object. Its argument can be either the device index or the name of a video file. A device index is just the number to specify which camera. Normally one camera will be connected (as in my case). So I simply pass 0 (or -1). You can select the second camera by passing 1 and so on. After that, you can capture frame-by-frame. But at the end, don't forget to release the capture.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0004"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Capture Video from Camera: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture(0)\nif not cap.isOpened():\n    print(\"Cannot open camera\")\n    exit()\nwhile True:\n # Capture frame-by-frame\n    ret, frame = cap.read()\n\n # if frame is read correctly ret is True\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n # Our operations on the frame come here\n    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)\n # Display the resulting frame\n cv.imshow('frame', gray)\n if cv.waitKey(1) == ord('q'):\n break\n\n# When everything done, release the capture\ncap.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: cap.read() returns a bool ( True / False ). If the frame is read correctly, it will be True . So you can check for the end of the video by checking this returned value.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: Sometimes, cap may not have initialized the capture. In that case, this code shows an error. You can check whether it is initialized or not by the method cap.isOpened() . If it is True , OK. Otherwise open it using cap.open() .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: You can also access some of the features of this video using cap.get(propId) method where propId is a number from 0 to 18. Each number denotes a property of the video (if it is applicable to that video). Full details can be seen here: cv::VideoCapture::get() . Some of these values can be modified using cap.set(propId, value) . Value is the new value you want.",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Capture Video from Camera: For example, I can check the frame width and height by cap.get( cv.CAP_PROP_FRAME_WIDTH ) and cap.get( cv.CAP_PROP_FRAME_HEIGHT ) . It gives me 640x480 by default. But I want to modify it to 320x240. Just use ret = cap.set( cv.CAP_PROP_FRAME_WIDTH ,320) and ret = cap.set( cv.CAP_PROP_FRAME_HEIGHT ,240) .",
+    "dom_ids": [
+      "readar-node-0004",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Playing Video from file: Playing video from file is the same as capturing it from camera, just change the camera index to a video file name. Also while displaying the frame, use appropriate time for cv.waitKey() . If it is too less, video will be very fast and if it is too high, video will be slow (Well, that is how you can display videos in slow motion). 25 milliseconds will be OK in normal cases.",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0010"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Playing Video from file: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture('vtest.avi')\n\nwhile cap.isOpened():\n    ret, frame = cap.read()\n\n # if frame is read correctly ret is True\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)\n\n cv.imshow('frame', gray)\n if cv.waitKey(1) == ord('q'):\n break\n\ncap.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0012",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0011"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: So we capture a video and process it frame-by-frame, and we want to save that video. For images, it is very simple: just use cv.imwrite() . Here, a little more work is required.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: This time we create a VideoWriter object. We should specify the output file name (eg: output.avi). Then we should specify the FourCC code (details in next paragraph). Then number of frames per second (fps) and frame size should be passed. And the last one is the isColor flag. If it is True , the encoder expect color frame, otherwise it works with grayscale frame.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0017"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: FourCC is a 4-byte code used to specify the video codec. The list of available codes can be found in fourcc.org . It is platform dependent. The following codecs work fine for me.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0014"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Saving a Video: - In Fedora: DIVX, XVID, MJPG, X264, WMV1, WMV2. (XVID is more preferable. MJPG results in high size video. X264 gives very small size video) - In Windows: DIVX (More to be tested and added) - In OSX: MJPG (.mp4), DIVX (.avi), X264 (.mkv).",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: FourCC code is passed as ‘cv.VideoWriter_fourcc('M’,'J','P','G') or cv.VideoWriter_fourcc(*'MJPG')` for MJPG.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Saving a Video: The below code captures from a camera, flips every frame in the vertical direction, and saves the video.",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0017"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Saving a Video: import numpy as np\nimport cv2 as cv\n\ncap = cv.VideoCapture(0)\n\n# Define the codec and create VideoWriter object\nfourcc = cv.VideoWriter_fourcc(*'XVID')\nout = cv.VideoWriter('output.avi', fourcc, 20.0, (640,  480))\n\nwhile cap.isOpened():\n    ret, frame = cap.read()\n if not ret:\n        print(\"Can't receive frame (stream end?). Exiting ...\")\n break\n    frame = cv.flip(frame, 0)\n\n # write the flipped frame\n    out.write(frame)\n\n cv.imshow('frame', frame)\n if cv.waitKey(1) == ord('q'):\n break\n\n# Release everything if job is finished\ncap.release()\nout.release()\ncv.destroyAllWindows()",
+    "dom_ids": [
+      "readar-node-0015",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "video_display",
+    "id": "video_display__node_0018"
+  }
+]

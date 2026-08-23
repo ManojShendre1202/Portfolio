@@ -1,0 +1,82 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Chroma supports deleting items from a collection by id using .delete . The embeddings, documents, and metadata associated with each item will be deleted.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0001"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n    ids=[\"id1\", \"id2\", \"id3\",...],\n)",
+    "dom_ids": [
+      "readar-node-0002"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.delete({\n    ids: [\"id1\", \"id2\", \"id3\",...],\n})",
+    "dom_ids": [
+      "readar-node-0003"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n    Some(vec![\"id1\".to_string(), \"id2\".to_string(), \"id3\".to_string()]),\n    None,\n).await?;",
+    "dom_ids": [
+      "readar-node-0004"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": ".delete also supports the where filter. It will delete all items in the collection that match the where filter.",
+    "dom_ids": [
+      "readar-node-0005"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "collection.delete(\n\twhere={\"chapter\": \"20\"}\n)",
+    "dom_ids": [
+      "readar-node-0006"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "await collection.delete({\n    where: {\"chapter\": \"20\"} //where\n})",
+    "dom_ids": [
+      "readar-node-0007"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0007"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "use chroma::types::{MetadataComparison, MetadataExpression, MetadataValue, PrimitiveOperator, Where};\n\nlet where_clause = Where::Metadata(MetadataExpression {\n    key: \"chapter\".to_string(),\n    comparison: MetadataComparison::Primitive(\n        PrimitiveOperator::Equal,\n        MetadataValue::Str(\"20\".to_string()),\n    ),\n});\n\ncollection.delete(\n    None,\n    Some(where_clause),\n).await?;",
+    "dom_ids": [
+      "readar-node-0008"
+    ],
+    "chapter": "delete_data",
+    "id": "delete_data__node_0008"
+  }
+]

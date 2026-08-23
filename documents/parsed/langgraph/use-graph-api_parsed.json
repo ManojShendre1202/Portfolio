@@ -1,0 +1,4188 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "This guide demonstrates the basics of LangGraph’s Graph API. It walks through state , as well as composing common graph structures such as sequences , branches , and loops . It also covers LangGraph’s control features, including the Send API for map-reduce workflows and the Command API for combining state updates with “hops” across nodes.",
+    "dom_ids": [
+      "readar-node-0001"
+    ],
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Setup: Install langgraph :",
+    "dom_ids": [
+      "setup",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0002"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Setup: pip install -U langgraph",
+    "dom_ids": [
+      "setup",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0003"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Setup: uv add langgraph",
+    "dom_ids": [
+      "setup",
+      "readar-node-0005"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0004"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Setup: Set up LangSmith for better debugging",
+    "dom_ids": [
+      "setup",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0005"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Setup: Sign up for LangSmith to quickly spot issues and improve the performance of your LangGraph projects. LangSmith lets you use trace data to debug, test, and monitor your LLM apps built with LangGraph—read more about how to get started in the docs .",
+    "dom_ids": [
+      "setup",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0006"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define and update state: Here we show how to define and update state in LangGraph. We will demonstrate:",
+    "dom_ids": [
+      "define-and-update-state",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0007"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Define and update state: - How to use state to define a graph’s schema - How to use reducers to control how state updates are processed.",
+    "dom_ids": [
+      "define-and-update-state",
+      "readar-node-0010"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0008"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define state: State in LangGraph can be a TypedDict , Pydantic model, or dataclass. Below we will use TypedDict . See Use Pydantic models for graph state for detail on using Pydantic.",
+    "dom_ids": [
+      "define-state",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define state: By default, graphs will have the same input and output schema, and the state determines that schema. See Define input and output schemas for how to define distinct input and output schemas.",
+    "dom_ids": [
+      "define-state",
+      "readar-node-0013"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define state: Let’s consider a simple example using messages . This represents a versatile formulation of state for many LLM applications. See our concepts page for more detail.",
+    "dom_ids": [
+      "define-state",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define state: from langchain.messages import AnyMessage\nfrom typing_extensions import TypedDict\n\nclass State(TypedDict):\n    messages: list[AnyMessage]\n    extra_field: int",
+    "dom_ids": [
+      "define-state",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define state: This state tracks a list of message objects, as well as an extra integer field.",
+    "dom_ids": [
+      "define-state",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: Let’s build an example graph with a single node. Our node is just a Python function that reads our graph’s state and makes updates to it. The first argument to this function will always be the state:",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: from langchain.messages import AIMessage\n\ndef node(state: State):\n    messages = state[\"messages\"]\n    new_message = AIMessage(\"Hello!\")\n    return {\"messages\": messages + [new_message], \"extra_field\": 10}",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0015"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: This node simply appends a message to our message list, and populates an extra field.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: Nodes should return updates to the state directly, instead of mutating the state.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: Let’s next define a simple graph containing this node. We use StateGraph to define a graph that operates on this state. We then use add_node populate our graph.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0022"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: from langgraph.graph import StateGraph\n\nbuilder = StateGraph(State)\nbuilder.add_node(node)\nbuilder.set_entry_point(\"node\")\ngraph = builder.compile()",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: LangGraph provides built-in utilities for visualizing your graph. Let’s inspect our graph. See Visualize your graph for detail on visualization.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: In this case, our graph just executes a single node. Let’s proceed with a simple invocation:",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0026"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0022"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: from langchain.messages import HumanMessage\n\nresult = graph.invoke({\"messages\": [HumanMessage(\"Hi\")]})\nresult",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: {'messages': [HumanMessage(content='Hi'), AIMessage(content='Hello!')], 'extra_field': 10}",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: Note that:",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0029"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0025"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Update state: - We kicked off invocation by updating a single key of the state. - We receive the entire state in the invocation result.",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0026"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Update state: For convenience, we frequently inspect the content of message objects via pretty-print:",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0027"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: for message in result[\"messages\"]:\n    message.pretty_print()",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0028"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Update state: ================================ Human Message ================================\n\nHi\n================================== Ai Message ==================================\n\nHello!",
+    "dom_ids": [
+      "update-state",
+      "readar-node-0033"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0029"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Process state updates with reducers: Each key in the state can have its own independent reducer function, which controls how updates from nodes are applied. If no reducer function is explicitly specified then it is assumed that all updates to the key should override it.",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0030"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Process state updates with reducers: For TypedDict state schemas, we can define reducers by annotating the corresponding field of the state with a reducer function.",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0031"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Process state updates with reducers: In the earlier example, our node updated the \"messages\" key in the state by appending a message to it. Below, we add a reducer to this key, such that updates are automatically appended:",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0037"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0032"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Process state updates with reducers: from typing_extensions import Annotated\n\ndef add(left, right):\n    \"\"\"Can also import `add` from the `operator` built-in.\"\"\"\n    return left + right\n\nclass State(TypedDict):\n    messages: Annotated[list[AnyMessage], add]\n    extra_field: int",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0033"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Process state updates with reducers: Now our node can be simplified:",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0039"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0034"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Process state updates with reducers: def node(state: State):\n    new_message = AIMessage(\"Hello!\")\n    return {\"messages\": [new_message], \"extra_field\": 10}",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0040"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0035"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Process state updates with reducers: from langgraph.graph import START\n\ngraph = StateGraph(State).add_node(node).add_edge(START, \"node\").compile()\n\nresult = graph.invoke({\"messages\": [HumanMessage(\"Hi\")]})\n\nfor message in result[\"messages\"]:\n    message.pretty_print()",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0041"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0036"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Process state updates with reducers: ================================ Human Message ================================\n\nHi\n================================== Ai Message ==================================\n\nHello!",
+    "dom_ids": [
+      "process-state-updates-with-reducers",
+      "readar-node-0042"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0037"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "MessagesState: In practice, there are additional considerations for updating lists of messages:",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0044"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0038"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "MessagesState: - We may wish to update an existing message in the state. - We may want to accept short-hands for message formats , such as OpenAI format .",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0045"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0039"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "MessagesState: LangGraph includes a built-in reducer add_messages that handles these considerations:",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0046"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0040"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "MessagesState: from langgraph.graph.message import add_messages\n\nclass State(TypedDict):\n    messages: Annotated[list[AnyMessage], add_messages]\n    extra_field: int\n\ndef node(state: State):\n    new_message = AIMessage(\"Hello!\")\n    return {\"messages\": [new_message], \"extra_field\": 10}\n\ngraph = StateGraph(State).add_node(node).set_entry_point(\"node\").compile()",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0047"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0041"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "MessagesState: input_message = {\"role\": \"user\", \"content\": \"Hi\"}\n\nresult = graph.invoke({\"messages\": [input_message]})\n\nfor message in result[\"messages\"]:\n    message.pretty_print()",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0048"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0042"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "MessagesState: ================================ Human Message ================================\n\nHi\n================================== Ai Message ==================================\n\nHello!",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0049"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0043"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "MessagesState: This is a versatile representation of state for applications involving chat models . LangGraph includes a prebuilt MessagesState for convenience, so that we can have:",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0050"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0044"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "MessagesState: from langgraph.graph import MessagesState\n\nclass State(MessagesState):\n    extra_field: int",
+    "dom_ids": [
+      "messagesstate",
+      "readar-node-0051"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0045"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: In some cases, you may want to bypass a reducer and directly overwrite a state value. LangGraph provides the Overwrite type for this purpose. When a node returns a value wrapped with Overwrite , the reducer is bypassed and the channel is set directly to that value.",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0053"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0046"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: This is useful when you want to reset or replace accumulated state rather than merge it with existing values.",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0054"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0047"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: from langgraph.graph import StateGraph, START, END\nfrom langgraph.types import Overwrite\nfrom typing_extensions import Annotated, TypedDict\nimport operator\n\nclass State(TypedDict):\n    messages: Annotated[list, operator.add]\n\ndef add_message(state: State):\n    return {\"messages\": [\"first message\"]}\n\ndef replace_messages(state: State):\n    # Bypass the reducer and replace the entire messages list\n    return {\"messages\": Overwrite([\"replacement message\"])}\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"add_message\", add_message)\nbuilder.add_node(\"replace_messages\", replace_messages)\nbuilder.add_edge(START, \"add_message\")\nbuilder.add_edge(\"add_message\", \"replace_messages\")\nbuilder.add_edge(\"replace_messages\", END)\n\ngraph = builder.compile()\n\nresult = graph.invoke({\"messages\": [\"initial\"]})\nprint(result[\"messages\"])",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0055"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0048"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: ['replacement message']",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0056"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0049"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: You can also use JSON format with the special key \"__overwrite__\" :",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0057"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0050"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: def replace_messages(state: State):\n    return {\"messages\": {\"__overwrite__\": [\"replacement message\"]}}",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0058"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0051"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Bypass reducers with Overwrite: When nodes execute in parallel, only one node can use Overwrite on the same state key in a given super-step. If multiple nodes attempt to overwrite the same key in the same super-step, an InvalidUpdateError will be raised.",
+    "dom_ids": [
+      "bypass-reducers-with-overwrite",
+      "readar-node-0059"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0052"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define input and output schemas: By default, StateGraph operates with a single schema, and all nodes are expected to communicate using that schema. However, it’s also possible to define distinct input and output schemas for a graph.",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0061"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0053"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define input and output schemas: When distinct schemas are specified, an internal schema will still be used for communication between nodes. The input schema ensures that the provided input matches the expected structure, while the output schema filters the internal data to return only the relevant information according to the defined output schema.",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0062"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0054"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define input and output schemas: Below, we’ll see how to define distinct input and output schema.",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0063"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0055"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define input and output schemas: from langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict\n\n# Define the schema for the input\nclass InputState(TypedDict):\n    question: str\n\n# Define the schema for the output\nclass OutputState(TypedDict):\n    answer: str\n\n# Define the overall schema, combining both input and output\nclass OverallState(InputState, OutputState):\n    pass\n\n# Define the node that processes the input and generates an answer\ndef answer_node(state: InputState):\n    # Example answer and an extra key\n    return {\"answer\": \"bye\", \"question\": state[\"question\"]}\n\n# Build the graph with input and output schemas specified\nbuilder = StateGraph(OverallState, input_schema=InputState, output_schema=OutputState)\nbuilder.add_node(answer_node)  # Add the answer node\nbuilder.add_edge(START, \"answer_node\")  # Define the starting edge\nbuilder.add_edge(\"answer_node\", END)  # Define the ending edge\ngraph = builder.compile()  # Compile the graph\n\n# Invoke the graph with an input and print the result\nprint(graph.invoke({\"question\": \"hi\"}))",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0064"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0056"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Define input and output schemas: {'answer': 'bye'}",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0065"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0057"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Define input and output schemas: Notice that the output of invoke only includes the output schema.",
+    "dom_ids": [
+      "define-input-and-output-schemas",
+      "readar-node-0066"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0058"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Pass private state between nodes: In some cases, you may want nodes to exchange information that is crucial for intermediate logic but doesn’t need to be part of the main schema of the graph. This private data is not relevant to the overall input/output of the graph and should only be shared between certain nodes.",
+    "dom_ids": [
+      "pass-private-state-between-nodes",
+      "readar-node-0068"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0059"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Pass private state between nodes: Below, we’ll create an example sequential graph consisting of three nodes (node_1, node_2 and node_3), where private data is passed between the first two steps (node_1 and node_2), while the third step (node_3) only has access to the public overall state.",
+    "dom_ids": [
+      "pass-private-state-between-nodes",
+      "readar-node-0069"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0060"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Pass private state between nodes: from langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict\n\n# The overall state of the graph (this is the public state shared across nodes)\nclass OverallState(TypedDict):\n    a: str\n\n# Output from node_1 contains private data that is not part of the overall state\nclass Node1Output(TypedDict):\n    private_data: str\n\n# The private data is only shared between node_1 and node_2\ndef node_1(state: OverallState) -> Node1Output:\n    output = {\"private_data\": \"set by node_1\"}\n    print(f\"Entered node `node_1`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output\n\n# Node 2 input only requests the private data available after node_1\nclass Node2Input(TypedDict):\n    private_data: str\n\ndef node_2(state: Node2Input) -> OverallState:\n    output = {\"a\": \"set by node_2\"}\n    print(f\"Entered node `node_2`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output\n\n# Node 3 only has access to the overall state (no access to private data from node_1)\ndef node_3(state: OverallState) -> OverallState:\n    output = {\"a\": \"set by node_3\"}\n    print(f\"Entered node `node_3`:\\n\\tInput: {state}.\\n\\tReturned: {output}\")\n    return output\n\n# Connect nodes in a sequence\n# node_2 accepts private data from node_1, whereas\n# node_3 does not see the private data.\nbuilder = StateGraph(OverallState).add_sequence([node_1, node_2, node_3])\nbuilder.add_edge(START, \"node_1\")\ngraph = builder.compile()\n\n# Invoke the graph with the initial state\nresponse = graph.invoke(\n    {\n        \"a\": \"set at start\",\n    }\n)\n\nprint()\nprint(f\"Output of graph invocation: {response}\")",
+    "dom_ids": [
+      "pass-private-state-between-nodes",
+      "readar-node-0070"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0061"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Pass private state between nodes: Entered node `node_1`:\n    Input: {'a': 'set at start'}.\n    Returned: {'private_data': 'set by node_1'}\nEntered node `node_2`:\n    Input: {'private_data': 'set by node_1'}.\n    Returned: {'a': 'set by node_2'}\nEntered node `node_3`:\n    Input: {'a': 'set by node_2'}.\n    Returned: {'a': 'set by node_3'}\n\nOutput of graph invocation: {'a': 'set by node_3'}",
+    "dom_ids": [
+      "pass-private-state-between-nodes",
+      "readar-node-0071"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0062"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: A StateGraph accepts a state_schema argument on initialization that specifies the “shape” of the state that the nodes in the graph can access and update.",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0073"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0063"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: In our examples, we typically use a python-native TypedDict or dataclass for state_schema , but state_schema can be any type .",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0074"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0064"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Here, we’ll see how a Pydantic BaseModel can be used for state_schema to add run-time validation on inputs .",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0075"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0065"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Known Limitations",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0076"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0066"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use pydantic models for graph state: - Currently, the output of the graph will NOT be an instance of a pydantic model. - Run-time validation only occurs on inputs to the first node in the graph, not on subsequent nodes or outputs. - The validation error trace from pydantic does not show which node the error arises in. - Pydantic’s recursive validation can be slow. For performance-sensitive applications, you may want to consider using a dataclass instead.",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0077"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0067"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: from langgraph.graph import StateGraph, START, END\nfrom typing_extensions import TypedDict\nfrom pydantic import BaseModel\n\n# The overall state of the graph (this is the public state shared across nodes)\nclass OverallState(BaseModel):\n    a: str\n\ndef node(state: OverallState):\n    return {\"a\": \"goodbye\"}\n\n# Build the state graph\nbuilder = StateGraph(OverallState)\nbuilder.add_node(node)  # node_1 is the first node\nbuilder.add_edge(START, \"node\")  # Start the graph with node_1\nbuilder.add_edge(\"node\", END)  # End the graph after node_1\ngraph = builder.compile()\n\n# Test the graph with a valid input\ngraph.invoke({\"a\": \"hello\"})",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0078"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0068"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Invoke the graph with an invalid input",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0079"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0069"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: try:\n    graph.invoke({\"a\": 123})  # Should be a string\nexcept Exception as e:\n    print(\"An exception was raised because `a` is an integer rather than a string.\")\n    print(e)",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0080"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0070"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: An exception was raised because `a` is an integer rather than a string.\n1 validation error for OverallState\na\n  Input should be a valid string [type=string_type, input_value=123, input_type=int]\n    For further information visit https://errors.pydantic.dev/2.9/v/string_type",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0081"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0071"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: See below for additional features of Pydantic model state:",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0082"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0072"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Serialization Behavior",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "serialization-behavior-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0073"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: When using Pydantic models as state schemas, it’s important to understand how serialization works, especially when:",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0084"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0074"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Use pydantic models for graph state: - Passing Pydantic objects as inputs - Receiving outputs from the graph - Working with nested Pydantic models",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0085"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0075"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Let’s see these behaviors in action.",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0086"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0076"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: from langgraph.graph import StateGraph, START, END\nfrom pydantic import BaseModel\n\nclass NestedModel(BaseModel):\n    value: str\n\nclass ComplexState(BaseModel):\n    text: str\n    count: int\n    nested: NestedModel\n\ndef process_node(state: ComplexState):\n    # Node receives a validated Pydantic object\n    print(f\"Input state type: {type(state)}\")\n    print(f\"Nested type: {type(state.nested)}\")\n    # Return a dictionary update\n    return {\"text\": state.text + \" processed\", \"count\": state.count + 1}\n\n# Build the graph\nbuilder = StateGraph(ComplexState)\nbuilder.add_node(\"process\", process_node)\nbuilder.add_edge(START, \"process\")\nbuilder.add_edge(\"process\", END)\ngraph = builder.compile()\n\n# Create a Pydantic instance for input\ninput_state = ComplexState(text=\"hello\", count=0, nested=NestedModel(value=\"test\"))\nprint(f\"Input object type: {type(input_state)}\")\n\n# Invoke graph with a Pydantic instance\nresult = graph.invoke(input_state)\nprint(f\"Output type: {type(result)}\")\nprint(f\"Output content: {result}\")\n\n# Convert back to Pydantic model if needed\noutput_model = ComplexState(**result)\nprint(f\"Converted back to Pydantic: {type(output_model)}\")",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0087"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0077"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Runtime Type Coercion",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "runtime-type-coercion-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0078"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Pydantic performs runtime type coercion for certain data types. This can be helpful but also lead to unexpected behavior if you’re not aware of it.",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0089"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0079"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: from langgraph.graph import StateGraph, START, END\nfrom pydantic import BaseModel\n\nclass CoercionExample(BaseModel):\n    # Pydantic will coerce string numbers to integers\n    number: int\n    # Pydantic will parse string booleans to bool\n    flag: bool\n\ndef inspect_node(state: CoercionExample):\n    print(f\"number: {state.number} (type: {type(state.number)})\")\n    print(f\"flag: {state.flag} (type: {type(state.flag)})\")\n    return {}\n\nbuilder = StateGraph(CoercionExample)\nbuilder.add_node(\"inspect\", inspect_node)\nbuilder.add_edge(START, \"inspect\")\nbuilder.add_edge(\"inspect\", END)\ngraph = builder.compile()\n\n# Demonstrate coercion with string inputs that will be converted\nresult = graph.invoke({\"number\": \"42\", \"flag\": \"true\"})\n\n# This would fail with a validation error\ntry:\n    graph.invoke({\"number\": \"not-a-number\", \"flag\": \"true\"})\nexcept Exception as e:\n    print(f\"\\nExpected validation error: {e}\")",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0090"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0080"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: Working with Message Models",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "working-with-message-models-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0081"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use pydantic models for graph state: When working with LangChain message types in your state schema, there are important considerations for serialization. You should use AnyMessage (rather than BaseMessage ) for proper serialization/deserialization when using message objects over the wire.",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0092"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0082"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use pydantic models for graph state: from langgraph.graph import StateGraph, START, END\nfrom pydantic import BaseModel\nfrom langchain.messages import HumanMessage, AIMessage, AnyMessage\nfrom typing import List\n\nclass ChatState(BaseModel):\n    messages: List[AnyMessage]\n    context: str\n\ndef add_message(state: ChatState):\n    return {\"messages\": state.messages + [AIMessage(content=\"Hello there!\")]}\n\nbuilder = StateGraph(ChatState)\nbuilder.add_node(\"add_message\", add_message)\nbuilder.add_edge(START, \"add_message\")\nbuilder.add_edge(\"add_message\", END)\ngraph = builder.compile()\n\n# Create input with a message\ninitial_state = ChatState(\n    messages=[HumanMessage(content=\"Hi\")], context=\"Customer support chat\"\n)\n\nresult = graph.invoke(initial_state)\nprint(f\"Output: {result}\")\n\n# Convert back to Pydantic model to see message types\noutput_model = ChatState(**result)\nfor i, msg in enumerate(output_model.messages):\n    print(f\"Message {i}: {type(msg).__name__} - {msg.content}\")",
+    "dom_ids": [
+      "use-pydantic-models-for-graph-state",
+      "readar-node-0093"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0083"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: Sometimes you want to be able to configure your graph when calling it. For example, you might want to be able to specify what LLM or system prompt to use at runtime, without polluting the graph state with these parameters .",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0095"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0084"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: To add runtime configuration:",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0096"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0085"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Add runtime configuration: - Specify a schema for your configuration - Add the configuration to the function signature for nodes or conditional edges - Pass the configuration into the graph.",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0097"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0086"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: See below for a simple example:",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0098"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0087"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: from langgraph.graph import END, StateGraph, START\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict\n\n# 1. Specify config schema\nclass ContextSchema(TypedDict):\n    my_runtime_value: str\n\n# 2. Define a graph that accesses the config in a node\nclass State(TypedDict):\n    my_state_value: str\n\ndef node(state: State, runtime: Runtime[ContextSchema]):\n    if runtime.context[\"my_runtime_value\"] == \"a\":\n        return {\"my_state_value\": 1}\n    elif runtime.context[\"my_runtime_value\"] == \"b\":\n        return {\"my_state_value\": 2}\n    else:\n        raise ValueError(\"Unknown values.\")\n\nbuilder = StateGraph(State, context_schema=ContextSchema)\nbuilder.add_node(node)\nbuilder.add_edge(START, \"node\")\nbuilder.add_edge(\"node\", END)\n\ngraph = builder.compile()\n\n# 3. Pass in configuration at runtime:\nprint(graph.invoke({}, context={\"my_runtime_value\": \"a\"}))\nprint(graph.invoke({}, context={\"my_runtime_value\": \"b\"}))",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0099"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0088"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: {'my_state_value': 1}\n{'my_state_value': 2}",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0100"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0089"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: Extended example: specifying LLM at runtime",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "extended-example-specifying-llm-at-runtime-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0090"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: Below we demonstrate a practical example in which we configure what LLM to use at runtime. We will use both OpenAI and Anthropic models.",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0102"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0091"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: from dataclasses import dataclass\n\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import MessagesState, END, StateGraph, START\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict\n\n@dataclass\nclass ContextSchema:\n    model_provider: str = \"anthropic\"\n\nMODELS = {\n    \"anthropic\": init_chat_model(\"claude-haiku-4-5-20251001\"),\n    \"openai\": init_chat_model(\"gpt-5.4-mini\"),\n}\n\ndef call_model(state: MessagesState, runtime: Runtime[ContextSchema]):\n    model = MODELS[runtime.context.model_provider]\n    response = model.invoke(state[\"messages\"])\n    return {\"messages\": [response]}\n\nbuilder = StateGraph(MessagesState, context_schema=ContextSchema)\nbuilder.add_node(\"model\", call_model)\nbuilder.add_edge(START, \"model\")\nbuilder.add_edge(\"model\", END)\n\ngraph = builder.compile()\n\n# Usage\ninput_message = {\"role\": \"user\", \"content\": \"hi\"}\n# With no configuration, uses default (Anthropic)\nresponse_1 = graph.invoke({\"messages\": [input_message]}, context=ContextSchema())[\"messages\"][-1]\n# Or, can set OpenAI\nresponse_2 = graph.invoke({\"messages\": [input_message]}, context={\"model_provider\": \"openai\"})[\"messages\"][-1]\n\nprint(response_1.response_metadata[\"model_name\"])\nprint(response_2.response_metadata[\"model_name\"])",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0103"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0092"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: claude-haiku-4-5-20251001\ngpt-5.4-mini",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0104"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0093"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: Extended example: specifying model and system message at runtime",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "extended-example-specifying-model-and-system-message-at-runtime-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0094"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add runtime configuration: Below we demonstrate a practical example in which we configure two parameters: the LLM and system message to use at runtime.",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0106"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0095"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: from dataclasses import dataclass\nfrom langchain.chat_models import init_chat_model\nfrom langchain.messages import SystemMessage\nfrom langgraph.graph import END, MessagesState, StateGraph, START\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict\n\n@dataclass\nclass ContextSchema:\n    model_provider: str = \"anthropic\"\n    system_message: str | None = None\n\nMODELS = {\n    \"anthropic\": init_chat_model(\"claude-haiku-4-5-20251001\"),\n    \"openai\": init_chat_model(\"gpt-5.4-mini\"),\n}\n\ndef call_model(state: MessagesState, runtime: Runtime[ContextSchema]):\n    model = MODELS[runtime.context.model_provider]\n    messages = state[\"messages\"]\n    if (system_message := runtime.context.system_message):\n        messages = [SystemMessage(system_message)] + messages\n    response = model.invoke(messages)\n    return {\"messages\": [response]}\n\nbuilder = StateGraph(MessagesState, context_schema=ContextSchema)\nbuilder.add_node(\"model\", call_model)\nbuilder.add_edge(START, \"model\")\nbuilder.add_edge(\"model\", END)\n\ngraph = builder.compile()\n\n# Usage\ninput_message = {\"role\": \"user\", \"content\": \"hi\"}\nresponse = graph.invoke({\"messages\": [input_message]}, context={\"model_provider\": \"openai\", \"system_message\": \"Respond in Italian.\"})\nfor message in response[\"messages\"]:\n    message.pretty_print()",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0107"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0096"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add runtime configuration: ================================ Human Message ================================\n\nhi\n================================== Ai Message ==================================\n\nCiao! Come posso aiutarti oggi?",
+    "dom_ids": [
+      "add-runtime-configuration",
+      "readar-node-0108"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0097"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: There are many use cases where you may wish for your node to have a custom retry policy, for example if you are calling an API, querying a database, or calling an LLM, etc. LangGraph lets you add retry policies to nodes.",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0110"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0098"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: To configure a retry policy, pass the retry_policy parameter to the add_node . The retry_policy parameter takes in a RetryPolicy named tuple object. Below we instantiate a RetryPolicy object with the default parameters and associate it with a node:",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0111"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0099"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add retry policies: from langgraph.types import RetryPolicy\n\nbuilder.add_node(\n    \"node_name\",\n    node_function,\n    retry_policy=RetryPolicy(),\n)",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0112"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0100"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: By default, the retry_on parameter uses the default_retry_on function, which retries on any exception except for the following:",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0113"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0101"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Add retry policies: - ValueError - TypeError - ArithmeticError - ImportError - LookupError - NameError - SyntaxError - RuntimeError - ReferenceError - StopIteration - StopAsyncIteration - OSError",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0114"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0102"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: In addition, for exceptions from popular http request libraries such as requests and httpx it only retries on 5xx status codes.",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0115"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0103"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: Extended example: customizing retry policies",
+    "dom_ids": [
+      "add-retry-policies",
+      "extended-example-customizing-retry-policies-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0104"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add retry policies: Consider an example in which we are reading from a SQL database. Below we pass two different retry policies to nodes:",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0117"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0105"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add retry policies: import sqlite3\nfrom typing_extensions import TypedDict\nfrom langchain.chat_models import init_chat_model\nfrom langgraph.graph import END, MessagesState, StateGraph, START\nfrom langgraph.types import RetryPolicy\nfrom langchain.messages import AIMessage\n\ncon = sqlite3.connect(\":memory:\")\nmodel = init_chat_model(\"claude-haiku-4-5-20251001\")\n\ndef query_database(state: MessagesState):\n    cursor = con.cursor()\n    cursor.execute(\"SELECT * FROM Artist LIMIT 10;\")\n    query_result = str(cursor.fetchall())\n    return {\"messages\": [AIMessage(content=query_result)]}\n\ndef call_model(state: MessagesState):\n    response = model.invoke(state[\"messages\"])\n    return {\"messages\": [response]}\n\n# Define a new graph\nbuilder = StateGraph(MessagesState)\nbuilder.add_node(\n    \"query_database\",\n    query_database,\n    retry_policy=RetryPolicy(retry_on=sqlite3.OperationalError),\n)\nbuilder.add_node(\"model\", call_model, retry_policy=RetryPolicy(max_attempts=5))\nbuilder.add_edge(START, \"model\")\nbuilder.add_edge(\"model\", \"query_database\")\nbuilder.add_edge(\"query_database\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "add-retry-policies",
+      "readar-node-0118"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0106"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set node timeouts: Use the timeout parameter with add_node to limit how long a single async node invocation can run. Provide the timeout in seconds or as a datetime.timedelta .",
+    "dom_ids": [
+      "set-node-timeouts",
+      "readar-node-0120"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0107"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set node timeouts: import asyncio\nfrom typing_extensions import TypedDict\n\nfrom langgraph.errors import NodeTimeoutError\nfrom langgraph.graph import END, START, StateGraph\n\n\nclass State(TypedDict):\n    value: str\n\n\nasync def call_model(state: State) -> State:\n    await asyncio.sleep(2)\n    return {\"value\": \"done\"}\n\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"model\", call_model, timeout=1.0)\nbuilder.add_edge(START, \"model\")\nbuilder.add_edge(\"model\", END)\ngraph = builder.compile()\n\ntry:\n    await graph.ainvoke({\"value\": \"start\"})\nexcept NodeTimeoutError:\n    print(\"Node timed out\")",
+    "dom_ids": [
+      "set-node-timeouts",
+      "readar-node-0121"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0108"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set node timeouts: Node timeouts are supported only for async nodes. If you set timeout on a sync node, LangGraph raises an error when the graph is compiled because sync Python execution cannot be safely canceled in-process.",
+    "dom_ids": [
+      "set-node-timeouts",
+      "readar-node-0122"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0109"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set node timeouts: When a node exceeds its timeout, LangGraph raises NodeTimeoutError , which subclasses Python’s built-in TimeoutError . If the node has a retry_policy that retries TimeoutError or NodeTimeoutError , the timed-out attempt is retried. The timeout applies to each attempt independently, so the timer resets for every retry.",
+    "dom_ids": [
+      "set-node-timeouts",
+      "readar-node-0123"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0110"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set node timeouts: Timed-out attempts do not commit their buffered writes. This prevents state updates or child-task scheduling from leaking out after the timeout boundary.",
+    "dom_ids": [
+      "set-node-timeouts",
+      "readar-node-0124"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0111"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure node timeouts: The timeout= parameter on add_node caps how long a single async node attempt may run. Pass a number (seconds), a timedelta , or a TimeoutPolicy for finer control over run and idle timeouts. When the limit is exceeded, LangGraph raises NodeTimeoutError and lets the retry policy decide whether to retry.",
+    "dom_ids": [
+      "configure-node-timeouts",
+      "readar-node-0126"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0112"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure node timeouts: Per-node timeouts require langgraph>=1.2 .",
+    "dom_ids": [
+      "configure-node-timeouts",
+      "readar-node-0127"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0113"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Configure node timeouts: from langgraph.types import TimeoutPolicy\n\nbuilder.add_node(\n    \"call_model\",\n    call_model,\n    timeout=TimeoutPolicy(run_timeout=120, idle_timeout=30),\n)",
+    "dom_ids": [
+      "configure-node-timeouts",
+      "readar-node-0128"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0114"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Configure node timeouts: See Fault tolerance for the full timeout lifecycle, idle-timeout refresh sources, and runtime.heartbeat() .",
+    "dom_ids": [
+      "configure-node-timeouts",
+      "readar-node-0129"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0115"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Handle node errors: The error_handler= parameter on add_node registers a function that runs after a node fails and all retries are exhausted. The handler receives the current state and a typed NodeError with failure context, and can route to a recovery branch via Command :",
+    "dom_ids": [
+      "handle-node-errors",
+      "readar-node-0131"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0116"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Handle node errors: Node-level error handlers require langgraph>=1.2 .",
+    "dom_ids": [
+      "handle-node-errors",
+      "readar-node-0132"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0117"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Handle node errors: from langgraph.errors import NodeError\nfrom langgraph.types import Command, RetryPolicy\n\ndef payment_error_handler(state: State, error: NodeError) -> Command:\n    return Command(\n        update={\"status\": f\"compensated: {error.error}\"},\n        goto=\"finalize\",\n    )\n\nbuilder.add_node(\n    \"charge_payment\",\n    charge_payment,\n    retry_policy=RetryPolicy(max_attempts=3, retry_on=ConnectionError),\n    error_handler=payment_error_handler,\n)",
+    "dom_ids": [
+      "handle-node-errors",
+      "readar-node-0133"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0118"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Handle node errors: See Fault tolerance for compensation patterns and Command routing.",
+    "dom_ids": [
+      "handle-node-errors",
+      "readar-node-0134"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0119"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set graph-wide node defaults: Requires langgraph>=1.2 .",
+    "dom_ids": [
+      "set-graph-wide-node-defaults",
+      "readar-node-0136"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0120"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set graph-wide node defaults: Use set_node_defaults to set retry_policy , timeout , cache_policy , or error_handler once for every node in a graph, instead of repeating them on each add_node call. Per-node values always win, and defaults are applied at StateGraph.compile time:",
+    "dom_ids": [
+      "set-graph-wide-node-defaults",
+      "readar-node-0137"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0121"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Set graph-wide node defaults: from langgraph.types import RetryPolicy, TimeoutPolicy\n\ngraph = (\n    StateGraph(State)\n    .set_node_defaults(\n        retry_policy=RetryPolicy(max_attempts=3),\n        timeout=TimeoutPolicy(run_timeout=30),\n        error_handler=fallback_handler,\n    )\n    .add_node(\"a\", node_a)\n    .add_node(\"b\", node_b, retry_policy=RetryPolicy(max_attempts=5))  # overrides default\n    .add_edge(START, \"a\")\n    .compile()\n)",
+    "dom_ids": [
+      "set-graph-wide-node-defaults",
+      "readar-node-0138"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0122"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set graph-wide node defaults: retry_policy and timeout defaults apply to every node, including error-handler nodes. cache_policy and error_handler defaults apply only to regular nodes—handlers never catch themselves, and caching a handler result is unsafe. Defaults are not inherited by subgraphs.",
+    "dom_ids": [
+      "set-graph-wide-node-defaults",
+      "readar-node-0139"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0123"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Set graph-wide node defaults: See Fault tolerance for the full precedence rules and applicability table.",
+    "dom_ids": [
+      "set-graph-wide-node-defaults",
+      "readar-node-0140"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0124"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access execution info inside a node: You can access execution identity and retry information via runtime.execution_info . This surfaces thread, run, and checkpoint identifiers as well as retry state, without needing to read from config directly.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0142"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0125"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: Attribute | Type | Description",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0143"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0126"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: thread_id | str | None | Thread ID for the current execution. None without a checkpointer.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0144"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0127"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: run_id | str | None | Run ID for the current execution. None when not provided in config.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0145"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0128"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: checkpoint_id | str | Checkpoint ID for the current execution.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0146"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0129"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: checkpoint_ns | str | Checkpoint namespace for the current execution.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0147"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0130"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: task_id | str | Task ID for the current execution.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0148"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0131"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: node_attempt | int | Current execution attempt number (1-indexed). 1 on the first try, 2 on the first retry, etc.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0149"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0132"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access execution info inside a node: node_first_attempt_time | float | None | Unix timestamp (seconds) of when the first attempt started. Stays the same across retries.",
+    "dom_ids": [
+      "access-execution-info-inside-a-node",
+      "readar-node-0150"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0133"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access thread and run IDs: Use execution_info to access the thread ID, run ID, and other identity fields inside a node:",
+    "dom_ids": [
+      "access-thread-and-run-ids",
+      "readar-node-0152"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0134"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Access thread and run IDs: from langgraph.graph import StateGraph, START, END\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict\n\nclass State(TypedDict):\n    result: str\n\ndef my_node(state: State, runtime: Runtime):\n    info = runtime.execution_info\n    print(f\"Thread: {info.thread_id}, Run: {info.run_id}\")\n    return {\"result\": \"done\"}\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"my_node\", my_node)\nbuilder.add_edge(START, \"my_node\")\nbuilder.add_edge(\"my_node\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "access-thread-and-run-ids",
+      "readar-node-0153"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0135"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adjust behavior based on retry state: When a node has a retry policy, use execution_info to inspect the current attempt number and switch to a fallback after the first attempt fails:",
+    "dom_ids": [
+      "adjust-behavior-based-on-retry-state",
+      "readar-node-0155"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0136"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Adjust behavior based on retry state: from langgraph.graph import StateGraph, START, END\nfrom langgraph.runtime import Runtime\nfrom langgraph.types import RetryPolicy\nfrom typing_extensions import TypedDict\n\nclass State(TypedDict):\n    result: str\n\ndef my_node(state: State, runtime: Runtime):\n    info = runtime.execution_info\n    if info.node_attempt > 1:\n        # use a fallback on retries\n        return {\"result\": call_fallback_api()}\n    return {\"result\": call_primary_api()}\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"my_node\", my_node, retry_policy=RetryPolicy(max_attempts=3))\nbuilder.add_edge(START, \"my_node\")\nbuilder.add_edge(\"my_node\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "adjust-behavior-based-on-retry-state",
+      "readar-node-0156"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0137"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Adjust behavior based on retry state: execution_info is available on the Runtime object even without a retry policy — node_attempt defaults to 1 and node_first_attempt_time is set to the time the node starts executing.",
+    "dom_ids": [
+      "adjust-behavior-based-on-retry-state",
+      "readar-node-0157"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0138"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access server info inside a node: When your graph runs on LangGraph Server, you can access server-specific metadata via runtime.server_info . This surfaces the assistant ID, graph ID, and authenticated user without needing to read from config metadata or configurable keys directly.",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0159"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0139"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access server info inside a node: Attribute | Type | Description",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0160"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0140"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access server info inside a node: assistant_id | str | The assistant ID for the current deployment.",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0161"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0141"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access server info inside a node: graph_id | str | The graph ID for the current deployment.",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0162"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0142"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access server info inside a node: user | BaseUser | None | The authenticated user, if custom auth is configured.",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0163"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0143"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Access server info inside a node: from langgraph.graph import StateGraph, START, END\nfrom langgraph.runtime import Runtime\nfrom typing_extensions import TypedDict\n\nclass State(TypedDict):\n    result: str\n\ndef my_node(state: State, runtime: Runtime):\n    server = runtime.server_info\n    if server is not None:\n        print(f\"Assistant: {server.assistant_id}, Graph: {server.graph_id}\")\n        if server.user is not None:\n            print(f\"User: {server.user.identity}\")\n    return {\"result\": \"done\"}\n\nbuilder = StateGraph(State)\nbuilder.add_node(\"my_node\", my_node)\nbuilder.add_edge(START, \"my_node\")\nbuilder.add_edge(\"my_node\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0164"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0144"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access server info inside a node: server_info is None when the graph is not running on LangGraph Server (e.g., during local development or testing).",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0165"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0145"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access server info inside a node: Requires deepagents>=0.5.0 (or langgraph>=1.1.5 ) for runtime.execution_info and runtime.server_info .",
+    "dom_ids": [
+      "access-server-info-inside-a-node",
+      "readar-node-0166"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0146"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access drain state inside a node: When a graceful shutdown has been requested, runtime.drain_requested is True . Read this inside a node to skip expensive work before the next superstep boundary:",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0168"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0147"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Access drain state inside a node: from langgraph.runtime import Runtime\n\ndef my_node(state: State, runtime: Runtime) -> State:\n    if runtime.drain_requested:\n        return {\"status\": \"skipped\", \"reason\": runtime.drain_reason}\n    return {\"status\": do_work()}",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0169"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0148"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access drain state inside a node: Property | Type | Description",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0170"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0149"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access drain state inside a node: drain_requested | bool | True if RunControl.request_drain() has been called for this run.",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0171"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0150"
+  },
+  {
+    "type": "table_row",
+    "level": null,
+    "text": "Access drain state inside a node: drain_reason | str | None | The reason string passed to request_drain() , or None if drain was not requested.",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0172"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0151"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Access drain state inside a node: Requires langgraph>=1.2 . See Graceful shutdown for the full RunControl API.",
+    "dom_ids": [
+      "access-drain-state-inside-a-node",
+      "readar-node-0173"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0152"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add node caching: Node caching is useful in cases where you want to avoid repeating operations, like when doing something expensive (either in terms of time or cost). LangGraph lets you add individualized caching policies to nodes in a graph.",
+    "dom_ids": [
+      "add-node-caching",
+      "readar-node-0175"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0153"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add node caching: To configure a cache policy, pass the cache_policy parameter to the add_node function. In the following example, a CachePolicy object is instantiated with a time to live of 120 seconds and the default key_func generator. Then it is associated with a node:",
+    "dom_ids": [
+      "add-node-caching",
+      "readar-node-0176"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0154"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add node caching: from langgraph.types import CachePolicy\n\nbuilder.add_node(\n    \"node_name\",\n    node_function,\n    cache_policy=CachePolicy(ttl=120),\n)",
+    "dom_ids": [
+      "add-node-caching",
+      "readar-node-0177"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0155"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Add node caching: Then, to enable node-level caching for a graph, set the cache argument when compiling the graph. The example below uses InMemoryCache to set up a graph with in-memory cache, but SqliteCache is also available.",
+    "dom_ids": [
+      "add-node-caching",
+      "readar-node-0178"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0156"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Add node caching: from langgraph.cache.memory import InMemoryCache\n\ngraph = builder.compile(cache=InMemoryCache())",
+    "dom_ids": [
+      "add-node-caching",
+      "readar-node-0179"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0157"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Prerequisites This guide assumes familiarity with the above section on state .",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0181"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0158"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Here we demonstrate how to construct a simple sequence of steps. We will show:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0182"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0159"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create a sequence of steps: - How to build a sequential graph - Built-in short-hand for constructing similar graphs.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0183"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0160"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: To add a sequence of nodes, we use the add_node and add_edge methods of our graph :",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0184"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0161"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: from langgraph.graph import START, StateGraph\n\nbuilder = StateGraph(State)\n\n# Add nodes\nbuilder.add_node(step_1)\nbuilder.add_node(step_2)\nbuilder.add_node(step_3)\n\n# Add edges\nbuilder.add_edge(START, \"step_1\")\nbuilder.add_edge(\"step_1\", \"step_2\")\nbuilder.add_edge(\"step_2\", \"step_3\")",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0185"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0162"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: We can also use the built-in shorthand .add_sequence :",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0186"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0163"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: builder = StateGraph(State).add_sequence([step_1, step_2, step_3])\nbuilder.add_edge(START, \"step_1\")",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0187"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0164"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Why split application steps into a sequence with LangGraph?",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "why-split-application-steps-into-a-sequence-with-langgraph-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0165"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: LangGraph makes it easy to add an underlying persistence layer to your application. This allows state to be checkpointed in between the execution of nodes, so your LangGraph nodes govern:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0189"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0166"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create a sequence of steps: - How state updates are checkpointed - How interruptions are resumed in human-in-the-loop workflows - How we can “rewind” and branch-off executions using LangGraph’s time travel features",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0190"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0167"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: They also determine how execution steps are streamed , and how your application is visualized and debugged using Studio .",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0191"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0168"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Let’s demonstrate an end-to-end example. We will create a sequence of three steps:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0192"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0169"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create a sequence of steps: - Populate a value in a key of the state - Update the same value - Populate a different value",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0193"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0170"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Let’s first define our state . This governs the schema of the graph , and can also specify how to apply updates. See Process state updates with reducers for more detail.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0194"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0171"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: In our case, we will just keep track of two values:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0195"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0172"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: from typing_extensions import TypedDict\n\nclass State(TypedDict):\n    value_1: str\n    value_2: int",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0196"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0173"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Our nodes are just Python functions that read our graph’s state and make updates to it. The first argument to this function will always be the state:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0197"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0174"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: def step_1(state: State):\n    return {\"value_1\": \"a\"}\n\ndef step_2(state: State):\n    current_value_1 = state[\"value_1\"]\n    return {\"value_1\": f\"{current_value_1} b\"}\n\ndef step_3(state: State):\n    return {\"value_2\": 10}",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0198"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0175"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Note that when issuing updates to the state, each node can just specify the value of the key it wishes to update.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0199"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0176"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: By default, this will overwrite the value of the corresponding key. You can also use reducers to control how updates are processed—for example, you can append successive updates to a key instead. See Process state updates with reducers for more detail.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0200"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0177"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Finally, we define the graph. We use StateGraph to define a graph that operates on this state.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0201"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0178"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: We will then use add_node and add_edge to populate our graph and define its control flow.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0202"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0179"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: from langgraph.graph import START, StateGraph\n\nbuilder = StateGraph(State)\n\n# Add nodes\nbuilder.add_node(step_1)\nbuilder.add_node(step_2)\nbuilder.add_node(step_3)\n\n# Add edges\nbuilder.add_edge(START, \"step_1\")\nbuilder.add_edge(\"step_1\", \"step_2\")\nbuilder.add_edge(\"step_2\", \"step_3\")",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0203"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0180"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Specifying custom names You can specify custom names for nodes using add_node :",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0204"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0181"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: builder.add_node(\"my_node\", step_1)",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0205"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0182"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Note that:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0206"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0183"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create a sequence of steps: - add_edge takes the names of nodes, which for functions defaults to node.__name__ . - We must specify the entry point of the graph. For this we add an edge with the START node . - The graph halts when there are no more nodes to execute.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0207"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0184"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: We next compile our graph. This provides a few basic checks on the structure of the graph (e.g., identifying orphaned nodes). If we were adding persistence to our application via a checkpointer , it would also be passed in here.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0208"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0185"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: graph = builder.compile()",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0209"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0186"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: LangGraph provides built-in utilities for visualizing your graph. Let’s inspect our sequence. See Visualize your graph for detail on visualization.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0210"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0187"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0211"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0188"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Let’s proceed with a simple invocation:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0212"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0189"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: graph.invoke({\"value_1\": \"c\"})",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0213"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0190"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: {'value_1': 'a b', 'value_2': 10}",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0214"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0191"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Note that:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0215"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0192"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Create a sequence of steps: - We kicked off invocation by providing a value for a single state key. We must always provide a value for at least one key. - The value we passed in was overwritten by the first node. - The second node updated the value. - The third node populated a different value.",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0216"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0193"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create a sequence of steps: Built-in shorthand langgraph>=0.2.46 includes a built-in short-hand add_sequence for adding node sequences. You can compile the same graph as follows:",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0217"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0194"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create a sequence of steps: builder = StateGraph(State).add_sequence([step_1, step_2, step_3])\nbuilder.add_edge(START, \"step_1\")\n\ngraph = builder.compile()\n\ngraph.invoke({\"value_1\": \"c\"})",
+    "dom_ids": [
+      "create-a-sequence-of-steps",
+      "readar-node-0218"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0195"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create branches: Parallel execution of nodes is essential to speed up overall graph operation. LangGraph offers native support for parallel execution of nodes, which can significantly enhance the performance of graph-based workflows. This parallelization is achieved through fan-out and fan-in mechanisms, utilizing both standard edges and conditional_edges . Below are some examples showing how to add create branching dataflows that work for you.",
+    "dom_ids": [
+      "create-branches",
+      "readar-node-0220"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0196"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: In this example, we fan out from Node A to B and C and then fan in to D . With our state, we specify the reducer add operation . This will combine or accumulate values for the specific key in the State, rather than simply overwriting the existing value. For lists, this means concatenating the new list with the existing list. See the above section on state reducers for more detail on updating state with reducers.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0222"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0197"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run graph nodes in parallel: import operator\nfrom typing import Annotated, Any\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n    print(f'Adding \"D\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"D\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(c)\nbuilder.add_node(d)\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"a\", \"b\")\nbuilder.add_edge(\"a\", \"c\")\nbuilder.add_edge(\"b\", \"d\")\nbuilder.add_edge(\"c\", \"d\")\nbuilder.add_edge(\"d\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0223"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0198"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run graph nodes in parallel: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0224"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0199"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: With the reducer, you can see that the values added in each node are accumulated.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0225"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0200"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run graph nodes in parallel: graph.invoke({\"aggregate\": []}, {\"configurable\": {\"thread_id\": \"foo\"}})",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0226"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0201"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run graph nodes in parallel: Adding \"A\" to []\nAdding \"B\" to ['A']\nAdding \"C\" to ['A']\nAdding \"D\" to ['A', 'B', 'C']",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0227"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0202"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: In the above example, nodes \"b\" and \"c\" are executed concurrently in the same superstep . Because they are in the same step, node \"d\" executes after both \"b\" and \"c\" are finished.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0228"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0203"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: Importantly, updates from a parallel superstep may not be ordered consistently. If you need a consistent, predetermined ordering of updates from a parallel superstep, you should write the outputs to a separate field in the state together with a value with which to order them.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0229"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0204"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: Exception handling?",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "exception-handling-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0205"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: LangGraph executes nodes within supersteps , meaning that while parallel branches are executed in parallel, the entire superstep is transactional . If any of these branches raises an exception, none of the updates are applied to the state (the entire superstep errors).",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0231"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0206"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: Importantly, when using a checkpointer , results from successful nodes within a superstep are saved, and don’t repeat when resumed.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0232"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0207"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: If you have error-prone (perhaps want to handle flakey API calls), LangGraph provides two ways to address this:",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0233"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0208"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Run graph nodes in parallel: - You can write regular python code within your node to catch and handle exceptions. - You can set a retry_policy to direct the graph to retry nodes that raise certain types of exceptions. Only failing branches are retried, so you needn’t worry about performing redundant work.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0234"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0209"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: Together, these let you perform parallel execution and fully control exception handling.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0235"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0210"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Run graph nodes in parallel: Set max concurrency You can control the maximum number of concurrent tasks by setting max_concurrency in the configuration when invoking the graph.",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0236"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0211"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Run graph nodes in parallel: graph.invoke({\"value_1\": \"c\"}, {\"configurable\": {\"max_concurrency\": 10}})",
+    "dom_ids": [
+      "run-graph-nodes-in-parallel",
+      "readar-node-0237"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0212"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Defer node execution: Deferring node execution is useful when you want to delay the execution of a node until all other pending tasks are completed. This is particularly relevant when branches have different lengths, which is common in workflows like map-reduce flows.",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0239"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0213"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Defer node execution: The above example showed how to fan-out and fan-in when each path was only one step. But what if one branch had more than one step? Let’s add a node \"b_2\" in the \"b\" branch:",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0240"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0214"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Defer node execution: import operator\nfrom typing import Annotated, Any\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef b_2(state: State):\n    print(f'Adding \"B_2\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B_2\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n    print(f'Adding \"D\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"D\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(b_2)\nbuilder.add_node(c)\nbuilder.add_node(d, defer=True)\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"a\", \"b\")\nbuilder.add_edge(\"a\", \"c\")\nbuilder.add_edge(\"b\", \"b_2\")\nbuilder.add_edge(\"b_2\", \"d\")\nbuilder.add_edge(\"c\", \"d\")\nbuilder.add_edge(\"d\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0241"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0215"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Defer node execution: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0242"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0216"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Defer node execution: graph.invoke({\"aggregate\": []})",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0243"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0217"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Defer node execution: Adding \"A\" to []\nAdding \"B\" to ['A']\nAdding \"C\" to ['A']\nAdding \"B_2\" to ['A', 'B', 'C']\nAdding \"D\" to ['A', 'B', 'C', 'B_2']",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0244"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0218"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Defer node execution: In the above example, nodes \"b\" and \"c\" are executed concurrently in the same superstep. We set defer=True on node d so it will not execute until all pending tasks are finished. In this case, this means that \"d\" waits to execute until the entire \"b\" branch is finished.",
+    "dom_ids": [
+      "defer-node-execution",
+      "readar-node-0245"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0219"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Conditional branching: If your fan-out should vary at runtime based on the state, you can use add_conditional_edges to select one or more paths using the graph state. See example below, where node a generates a state update that determines the following node.",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0247"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0220"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Conditional branching: import operator\nfrom typing import Annotated, Literal, Sequence\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    aggregate: Annotated[list, operator.add]\n    # Add a key to the state. We will set this key to determine\n    # how we branch.\n    which: str\n\ndef a(state: State):\n    print(f'Adding \"A\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"], \"which\": \"c\"}\n\ndef b(state: State):\n    print(f'Adding \"B\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n    print(f'Adding \"C\" to {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(c)\nbuilder.add_edge(START, \"a\")\nbuilder.add_edge(\"b\", END)\nbuilder.add_edge(\"c\", END)\n\ndef conditional_edge(state: State) -> Literal[\"b\", \"c\"]:\n    # Fill in arbitrary logic here that uses the state\n    # to determine the next node\n    return state[\"which\"]\n\nbuilder.add_conditional_edges(\"a\", conditional_edge)\n\ngraph = builder.compile()",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0248"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0221"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Conditional branching: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0249"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0222"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Conditional branching: result = graph.invoke({\"aggregate\": []})\nprint(result)",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0250"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0223"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Conditional branching: Adding \"A\" to []\nAdding \"C\" to ['A']\n{'aggregate': ['A', 'C'], 'which': 'c'}",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0251"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0224"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Conditional branching: Your conditional edges can route to multiple destination nodes. For example:",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0252"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0225"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Conditional branching: def route_bc_or_cd(state: State) -> Sequence[str]:\n    if state[\"which\"] == \"cd\":\n        return [\"c\", \"d\"]\n    return [\"b\", \"c\"]",
+    "dom_ids": [
+      "conditional-branching",
+      "readar-node-0253"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0226"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Map-Reduce and the send API: LangGraph supports map-reduce and other advanced branching patterns using the Send API. Here is an example of how to use it:",
+    "dom_ids": [
+      "map-reduce-and-the-send-api",
+      "readar-node-0255"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0227"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Map-Reduce and the send API: from langgraph.graph import StateGraph, START, END\nfrom langgraph.types import Send\nfrom typing_extensions import TypedDict, Annotated\nimport operator\n\nclass OverallState(TypedDict):\n    topic: str\n    subjects: list[str]\n    jokes: Annotated[list[str], operator.add]\n    best_selected_joke: str\n\ndef generate_topics(state: OverallState):\n    return {\"subjects\": [\"lions\", \"elephants\", \"penguins\"]}\n\ndef generate_joke(state: OverallState):\n    joke_map = {\n        \"lions\": \"Why don't lions like fast food? Because they can't catch it!\",\n        \"elephants\": \"Why don't elephants use computers? They're afraid of the mouse!\",\n        \"penguins\": \"Why don't penguins like talking to strangers at parties? Because they find it hard to break the ice.\"\n    }\n    return {\"jokes\": [joke_map[state[\"subject\"]]]}\n\ndef continue_to_jokes(state: OverallState):\n    return [Send(\"generate_joke\", {\"subject\": s}) for s in state[\"subjects\"]]\n\ndef best_joke(state: OverallState):\n    return {\"best_selected_joke\": \"penguins\"}\n\nbuilder = StateGraph(OverallState)\nbuilder.add_node(\"generate_topics\", generate_topics)\nbuilder.add_node(\"generate_joke\", generate_joke)\nbuilder.add_node(\"best_joke\", best_joke)\nbuilder.add_edge(START, \"generate_topics\")\nbuilder.add_conditional_edges(\"generate_topics\", continue_to_jokes, [\"generate_joke\"])\nbuilder.add_edge(\"generate_joke\", \"best_joke\")\nbuilder.add_edge(\"best_joke\", END)\ngraph = builder.compile()",
+    "dom_ids": [
+      "map-reduce-and-the-send-api",
+      "readar-node-0256"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0228"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Map-Reduce and the send API: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "map-reduce-and-the-send-api",
+      "readar-node-0257"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0229"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Map-Reduce and the send API: # Call the graph: here we call it to generate a list of jokes\nstream = graph.stream_events({\"topic\": \"animals\"}, version=\"v3\")\nfor message in stream.messages:\n    for token in message.text:\n        print(token, end=\"\", flush=True)",
+    "dom_ids": [
+      "map-reduce-and-the-send-api",
+      "readar-node-0258"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0230"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Map-Reduce and the send API: {'generate_topics': {'subjects': ['lions', 'elephants', 'penguins']}}\n{'generate_joke': {'jokes': [\"Why don't lions like fast food? Because they can't catch it!\"]}}\n{'generate_joke': {'jokes': [\"Why don't elephants use computers? They're afraid of the mouse!\"]}}\n{'generate_joke': {'jokes': ['Why don't penguins like talking to strangers at parties? Because they find it hard to break the ice.']}}\n{'best_joke': {'best_selected_joke': 'penguins'}}",
+    "dom_ids": [
+      "map-reduce-and-the-send-api",
+      "readar-node-0259"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0231"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: When creating a graph with a loop, we require a mechanism for terminating execution. This is most commonly done by adding a conditional edge that routes to the END node once we reach some termination condition.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0261"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0232"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: You can also set the graph recursion limit when invoking or streaming the graph. The recursion limit sets the number of super-steps that the graph is allowed to execute before it raises an error. Read more about the recursion limit concept .",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0262"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0233"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: Let’s consider a simple graph with a loop to better understand how these mechanisms work.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0263"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0234"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: To return the last value of your state instead of receiving a recursion limit error, see the next section .",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0264"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0235"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: When creating a loop, you can include a conditional edge that specifies a termination condition:",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0265"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0236"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: builder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\n\ndef route(state: State) -> Literal[\"b\", END]:\n    if termination_condition(state):\n        return END\n    else:\n        return \"b\"\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"a\")\ngraph = builder.compile()",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0266"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0237"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: To control the recursion limit, specify \"recursion_limit\" in the config. This will raise a GraphRecursionError , which you can catch and handle:",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0267"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0238"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: from langgraph.errors import GraphRecursionError\n\ntry:\n    graph.invoke(inputs, {\"recursion_limit\": 3})\nexcept GraphRecursionError:\n    print(\"Recursion Error\")",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0268"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0239"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: Let’s define a graph with a simple loop. Note that we use a conditional edge to implement a termination condition.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0269"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0240"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: import operator\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    # The operator.add reducer fn makes this append-only\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Node A sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Node B sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\n# Define nodes\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\n\n# Define edges\ndef route(state: State) -> Literal[\"b\", END]:\n    if len(state[\"aggregate\"]) < 7:\n        return \"b\"\n    else:\n        return END\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"a\")\ngraph = builder.compile()",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0270"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0241"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0271"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0242"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: This architecture is similar to a ReAct agent in which node \"a\" is a tool-calling model, and node \"b\" represents the tools.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0272"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0243"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: In our route conditional edge, we specify that we should end after the \"aggregate\" list in the state passes a threshold length.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0273"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0244"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Create and control loops: Invoking the graph, we see that we alternate between nodes \"a\" and \"b\" before terminating once we reach the termination condition.",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0274"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0245"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: graph.invoke({\"aggregate\": []})",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0275"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0246"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Create and control loops: Node A sees []\nNode B sees ['A']\nNode A sees ['A', 'B']\nNode B sees ['A', 'B', 'A']\nNode A sees ['A', 'B', 'A', 'B']\nNode B sees ['A', 'B', 'A', 'B', 'A']\nNode A sees ['A', 'B', 'A', 'B', 'A', 'B']",
+    "dom_ids": [
+      "create-and-control-loops",
+      "readar-node-0276"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0247"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: In some applications, we may not have a guarantee that we will reach a given termination condition. In these cases, we can set the graph’s recursion limit . This will raise a GraphRecursionError after a given number of supersteps . We can then catch and handle this exception:",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0278"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0248"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: from langgraph.errors import GraphRecursionError\n\ntry:\n    graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\nexcept GraphRecursionError:\n    print(\"Recursion Error\")",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0279"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0249"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: Node A sees []\nNode B sees ['A']\nNode C sees ['A', 'B']\nNode D sees ['A', 'B']\nNode A sees ['A', 'B', 'C', 'D']\nRecursion Error",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0280"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0250"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: Extended example: return state on hitting recursion limit",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "extended-example-return-state-on-hitting-recursion-limit-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0251"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: Instead of raising GraphRecursionError , we can introduce a new key to the state that keeps track of the number of steps remaining until reaching the recursion limit. We can then use this key to determine if we should end the run.",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0282"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0252"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: LangGraph implements a special RemainingSteps annotation. Under the hood, it creates a ManagedValue channel — a state channel that will exist for the duration of our graph run and no longer.",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0283"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0253"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: import operator\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.managed.is_last_step import RemainingSteps\n\nclass State(TypedDict):\n    aggregate: Annotated[list, operator.add]\n    remaining_steps: RemainingSteps\n\ndef a(state: State):\n    print(f'Node A sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Node B sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\n# Define nodes\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\n\n# Define edges\ndef route(state: State) -> Literal[\"b\", END]:\n    if state[\"remaining_steps\"] <= 2:\n        return END\n    else:\n        return \"b\"\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"a\")\ngraph = builder.compile()\n\n# Test it out\nresult = graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\nprint(result)",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0284"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0254"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: Node A sees []\nNode B sees ['A']\nNode A sees ['A', 'B']\n{'aggregate': ['A', 'B', 'A']}",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0285"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0255"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: Extended example: loops with branches",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "extended-example-loops-with-branches-accordion-title"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0256"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: To better understand how the recursion limit works, let’s consider a more complex example. Below we implement a loop, but one step fans out into two nodes:",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0287"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0257"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: import operator\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\n\nclass State(TypedDict):\n    aggregate: Annotated[list, operator.add]\n\ndef a(state: State):\n    print(f'Node A sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"A\"]}\n\ndef b(state: State):\n    print(f'Node B sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"B\"]}\n\ndef c(state: State):\n    print(f'Node C sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"C\"]}\n\ndef d(state: State):\n    print(f'Node D sees {state[\"aggregate\"]}')\n    return {\"aggregate\": [\"D\"]}\n\n# Define nodes\nbuilder = StateGraph(State)\nbuilder.add_node(a)\nbuilder.add_node(b)\nbuilder.add_node(c)\nbuilder.add_node(d)\n\n# Define edges\ndef route(state: State) -> Literal[\"b\", END]:\n    if len(state[\"aggregate\"]) < 7:\n        return \"b\"\n    else:\n        return END\n\nbuilder.add_edge(START, \"a\")\nbuilder.add_conditional_edges(\"a\", route)\nbuilder.add_edge(\"b\", \"c\")\nbuilder.add_edge(\"b\", \"d\")\nbuilder.add_edge([\"c\", \"d\"], \"a\")\ngraph = builder.compile()",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0288"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0258"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: from IPython.display import Image, display\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0289"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0259"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: This graph looks complex, but can be conceptualized as loop of supersteps :",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0290"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0260"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Impose a recursion limit: - Node A - Node B - Nodes C and D - Node A",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0291"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0261"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: We have a loop of four supersteps, where nodes C and D are executed concurrently.",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0292"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0262"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: Invoking the graph as before, we see that we complete two full “laps” before hitting the termination condition:",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0293"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0263"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: result = graph.invoke({\"aggregate\": []})",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0294"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0264"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: Node A sees []\nNode B sees ['A']\nNode D sees ['A', 'B']\nNode C sees ['A', 'B']\nNode A sees ['A', 'B', 'C', 'D']\nNode B sees ['A', 'B', 'C', 'D', 'A']\nNode D sees ['A', 'B', 'C', 'D', 'A', 'B']\nNode C sees ['A', 'B', 'C', 'D', 'A', 'B']\nNode A sees ['A', 'B', 'C', 'D', 'A', 'B', 'C', 'D']",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0295"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0265"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Impose a recursion limit: However, if we set the recursion limit to four, we only complete one lap because each lap is four supersteps:",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0296"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0266"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: from langgraph.errors import GraphRecursionError\n\ntry:\n    result = graph.invoke({\"aggregate\": []}, {\"recursion_limit\": 4})\nexcept GraphRecursionError:\n    print(\"Recursion Error\")",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0297"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0267"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Impose a recursion limit: Node A sees []\nNode B sees ['A']\nNode C sees ['A', 'B']\nNode D sees ['A', 'B']\nNode A sees ['A', 'B', 'C', 'D']\nRecursion Error",
+    "dom_ids": [
+      "impose-a-recursion-limit",
+      "readar-node-0298"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0268"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: Using the async programming paradigm can produce significant performance improvements when running IO-bound code concurrently (e.g., making concurrent API requests to a chat model provider).",
+    "dom_ids": [
+      "async",
+      "readar-node-0300"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0269"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: To convert a sync implementation of the graph to an async implementation, you will need to:",
+    "dom_ids": [
+      "async",
+      "readar-node-0301"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0270"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Async: - Update nodes use async def instead of def . - Update the code inside to use await appropriately. - Invoke the graph with .ainvoke or .astream as desired.",
+    "dom_ids": [
+      "async",
+      "readar-node-0302"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0271"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: Because many LangChain objects implement the Runnable Protocol which has async variants of all the sync methods it’s typically fairly quick to upgrade a sync graph to an async graph.",
+    "dom_ids": [
+      "async",
+      "readar-node-0303"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0272"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: See example below. To demonstrate async invocations of underlying LLMs, we will include a chat model:",
+    "dom_ids": [
+      "async",
+      "readar-node-0304"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0273"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Async: - OpenAI - Anthropic - Azure - Google Gemini - AWS Bedrock - HuggingFace - OpenRouter",
+    "dom_ids": [
+      "async",
+      "readar-node-0305"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0274"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the OpenAI chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0306"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0275"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[openai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0307"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0276"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[openai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0308"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0277"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"OPENAI_API_KEY\"] = \"sk-...\"\n\nmodel = init_chat_model(\"gpt-5.5\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0309"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0278"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_openai import ChatOpenAI\n\nos.environ[\"OPENAI_API_KEY\"] = \"sk-...\"\n\nmodel = ChatOpenAI(model=\"gpt-5.5\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0310"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0279"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the Anthropic chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0311"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0280"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[anthropic]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0312"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0281"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[anthropic]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0313"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0282"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"ANTHROPIC_API_KEY\"] = \"sk-...\"\n\nmodel = init_chat_model(\"claude-sonnet-4-6\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0314"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0283"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_anthropic import ChatAnthropic\n\nos.environ[\"ANTHROPIC_API_KEY\"] = \"sk-...\"\n\nmodel = ChatAnthropic(model=\"claude-sonnet-4-6\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0315"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0284"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the Azure chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0316"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0285"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[openai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0317"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0286"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[openai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0318"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0287"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"...\"\nos.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"...\"\nos.environ[\"OPENAI_API_VERSION\"] = \"2025-03-01-preview\"\n\nmodel = init_chat_model(\n    \"azure_openai:gpt-5.5\",\n    azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"],\n)",
+    "dom_ids": [
+      "async",
+      "readar-node-0319"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0288"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_openai import AzureChatOpenAI\n\nos.environ[\"AZURE_OPENAI_API_KEY\"] = \"...\"\nos.environ[\"AZURE_OPENAI_ENDPOINT\"] = \"...\"\nos.environ[\"OPENAI_API_VERSION\"] = \"2025-03-01-preview\"\n\nmodel = AzureChatOpenAI(\n    model=\"gpt-5.5\",\n    azure_deployment=os.environ[\"AZURE_OPENAI_DEPLOYMENT_NAME\"]\n)",
+    "dom_ids": [
+      "async",
+      "readar-node-0320"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0289"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the Google GenAI chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0321"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0290"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[google-genai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0322"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0291"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[google-genai]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0323"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0292"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"GOOGLE_API_KEY\"] = \"...\"\n\nmodel = init_chat_model(\"google_genai:gemini-3.7-flash\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0324"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0293"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_google_genai import ChatGoogleGenerativeAI\n\nos.environ[\"GOOGLE_API_KEY\"] = \"...\"\n\nmodel = ChatGoogleGenerativeAI(model=\"gemini-3.7-flash\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0325"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0294"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the AWS Bedrock chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0326"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0295"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[aws]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0327"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0296"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[aws]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0328"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0297"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: from langchain.chat_models import init_chat_model\n\n# Follow the steps here to configure your credentials:\n# https://docs.aws.amazon.com/bedrock/latest/userguide/getting-started.html\n\nmodel = init_chat_model(\n    \"us.anthropic.claude-sonnet-4-6\",\n    model_provider=\"bedrock_converse\",\n)",
+    "dom_ids": [
+      "async",
+      "readar-node-0329"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0298"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: from langchain_aws import ChatBedrock\n\nmodel = ChatBedrock(model=\"us.anthropic.claude-sonnet-4-6\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0330"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0299"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the HuggingFace chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0331"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0300"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain[huggingface]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0332"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0301"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain[huggingface]\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0333"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0302"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"HUGGINGFACEHUB_API_TOKEN\"] = \"hf_...\"\n\nmodel = init_chat_model(\n    \"microsoft/Phi-3-mini-4k-instruct\",\n    model_provider=\"huggingface\",\n    temperature=0.7,\n    max_tokens=1024,\n)",
+    "dom_ids": [
+      "async",
+      "readar-node-0334"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0303"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint\n\nos.environ[\"HUGGINGFACEHUB_API_TOKEN\"] = \"hf_...\"\n\nllm = HuggingFaceEndpoint(\n    repo_id=\"microsoft/Phi-3-mini-4k-instruct\",\n    temperature=0.7,\n    max_length=1024,\n)\nmodel = ChatHuggingFace(llm=llm)",
+    "dom_ids": [
+      "async",
+      "readar-node-0335"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0304"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: 👉 Read the OpenRouter chat model integration docs",
+    "dom_ids": [
+      "async",
+      "readar-node-0336"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0305"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: pip install -U \"langchain-openrouter\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0337"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0306"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: uv add \"langchain-openrouter\"",
+    "dom_ids": [
+      "async",
+      "readar-node-0338"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0307"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain.chat_models import init_chat_model\n\nos.environ[\"OPENROUTER_API_KEY\"] = \"sk-...\"\n\nmodel = init_chat_model(\n    \"auto\",\n    model_provider=\"openrouter\",\n)",
+    "dom_ids": [
+      "async",
+      "readar-node-0339"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0308"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: import os\nfrom langchain_openrouter import ChatOpenRouter\n\nos.environ[\"OPENROUTER_API_KEY\"] = \"sk-...\"\n\nmodel = ChatOpenRouter(model=\"auto\")",
+    "dom_ids": [
+      "async",
+      "readar-node-0340"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0309"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Async: from langchain.chat_models import init_chat_model\nfrom langgraph.graph import MessagesState, StateGraph\n\nasync def node(state: MessagesState):\n    new_message = await llm.ainvoke(state[\"messages\"])\n    return {\"messages\": [new_message]}\n\nbuilder = StateGraph(MessagesState).add_node(node).set_entry_point(\"node\")\ngraph = builder.compile()\n\ninput_message = {\"role\": \"user\", \"content\": \"Hello\"}\nresult = await graph.ainvoke({\"messages\": [input_message]})",
+    "dom_ids": [
+      "async",
+      "readar-node-0341"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0310"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Async: Async streaming See the streaming guide for examples of streaming with async.",
+    "dom_ids": [
+      "async",
+      "readar-node-0342"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0311"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: It can be useful to combine control flow (edges) and state updates (nodes). For example, you might want to BOTH perform state updates AND decide which node to go to next in the SAME node. LangGraph provides a way to do so by returning a Command object from node functions:",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0344"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0312"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: def my_node(state: State) -> Command[Literal[\"my_other_node\"]]:\n    return Command(\n        # state update\n        update={\"foo\": \"bar\"},\n        # control flow\n        goto=\"my_other_node\"\n    )",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0345"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0313"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: We show an end-to-end example below. Let’s create a simple graph with 3 nodes: A, B and C. We will first execute node A, and then decide whether to go to Node B or Node C next based on the output of node A.",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0346"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0314"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: import random\nfrom typing_extensions import TypedDict, Literal\nfrom langgraph.graph import StateGraph, START\nfrom langgraph.types import Command\n\n# Define graph state\nclass State(TypedDict):\n    foo: str\n\n# Define the nodes\n\ndef node_a(state: State) -> Command[Literal[\"node_b\", \"node_c\"]]:\n    print(\"Called A\")\n    value = random.choice([\"b\", \"c\"])\n    # this is a replacement for a conditional edge function\n    if value == \"b\":\n        goto = \"node_b\"\n    else:\n        goto = \"node_c\"\n\n    # note how Command allows you to BOTH update the graph state AND route to the next node\n    return Command(\n        # this is the state update\n        update={\"foo\": value},\n        # this is a replacement for an edge\n        goto=goto,\n    )\n\ndef node_b(state: State):\n    print(\"Called B\")\n    return {\"foo\": state[\"foo\"] + \"b\"}\n\ndef node_c(state: State):\n    print(\"Called C\")\n    return {\"foo\": state[\"foo\"] + \"c\"}",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0347"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0315"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: We can now create the StateGraph with the above nodes. Notice that the graph doesn’t have conditional edges for routing! This is because control flow is defined with Command inside node_a .",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0348"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0316"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: builder = StateGraph(State)\nbuilder.add_edge(START, \"node_a\")\nbuilder.add_node(node_a)\nbuilder.add_node(node_b)\nbuilder.add_node(node_c)\n# NOTE: there are no edges between nodes A, B and C!\n\ngraph = builder.compile()",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0349"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0317"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: You might have noticed that we used Command as a return type annotation, e.g. Command[Literal[\"node_b\", \"node_c\"]] . This is necessary for the graph rendering and tells LangGraph that node_a can navigate to node_b and node_c .",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0350"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0318"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: from IPython.display import display, Image\n\ndisplay(Image(graph.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0351"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0319"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: If we run the graph multiple times, we’d see it take different paths (A -> B or A -> C) based on the random choice in node A.",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0352"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0320"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: graph.invoke({\"foo\": \"\"})",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0353"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0321"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Combine control flow and state updates with Command: Called A\nCalled C",
+    "dom_ids": [
+      "combine-control-flow-and-state-updates-with-command",
+      "readar-node-0354"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0322"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: If you are using subgraphs , you might want to navigate from a node within a subgraph to a different subgraph (i.e. a different node in the parent graph). To do so, you can specify graph=Command.PARENT in Command :",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0356"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0323"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: def my_node(state: State) -> Command[Literal[\"other_subgraph\"]]:\n    return Command(\n        update={\"foo\": \"bar\"},\n        goto=\"other_subgraph\",  # where `other_subgraph` is a node in the parent graph\n        graph=Command.PARENT\n    )",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0357"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0324"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: Let’s demonstrate this using the above example. We’ll do so by changing nodeA in the above example into a single-node graph that we’ll add as a subgraph to our parent graph.",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0358"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0325"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: State updates with Command.PARENT When you send updates from a subgraph node to a parent graph node for a key that’s shared by both parent and subgraph state schemas , you must define a reducer for the key you’re updating in the parent graph state. See the example below.",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0359"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0326"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: import operator\nfrom typing_extensions import Annotated\n\nclass State(TypedDict):\n    # NOTE: we define a reducer here\n    foo: Annotated[str, operator.add]\n\ndef node_a(state: State):\n    print(\"Called A\")\n    value = random.choice([\"a\", \"b\"])\n    # this is a replacement for a conditional edge function\n    if value == \"a\":\n        goto = \"node_b\"\n    else:\n        goto = \"node_c\"\n\n    # note how Command allows you to BOTH update the graph state AND route to the next node\n    return Command(\n        update={\"foo\": value},\n        goto=goto,\n        # this tells LangGraph to navigate to node_b or node_c in the parent graph\n        # NOTE: this will navigate to the closest parent graph relative to the subgraph\n        graph=Command.PARENT,\n    )\n\nsubgraph = StateGraph(State).add_node(node_a).add_edge(START, \"node_a\").compile()\n\ndef node_b(state: State):\n    print(\"Called B\")\n    # NOTE: since we've defined a reducer, we don't need to manually append\n    # new characters to existing 'foo' value. instead, reducer will append these\n    # automatically (via operator.add)\n    return {\"foo\": \"b\"}\n\ndef node_c(state: State):\n    print(\"Called C\")\n    return {\"foo\": \"c\"}\n\nbuilder = StateGraph(State)\nbuilder.add_edge(START, \"subgraph\")\nbuilder.add_node(\"subgraph\", subgraph)\nbuilder.add_node(node_b)\nbuilder.add_node(node_c)\n\ngraph = builder.compile()",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0360"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0327"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: graph.invoke({\"foo\": \"\"})",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0361"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0328"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Navigate to a node in a parent graph: Called A\nCalled C",
+    "dom_ids": [
+      "navigate-to-a-node-in-a-parent-graph",
+      "readar-node-0362"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0329"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use inside tools: A common use case is updating graph state from inside a tool. For example, in a customer support application you might want to look up customer information based on their account number or ID in the beginning of the conversation. To update the graph state from the tool, you can return Command(update={\"my_custom_key\": \"foo\", \"messages\": [...]}) from the tool:",
+    "dom_ids": [
+      "use-inside-tools",
+      "readar-node-0364"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0330"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Use inside tools: from langchain.tools import ToolRuntime\n\n@tool\ndef lookup_user_info(runtime: ToolRuntime):\n    \"\"\"Use this to look up user information to better assist them with their questions.\"\"\"\n    user_info = get_user_info(runtime.server_info.user.identity)\n    return Command(\n        update={\n            # update the state keys\n            \"user_info\": user_info,\n            # update the message history\n            \"messages\": [ToolMessage(\"Successfully looked up user information\", tool_call_id=runtime.tool_call_id)]\n        }\n    )",
+    "dom_ids": [
+      "use-inside-tools",
+      "readar-node-0365"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0331"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use inside tools: You MUST include messages (or any state key used for the message history) in Command.update when returning Command from a tool and the list of messages in messages MUST contain a ToolMessage . This is necessary for the resulting message history to be valid (LLM providers require AI messages with tool calls to be followed by the tool result messages).",
+    "dom_ids": [
+      "use-inside-tools",
+      "readar-node-0366"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0332"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Use inside tools: If you are using tools that update state via Command , we recommend using prebuilt ToolNode which automatically handles tools returning Command objects and propagates them to the graph state. If you’re writing a custom node that calls tools, you would need to manually propagate Command objects returned by the tools as the update from the node.",
+    "dom_ids": [
+      "use-inside-tools",
+      "readar-node-0367"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0333"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Visualize your graph: Here we demonstrate how to visualize the graphs you create.",
+    "dom_ids": [
+      "visualize-your-graph",
+      "readar-node-0369"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0334"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Visualize your graph: You can visualize any arbitrary Graph , including StateGraph .",
+    "dom_ids": [
+      "visualize-your-graph",
+      "readar-node-0370"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0335"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Visualize your graph: Let’s have some fun by drawing fractals :).",
+    "dom_ids": [
+      "visualize-your-graph",
+      "readar-node-0371"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0336"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Visualize your graph: import random\nfrom typing import Annotated, Literal\nfrom typing_extensions import TypedDict\nfrom langgraph.graph import StateGraph, START, END\nfrom langgraph.graph.message import add_messages\n\nclass State(TypedDict):\n    messages: Annotated[list, add_messages]\n\nclass MyNode:\n    def __init__(self, name: str):\n        self.name = name\n    def __call__(self, state: State):\n        return {\"messages\": [(\"assistant\", f\"Called node {self.name}\")]}\n\ndef route(state) -> Literal[\"entry_node\", END]:\n    if len(state[\"messages\"]) > 10:\n        return END\n    return \"entry_node\"\n\ndef add_fractal_nodes(builder, current_node, level, max_level):\n    if level > max_level:\n        return\n    # Number of nodes to create at this level\n    num_nodes = random.randint(1, 3)  # Adjust randomness as needed\n    for i in range(num_nodes):\n        nm = [\"A\", \"B\", \"C\"][i]\n        node_name = f\"node_{current_node}_{nm}\"\n        builder.add_node(node_name, MyNode(node_name))\n        builder.add_edge(current_node, node_name)\n        # Recursively add more nodes\n        r = random.random()\n        if r > 0.2 and level + 1 < max_level:\n            add_fractal_nodes(builder, node_name, level + 1, max_level)\n        elif r > 0.05:\n            builder.add_conditional_edges(node_name, route, node_name)\n        else:\n            # End\n            builder.add_edge(node_name, END)\n\ndef build_fractal_graph(max_level: int):\n    builder = StateGraph(State)\n    entry_point = \"entry_node\"\n    builder.add_node(entry_point, MyNode(entry_point))\n    builder.add_edge(START, entry_point)\n    add_fractal_nodes(builder, entry_point, 1, max_level)\n    # Optional: set a finish point if required\n    builder.add_edge(entry_point, END)  # or any specific node\n    return builder.compile()\n\napp = build_fractal_graph(3)",
+    "dom_ids": [
+      "visualize-your-graph",
+      "readar-node-0372"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0337"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: We can also convert a graph class into Mermaid syntax.",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0374"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0338"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Mermaid: print(app.get_graph().draw_mermaid())",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0375"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0339"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Mermaid: %%{init: {'flowchart': {'curve': 'linear'}}}%%\ngraph TD;\n    tart__([<p>__start__</p>]):::first\n    ry_node(entry_node)\n    e_entry_node_A(node_entry_node_A)\n    e_entry_node_B(node_entry_node_B)\n    e_node_entry_node_B_A(node_node_entry_node_B_A)\n    e_node_entry_node_B_B(node_node_entry_node_B_B)\n    e_node_entry_node_B_C(node_node_entry_node_B_C)\n    nd__([<p>__end__</p>]):::last\n    tart__ --> entry_node;\n    ry_node --> __end__;\n    ry_node --> node_entry_node_A;\n    ry_node --> node_entry_node_B;\n    e_entry_node_B --> node_node_entry_node_B_A;\n    e_entry_node_B --> node_node_entry_node_B_B;\n    e_entry_node_B --> node_node_entry_node_B_C;\n    e_entry_node_A -.-> entry_node;\n    e_entry_node_A -.-> __end__;\n    e_node_entry_node_B_A -.-> entry_node;\n    e_node_entry_node_B_A -.-> __end__;\n    e_node_entry_node_B_B -.-> entry_node;\n    e_node_entry_node_B_B -.-> __end__;\n    e_node_entry_node_B_C -.-> entry_node;\n    e_node_entry_node_B_C -.-> __end__;\n    ssDef default fill:#f2f0ff,line-height:1.2\n    ssDef first fill-opacity:0\n    ssDef last fill:#bfb6fc",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0376"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0340"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: If preferred, we could render the Graph into a .png . Here we could use three options:",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0377"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0341"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Mermaid: - Using Mermaid.ink API (does not require additional packages) - Using Mermaid + Pyppeteer (requires pip install pyppeteer ) - Using graphviz (which requires pip install graphviz )",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0378"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0342"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: Using Mermaid.Ink",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0379"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0343"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: By default, draw_mermaid_png() uses Mermaid.Ink’s API to generate the diagram.",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0380"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0344"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Mermaid: from IPython.display import Image, display\nfrom langchain_core.runnables.graph import CurveStyle, MermaidDrawMethod, NodeStyles\n\ndisplay(Image(app.get_graph().draw_mermaid_png()))",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0381"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0345"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: Using Mermaid + Pyppeteer",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0382"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0346"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Mermaid: import nest_asyncio\n\nnest_asyncio.apply()  # Required for Jupyter Notebook to run async functions\n\ndisplay(\n    Image(\n        app.get_graph().draw_mermaid_png(\n            curve_style=CurveStyle.LINEAR,\n            node_colors=NodeStyles(first=\"#ffdfba\", last=\"#baffc9\", default=\"#fad7de\"),\n            wrap_label_n_words=9,\n            output_file_path=None,\n            draw_method=MermaidDrawMethod.PYPPETEER,\n            background_color=\"white\",\n            padding=10,\n        )\n    )\n)",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0383"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0347"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Mermaid: Using Graphviz",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0384"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0348"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Mermaid: try:\n    display(Image(app.get_graph().draw_png()))\nexcept ImportError:\n    print(\n        \"You likely need to install dependencies for pygraphviz, see more here https://github.com/pygraphviz/pygraphviz/blob/main/INSTALL.txt\"\n    )",
+    "dom_ids": [
+      "mermaid",
+      "readar-node-0385"
+    ],
+    "merge": "heading_fold",
+    "chapter": "use-graph-api",
+    "id": "use-graph-api__node_0349"
+  }
+]

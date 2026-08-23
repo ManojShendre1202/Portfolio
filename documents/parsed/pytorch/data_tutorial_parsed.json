@@ -1,0 +1,338 @@
+[
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Datasets & DataLoaders: Created On: Feb 09, 2021 | Last Updated: May 07, 2026 | Last Verified: Nov 05, 2024",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0002"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0001"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Datasets & DataLoaders: Code for processing data samples can get messy and hard to maintain; we ideally want our dataset code to be decoupled from our model training code for better readability and modularity. PyTorch provides two data primitives: torch.utils.data.DataLoader and torch.utils.data.Dataset that allow you to use pre-loaded datasets as well as your own data. Dataset stores the samples and their corresponding labels, and DataLoader wraps an iterable around the Dataset to enable easy access to the samples.",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0003"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0002"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Datasets & DataLoaders: PyTorch domain libraries provide a number of pre-loaded datasets (such as FashionMNIST) that subclass torch.utils.data.Dataset and implement functions specific to the particular data. They can be used to prototype and benchmark your model. You can find them here: Image Datasets , Text Datasets , and Audio Datasets",
+    "dom_ids": [
+      "readar-node-0001",
+      "readar-node-0004"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0003"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Loading a Dataset: Here is an example of how to load the Fashion-MNIST dataset from TorchVision. Fashion-MNIST is a dataset of Zalando’s article images consisting of 60,000 training examples and 10,000 test examples. Each example comprises a 28×28 grayscale image and an associated label from one of 10 classes.",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0006"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0004"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Loading a Dataset: - root is the path where the train/test data is stored, - train specifies training or test dataset, - download=True downloads the data from the internet if it’s not available at root . - transform and target_transform specify the feature and label transformations",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0007"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0005"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading a Dataset: import torch\nfrom torch.utils.data import Dataset\nfrom torchvision import datasets\nfrom torchvision.transforms import v2\nimport matplotlib.pyplot as plt\n\n\ntraining_data = datasets.FashionMNIST(\n    root=\"data\",\n    train=True,\n    download=True,\n    transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)])\n)\n\ntest_data = datasets.FashionMNIST(\n    root=\"data\",\n    train=False,\n    download=True,\n    transform=v2.Compose([v2.ToImage(), v2.ToDtype(torch.float32, scale=True)])\n)",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0008"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0006"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Loading a Dataset:   0%|          | 0.00/26.4M [00:00<?, ?B/s]\n  0%|          | 65.5k/26.4M [00:00<01:10, 375kB/s]\n  1%|          | 229k/26.4M [00:00<00:37, 704kB/s]\n  3%|▎         | 918k/26.4M [00:00<00:11, 2.17MB/s]\n 14%|█▍        | 3.67M/26.4M [00:00<00:03, 7.50MB/s]\n 36%|███▌      | 9.54M/26.4M [00:00<00:00, 19.8MB/s]\n 48%|████▊     | 12.7M/26.4M [00:00<00:00, 19.9MB/s]\n 70%|███████   | 18.6M/26.4M [00:01<00:00, 28.9MB/s]\n 83%|████████▎ | 22.0M/26.4M [00:01<00:00, 26.3MB/s]\n100%|██████████| 26.4M/26.4M [00:01<00:00, 19.9MB/s]\n\n  0%|          | 0.00/29.5k [00:00<?, ?B/s]\n100%|██████████| 29.5k/29.5k [00:00<00:00, 336kB/s]\n\n  0%|          | 0.00/4.42M [00:00<?, ?B/s]\n  1%|▏         | 65.5k/4.42M [00:00<00:11, 372kB/s]\n  4%|▎         | 164k/4.42M [00:00<00:08, 482kB/s]\n 16%|█▌        | 688k/4.42M [00:00<00:02, 1.62MB/s]\n 62%|██████▏   | 2.75M/4.42M [00:00<00:00, 5.61MB/s]\n100%|██████████| 4.42M/4.42M [00:00<00:00, 6.25MB/s]\n\n  0%|          | 0.00/5.15k [00:00<?, ?B/s]\n100%|██████████| 5.15k/5.15k [00:00<00:00, 32.4MB/s]",
+    "dom_ids": [
+      "readar-node-0005",
+      "readar-node-0009"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0007"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Iterating and Visualizing the Dataset: We can index Datasets manually like a list: training_data[index] . We use matplotlib to visualize some samples in our training data.",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0011"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0008"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Iterating and Visualizing the Dataset: labels_map = {\n    0: \"T-Shirt\",\n    1: \"Trouser\",\n    2: \"Pullover\",\n    3: \"Dress\",\n    4: \"Coat\",\n    5: \"Sandal\",\n    6: \"Shirt\",\n    7: \"Sneaker\",\n    8: \"Bag\",\n    9: \"Ankle Boot\",\n}\nfigure = plt.figure(figsize=(8, 8))\ncols, rows = 3, 3\nfor i in range(1, cols * rows + 1):\n    sample_idx = torch.randint(len(training_data), size=(1,)).item()\n    img, label = training_data[sample_idx]\n    figure.add_subplot(rows, cols, i)\n    plt.title(labels_map[label])\n    plt.axis(\"off\")\n    plt.imshow(img.squeeze(), cmap=\"gray\")\nplt.show()",
+    "dom_ids": [
+      "readar-node-0010",
+      "readar-node-0012"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0009"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating a Custom Dataset for your files: A custom Dataset class must implement three functions: __init__ , __len__ , and __getitem__ . Take a look at this implementation; the FashionMNIST images are stored in a directory img_dir , and their labels are stored separately in a CSV file annotations_file .",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0014"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0010"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Creating a Custom Dataset for your files: In the next sections, we’ll break down what’s happening in each of these functions.",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0015"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0011"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Creating a Custom Dataset for your files: import os\nimport pandas as pd\nfrom torchvision.io import decode_image\n\nclass CustomImageDataset(Dataset):\n    def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):\n        self.img_labels = pd.read_csv(annotations_file)\n        self.img_dir = img_dir\n        self.transform = transform\n        self.target_transform = target_transform\n\n    def __len__(self):\n        return len(self.img_labels)\n\n    def __getitem__(self, idx):\n        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])\n        image = decode_image(img_path)\n        label = self.img_labels.iloc[idx, 1]\n        if self.transform:\n            image = self.transform(image)\n        if self.target_transform:\n            label = self.target_transform(label)\n        return image, label",
+    "dom_ids": [
+      "readar-node-0013",
+      "readar-node-0016"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0012"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "__init__: The __init__ function is run once when instantiating the Dataset object. We initialize the directory containing the images, the annotations file, and both transforms (covered in more detail in the next section).",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0018"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0013"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "__init__: The labels.csv file looks like:",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0019"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0014"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "__init__: tshirt1.jpg, 0\ntshirt2.jpg, 0\n......\nankleboot999.jpg, 9",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0020"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0015"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "__init__: def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):\n    self.img_labels = pd.read_csv(annotations_file)\n    self.img_dir = img_dir\n    self.transform = transform\n    self.target_transform = target_transform",
+    "dom_ids": [
+      "readar-node-0017",
+      "readar-node-0021"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0016"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "__len__: The __len__ function returns the number of samples in our dataset.",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0023"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0017"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "__len__: Example:",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0024"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0018"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "__len__: def __len__(self):\n    return len(self.img_labels)",
+    "dom_ids": [
+      "readar-node-0022",
+      "readar-node-0025"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0019"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "__getitem__: The __getitem__ function loads and returns a sample from the dataset at the given index idx . Based on the index, it identifies the image’s location on disk, converts that to a tensor using decode_image , retrieves the corresponding label from the csv data in self.img_labels , calls the transform functions on them (if applicable), and returns the tensor image and corresponding label in a tuple.",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0027"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0020"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "__getitem__: def __getitem__(self, idx):\n    img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])\n    image = decode_image(img_path)\n    label = self.img_labels.iloc[idx, 1]\n    if self.transform:\n        image = self.transform(image)\n    if self.target_transform:\n        label = self.target_transform(label)\n    return image, label",
+    "dom_ids": [
+      "readar-node-0026",
+      "readar-node-0028"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0021"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Preparing your data for training with DataLoaders: The Dataset retrieves our dataset’s features and labels one sample at a time. While training a model, we typically want to pass samples in “minibatches”, reshuffle the data at every epoch to reduce model overfitting, and use Python’s multiprocessing to speed up data retrieval.",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0030"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0022"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Preparing your data for training with DataLoaders: DataLoader is an iterable that abstracts this complexity for us in an easy API.",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0031"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0023"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Preparing your data for training with DataLoaders: from torch.utils.data import DataLoader\n\ntrain_dataloader = DataLoader(training_data, batch_size=64, shuffle=True)\ntest_dataloader = DataLoader(test_data, batch_size=64, shuffle=True)",
+    "dom_ids": [
+      "readar-node-0029",
+      "readar-node-0032"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0024"
+  },
+  {
+    "type": "paragraph",
+    "level": null,
+    "text": "Iterate through the DataLoader: We have loaded that dataset into the DataLoader and can iterate through the dataset as needed. Each iteration below returns a batch of train_features and train_labels (containing batch_size=64 features and labels respectively). Because we specified shuffle=True , after we iterate over all batches the data is shuffled (for finer-grained control over the data loading order, take a look at Samplers ).",
+    "dom_ids": [
+      "readar-node-0033",
+      "readar-node-0034"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0025"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Iterate through the DataLoader: # Display image and label.\ntrain_features, train_labels = next(iter(train_dataloader))\nprint(f\"Feature batch shape: {train_features.size()}\")\nprint(f\"Labels batch shape: {train_labels.size()}\")\nimg = train_features[0].squeeze()\nlabel = train_labels[0]\nplt.imshow(img, cmap=\"gray\")\nplt.show()\nprint(f\"Label: {label}\")",
+    "dom_ids": [
+      "readar-node-0033",
+      "readar-node-0035"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0026"
+  },
+  {
+    "type": "code",
+    "level": null,
+    "text": "Iterate through the DataLoader: Feature batch shape: torch.Size([64, 1, 28, 28])\nLabels batch shape: torch.Size([64])\nLabel: 1",
+    "dom_ids": [
+      "readar-node-0033",
+      "readar-node-0036"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0027"
+  },
+  {
+    "type": "list",
+    "level": null,
+    "text": "Further Reading: - torch.utils.data API",
+    "dom_ids": [
+      "readar-node-0037",
+      "readar-node-0038"
+    ],
+    "merge": "heading_fold",
+    "chapter": "data_tutorial",
+    "id": "data_tutorial__node_0028"
+  }
+]

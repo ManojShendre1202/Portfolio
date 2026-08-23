@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 1.2. Architectural Fundamentals</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-arch.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="1.2. Architectural Fundamentals" property="og:title"/>
+<meta content="1.2.&amp;nbsp;Architectural Fundamentals # Before we proceed, you should understand the basic PostgreSQL system architecture. Understanding how the parts of PostgreSQL …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-arch.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-arch.html" title="PostgreSQL 18 - 1.2. Architectural Fundamentals">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-arch.html" title="PostgreSQL 18 - 1.2. Architectural Fundamentals">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-arch.html" title="PostgreSQL 17 - 1.2. Architectural Fundamentals">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-arch.html" title="PostgreSQL 16 - 1.2. Architectural Fundamentals">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-arch.html" title="PostgreSQL 15 - 1.2. Architectural Fundamentals">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-arch.html" title="PostgreSQL 14 - 1.2. Architectural Fundamentals">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-arch.html" rel="nofollow" title="PostgreSQL 19 - 1.2. Architectural Fundamentals">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-arch.html" rel="nofollow" title="PostgreSQL devel - 1.2. Architectural Fundamentals">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-arch.html" rel="nofollow" title="PostgreSQL 13 - 1.2. Architectural Fundamentals">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-arch.html" rel="nofollow" title="PostgreSQL 12 - 1.2. Architectural Fundamentals">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-arch.html" rel="nofollow" title="PostgreSQL 11 - 1.2. Architectural Fundamentals">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-arch.html" rel="nofollow" title="PostgreSQL 10 - 1.2. Architectural Fundamentals">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.6 - 1.2. Architectural Fundamentals">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.5 - 1.2. Architectural Fundamentals">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.4 - 1.2. Architectural Fundamentals">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.3 - 1.2. Architectural Fundamentals">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.2 - 1.2. Architectural Fundamentals">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.1 - 1.2. Architectural Fundamentals">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-arch.html" rel="nofollow" title="PostgreSQL 9.0 - 1.2. Architectural Fundamentals">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-arch.html" rel="nofollow" title="PostgreSQL 8.4 - 1.2. Architectural Fundamentals">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-arch.html" rel="nofollow" title="PostgreSQL 8.3 - 1.2. Architectural Fundamentals">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-arch.html" rel="nofollow" title="PostgreSQL 8.2 - 1.2. Architectural Fundamentals">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-arch.html" rel="nofollow" title="PostgreSQL 8.1 - 1.2. Architectural Fundamentals">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-arch.html" rel="nofollow" title="PostgreSQL 8.0 - 1.2. Architectural Fundamentals">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-arch.html" rel="nofollow" title="PostgreSQL 7.4 - 1.2. Architectural Fundamentals">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-arch.html" rel="nofollow" title="PostgreSQL 7.3 - 1.2. Architectural Fundamentals">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-arch.html" rel="nofollow" title="PostgreSQL 7.2 - 1.2. Architectural Fundamentals">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-ARCH">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">1.2. Architectural Fundamentals </h2>
+</div>
+</div>
+</div>
+<p id="readar-node-0002">Before we proceed, you should understand the basic <span class="productname">PostgreSQL</span> system architecture. Understanding how the parts of <span class="productname">PostgreSQL</span> interact will make this chapter somewhat clearer.</p>
+<p id="readar-node-0003">In database jargon, <span class="productname">PostgreSQL</span> uses a client/server model. A <span class="productname">PostgreSQL</span> session consists of the following cooperating processes (programs):</p>
+<div class="itemizedlist">
+<ul class="itemizedlist" id="readar-node-0004" style="list-style-type: disc;">
+<li class="listitem">
+<p>A server process, which manages the database files, accepts connections to the database from client applications, and performs database actions on behalf of the clients. The database server program is called <code class="filename">postgres</code>. <a class="indexterm" id="id-1.4.3.3.3.3.1.1.2" name="id-1.4.3.3.3.3.1.1.2"></a></p>
+</li>
+<li class="listitem">
+<p>The user's client (frontend) application that wants to perform database operations. Client applications can be very diverse in nature: a client could be a text-oriented tool, a graphical application, a web server that accesses the database to display web pages, or a specialized database maintenance tool. Some client applications are supplied with the <span class="productname">PostgreSQL</span> distribution; most are developed by users.</p>
+</li>
+</ul>
+</div>
+<p id="readar-node-0005">As is typical of client/server applications, the client and the server can be on different hosts. In that case they communicate over a TCP/IP network connection. You should keep this in mind, because the files that can be accessed on a client machine might not be accessible (or might only be accessible using a different file name) on the database server machine.</p>
+<p id="readar-node-0006">The <span class="productname">PostgreSQL</span> server can handle multiple concurrent connections from clients. To achieve this it starts (<span class="quote">“<span class="quote">forks</span>”</span>) a new process for each connection. From that point on, the client and the new server process communicate without intervention by the original <code class="filename">postgres</code> process. Thus, the supervisor server process is always running, waiting for client connections, whereas client and associated server processes come and go. (All of this is of course invisible to the user. We only mention it here for completeness.)</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

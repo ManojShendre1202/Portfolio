@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>PostgreSQL: Documentation: 18: 2.4. Populating a Table With Rows</title>
+<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+<meta content="text/xhtml; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="#336791" name="theme-color"/>
+<meta content="The PostgreSQL Global Development Group" name="copyright"/>
+<meta content="https://www.postgresql.org/docs/18/tutorial-populate.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="2026-08-13T12:52:54.741344" property="article:published_time"/>
+<meta content="https://www.postgresql.org/media/img/about/press/elephant.png" property="og:image"/>
+<meta content="2.4. Populating a Table With Rows" property="og:title"/>
+<meta content="2.4.&amp;nbsp;Populating a Table With Rows # The INSERT statement is used to populate a table with rows: INSERT INTO weather …" property="og:description"/>
+<meta content="PostgreSQL Documentation" property="og:site_name"/>
+<link href="/media/css/fontawesome.css?53e61696" rel="stylesheet"/>
+<link href="/media/css/bootstrap-4.4.1.min.css" rel="stylesheet"/>
+<link href="/favicon.ico" rel="shortcut icon"/>
+<link href="/dyncss/base.css?53e61696" rel="stylesheet" type="text/css"/>
+
+<link href="https://www.postgresql.org/docs/current/tutorial-populate.html" rel="canonical"/>
+</head>
+<body>
+<div class="container-fluid">
+<div class="row justify-content-md-center">
+<div class="col">
+<!-- Header -->
+
+</div>
+</div>
+<div class="row justify-content-center pg-shout-box">
+<div class="col text-white text-center">August 13, 2026: <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">PostgreSQL 18.6, 17.11, 16.15, 15.19, 14.24 and 19 Beta 3 Released!</a>
+</div>
+</div>
+</div>
+<div class="container-fluid margin">
+<div class="row">
+<div class="col-11" id="pgContentWrap">
+<div class="row">
+<div class="col-md-6 mb-2">
+<div class="row">
+<div class="col">
+<div>
+<a href="/docs/" title="Documentation">Documentation</a> → <a href="/docs/18/index.html">PostgreSQL 18</a>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Supported Versions:
+                      
+                        
+                        
+                          <a class="docs-version-selected" href="/docs/current/tutorial-populate.html" title="PostgreSQL 18 - 2.4. Populating a Table With Rows">Current</a>
+                          (<a class="docs-version-selected" href="/docs/18/tutorial-populate.html" title="PostgreSQL 18 - 2.4. Populating a Table With Rows">18</a>)
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/17/tutorial-populate.html" title="PostgreSQL 17 - 2.4. Populating a Table With Rows">17</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/16/tutorial-populate.html" title="PostgreSQL 16 - 2.4. Populating a Table With Rows">16</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/15/tutorial-populate.html" title="PostgreSQL 15 - 2.4. Populating a Table With Rows">15</a>
+                        
+                      
+                         / 
+                        
+                          <a href="/docs/14/tutorial-populate.html" title="PostgreSQL 14 - 2.4. Populating a Table With Rows">14</a>
+</div>
+</div>
+<div class="row">
+<div class="col">
+                    Development Versions:
+                    
+                      
+                      <a href="/docs/19/tutorial-populate.html" rel="nofollow" title="PostgreSQL 19 - 2.4. Populating a Table With Rows">19</a>
+                    
+                       / 
+                      <a href="/docs/devel/tutorial-populate.html" rel="nofollow" title="PostgreSQL devel - 2.4. Populating a Table With Rows">devel</a>
+</div>
+</div>
+<div class="row">
+<div class="col-12">
+                    Unsupported versions:
+                    
+                      
+                      <a href="/docs/13/tutorial-populate.html" rel="nofollow" title="PostgreSQL 13 - 2.4. Populating a Table With Rows">13</a>
+                    
+                       / 
+                      <a href="/docs/12/tutorial-populate.html" rel="nofollow" title="PostgreSQL 12 - 2.4. Populating a Table With Rows">12</a>
+                    
+                       / 
+                      <a href="/docs/11/tutorial-populate.html" rel="nofollow" title="PostgreSQL 11 - 2.4. Populating a Table With Rows">11</a>
+                    
+                       / 
+                      <a href="/docs/10/tutorial-populate.html" rel="nofollow" title="PostgreSQL 10 - 2.4. Populating a Table With Rows">10</a>
+                    
+                       / 
+                      <a href="/docs/9.6/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.6 - 2.4. Populating a Table With Rows">9.6</a>
+                    
+                       / 
+                      <a href="/docs/9.5/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.5 - 2.4. Populating a Table With Rows">9.5</a>
+                    
+                       / 
+                      <a href="/docs/9.4/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.4 - 2.4. Populating a Table With Rows">9.4</a>
+                    
+                       / 
+                      <a href="/docs/9.3/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.3 - 2.4. Populating a Table With Rows">9.3</a>
+                    
+                       / 
+                      <a href="/docs/9.2/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.2 - 2.4. Populating a Table With Rows">9.2</a>
+                    
+                       / 
+                      <a href="/docs/9.1/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.1 - 2.4. Populating a Table With Rows">9.1</a>
+                    
+                       / 
+                      <a href="/docs/9.0/tutorial-populate.html" rel="nofollow" title="PostgreSQL 9.0 - 2.4. Populating a Table With Rows">9.0</a>
+                    
+                       / 
+                      <a href="/docs/8.4/tutorial-populate.html" rel="nofollow" title="PostgreSQL 8.4 - 2.4. Populating a Table With Rows">8.4</a>
+                    
+                       / 
+                      <a href="/docs/8.3/tutorial-populate.html" rel="nofollow" title="PostgreSQL 8.3 - 2.4. Populating a Table With Rows">8.3</a>
+                    
+                       / 
+                      <a href="/docs/8.2/tutorial-populate.html" rel="nofollow" title="PostgreSQL 8.2 - 2.4. Populating a Table With Rows">8.2</a>
+                    
+                       / 
+                      <a href="/docs/8.1/tutorial-populate.html" rel="nofollow" title="PostgreSQL 8.1 - 2.4. Populating a Table With Rows">8.1</a>
+                    
+                       / 
+                      <a href="/docs/8.0/tutorial-populate.html" rel="nofollow" title="PostgreSQL 8.0 - 2.4. Populating a Table With Rows">8.0</a>
+                    
+                       / 
+                      <a href="/docs/7.4/tutorial-populate.html" rel="nofollow" title="PostgreSQL 7.4 - 2.4. Populating a Table With Rows">7.4</a>
+                    
+                       / 
+                      <a href="/docs/7.3/tutorial-populate.html" rel="nofollow" title="PostgreSQL 7.3 - 2.4. Populating a Table With Rows">7.3</a>
+                    
+                       / 
+                      <a href="/docs/7.2/tutorial-populate.html" rel="nofollow" title="PostgreSQL 7.2 - 2.4. Populating a Table With Rows">7.2</a>
+</div>
+</div>
+</div>
+<div class="col-md-6 col-lg-5 offset-lg-1">
+
+</div>
+</div>
+<div id="docContent">
+<div class="navheader">
+
+<hr/>
+</div>
+<div class="sect1" id="TUTORIAL-POPULATE">
+<div class="titlepage">
+<div>
+<div>
+<h2 class="title" id="readar-node-0001" style="clear: both">2.4. Populating a Table With Rows </h2>
+</div>
+</div>
+</div><a class="indexterm" id="id-1.4.4.5.2" name="id-1.4.4.5.2"></a>
+<p id="readar-node-0002">The <code class="command">INSERT</code> statement is used to populate a table with rows:</p>
+<pre class="programlisting" id="readar-node-0003">
+INSERT INTO weather VALUES ('San Francisco', 46, 50, 0.25, '1994-11-27');
+</pre>
+<p id="readar-node-0004">Note that all data types use rather obvious input formats. Constants that are not simple numeric values usually must be surrounded by single quotes (<code class="literal">'</code>), as in the example. The <code class="type">date</code> type is actually quite flexible in what it accepts, but for this tutorial we will stick to the unambiguous format shown here.</p>
+<p id="readar-node-0005">The <code class="type">point</code> type requires a coordinate pair as input, as shown here:</p>
+<pre class="programlisting" id="readar-node-0006">
+INSERT INTO cities VALUES ('San Francisco', '(-194.0, 53.0)');
+</pre>
+<p id="readar-node-0007">The syntax used so far requires you to remember the order of the columns. An alternative syntax allows you to list the columns explicitly:</p>
+<pre class="programlisting" id="readar-node-0008">
+INSERT INTO weather (city, temp_lo, temp_hi, prcp, date)
+    VALUES ('San Francisco', 43, 57, 0.0, '1994-11-29');
+</pre>
+<p id="readar-node-0009">You can list the columns in a different order if you wish or even omit some columns, e.g., if the precipitation is unknown:</p>
+<pre class="programlisting" id="readar-node-0010">
+INSERT INTO weather (date, city, temp_hi, temp_lo)
+    VALUES ('1994-11-29', 'Hayward', 54, 37);
+</pre>
+<p id="readar-node-0011">Many developers consider explicitly listing the columns better style than relying on the order implicitly.</p>
+<p id="readar-node-0012">Please enter all the commands shown above so you have some data to work with in the following sections.</p>
+<p id="readar-node-0013"><a class="indexterm" id="id-1.4.4.5.7.1" name="id-1.4.4.5.7.1"></a> You could also have used <code class="command">COPY</code> to load large amounts of data from flat-text files. This is usually faster because the <code class="command">COPY</code> command is optimized for this application while allowing less flexibility than <code class="command">INSERT</code>. An example would be:</p>
+<pre class="programlisting" id="readar-node-0014">
+COPY weather FROM '/home/user/weather.txt';
+</pre>
+<p id="readar-node-0015">where the file name for the source file must be available on the machine running the backend process, not the client, since the backend process reads the file directly. The data inserted above into the weather table could also be inserted from a file containing (values are separated by a tab character):</p>
+<pre class="programlisting" id="readar-node-0016">
+San Francisco    46    50    0.25    1994-11-27
+San Francisco    43    57    0.0    1994-11-29
+Hayward    37    54    \N    1994-11-29
+</pre>
+<p id="readar-node-0017">You can read more about the <code class="command">COPY</code> command in <a class="xref" href="sql-copy.html" title="COPY"><span class="refentrytitle">COPY</span></a>.</p>
+</div>
+<div class="navfooter">
+<hr/>
+
+</div>
+</div>
+
+</div> <!-- pgContentWrap -->
+</div>
+</div>
+<!-- Footer -->
+
+
+</body>
+</html>

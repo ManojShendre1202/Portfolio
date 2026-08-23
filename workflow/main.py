@@ -10,7 +10,7 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)],
 )
 # httpx (used by huggingface_hub's connectivity checks when loading the local
-# embedder/reranker models) logs every request at INFO — noisy, not useful here.
+# embedder model) logs every request at INFO — noisy, not useful here.
 logging.getLogger('httpx').setLevel(logging.WARNING)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
