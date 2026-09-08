@@ -2,41 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion'
 import lottie from 'lottie-web'
 import robotData from '../../assets/robot.json'
+import readarShot from '../../assets/Readar.png'
+import agneisShot from '../../assets/Agneis.png'
 import './Portfolio.css'
-
-/* ══════════════════════════════
-   TILT CARD — cursor-reactive 3D tilt wrapper
-══════════════════════════════ */
-function TiltCard({ children, className, style, max = 6, ...motionProps }) {
-  const ref = useRef(null)
-  const mx  = useMotionValue(0)
-  const my  = useMotionValue(0)
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [max, -max]), { stiffness: 300, damping: 30 })
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-max, max]), { stiffness: 300, damping: 30 })
-  const glowX   = useSpring(useTransform(mx, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
-  const glowY   = useSpring(useTransform(my, [-0.5, 0.5], ['0%', '100%']), { stiffness: 300, damping: 30 })
-
-  const onMove = (e) => {
-    const r = ref.current.getBoundingClientRect()
-    mx.set((e.clientX - r.left) / r.width - 0.5)
-    my.set((e.clientY - r.top) / r.height - 0.5)
-  }
-  const onLeave = () => { mx.set(0); my.set(0) }
-
-  return (
-    <motion.div
-      ref={ref}
-      className={`tilt-card ${className || ''}`}
-      style={{ ...style, rotateX, rotateY, '--gx': glowX, '--gy': glowY }}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      {...motionProps}
-    >
-      <div className="tilt-glow" aria-hidden />
-      {children}
-    </motion.div>
-  )
-}
 
 /* ══════════════════════════════
    NAVBAR
@@ -254,8 +222,8 @@ function Intro() {
             >
               <p className="intro-role">{title}</p>
               <p className="intro-tagline">
-                Making machines read engineering drawings<br />
-                <em>the way human engineers do.</em>
+                Agentic AI systems and engineering-drawing intelligence<br />
+                <em>built the way experts think.</em>
               </p>
             </motion.div>
 
@@ -419,14 +387,14 @@ function About() {
 
         <MaskReveal className="about-headline" delay={0.1}>
           Aeronautical engineer<br />
-          <em>who builds CV systems</em>
+          <em>who builds agentic systems</em>
         </MaskReveal>
 
         <motion.div className="about-body" {...aboutReveal(0.2)}>
           <p>
             I graduated in Aeronautical Engineering — then pivoted into Computer Vision
-            because the aerospace background is a superpower when your job is making
-            machines read engineering drawings.
+            because the aerospace background is a superpower for reading engineering
+            drawings — work that's since grown into building agentic systems more broadly.
           </p>
           <p>
             In 2 years at Kynea Solutions, I've handled core development or led 7 of 10 client
@@ -434,10 +402,12 @@ function About() {
             and industrial manufacturing domains.
           </p>
           <p>
-            As a personal project, I also built and deployed <strong>Readar</strong> — a
+            As personal projects, I've built and deployed <strong>Readar</strong>, a
             graph-based RAG chat engine with custom retrieval, graph traversal, cross-encoder
-            reranking, and session memory, cutting LLM token usage by ~75–85% with no accuracy
-            loss.
+            reranking, and session memory that cuts LLM token usage by ~75–85% with no
+            accuracy loss. I've also built <strong>AGNEIS</strong>, a multi-agent negotiation
+            framework where role-agents execute and verify real work in a sandboxed
+            environment.
           </p>
         </motion.div>
 
@@ -599,52 +569,22 @@ const PROJECTS = [
     beforeAfter: { before: '10–20 engineers, ~1 month per drawing set', after: '2–3 people, ~2 hours including human verification' },
   },
   {
-    num: '02', client: 'Shipbuilding — Cable Systems', title: 'Cable Routing System',
-    status: 'UAT', impact: 'Lakhs of cables · Lakhs of km routed', solo: true,
-    tags: ['Python', 'ezdxf', 'Shapely', 'Dijkstra', 'Graph Algorithms'],
-    desc: 'Flood Fill + Dijkstra hybrid routes cables across ship decks via a universal graph from DXF drawings.',
-    fullDesc: 'Parses complex DXF ship drawings to identify multiple decks and cable trays — a significant challenge given the varied curves, angles, and representations across different ship departments. Builds a universal topological graph of the ship, then routes cables using a custom Flood Fill + Dijkstra hybrid algorithm that accounts for tray capacity, routing constraints, and cable specifications.',
+    num: '02', client: 'Shipbuilding', title: 'Cable Routing & Hull Weld Seam BOM',
+    status: 'UAT', impact: 'Lakhs of cables & km routed · thousands of weld spots automated', solo: true, lead: true,
+    tags: ['Python', 'ezdxf', 'Shapely', 'Dijkstra', 'Graph Algorithms', 'OpenCV'],
+    desc: 'Flood Fill + Dijkstra cable routing across ship decks, plus a separate geometry-only hull weld-seam BOM module — two systems, one ship.',
+    fullDesc: 'Two modules for the same shipbuilding client, across different departments. First: parses multi-deck DXF ship drawings with ezdxf and Shapely to extract cable-tray geometry, builds a universal topological graph of the ship, and routes cables with a custom Flood Fill + Dijkstra hybrid algorithm under tray-capacity and connectivity constraints. Second, led as project lead: a geometry-only hull engineering module — detects weld seams and blocks via Shapely-based shape analysis and computes seam lengths through direct on-spot geometric measurement, deliberately no graph or ML model in the loop. Both required engineering the parsing and geometry logic to handle inconsistent drawing conventions and curve representations across decks, trays, and hull sections.',
     techDetails: [
       'DXF parsing with ezdxf to extract cable tray geometry across multiple ship decks',
-      'Shapely-based geometric analysis to classify tray types from varied curve representations',
-      'Universal graph construction representing all possible routing paths',
-      'Flood Fill + Dijkstra hybrid for optimal cable routing with constraint satisfaction',
-      'BOM output: cable lengths, tray assignments, routing paths',
+      'Universal topological graph of the ship + Flood Fill/Dijkstra hybrid for constraint-satisfying cable routing',
+      'Second module (project lead): Shapely-based weld seam and block detection, on-spot geometric seam-length computation — no graph, no ML by design',
+      'Parsing/geometry logic engineered to handle inconsistent drawing conventions and curve representations across decks, trays, and hull sections',
+      'BOM output: cable lengths, tray assignments, routing paths, weld seam lengths and types',
     ],
-    beforeAfter: { before: 'Manual routing by engineers — weeks per ship, lakhs of cables', after: 'Automated routing in hours — same accuracy, full BOM output' },
+    beforeAfter: { before: 'Manual routing and weld-seam measurement by engineers — weeks per ship, error-prone on complex hull geometries', after: 'Automated routing + geometric weld-seam computation — full BOM output at scale' },
   },
   {
-    num: '03', client: 'Shipbuilding — Hull Engineering', title: 'Hull Weld Seam BOM',
-    status: 'UAT', impact: 'Thousands of weld spots per drawing', solo: true, lead: true,
-    tags: ['Python', 'ezdxf', 'Shapely', 'OpenCV'],
-    desc: 'On-spot geometric computation of weld seam lengths — no graph, no ML. Pure shape analysis.',
-    fullDesc: 'Second project within the shipbuilding domain — a different department, demonstrating repeat client engagement. Detects thousands of welding spots and blocks across hull drawings, then computes weld seam lengths via on-spot geometric calculation. Deliberately contrasts with the cable routing approach — no graph-based algorithm, no ML models. Pure shape analysis because the problem structure demands it.',
-    techDetails: [
-      'Hull drawing parsing with ezdxf — different schema from cable routing drawings',
-      'Weld spot and block detection using Shapely geometric analysis',
-      'On-spot seam length computation via direct geometric measurement',
-      'No ML, no graph — pure engineering solution matching the problem structure',
-      'BOM output: weld seam lengths, weld types, location references',
-    ],
-    beforeAfter: { before: 'Manual measurement by engineers — error-prone on complex hull geometries', after: 'Automated geometric computation — thousands of spots in minutes' },
-  },
-  {
-    num: '04', client: 'Automotive (multiple clients)', title: 'Automotive Wiring Harness BOM',
-    status: 'Near-Prod', impact: '~95% reduction — 2–3 days → 1 hour',
-    tags: ['FasterRCNN', 'AWS', 'Azure', 'OpenCV', 'OCR'],
-    desc: 'FasterRCNN detection + graph association generates full BOM from automotive wiring drawings.',
-    fullDesc: 'Processes complex automotive wiring harness drawings across multiple clients — among the most intricate engineering drawings in any domain. Element detection using a locally-trained FasterRCNN model identifies connectors, terminals, splices, and wiring components. Custom graph association logic (core contribution) links detected elements to tables and BOM entries, calculates wiring lengths and bundle configurations, and generates complete manufacturing BOMs.',
-    techDetails: [
-      'FasterRCNN trained locally on automotive wiring harness components',
-      'Custom graph/association logic linking detected elements to BOM tables',
-      'Wiring length calculation from geometric analysis of harness paths',
-      'Bundle calculation combining individual wire specifications',
-      'AWS + Azure cloud processing for large drawing batches',
-    ],
-    beforeAfter: { before: '3–4 engineers, ~2–3 days per harness drawing set', after: '~1 hour including manual verification step' },
-  },
-  {
-    num: '05', client: 'Defense Shipbuilding', title: 'Cable Routing POC',
+    num: '03', client: 'Defense Shipbuilding', title: 'Cable Routing POC',
     status: 'Delivered', impact: 'Sent Alone · On-site · No internet · 120m ships', solo: true,
     tags: ['Python', 'ezdxf', 'Shapely', 'OpenCV'],
     desc: 'On-site live delivery, sent alone, with zero internet access on 120m+ ships.',
@@ -657,20 +597,7 @@ const PROJECTS = [
     ],
   },
   {
-    num: '06', client: 'Aerospace', title: 'Aircraft BOM Generation',
-    status: 'In Dev', impact: 'Airbus + Boeing aircraft database', solo: true,
-    tags: ['Python', 'YOLO', 'OpenCV', 'AWS OCR'],
-    desc: 'YOLO content classification + deterministic OpenCV table detection, tuned for maximum extraction accuracy.',
-    fullDesc: 'Processes complex scanned engineering drawings for Airbus and Boeing aircraft databases. Trained a YOLO classification model to identify content types across each drawing and route regions to the right extraction path. Table detection itself stays deterministic — fax-format unstructured tables have enough consistent geometric structure that a pure OpenCV approach, backed by custom CV detection and processing, is more accurate and maintainable than a neural network for that specific step.',
-    techDetails: [
-      'YOLO classification model trained to identify content types across scanned drawings',
-      'Fax-format unstructured table detection — deterministic OpenCV, no ML by design',
-      "AWS's document-extraction OCR for text extraction, tuned for maximum accuracy",
-      'Cross-document reference resolution across large Airbus/Boeing drawing sets',
-    ],
-  },
-  {
-    num: '07', client: 'Electrical Components Manufacturing', title: 'SAP Deduction Validation',
+    num: '04', client: 'Electrical Components Manufacturing', title: 'SAP Deduction Validation',
     status: 'Production', impact: '1+ year owned · 6 months in production', solo: true,
     tags: ['Python', 'Azure ADF', 'ADLS', 'SQL'],
     desc: 'Sole maintainer of an existing ML model validating SAP deductions — took it to production, own the full support lifecycle.',
@@ -740,6 +667,19 @@ function ProjectRow({ p, onOpen }) {
   )
 }
 
+const ADDITIONAL_MENTIONS = [
+  {
+    client: 'Automotive (multiple clients)',
+    title:  'Wiring Harness BOM Automation',
+    sub:    'FasterRCNN detection + custom graph/association logic on AWS + Azure — ~95% reduction in processing time (2–3 days → ~1 hour).',
+  },
+  {
+    client: 'Aerospace',
+    title:  'Aircraft BOM Generation',
+    sub:    'YOLO content classification + deterministic OpenCV table detection + AWS OCR, for Airbus/Boeing drawing databases.',
+  },
+]
+
 function Experience() {
   const [modal, setModal] = useState(null)
   const sectionRef = useRef(null)
@@ -755,20 +695,36 @@ function Experience() {
             <p className="section-label">Professional Experience</p>
             <MaskReveal className="section-title" onMount>
               Kynea Solutions LLP<br />
-              <em>May 2024 — Present</em>
+              <em>May 2024 — Aug 2026</em>
             </MaskReveal>
             <p className="exp-sub">
-              ML Engineer · Bangalore<br />
+              ML Engineer · Hyderabad<br />
               7 of 10 projects — core development or lead
             </p>
             <p className="exp-hint">Click any card for full details</p>
           </motion.div>
         </div>
 
-        <div className="case-log">
-          {PROJECTS.map((p, i) => (
-            <ProjectRow key={i} p={p} onOpen={setModal} />
-          ))}
+        <div>
+          <div className="case-log">
+            {PROJECTS.map((p, i) => (
+              <ProjectRow key={i} p={p} onOpen={setModal} />
+            ))}
+          </div>
+
+          <div className="about-credentials" style={{ marginTop: 48 }}>
+            <p className="section-label" style={{ marginBottom: 4 }}>Additional Mentions</p>
+            {ADDITIONAL_MENTIONS.map((m, i) => (
+              <div className="cred-row" key={i}>
+                <span className="cred-num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="cred-label">{m.client}</span>
+                <div className="cred-body">
+                  <p className="cred-title">{m.title}</p>
+                  <p className="cred-sub">{m.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="sheet-title-block">
@@ -785,178 +741,149 @@ function Experience() {
 /* ══════════════════════════════
    READAR
 ══════════════════════════════ */
-const DOCK_STEPS = [
-  { num: '01', title: 'Parse',   desc: 'DOM-aware HTML parsing — heading-path stitching, no font-size heuristics. Cross-page paragraph stitching for PDFs.' },
-  { num: '02', title: 'Embed',   desc: 'nomic-embed-text-v1.5 locally, 8192-token context. Overflow nodes chunked + mean-pooled, never truncated.' },
-  { num: '03', title: 'Graph',   desc: 'Cosine-similarity edges above threshold connect nodes — coreferences resolve naturally, no entity extraction pass.' },
-  { num: '04', title: 'Retrieve', desc: 'BFS hop traversal over the graph pulls a candidate subgraph — a cheap, wide recall net.' },
-  { num: '05', title: 'Rerank',  desc: 'Cross-encoder re-scores candidates against the real query text — cuts tokens sent to Gemini by ~75-85%.' },
-  { num: '06', title: 'Stream',  desc: 'WebSocket token streaming with live citation highlighting — click a citation, it scrolls to and flashes the real source paragraph.' },
-]
-
-const DOCK_PRINCIPLES = [
-  {
-    name:   'Memory that doesn\'t grow with the conversation',
-    metric: 'Flat cost — turn 2 or turn 30',
-    detail: 'Each turn\'s hidden summary gets embedded into its own small per-session graph. A new question retrieves only the few relevant past turns, never the full transcript.',
-  },
-  {
-    name:   'Rerank before it reaches Gemini',
-    metric: '~75-85% fewer tokens per answer',
-    detail: 'Graph-hop retrieval casts a wide net; a cross-encoder re-scores every candidate against the actual question before anything gets sent to the model.',
-  },
-  {
-    name:   'A similarity graph, not an entity graph',
-    metric: 'Zero entity-extraction passes',
-    detail: 'Nodes are paragraphs, edges are cosine similarity. Coreferences like "it" or "the system" resolve for free by clustering with what they mean.',
-  },
-  {
-    name:   'Built to survive real concurrent load',
-    metric: 'Load-tested with real simultaneous chats',
-    detail: 'Blocking embed/rerank/Gemini calls run off the shared event loop in dedicated executors; a rate guard returns a friendly message instead of a raw exception.',
-  },
-]
-
 function Readar() {
   const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const lineH = useTransform(scrollYProgress, [0.1, 0.8], ['0%', '100%'])
 
   return (
     <section className="dock-section" id="readar" ref={ref}>
       <span className="reg-mark on-dark tl" aria-hidden /><span className="reg-mark on-dark tr" aria-hidden />
       <div className="dock-inner">
 
-        <motion.div
-          className="dock-header"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <p className="section-label">Personal Project</p>
-          <MaskReveal className="section-title">Readar<br /><em>Graph RAG Chat Engine</em></MaskReveal>
-          <p className="dock-tagline">
-            A retrieval-augmented chatbot built from scratch —<br />
-            semantic similarity graph, live citations, real conversation memory.
-          </p>
-        </motion.div>
+        {/* ── Readar ── */}
+        <div className="showcase-row">
+          <div className="showcase-text-col">
+            <motion.div
+              className="dock-header"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <p className="section-label">Personal Project</p>
+              <MaskReveal className="section-title">Readar<br /><em>Graph RAG Chat Engine</em></MaskReveal>
+            </motion.div>
 
-        <div className="dock-body">
+            <motion.div
+              className="dock-story"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <p>
+                A production-grade <strong>RAG engine built entirely from scratch</strong> — no
+                vector DB, no LangChain, no off-the-shelf framework. The ingestion pipeline does
+                semantic chunking and knowledge-graph indexing on nomic-embed-text-v1.5, then
+                answers questions with cosine-similarity retrieval, BFS graph traversal, and
+                confidence-threshold candidate selection, backed by retrieval-augmented
+                conversational memory instead of full transcript replay.
+              </p>
+              <p>
+                Adaptive query-complexity scaling achieved <strong>100% citation utilization</strong>{' '}
+                on simple/moderate queries with zero token waste, measured and validated across
+                two structurally different document corpora with live production metrics. Token
+                waste itself was quantified rather than guessed — ~5% ingestion-level junk, ~15%
+                query-decomposition drift — and cross-encoder reranking was tested and{' '}
+                <strong>rejected</strong> after the evidence showed it wasn't worth the cost.
+              </p>
+              <p>
+                Shipped as a real production system: Python asyncio and WebSocket streaming with
+                real-time citation highlighting, blocking API calls moved off the event loop into
+                dedicated thread executors, proactive rate limiting, and load-tested under actual
+                concurrent chat sessions — <strong>self-hosted end-to-end on Oracle Cloud (OCI
+                ARM)</strong> via Docker + Nginx.
+              </p>
+
+              <div className="dock-stats">
+                {[
+                  { num: '75–85%', label: 'LLM token cut\nvs. naive RAG' },
+                  { num: '1–2s',   label: 'Retrieval time\ncomplex multi-question queries' },
+                ].map((s, i) => (
+                  <div key={i} className="dock-stat">
+                    <span className="dock-stat-num">{s.num}</span>
+                    <span className="dock-stat-label">{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
           <motion.div
-            className="dock-story"
+            className="showcase-image"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <img src={readarShot} alt="Readar chat interface" />
+          </motion.div>
+        </div>
+
+        {/* ── AGNEIS ── */}
+        <div className="showcase-row reverse" style={{ marginTop: 96 }}>
+          <motion.div
+            className="showcase-image"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p>
-              A <strong>graph-based RAG pipeline</strong> written from first principles — no
-              vector DB, no LangChain. Paragraphs become nodes, cosine-similarity edges connect
-              related ideas, and a BFS hop-traversal retrieves a subgraph per question. A
-              cross-encoder reranks the candidates before anything reaches Gemini.
-            </p>
-            <p>
-              The live demo ingests real documentation end-to-end — parsed straight from the
-              DOM, stitched into 1,049 nodes and 549,676 similarity edges — and answers with
-              streamed responses, clickable citations that scroll to and highlight the exact
-              source paragraph, and a live trace panel exposing retrieval scores, token counts,
-              and latency per stage.
-            </p>
-            <p>
-              Multi-turn memory is <strong>retrieval-augmented, not history replay</strong> —
-              each turn's hidden summary is embedded into its own small per-session graph, so
-              cost stays flat over a long conversation instead of growing with every turn.
-            </p>
-            <p>
-              Self-hosted end-to-end on an <strong>Oracle Cloud (OCI) ARM VM</strong> — Dockerized
-              Django + WebSocket services behind Nginx, load-tested with real concurrent chat
-              sessions (embedding, reranking, and Gemini streaming all running under actual
-              simultaneous load, not just single-request benchmarks).
-            </p>
-
-            <div className="dock-stats">
-              {[
-                { num: '1,049',  label: 'Nodes ingested\n(live demo graph)' },
-                { num: '~80%',   label: 'Token cut from\ntwo-stage rerank' },
-              ].map((s, i) => (
-                <div key={i} className="dock-stat">
-                  <span className="dock-stat-num">{s.num}</span>
-                  <span className="dock-stat-label">{s.label}</span>
-                </div>
-              ))}
-            </div>
+            <img src={agneisShot} alt="AGNEIS negotiation pipeline" />
           </motion.div>
 
-          <div className="dock-steps-wrap">
-            <p className="dock-steps-title">Pipeline — question to answer</p>
+          <div className="showcase-text-col">
+            <motion.div
+              className="dock-header reverse"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <p className="section-label">Personal Project</p>
+              <MaskReveal className="section-title">AGNEIS<br /><em>Agentic Negotiation Framework</em></MaskReveal>
+            </motion.div>
 
-            <div className="dock-line-track">
-              <motion.div className="dock-line-fill" style={{ height: lineH }} />
-            </div>
-
-            <div className="dock-steps">
-              {DOCK_STEPS.map((s, i) => (
-                <motion.div
-                  key={i}
-                  className="dock-step"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
-                >
-                  <span className="ds-num">{s.num}</span>
-                  <div className="ds-content">
-                    <p className="ds-title">{s.title}</p>
-                    <p className="ds-desc">{s.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            <motion.div
+              className="dock-story"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+            >
+              <p>
+                Give the system a goal, a budget, and constraints — not a solution. A{' '}
+                <strong>Prime</strong> meta-agent decomposes the objective into a roster of
+                role-agents at runtime, never hardcoded, and assigns each one a model tier, a
+                memory scope, and real ownership of specific files inside an isolated sandbox.
+                Roles negotiate directly with each other, and can only request a new role or more
+                resources from Prime — they never spawn agents themselves.
+              </p>
+              <p>
+                Engineered with production-grade guardrails: a <strong>sandboxed execution
+                environment</strong> wrapping every tool call, proactive rate-limiting guardrails
+                against provider quotas, and a deterministic <strong>LangGraph state-machine
+                </strong> orchestrating role turns, tool execution, and a "reflect" step that
+                re-invokes a role against real captured stdout/stderr before it's allowed to claim
+                success — closing a fabrication pattern where a model narrates a test passing
+                before the test ran. File ownership and every LLM-vs-deterministic boundary is
+                enforced in code, not prompted.
+              </p>
+              <p>
+                Validated with real <strong>API integration testing across model providers
+                </strong> — Claude Sonnet and Gemini Flash — with retry/backoff handling and
+                full token-usage accounting across the pipeline. Built on{' '}
+                <strong>Django + a dedicated LangGraph worker process</strong>, with a live
+                websocket feed streaming every turn, tool call, and reflection to the frontend as
+                it happens. Completed negotiation runs are viewable read-only at{' '}
+                <a href="https://agneis.manojshendre.com" target="_blank" rel="noopener noreferrer" className="cred-link">
+                  <strong>agneis.manojshendre.com</strong>
+                </a> — live agent execution itself stays
+                local by design, since a publicly reachable sandbox isn't worth the risk for a
+                single-operator project.
+              </p>
+            </motion.div>
           </div>
         </div>
-
-        <motion.div
-          className="dock-principles"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <p className="dock-principles-title">Engineering decisions</p>
-          <div className="dock-principles-grid">
-            {DOCK_PRINCIPLES.map((p, i) => (
-              <TiltCard
-                key={i}
-                className="dock-principle"
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.5, delay: i * 0.07 }}
-              >
-                <p className="dp-name">{p.name}</p>
-                <p className="dp-metric">{p.metric}</p>
-                <p className="dp-how">{p.detail}</p>
-              </TiltCard>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="dock-oss"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="dock-oss-label">Live Demo</span>
-          <p>
-            Try it yourself — pick a curated doc and ask it anything at{' '}
-            <a href="https://manojshendre.com/readar/" target="_blank" rel="noopener noreferrer" className="dock-oss-link">
-              manojshendre.com/readar
-            </a>
-          </p>
-        </motion.div>
 
       </div>
 
@@ -972,12 +899,11 @@ function Readar() {
    SKILLS
 ══════════════════════════════ */
 const SKILLS = [
-  { cat: 'AI, ML & LLM Engineering', items: ['Machine Learning', 'Deep Learning', 'Generative AI', 'Large Language Models (LLMs)', 'Retrieval-Augmented Generation (RAG)', 'Google Gemini API', 'Prompt Engineering', 'Vector Embeddings', 'Semantic Search', 'Natural Language Processing (NLP)'] },
-  { cat: 'Computer Vision & ML',    items: ['OpenCV (advanced)', 'FasterRCNN', 'OCR', 'Azure Computer Vision', 'ChangeFormer', 'PyTorch'] },
-  { cat: 'Drawing & Geometry',      items: ['ezdxf', 'Shapely', 'DXF processing', 'SVG processing', 'PDF processing'] },
-  { cat: 'Cloud & Infrastructure',  items: ['Azure ADF', 'Azure ADLS', 'AWS', 'Oracle Cloud Infrastructure (OCI)', 'Docker', 'Nginx'] },
-  { cat: 'Backend & Systems',       items: ['Python', 'Django', 'FastAPI', 'WebSockets', 'Custom Worker Pools', 'SQL'] },
-  { cat: 'Databases',               items: ['MSSQL', 'MySQL', 'ArangoDB', 'Azure Data Lake', 'Firebase', 'PostgreSQL'] },
+  { cat: 'Agentic Systems',      items: ['LangGraph', 'LangChain', 'Multi-Agent Orchestration', 'Tool Use / Function Calling', 'Agent Guardrails', 'Sandboxed Execution', 'State Machines', 'Prompt Engineering'] },
+  { cat: 'RAG',                  items: ['Retrieval-Augmented Generation', 'Vector Embeddings', 'Semantic Search', 'Knowledge Graphs', 'Hybrid BM25 + Cosine Retrieval', 'Reranking', 'Chunking Strategies', 'Citation Grounding'] },
+  { cat: 'LLM',                  items: ['Large Language Models', 'Claude (Anthropic API)', 'Google Gemini API', 'Generative AI', 'NLP'] },
+  { cat: 'Python & Backend',     items: ['Python', 'Django', 'FastAPI', 'WebSockets', 'Custom Worker Pools'] },
+  { cat: 'Databases & Others',   items: ['PostgreSQL', 'MSSQL', 'MySQL', 'ArangoDB', 'Docker', 'Nginx', 'AWS', 'Oracle Cloud Infrastructure (OCI)', 'OpenCV'] },
 ]
 
 function Skills() {
