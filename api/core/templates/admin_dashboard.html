@@ -2,11 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Readar Admin</title>
 <style>
   :root {
-    --bg: #0b0d10; --panel: #14171b; --border: #23272e; --text: #e7e9ec;
-    --muted: #8b93a1; --accent: #5ee6a8; --warn: #f5a623; --err: #f55b5b;
+    --bg: #0b0d10; --panel: #14171b; --panel2: #1a1e24; --border: #23272e; --text: #e7e9ec;
+    --muted: #8b93a1; --accent: #5ee6a8; --accent2: #3b82c4; --warn: #f5a623; --err: #f55b5b;
   }
   * { box-sizing: border-box; }
   body {
@@ -16,53 +17,98 @@
 
   /* ── Sidebar ── */
   nav {
-    width: 200px; flex-shrink: 0; background: var(--panel); border-right: 1px solid var(--border);
+    width: 210px; flex-shrink: 0; background: var(--panel); border-right: 1px solid var(--border);
     display: flex; flex-direction: column; padding: 1rem 0;
   }
   nav .brand { font-weight: 700; font-size: 1rem; padding: 0 1.25rem 1rem; letter-spacing: 0.02em; }
   nav .brand span { color: var(--accent); }
   nav .section-label { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; padding: 1rem 1.25rem 0.4rem; }
-  nav button {
+  nav button.nav {
     all: unset; cursor: pointer; padding: 0.55rem 1.25rem; font-size: 0.88rem; color: var(--muted);
     border-left: 3px solid transparent;
   }
-  nav button:hover { color: var(--text); background: #1a1e24; }
-  nav button.active { color: var(--text); border-left-color: var(--accent); background: #1a1e24; }
-  nav .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 0.5rem; }
+  nav button.nav:hover { color: var(--text); background: var(--panel2); }
+  nav button.nav.active { color: var(--text); border-left-color: var(--accent); background: var(--panel2); }
+  nav .spacer { flex: 1; }
+  nav .optout { padding: 0.75rem 1.25rem 0; border-top: 1px solid var(--border); font-size: 0.74rem; color: var(--muted); line-height: 1.4; }
+  nav .optout button { margin-top: 0.5rem; width: 100%; }
 
   /* ── Main ── */
-  main { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
-  h1 { font-size: 1.1rem; margin: 0 0 1.25rem; color: var(--muted); font-weight: 500; }
+  main { flex: 1; overflow-y: auto; padding: 1.5rem 2rem 3rem; }
+  .page-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  h1 { font-size: 1.15rem; margin: 0; font-weight: 600; }
+  .updated { color: var(--muted); font-size: 0.76rem; margin-left: auto; }
+  .hidden { display: none !important; }
 
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+  button, select, input {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 0.4rem 0.7rem; border-radius: 6px; font-size: 0.8rem; font-family: inherit;
+  }
+  button { cursor: pointer; }
+  button:hover { background: var(--panel2); }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; background: var(--panel); }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button.on { background: var(--accent); color: #07140e; font-weight: 600; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
   .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
   .card h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 0.5rem; font-weight: 600; }
   .card .value { font-size: 1.7rem; font-weight: 700; }
   .card .sub { color: var(--muted); font-size: 0.78rem; margin-top: 0.25rem; }
+  .delta.up { color: var(--accent); } .delta.down { color: var(--err); } .delta.flat { color: var(--muted); }
   .bar { background: #22262d; border-radius: 4px; height: 5px; margin-top: 0.6rem; overflow: hidden; }
   .bar > div { background: var(--accent); height: 100%; transition: width 0.3s; }
   .bar.warn > div { background: var(--warn); }
   .bar.err > div { background: var(--err); }
+  .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-right: 6px; box-shadow: 0 0 0 0 rgba(94,230,168,.6); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 7px rgba(94,230,168,0); } 100% { box-shadow: 0 0 0 0 rgba(94,230,168,0); } }
 
-  /* ── Log viewer ── */
-  .log-toolbar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
-  .log-toolbar select, .log-toolbar button {
-    background: var(--panel); border: 1px solid var(--border); color: var(--text);
-    padding: 0.4rem 0.7rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
-  }
-  .log-status { color: var(--muted); font-size: 0.78rem; margin-left: auto; }
-  #logbox {
-    background: #08090b; border: 1px solid var(--border); border-radius: 8px;
-    padding: 1rem; height: calc(100vh - 160px); overflow-y: auto;
-    font-family: 'Cascadia Code', Consolas, monospace; font-size: 0.78rem; line-height: 1.5;
-    white-space: pre-wrap; word-break: break-all;
-  }
-  #logbox .line { padding: 1px 0; }
-  #logbox .lvl-ERROR, #logbox .lvl-CRITICAL { color: var(--err); }
-  #logbox .lvl-WARNING { color: var(--warn); }
-  #logbox .lvl-INFO { color: var(--text); }
-  #logbox .lvl-DEBUG { color: var(--muted); }
-  #logbox .empty { color: var(--muted); font-style: italic; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+  .notice { background: #2a2210; border: 1px solid #5a4716; color: var(--warn); border-radius: 8px; padding: 0.6rem 0.9rem; font-size: 0.8rem; margin-bottom: 1rem; }
+
+  /* chart */
+  .chart-wrap { overflow-x: auto; }
+  svg.chart { width: 100%; height: 220px; display: block; }
+  svg.chart text { fill: var(--muted); font-size: 10px; }
+  .legend { display: flex; gap: 1rem; font-size: 0.74rem; color: var(--muted); margin-top: 0.4rem; }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+  /* ranked lists */
+  .rank { display: flex; flex-direction: column; gap: 0.5rem; }
+  .rank .row { position: relative; font-size: 0.82rem; display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.3rem 0.5rem; border-radius: 5px; overflow: hidden; }
+  .rank .row .fill { position: absolute; inset: 0 auto 0 0; background: rgba(94,230,168,.13); border-radius: 5px; }
+  .rank .row span { position: relative; }
+  .rank .row .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rank .row .num { color: var(--muted); flex-shrink: 0; }
+  .empty { color: var(--muted); font-style: italic; font-size: 0.82rem; }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th { text-align: left; color: var(--muted); font-weight: 600; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); }
+  td { padding: 0.45rem 0.6rem; border-bottom: 1px solid #1b1f25; vertical-align: top; }
+  td.rel { color: var(--muted); white-space: nowrap; }
+  .tag { font-size: 0.68rem; padding: 1px 6px; border-radius: 9px; background: var(--panel2); color: var(--muted); }
+  .tag.new { background: rgba(94,230,168,.15); color: var(--accent); }
+
+  /* logs */
+  .log-toolbar { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+  .log-toolbar input[type=search] { min-width: 220px; }
+  #logbox { background: #08090b; border: 1px solid var(--border); border-radius: 8px; height: calc(100vh - 200px); overflow: auto; }
+  #logbox table { font-family: 'Cascadia Code', Consolas, monospace; font-size: 0.76rem; }
+  #logbox th { position: sticky; top: 0; background: #08090b; z-index: 1; }
+  #logbox td { border-bottom: 1px solid #12151a; }
+  #logbox td.time { white-space: nowrap; color: var(--muted); }
+  #logbox td.time small { display: block; font-size: 0.68rem; opacity: .75; }
+  #logbox td.lg { color: var(--accent2); white-space: nowrap; }
+  #logbox td.msg { white-space: pre-wrap; word-break: break-word; }
+  .lvl { font-size: 0.66rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; letter-spacing: .03em; }
+  .lvl.DEBUG { background: #23272e; color: var(--muted); }
+  .lvl.INFO { background: rgba(94,230,168,.14); color: var(--accent); }
+  .lvl.WARNING { background: rgba(245,166,35,.16); color: var(--warn); }
+  .lvl.ERROR, .lvl.CRITICAL { background: rgba(245,91,91,.18); color: var(--err); }
+  tr.row-ERROR td.msg, tr.row-CRITICAL td.msg { color: var(--err); }
+  tr.row-WARNING td.msg { color: var(--warn); }
 </style>
 </head>
 <body>
@@ -70,130 +116,340 @@
 <nav>
   <div class="brand">Readar <span>Admin</span></div>
 
-  <div class="section-label">Overview</div>
-  <button data-view="overview" class="active"><span class="dot"></span>Live Status</button>
+  <div class="section-label">Insights</div>
+  <button class="nav active" data-view="analytics">Visitors</button>
+  <button class="nav" data-view="health">Server &amp; Gemini</button>
 
   <div class="section-label">Logs</div>
-  <button data-view="log" data-source="django">Django</button>
-  <button data-view="log" data-source="dockyard">Dockyard</button>
-  <button data-view="log" data-source="rag">RAG Pipeline</button>
-  <button data-view="log" data-source="core">Core / API</button>
+  <button class="nav" data-view="log" data-source="django">Django</button>
+  <button class="nav" data-view="log" data-source="dockyard">Dockyard</button>
+  <button class="nav" data-view="log" data-source="rag">RAG Pipeline</button>
+  <button class="nav" data-view="log" data-source="core">Core / API</button>
+
+  <div class="spacer"></div>
+  <div class="optout">
+    <div id="optoutText">Visit tracking</div>
+    <button id="optoutBtn">…</button>
+  </div>
 </nav>
 
 <main>
-  <div id="overview-view">
-    <h1>Live Server Status</h1>
-    <div class="grid" id="grid"></div>
+  <!-- ───────── Visitors ───────── -->
+  <div id="analytics-view">
+    <div class="page-head">
+      <h1>Visitors</h1>
+      <div class="seg" id="rangeSeg">
+        <button data-days="1">Today</button>
+        <button data-days="7" class="on">7 days</button>
+        <button data-days="30">30 days</button>
+        <button data-days="90">90 days</button>
+      </div>
+      <span class="updated" id="analyticsUpdated"></span>
+    </div>
+    <div id="analytics-body"><div class="empty">Loading…</div></div>
   </div>
 
-  <div id="log-view" style="display:none;">
-    <h1 id="log-title">Logs</h1>
+  <!-- ───────── Server & Gemini ───────── -->
+  <div id="health-view" class="hidden">
+    <div class="page-head">
+      <h1>Server &amp; Gemini</h1>
+      <span class="updated" id="healthUpdated"></span>
+    </div>
+    <div class="grid" id="healthGrid"></div>
+  </div>
+
+  <!-- ───────── Logs ───────── -->
+  <div id="log-view" class="hidden">
+    <div class="page-head">
+      <h1 id="log-title">Logs</h1>
+      <span class="updated" id="logStatus"></span>
+    </div>
     <div class="log-toolbar">
-      <label style="color:var(--muted); font-size:0.8rem;">Lines:</label>
+      <select id="levelFilter">
+        <option value="ALL">All levels</option>
+        <option value="INFO">Info and above</option>
+        <option value="WARNING">Warnings and errors</option>
+        <option value="ERROR">Errors only</option>
+      </select>
+      <input type="search" id="logSearch" placeholder="Search messages…">
       <select id="lineCount">
-        <option value="100">100</option>
-        <option value="200" selected>200</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
+        <option value="100">Last 100</option>
+        <option value="200" selected>Last 200</option>
+        <option value="500">Last 500</option>
+        <option value="1000">Last 1000</option>
       </select>
       <button id="pauseBtn">Pause</button>
-      <span class="log-status" id="logStatus"></span>
+      <span style="color:var(--muted); font-size:0.74rem;">Newest first · times shown in your local time</span>
     </div>
-    <div id="logbox"><div class="empty">Loading…</div></div>
+    <div id="logbox"><div class="empty" style="padding:1rem;">Loading…</div></div>
   </div>
 </main>
 
 <script>
-const state = { view: 'overview', source: 'django', paused: false };
+const state = { view: 'analytics', source: 'django', days: 7, paused: false, logEntries: [], timer: null };
+const LEVEL_RANK = { DEBUG: 0, INFO: 1, WARNING: 2, ERROR: 3, CRITICAL: 4 };
+const $ = id => document.getElementById(id);
 
-function bar(pct) {
-  const cls = pct > 90 ? 'err' : pct > 70 ? 'warn' : '';
-  return `<div class="bar ${cls}"><div style="width:${Math.min(pct,100)}%"></div></div>`;
+/* ── helpers ── */
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
+function num(n) { return Number(n || 0).toLocaleString(); }
+function ago(iso) {
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 10) return 'just now';
+  if (s < 60) return Math.floor(s) + 's ago';
+  if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (s < 86400) return Math.floor(s / 3600) + ' h ago';
+  return Math.floor(s / 86400) + ' d ago';
+}
+function when(iso) {
+  return new Date(iso).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+function stamp() { return 'Updated ' + new Date().toLocaleTimeString(); }
+function tzMinutes() { return -new Date().getTimezoneOffset(); }
+async function getJSON(url) {
+  const r = await fetch(url, { credentials: 'same-origin' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+function delta(cur, prev) {
+  if (!prev) return cur ? '<span class="delta up">new activity</span>' : '<span class="delta flat">no change</span>';
+  const pct = Math.round((cur - prev) / prev * 100);
+  const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
+  return `<span class="delta ${cls}">${pct > 0 ? '▲' : pct < 0 ? '▼' : '•'} ${Math.abs(pct)}%</span> vs previous period`;
+}
 function card(title, value, sub, pct) {
+  const cls = pct > 90 ? 'err' : pct > 70 ? 'warn' : '';
   return `<div class="card"><h2>${title}</h2><div class="value">${value}</div>
-    ${sub ? `<div class="sub">${sub}</div>` : ''}${pct != null ? bar(pct) : ''}</div>`;
+    ${sub ? `<div class="sub">${sub}</div>` : ''}
+    ${pct != null ? `<div class="bar ${cls}"><div style="width:${Math.min(pct,100)}%"></div></div>` : ''}</div>`;
+}
+function rank(title, rows, emptyMsg) {
+  const max = Math.max(1, ...rows.map(r => r.visitors));
+  const body = rows.length
+    ? rows.map(r => `<div class="row"><div class="fill" style="width:${100 * r.visitors / max}%"></div>
+        <span class="name" title="${esc(r.name)}">${esc(r.name)}</span>
+        <span class="num">${num(r.visitors)}${r.views !== r.visitors ? ` · ${num(r.views)} views` : ''}</span></div>`).join('')
+    : `<div class="empty">${emptyMsg || 'No data yet'}</div>`;
+  return `<div class="card"><h2>${title}</h2><div class="rank">${body}</div></div>`;
 }
 
-async function refreshOverview() {
-  const r = await fetch('stats/');
-  const d = await r.json();
+/* ── analytics ── */
+function chartSVG(series) {
+  const W = 760, H = 220, padL = 30, padB = 22, padT = 8;
+  const max = Math.max(1, ...series.map(s => s.views));
+  const niceMax = max <= 4 ? 4 : Math.ceil(max / 4) * 4;
+  const innerW = W - padL, innerH = H - padB - padT;
+  const slot = innerW / series.length;
+  const bw = Math.max(2, Math.min(28, slot * 0.7));
+  let g = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + innerH - innerH * i / 4;
+    g += `<line x1="${padL}" x2="${W}" y1="${y}" y2="${y}" stroke="#23272e" stroke-width="1"/>
+          <text x="${padL - 6}" y="${y + 3}" text-anchor="end">${Math.round(niceMax * i / 4)}</text>`;
+  }
+  const every = Math.ceil(series.length / 10);
+  series.forEach((s, i) => {
+    const x = padL + slot * i + (slot - bw) / 2;
+    const hv = innerH * s.views / niceMax, hu = innerH * s.visitors / niceMax;
+    const label = new Date(s.date + 'T00:00:00').toLocaleDateString([], { month: 'short', day: 'numeric', weekday: 'short' });
+    g += `<g><title>${label}: ${s.visitors} visitors, ${s.views} views</title>
+      <rect x="${x}" y="${padT + innerH - hv}" width="${bw}" height="${hv}" rx="2" fill="#3b82c4" opacity=".55"/>
+      <rect x="${x}" y="${padT + innerH - hu}" width="${bw}" height="${hu}" rx="2" fill="#5ee6a8"/></g>`;
+    if (i % every === 0) {
+      g += `<text x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${new Date(s.date + 'T00:00:00').toLocaleDateString([], { month: 'short', day: 'numeric' })}</text>`;
+    }
+  });
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${g}</svg>
+    <div class="legend"><span><i style="background:#5ee6a8"></i>Unique visitors</span><span><i style="background:#3b82c4;opacity:.6"></i>Page views</span></div>`;
+}
+
+async function refreshAnalytics() {
+  let d;
+  try {
+    d = await getJSON(`analytics/?days=${state.days}&tz=${tzMinutes()}`);
+  } catch (e) {
+    $('analytics-body').innerHTML = `<div class="notice">Couldn't load analytics (${esc(e.message)}). If you were logged out, reload the page.</div>`;
+    return;
+  }
+  setOptoutUI(d.ignored_browser);
+  const t = d.totals, e = d.engagement;
+
+  let html = '';
+  if (!t.all_time_views) {
+    html += `<div class="notice">No visits recorded yet. Tracking starts once the new frontend build is deployed — open the site in a browser that isn't excluded and refresh this page.</div>`;
+  } else if (t.tracking_since) {
+    html += `<div class="empty" style="margin-bottom:.75rem;">Tracking since ${esc(when(t.tracking_since))} · ${num(t.all_time_views)} page views all-time</div>`;
+  }
+
+  html += '<div class="grid">';
+  html += card('Unique visitors', num(t.visitors), delta(t.visitors, t.prev_visitors));
+  html += card('Page views', num(t.views), delta(t.views, t.prev_views));
+  html += card('New vs returning', `${num(t.new_visitors)} <span style="font-size:1rem;color:var(--muted)">/ ${num(t.returning_visitors)}</span>`, 'first-time / came back');
+  html += card('<span class="live-dot"></span>Online now', num(t.online_now), 'active in the last 5 minutes');
+  html += card('Today', num(t.today_visitors), `${num(t.yesterday_visitors)} visitors yesterday`);
+  html += '</div>';
+
+  html += `<div class="card" style="margin-bottom:1rem;"><h2>Daily traffic</h2><div class="chart-wrap">${chartSVG(d.series)}</div></div>`;
+
+  html += '<div class="cols">';
+  html += rank('Top pages', d.top_pages);
+  html += rank('Where visitors come from', d.referrers);
+  html += rank('Devices', d.devices);
+  html += rank('Browsers', d.browsers);
+  if (d.countries.length) html += rank('Countries', d.countries);
+  html += '</div>';
+
+  html += '<div class="grid">';
+  html += card('Visitors who opened Readar', num(e.readar_visitors), 'viewed any /readar page');
+  html += card('Started a chat', num(e.chatters), `${num(e.chat_sessions)} chat sessions`);
+  html += card('Questions asked', num(e.questions_asked), e.limited_by_retention ? 'chat data is purged after 7 days — this undercounts' : 'user messages in range');
+  html += '</div>';
+
+  html += `<div class="card"><h2>Recent visits</h2>${
+    d.recent.length ? `<table><thead><tr><th>When</th><th>Page</th><th>From</th><th>Device</th><th>Visitor</th></tr></thead><tbody>${
+      d.recent.map(v => `<tr>
+        <td class="rel" title="${esc(when(v.ts))}">${esc(ago(v.ts))}</td>
+        <td>${esc(v.path)}</td>
+        <td>${esc(v.referrer || 'direct')}</td>
+        <td>${esc(v.device)} · ${esc(v.browser)}${v.country ? ' · ' + esc(v.country) : ''}</td>
+        <td>…${esc(v.visitor)} ${v.new ? '<span class="tag new">new</span>' : '<span class="tag">returning</span>'}</td></tr>`).join('')
+    }</tbody></table>` : '<div class="empty">Nothing yet</div>'}</div>`;
+
+  $('analytics-body').innerHTML = html;
+  $('analyticsUpdated').textContent = stamp();
+}
+
+/* ── health ── */
+async function refreshHealth() {
+  let d;
+  try { d = await getJSON('stats/'); }
+  catch (e) { $('healthGrid').innerHTML = `<div class="notice">Couldn't load stats (${esc(e.message)}).</div>`; return; }
   let html = '';
   html += card('CPU (whole machine)', d.server.cpu_percent + '%', null, d.server.cpu_percent);
   html += card('Memory', d.server.mem_percent + '%', `${d.server.mem_used_gb} / ${d.server.mem_total_gb} GB`, d.server.mem_percent);
   html += card('Disk', d.server.disk_percent + '%', `${d.server.disk_used_gb} / ${d.server.disk_total_gb} GB`, d.server.disk_percent);
-  html += card('Live WS Connections', d.live.ws_connections, d.live.stats_age_sec != null ? `updated ${d.live.stats_age_sec}s ago` : 'no data yet — start a chat');
-  html += card('Active Users (5 min)', d.db.recent_users, 'distinct visitors, DB-derived');
+  html += card('Live chat connections', d.live.ws_connections,
+    d.live.stats_age_sec != null ? `stats written ${d.live.stats_age_sec}s ago` : 'no data yet — start a chat');
+  if (d.live.avg_latency_sec != null) {
+    html += card('Avg answer time', d.live.avg_latency_sec + 's', `last: ${d.live.last_latency_sec}s · over last ${d.live.recent_calls.length} answers`);
+  }
   if (d.live.gemini) {
     const g = d.live.gemini;
-    html += card('Gemini RPM', `${g.rpm}/${g.rpm_limit}`, null, 100 * g.rpm / g.rpm_limit);
-    html += card('Gemini RPD', `${g.rpd}/${g.rpd_limit}`, `${g.tokens_today.toLocaleString()} tokens today`, 100 * g.rpd / g.rpd_limit);
+    html += card('Gemini requests / min', `${g.rpm}/${g.rpm_limit}`, null, 100 * g.rpm / g.rpm_limit);
+    html += card('Gemini tokens / min', `${num(g.tpm)}/${num(g.tpm_limit)}`, null, 100 * g.tpm / g.tpm_limit);
+    html += card('Gemini requests today', `${g.rpd}/${g.rpd_limit}`, `${num(g.tokens_today)} tokens today`, 100 * g.rpd / g.rpd_limit);
   }
-  html += card('Total Sessions', d.db.total_sessions, `${d.db.active_sessions} active`);
-  html += card('Total Chat Turns', d.db.total_turns);
-  document.getElementById('grid').innerHTML = html;
+  html += card('Chat sessions', num(d.db.total_sessions), `${num(d.db.active_sessions)} active`);
+  html += card('Chat turns', num(d.db.total_turns), 'kept for 7 days');
+  $('healthGrid').innerHTML = html;
+  $('healthUpdated').textContent = stamp();
 }
 
-function lineClass(line) {
-  for (const lvl of ['CRITICAL','ERROR','WARNING','INFO','DEBUG']) {
-    if (line.includes(' ' + lvl + ' ')) return 'lvl-' + lvl;
+/* ── logs ── */
+function renderLog() {
+  const minRank = { ALL: 0, INFO: 1, WARNING: 2, ERROR: 3 }[$('levelFilter').value];
+  const q = $('logSearch').value.trim().toLowerCase();
+  const rows = state.logEntries
+    .filter(e => (LEVEL_RANK[e.level] ?? 1) >= minRank)
+    .filter(e => !q || e.message.toLowerCase().includes(q) || e.logger.toLowerCase().includes(q))
+    .reverse(); // newest first
+
+  const box = $('logbox');
+  if (!rows.length) {
+    box.innerHTML = '<div class="empty" style="padding:1rem;">No log entries match.</div>';
+  } else {
+    box.innerHTML = `<table><thead><tr><th>Time</th><th>Level</th><th>Source</th><th>Message</th></tr></thead><tbody>${
+      rows.map(e => `<tr class="row-${e.level}">
+        <td class="time" ${e.ts ? `title="${esc(e.ts)} (UTC)"` : ''}>${e.ts ? `${esc(when(e.ts))}<small>${esc(ago(e.ts))}</small>` : '—'}</td>
+        <td><span class="lvl ${e.level}">${e.level}</span></td>
+        <td class="lg">${esc(e.logger)}</td>
+        <td class="msg">${esc(e.message)}</td></tr>`).join('')
+    }</tbody></table>`;
   }
-  return '';
+  $('logStatus').textContent = `${rows.length} of ${state.logEntries.length} entries · ${stamp()}`;
 }
 
 async function refreshLog() {
   if (state.paused) return;
-  const n = document.getElementById('lineCount').value;
-  const r = await fetch(`logs/?source=${state.source}&lines=${n}`);
-  const d = await r.json();
-  const box = document.getElementById('logbox');
-  const wasAtBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
-
+  let d;
+  try { d = await getJSON(`logs/?source=${state.source}&lines=${$('lineCount').value}`); }
+  catch (e) { $('logbox').innerHTML = `<div class="notice" style="margin:1rem;">Couldn't load logs (${esc(e.message)}).</div>`; return; }
   if (!d.exists) {
-    box.innerHTML = '<div class="empty">No log file yet for this source — nothing has logged here.</div>';
-  } else if (d.lines.length === 0) {
-    box.innerHTML = '<div class="empty">Log file is empty.</div>';
-  } else {
-    box.innerHTML = d.lines.map(l => `<div class="line ${lineClass(l)}">${escapeHtml(l)}</div>`).join('');
+    state.logEntries = [];
+    $('logbox').innerHTML = '<div class="empty" style="padding:1rem;">No log file yet for this source — nothing has logged here.</div>';
+    return;
   }
-  document.getElementById('logStatus').textContent = `${d.lines ? d.lines.length : 0} lines · refreshed ${new Date().toLocaleTimeString()}`;
-  if (wasAtBottom) box.scrollTop = box.scrollHeight;
+  state.logEntries = d.entries;
+  renderLog();
 }
 
-function escapeHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+/* ── exclude-this-browser toggle ── */
+function setOptoutUI(ignored) {
+  $('optoutText').textContent = ignored
+    ? 'This browser is excluded — your own visits are not counted.'
+    : 'Your own visits to the site are being counted.';
+  $('optoutBtn').textContent = ignored ? 'Count my visits again' : 'Exclude this browser';
+  $('optoutBtn').dataset.ignored = ignored ? '1' : '';
 }
+$('optoutBtn').addEventListener('click', async () => {
+  const ignoredNow = $('optoutBtn').dataset.ignored === '1';
+  await fetch('/api/track/optout/', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ off: !ignoredNow }),
+  });
+  setOptoutUI(!ignoredNow);
+});
 
+/* ── view switching / polling ── */
 function setView(view, source) {
   state.view = view;
   if (source) state.source = source;
-  document.getElementById('overview-view').style.display = view === 'overview' ? '' : 'none';
-  document.getElementById('log-view').style.display = view === 'log' ? '' : 'none';
+  $('analytics-view').classList.toggle('hidden', view !== 'analytics');
+  $('health-view').classList.toggle('hidden', view !== 'health');
+  $('log-view').classList.toggle('hidden', view !== 'log');
   if (view === 'log') {
-    document.getElementById('log-title').textContent = source.charAt(0).toUpperCase() + source.slice(1) + ' Logs';
-    refreshLog();
-  } else {
-    refreshOverview();
+    const names = { django: 'Django', dockyard: 'Dockyard', rag: 'RAG Pipeline', core: 'Core / API' };
+    $('log-title').textContent = names[state.source] + ' logs';
+    state.logEntries = [];
+    $('logbox').innerHTML = '<div class="empty" style="padding:1rem;">Loading…</div>';
   }
+  tick();
 }
 
-document.querySelectorAll('nav button').forEach(btn => {
+function tick() {
+  if (state.view === 'analytics') refreshAnalytics();
+  else if (state.view === 'health') refreshHealth();
+  else refreshLog();
+}
+
+document.querySelectorAll('nav button.nav').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('nav button.nav').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     setView(btn.dataset.view, btn.dataset.source);
   });
 });
-
-document.getElementById('lineCount').addEventListener('change', refreshLog);
-document.getElementById('pauseBtn').addEventListener('click', (e) => {
+$('rangeSeg').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#rangeSeg button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  state.days = Number(b.dataset.days);
+  refreshAnalytics();
+});
+$('levelFilter').addEventListener('change', renderLog);
+$('logSearch').addEventListener('input', renderLog);
+$('lineCount').addEventListener('change', refreshLog);
+$('pauseBtn').addEventListener('click', e => {
   state.paused = !state.paused;
   e.target.textContent = state.paused ? 'Resume' : 'Pause';
 });
 
-setInterval(() => { state.view === 'overview' ? refreshOverview() : refreshLog(); }, 4000);
-refreshOverview();
+// Analytics moves slowly; health and logs are the "watch it live" views.
+setInterval(() => { if (state.view !== 'analytics') tick(); }, 4000);
+setInterval(() => { if (state.view === 'analytics') tick(); }, 30000);
+tick();
 </script>
 </body>
 </html>

@@ -40,6 +40,27 @@ class GeminiUsage(models.Model):
         db_table = 'readar_gemini_usage'
 
 
+class PageView(models.Model):
+    """One row per human page view of the site — the source for the admin
+    dashboard's analytics tab. Deliberately independent of ChatSession: chat
+    rows are purged after a week and only exist for people who open a chat,
+    whereas this tracks everyone and is kept long-term.
+
+    visitor_id comes from the long-lived `pv_vid` cookie (see
+    tracking_views.py), not the 7-day chat cookie. No IP address is stored."""
+    visitor_id    = models.CharField(max_length=64, db_index=True)
+    path          = models.CharField(max_length=255)
+    referrer_host = models.CharField(max_length=255, blank=True, default='')
+    device        = models.CharField(max_length=16, blank=True, default='')
+    browser       = models.CharField(max_length=24, blank=True, default='')
+    country       = models.CharField(max_length=2, blank=True, default='')
+    is_new_visitor = models.BooleanField(default=False)
+    created_at    = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        db_table = 'readar_page_views'
+
+
 class ChatTurn(models.Model):
     """The UI transcript — distinct from the session's memory-graph .pkl.
     See schema_design.md §1."""

@@ -3,7 +3,11 @@ services:
   # ── Django (Waitress) ─────────────────────────────────────────────────────
   django:
     build: .
-    command: python server.py
+    # migrate runs against whatever DB this machine's backend/.env points at
+    # (POSTGRES_* — different on local vs the server), so each environment
+    # migrates its own database. Only this service migrates; dockyard doesn't,
+    # to avoid two containers racing on schema changes at startup.
+    command: sh -c "python manage.py migrate --noinput && python server.py"
     env_file: backend/.env
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
