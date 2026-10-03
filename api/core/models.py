@@ -57,6 +57,19 @@ class PageView(models.Model):
     is_new_visitor = models.BooleanField(default=False)
     created_at    = models.DateTimeField(auto_now_add=True, db_index=True)
 
+    # Traffic-quality fields. No raw user-agent or IP is stored: `os` is parsed
+    # from the UA, `ua_hash` is a short one-way hash (to spot many hits from
+    # the same client), and `visit_class` is one of
+    #   owner      - you (staff session or the pv_ignore cookie)
+    #   bot        - failed a bot check; `bot_reason` says which
+    #   genuine    - loaded the page AND later interacted with it
+    #   unverified - loaded the page, never interacted (yet)
+    #   legacy     - recorded before this classification existed
+    os            = models.CharField(max_length=12, blank=True, default='')
+    ua_hash       = models.CharField(max_length=12, blank=True, default='', db_index=True)
+    visit_class   = models.CharField(max_length=10, default='unverified', db_index=True)
+    bot_reason    = models.CharField(max_length=24, blank=True, default='')
+
     class Meta:
         db_table = 'readar_page_views'
 

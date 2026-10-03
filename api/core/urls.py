@@ -6,6 +6,7 @@ from api.core import tracking_views
 
 urlpatterns = [
     path('track/',                                 tracking_views.track_pageview),
+    path('track/engaged/',                         tracking_views.track_engaged),
     path('track/optout/',                          tracking_views.track_optout),
     path('readar/session/',                        views.getOrCreateSession),
     path('readar/session/new/',                    views.startNewSession),

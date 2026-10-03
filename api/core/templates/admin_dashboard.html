@@ -90,6 +90,9 @@
   td.rel { color: var(--muted); white-space: nowrap; }
   .tag { font-size: 0.68rem; padding: 1px 6px; border-radius: 9px; background: var(--panel2); color: var(--muted); }
   .tag.new { background: rgba(94,230,168,.15); color: var(--accent); }
+  .tag.genuine { background: rgba(94,230,168,.15); color: var(--accent); }
+  .tag.bot { background: rgba(245,91,91,.16); color: var(--err); }
+  .tag.owner { background: rgba(59,130,196,.2); color: var(--accent2); }
 
   /* logs */
   .log-toolbar { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
@@ -291,6 +294,17 @@ async function refreshAnalytics() {
   html += card('Today', num(t.today_visitors), `${num(t.yesterday_visitors)} visitors yesterday`);
   html += '</div>';
 
+  // Traffic quality: who is behind the visits in this range. Headline numbers above
+  // count genuine + unverified (+ legacy); "you" and bots are shown here only.
+  const q = d.quality || {};
+  html += '<div class="grid">';
+  html += card('Genuine visitors', num(q.genuine || 0), 'stayed a few seconds and interacted with the page');
+  html += card('Unverified', num(q.unverified || 0), 'loaded the page, no interaction seen (could be a person who left fast, or a quiet bot)');
+  html += card('Suspected bots', num(q.bot || 0), 'failed an automated-browser check — not in the totals');
+  html += card('You', num(q.owner || 0), 'your own browsers (logged in to admin, or ?notrack=1) — not in the totals');
+  if (q.legacy) html += card('Before bot detection', num(q.legacy), 'recorded earlier, can\'t be classified — still in the totals');
+  html += '</div>';
+
   html += `<div class="card" style="margin-bottom:1rem;"><h2>Daily traffic</h2><div class="chart-wrap">${chartSVG(d.series)}</div></div>`;
 
   html += '<div class="cols">';
@@ -298,6 +312,7 @@ async function refreshAnalytics() {
   html += rank('Where visitors come from', d.referrers);
   html += rank('Devices', d.devices);
   html += rank('Browsers', d.browsers);
+  if (d.os && d.os.length) html += rank('Operating systems', d.os);
   if (d.countries.length) html += rank('Countries', d.countries);
   html += '</div>';
 
@@ -313,8 +328,12 @@ async function refreshAnalytics() {
         <td class="rel" title="${esc(when(v.ts))}">${esc(ago(v.ts))}</td>
         <td>${esc(v.path)}</td>
         <td>${esc(v.referrer || 'direct')}</td>
-        <td>${esc(v.device)} · ${esc(v.browser)}${v.country ? ' · ' + esc(v.country) : ''}</td>
-        <td>…${esc(v.visitor)} ${v.new ? '<span class="tag new">new</span>' : '<span class="tag">returning</span>'}</td></tr>`).join('')
+        <td>${esc(v.device)} · ${esc(v.browser)}${v.os ? ' · ' + esc(v.os) : ''}${v.country ? ' · ' + esc(v.country) : ''}</td>
+        <td>…${esc(v.visitor)} ${v.new ? '<span class="tag new">new</span>' : '<span class="tag">returning</span>'}
+          ${v.cls === 'owner' ? '<span class="tag owner" title="' + esc(v.reason) + '">you</span>'
+            : v.cls === 'bot' ? '<span class="tag bot" title="' + esc(v.reason) + '">bot · ' + esc(v.reason) + '</span>'
+            : v.cls === 'genuine' ? '<span class="tag genuine">genuine</span>'
+            : v.cls === 'unverified' ? '<span class="tag" title="no interaction seen yet">unverified</span>' : ''}</td></tr>`).join('')
     }</tbody></table>` : '<div class="empty">Nothing yet</div>'}</div>`;
 
   $('analytics-body').innerHTML = html;

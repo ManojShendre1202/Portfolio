@@ -13,7 +13,9 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from api.core.models import ChatSession, ChatTurn, PageView
-from api.core.tracking_views import is_ignored
+from api.core.tracking_views import (
+    is_ignored, OWNER, BOT, GENUINE, UNVERIFIED, LEGACY, COUNTED_CLASSES,
+)
 from workflow.engine.ws.live_stats import read_stats
 
 # name shown in the UI -> log file written by settings.py's LOGGING config
@@ -146,6 +148,22 @@ def _distinct_visitors(qs) -> int:
     return qs.values('visitor_id').distinct().count()
 
 
+# When one visitor_id has views in several classes (first page unverified, the
+# next one engaged), it is counted once, under its strongest class.
+_QUALITY_RANK = {OWNER: 5, BOT: 4, GENUINE: 3, UNVERIFIED: 2, LEGACY: 1}
+
+
+def _quality_counts(qs) -> dict:
+    best: dict[str, str] = {}
+    for vid, cls in qs.values_list('visitor_id', 'visit_class').distinct():
+        if _QUALITY_RANK.get(cls, 0) > _QUALITY_RANK.get(best.get(vid), 0):
+            best[vid] = cls
+    counts = {OWNER: 0, BOT: 0, GENUINE: 0, UNVERIFIED: 0, LEGACY: 0}
+    for cls in best.values():
+        counts[cls] = counts.get(cls, 0) + 1
+    return counts
+
+
 def _breakdown(qs, field: str, blank_label: str | None = None, limit: int = 8) -> list[dict]:
     """Distinct visitors per value of `field`, biggest first."""
     rows = (
@@ -187,9 +205,13 @@ def admin_analytics(request):
     start       = datetime.combine(start_date, datetime.min.time(), tzinfo=tz)
     prev_start  = start - timedelta(days=days)
 
-    all_views = PageView.objects.all()
+    # raw_views includes you and bots (for the quality breakdown and the recent
+    # list); all_views / qs / prev_qs are what the headline numbers count.
+    raw_views = PageView.objects.all()
+    all_views = raw_views.filter(visit_class__in=COUNTED_CLASSES)
     qs        = all_views.filter(created_at__gte=start)
     prev_qs   = all_views.filter(created_at__gte=prev_start, created_at__lt=start)
+    quality   = _quality_counts(raw_views.filter(created_at__gte=start))
 
     visitors     = _distinct_visitors(qs)
     new_visitors = _distinct_visitors(qs.filter(is_new_visitor=True))
@@ -238,8 +260,11 @@ def admin_analytics(request):
             'country': v.country,
             'new': v.is_new_visitor,
             'visitor': v.visitor_id[-6:],
+            'os': v.os,
+            'cls': v.visit_class,
+            'reason': v.bot_reason,
         }
-        for v in all_views.order_by('-created_at')[:40]
+        for v in raw_views.order_by('-created_at')[:40]
     ]
 
     return JsonResponse({
@@ -264,6 +289,8 @@ def admin_analytics(request):
         'referrers': _breakdown(qs, 'referrer_host', blank_label='Direct / unknown'),
         'devices': _breakdown(qs, 'device'),
         'browsers': _breakdown(qs, 'browser'),
+        'os': _breakdown(qs, 'os'),
+        'quality': quality,
         'countries': _breakdown(qs, 'country'),
         'engagement': {
             'readar_visitors': readar_visitors,
