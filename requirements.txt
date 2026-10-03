@@ -7,6 +7,12 @@ PyMuPDF==1.27.2.2
 numpy==2.4.2
 psycopg2-binary==2.9.12
 sentence-transformers==5.6.0
+# Pinned on purpose: sentence-transformers pulls transformers in unpinned, and a
+# fresh Docker build then resolves the newest release. The nomic embedder runs
+# its own downloaded modeling code (trust_remote_code), which calls
+# get_extended_attention_mask — a newer transformers broke that in prod. This is
+# the version the local venv (known good) uses; bump it only after testing chat.
+transformers==5.13.1
 rank-bm25==0.2.2
 spacy==3.8.14
 einops==0.8.2
