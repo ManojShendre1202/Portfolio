@@ -30,6 +30,7 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 from asgiref.sync import sync_to_async
+from django.db import close_old_connections
 from google import genai
 
 from api.core.service.ChatSessionService import ChatSessionService
@@ -38,6 +39,28 @@ from backend.RAG.Query.gemini_rate_guard import chat_rate_limiter, persist_usage
 from workflow.engine.ws import live_stats
 
 logger = logging.getLogger(__name__)
+
+
+def _db(fn):
+    """Async wrapper for a sync ORM call, with Django's per-request
+    connection hygiene.
+
+    Dockyard isn't a Django request cycle, so nothing ever calls
+    close_old_connections() for us. Without this, the sync_to_async thread
+    keeps one DB connection open forever. Once the Supabase pooler/network
+    drops it after a few idle days, every chat fails with "server closed the
+    connection unexpectedly" until the container restarts. Dropping
+    stale/unusable connections before and after each call makes Django
+    transparently reconnect instead.
+    """
+    def run(*args, **kwargs):
+        close_old_connections()
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            close_old_connections()
+    return sync_to_async(run)
+
 
 GEMINI_KEY = os.getenv('GEMINI_API_KEY')
 
@@ -176,13 +199,13 @@ async def handle_question(chat_id: str, question: str, send_to_browser) -> None:
             lock_wait = round(t_lock_acquired - t_wall_start, 3)
 
             t = time.perf_counter()
-            session = await sync_to_async(ChatSessionService.get_by_chat_id)(chat_id)
+            session = await _db(ChatSessionService.get_by_chat_id)(chat_id)
             doc_id  = session.doc_id
             t_db_get_session = round(time.perf_counter() - t, 3)
             logger.info('handle_question start: chat_id=%s doc_id=%s question=%r', chat_id, doc_id, question[:120])
 
             t = time.perf_counter()
-            await sync_to_async(ChatSessionService.add_turn)(chat_id, role='user', text=question)
+            await _db(ChatSessionService.add_turn)(chat_id, role='user', text=question)
             t_db_add_user_turn = round(time.perf_counter() - t, 3)
 
             t0 = time.perf_counter()
@@ -221,7 +244,7 @@ Answer:"""
 
                     token_count = usage_tokens or estimated_tokens
                     chat_rate_limiter.record(token_count)
-                    await sync_to_async(persist_usage)(1, token_count)
+                    await _db(persist_usage)(1, token_count)
 
                     # db_add_ai_turn (the time the DB write itself takes) genuinely
                     # can't be known before making that write, so it's left out of
@@ -246,7 +269,7 @@ Answer:"""
                     }
 
                     t = time.perf_counter()
-                    await sync_to_async(ChatSessionService.add_turn)(
+                    await _db(ChatSessionService.add_turn)(
                         chat_id, role='ai', text=answer_text, citations=citations, trace=trace,
                     )
                     t_db_add_ai_turn = round(time.perf_counter() - t, 3)

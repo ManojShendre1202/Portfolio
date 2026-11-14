@@ -645,7 +645,8 @@ export default function SplitView({ doc, onBack }) {
           </div>
 
           <div className="rd-input-wrap">
-            {chips.length > 0 && (
+            {/* suggestions are a starting point only — hide once the conversation begins */}
+            {chips.length > 0 && turns.length === 0 && !typing && (
               <div className="rd-chip-row">
                 {chips.map(q => (
                   <button key={q} className="rd-chip" onClick={() => sendMessage(q)}>{q}</button>

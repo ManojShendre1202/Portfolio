@@ -11,8 +11,6 @@ services:
     env_file: backend/.env
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
-      - SIGNAL_HOST=dockyard
-      - SIGNAL_PORT=9000
       - PYTHONUNBUFFERED=1
     volumes:
       - media_data:/app/media        # persist uploaded files + processed graphs

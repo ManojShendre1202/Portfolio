@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -86,17 +87,35 @@ LOGGING = {
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+# ── Environment helpers ──────────────────────────────────────────────────
+# Every environment-specific value comes from backend/.env (or the
+# container's env_file). Local and prod share these exact keys and differ
+# only in values — there is no "am I in prod?" switch anywhere in code.
+def env_required(name):
+    """Fail loudly at startup instead of silently falling back to a value
+    that might belong to a different environment (e.g. the prod DB)."""
+    value = os.getenv(name)
+    if not value:
+        raise ImproperlyConfigured(f"Missing required environment variable: {name}")
+    return value
+
+
+def env_bool(name, default=False):
+    return os.getenv(name, str(default)).strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+def env_list(name):
+    return [v.strip() for v in os.getenv(name, '').split(',') if v.strip()]
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
-PROD = os.getenv('PROD')
+SECRET_KEY = env_required('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# Defaults to False so a forgotten key on the server never enables debug.
+DEBUG = env_bool('DEBUG', default=False)
 
-if PROD == "PROD":
-    ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()]
-else:
-    ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS')
 
 # nginx terminates TLS and forwards this header — without it Django can't
 # tell requests are actually HTTPS, breaking request.is_secure() and any
@@ -154,14 +173,19 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# No defaults on purpose: dev and prod are separate Supabase projects, and a
+# missing key must never quietly connect this environment to the other one.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
-        'USER': os.getenv('POSTGRES_USER', 'postgres.iffooxlsgmrguifprwfd'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST', 'aws-1-ap-southeast-1.pooler.supabase.com'),
-        'PORT': os.getenv('POSTGRES_PORT', '6543'),
+        'NAME': env_required('POSTGRES_DB'),
+        'USER': env_required('POSTGRES_USER'),
+        'PASSWORD': env_required('POSTGRES_PASSWORD'),
+        'HOST': env_required('POSTGRES_HOST'),
+        'PORT': env_required('POSTGRES_PORT'),
+        # Verify a reused connection is still alive before handing it out,
+        # so one dropped by the Supabase pooler gets replaced, not used.
+        'CONN_HEALTH_CHECKS': True,
     }
 }
 
@@ -218,10 +242,4 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# _csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8020,http://localhost:8020')
-
-if PROD == "PROD":
-    _csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS')
-    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',')]
-else:
-    CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:8020"]
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')

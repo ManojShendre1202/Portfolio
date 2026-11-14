@@ -30,7 +30,12 @@ COPY . .
 
 # Bakes admin's CSS/JS into staticfiles/ for WhiteNoise to serve — safe to
 # run in both django and dockyard images even though only django serves it.
-RUN python manage.py collectstatic --noinput
+# backend/.env isn't in the image (.dockerignore) and settings.py requires
+# these vars, so give this build step throwaway values. collectstatic never
+# touches the DB; real values come from env_file at container runtime.
+RUN SECRET_KEY=build-only POSTGRES_DB=x POSTGRES_USER=x POSTGRES_PASSWORD=x \
+    POSTGRES_HOST=x POSTGRES_PORT=5432 \
+    python manage.py collectstatic --noinput
 
 # Default command — overridden per service in docker-compose.yml
 CMD ["python", "server.py"]

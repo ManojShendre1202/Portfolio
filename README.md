@@ -147,15 +147,16 @@ the workflow/chat service, and Nginx together with the correct upstreams out of 
 
 ### Environment
 
-A local `backend/.env` (not committed) is required, at minimum:
+`backend/.env` (git-ignored) is the only thing that differs between dev and prod.
+Copy the committed template and fill it in. Use the dev Supabase project locally
+and the prod one on the server:
 
 ```
-PROD=DEV
-ALLOWED_HOSTS=127.0.0.1,localhost
-CSRF_TRUSTED_ORIGINS=http://localhost:5173
-GEMINI_API_KEY=...
-# + database credentials
+cp backend/.env.example backend/.env
 ```
+
+Locally, `dev.bat` starts Django, Dockyard, Vite and nginx (http://localhost:8080)
+in one Windows Terminal window.
 
 ---
 
